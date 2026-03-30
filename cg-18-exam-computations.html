@@ -575,33 +575,44 @@ $$\lambda_3 x_2 = 0 \quad \text{...(v)}$$
 
 <div class="step">
 <div class="step-label">Step 4: Enumerate cases using complementary slackness</div>
-Each $\lambda_i$ is either 0 or its constraint is active (equality). We check cases systematically.
+<p>Each $\lambda_i$ is either 0 or its constraint is active (equality). We check cases systematically.</p>
 
-<strong>Case 1: Only $c_1$ active</strong> ($\lambda_1 \gt  0$, $\lambda_2 = 0$, $\lambda_3 = 0$)
-
-From (i): $2x_1 = \lambda_1$, from (ii): $2x_2 = \lambda_1$, so $x_1 = x_2$.
-
-From $c_1$ active: $x_1 + x_2 = 4$, so $x_1 = x_2 = 2$.
-
-Then $\lambda_1 = 2(2) = 4 \gt  0$. Check primal feasibility: $x_1 = 2 \gt  0$, $x_2 = 2 \gt  0$.
-
+<div style="margin: 20px 0; padding: 16px 20px; background: var(--bg-surface); border-radius: 4px;">
+<p><strong style="color: var(--accent-sage);">Case 1: Only $c_1$ active</strong> ($\lambda_1 \gt  0$, $\lambda_2 = 0$, $\lambda_3 = 0$)</p>
+<p>From (i): $2x_1 = \lambda_1$</p>
+<p>From (ii): $2x_2 = \lambda_1$</p>
+<p>So $x_1 = x_2$.</p>
+<p>From $c_1$ active: $x_1 + x_2 = 4$, so $x_1 = x_2 = 2$.</p>
+<p>Then $\lambda_1 = 2(2) = 4 \gt  0$.</p>
+<p>Check primal feasibility: $x_1 = 2 \gt  0$, $x_2 = 2 \gt  0$.</p>
 <div class="result">KKT point: $x^* = (2, 2)$, $\lambda_1 = 4$, $\lambda_2 = \lambda_3 = 0$. All conditions satisfied!</div>
+</div>
 
-<strong>Case 2: Only $c_2$ active</strong> ($\lambda_1 = 0$, $\lambda_2 \gt  0$, $\lambda_3 = 0$)
+<div style="margin: 20px 0; padding: 16px 20px; background: var(--bg-surface); border-radius: 4px;">
+<p><strong style="color: var(--accent-rose);">Case 2: Only $c_2$ active</strong> ($\lambda_1 = 0$, $\lambda_2 \gt  0$, $\lambda_3 = 0$)</p>
+<p>From (iv): $x_1 = 0$.</p>
+<p>From (i): $0 = \lambda_2$, but we assumed $\lambda_2 \gt  0$. Contradiction.</p>
+<p style="color: var(--accent-rose);">No solution.</p>
+</div>
 
-From (iv): $x_1 = 0$. From (i): $0 = \lambda_2$, contradiction ($\lambda_2 \gt  0$). No solution.
+<div style="margin: 20px 0; padding: 16px 20px; background: var(--bg-surface); border-radius: 4px;">
+<p><strong style="color: var(--accent-rose);">Case 3: $c_1$ and $c_2$ active</strong> ($\lambda_1 \gt  0$, $\lambda_2 \gt  0$, $\lambda_3 = 0$)</p>
+<p>$x_1 = 0$ and $x_1 + x_2 = 4$, so $x_2 = 4$.</p>
+<p>From (ii): $2(4) = \lambda_1$, so $\lambda_1 = 8$.</p>
+<p>From (i): $0 = 8 + \lambda_2$, so $\lambda_2 = -8 \lt  0$.</p>
+<p style="color: var(--accent-rose);">Violates dual feasibility!</p>
+</div>
 
-<strong>Case 3: $c_1$ and $c_2$ active</strong> ($\lambda_1 \gt  0$, $\lambda_2 \gt  0$, $\lambda_3 = 0$)
+<div style="margin: 20px 0; padding: 16px 20px; background: var(--bg-surface); border-radius: 4px;">
+<p><strong style="color: var(--accent-gold);">Case 4: $c_1$ and $c_3$ active</strong> (by symmetry with Case 3)</p>
+<p>$x_2 = 0$, $x_1 = 4$.</p>
+<p>From (i): $8 = \lambda_1 + \lambda_2$</p>
+<p>From (ii): $0 = \lambda_1 + \lambda_3$, so $\lambda_3 = -\lambda_1$.</p>
+<p>Since $\lambda_1 \geq 0$ and $\lambda_3 \geq 0$, we need $\lambda_1 = 0$ and $\lambda_3 = 0$. Then $\lambda_2 = 8$.</p>
+<p>Check: if $\lambda_1 = 0$, from (i) $8 = \lambda_2$, from (ii) $0 = \lambda_3$. Check $c_1$: $4 + 0 - 4 = 0 \geq 0$. This works, but $(4, 0)$ gives $f = 16$, which is worse than $(2,2)$ giving $f = 8$.</p>
+<p><strong>By symmetry,</strong> $(0, 4)$ gives $f = 16$ as well.</p>
+</div>
 
-$x_1 = 0$ and $x_1 + x_2 = 4$, so $x_2 = 4$. From (ii): $2(4) = \lambda_1$, so $\lambda_1 = 8$. From (i): $0 = 8 + \lambda_2$, so $\lambda_2 = -8 \lt  0$. Violates dual feasibility!
-
-<strong>Case 4: $c_1$ and $c_3$ active</strong> (by symmetry with Case 3)
-
-$x_2 = 0$, $x_1 = 4$. From (i): $8 = \lambda_1 + \lambda_2$, from (ii): $0 = \lambda_1 + \lambda_3$, so $\lambda_3 = -\lambda_1$. Since $\lambda_1 \geq 0$ and $\lambda_3 \geq 0$, we need $\lambda_1 = 0$ and $\lambda_3 = 0$. Then $\lambda_2 = 8$. But check: if $\lambda_1 = 0$, then $c_1$ should not be active... Actually we assumed $\lambda_1 \gt  0$. If $\lambda_1 = 0$: from (i) $8 = \lambda_2$, from (ii) $0 = \lambda_3$. Check $c_1$: $4 + 0 - 4 = 0 \geq 0$. This works! But this is actually the case $c_2$ inactive, $c_3$ active, $c_1$ happens to be active at the boundary.
-
-In any case, $(4, 0)$ gives $f = 16$, which is worse than $(2,2)$ giving $f = 8$.
-
-<strong>By symmetry,</strong> $(0, 4)$ gives $f = 16$ as well.
 </div>
 
 <div class="step">
