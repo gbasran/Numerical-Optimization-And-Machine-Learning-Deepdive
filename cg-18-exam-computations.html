@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Page 18 &mdash; Exam Computations | MATH 3850 Course Guide</title>
+<title>Page 18 : Exam Computations | MATH 3850 Course Guide</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+ onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
 
-<span class="tag">PAGE 18 &mdash; SYNTHESIS</span>
+<span class="tag">PAGE 18; SYNTHESIS</span>
 <h1>Exam Prep: Worked Computation Problems</h1>
-<p class="subtitle">One complete worked problem per method &mdash; every step shown explicitly &mdash; mirrors the exact question types from quizzes 1&ndash;8</p>
+<p class="subtitle">One complete worked problem per method; every step shown explicitly; mirrors the exact question types from quizzes 1&ndash;8</p>
 
 <div class="exam-flag">
 <h4>How to use this page</h4>
@@ -79,7 +79,7 @@ $$x_1 = \begin{bmatrix} -2/29 \\ 9/29 \end{bmatrix} \approx \begin{bmatrix} -0.0
 </div>
 
 <div class="step">
-<div class="step-label">Step 5: Verify &mdash; function value decreased</div>
+<div class="step-label">Step 5: Verify; function value decreased</div>
 
 $$f(x_0) = 3(4) + 2(1) = 14$$
 $$f(x_1) = 3\left(\frac{4}{841}\right) + 2\left(\frac{81}{841}\right) = \frac{12 + 162}{841} = \frac{174}{841} \approx 0.207$$
@@ -115,7 +115,7 @@ $$\nabla^2 f(x) = \begin{bmatrix} 12x_1^2 - 4 & 0 \\ 0 & 2 \end{bmatrix}$$
 
 $$\nabla^2 f(x_0) = \begin{bmatrix} 12(4) - 4 & 0 \\ 0 & 2 \end{bmatrix} = \begin{bmatrix} 44 & 0 \\ 0 & 2 \end{bmatrix}$$
 
-<p class="check">Check: is the Hessian positive definite? Eigenvalues are 44 and 2 (diagonal matrix). Both positive, so yes &mdash; Newton step is a descent direction.</p>
+<p class="check">Check: is the Hessian positive definite? Eigenvalues are 44 and 2 (diagonal matrix). Both positive, so yes; Newton step is a descent direction.</p>
 </div>
 
 <div class="step">
@@ -251,7 +251,7 @@ $$\text{predicted reduction} = m_0(0) - m_0(p) = 10 - 4.56 = 5.44$$
 $$\rho_0 = \frac{\text{actual reduction}}{\text{predicted reduction}} = \frac{5.44}{5.44} = 1.0$$
 
 <div class="result">
-$\rho_0 = 1.0$ &mdash; the model perfectly predicted the actual reduction!
+$\rho_0 = 1.0$; the model perfectly predicted the actual reduction!
 </div>
 
 <p class="check">This makes sense: $f$ is quadratic, and the quadratic model of a quadratic function is exact. So the model always perfectly predicts the actual change.</p>
@@ -422,7 +422,7 @@ $$y_0 = g_1 - g_0 = \begin{bmatrix}2/5\\6/5\end{bmatrix} - \begin{bmatrix}6\\-2\
 
 $$s_0^T y_0 = \left(-\frac{6}{5}\right)\left(-\frac{28}{5}\right) + \left(\frac{2}{5}\right)\left(\frac{16}{5}\right) = \frac{168}{25} + \frac{32}{25} = \frac{200}{25} = 8$$
 
-<p class="check">$s_0^T y_0 = 8 &gt; 0$. Curvature condition satisfied &mdash; proceed with BFGS update.</p>
+<p class="check">$s_0^T y_0 = 8 &gt; 0$. Curvature condition satisfied; proceed with BFGS update.</p>
 </div>
 
 <div class="step">
@@ -456,7 +456,7 @@ $$H_1 = \begin{bmatrix}64/250 + 45/250 & 112/250 - 15/250\\112/250 - 15/250 & 19
 $$H_1 = \frac{1}{250}\begin{bmatrix}109 & 97\\97 & 201\end{bmatrix}$$
 </div>
 
-<p class="check">For reference, the true inverse Hessian is $A^{-1} = \frac{1}{4}\begin{bmatrix}2&2\\2&4\end{bmatrix} = \begin{bmatrix}0.5&0.5\\0.5&1.0\end{bmatrix}$. Our $H_1 \approx \begin{bmatrix}0.436&0.388\\0.388&0.804\end{bmatrix}$ &mdash; getting closer! A second BFGS step on a quadratic would give the exact inverse Hessian.</p>
+<p class="check">For reference, the true inverse Hessian is $A^{-1} = \frac{1}{4}\begin{bmatrix}2&2\\2&4\end{bmatrix} = \begin{bmatrix}0.5&0.5\\0.5&1.0\end{bmatrix}$. Our $H_1 \approx \begin{bmatrix}0.436&0.388\\0.388&0.804\end{bmatrix}$; getting closer! A second BFGS step on a quadratic would give the exact inverse Hessian.</p>
 </div>
 </div>
 
@@ -513,7 +513,7 @@ $$x_1 = \begin{bmatrix}2/3\\8/3\end{bmatrix} \approx \begin{bmatrix}0.667\\2.667
 </div>
 
 <div class="step">
-<div class="step-label">Step 5: Verify &mdash; is the residual smaller?</div>
+<div class="step-label">Step 5: Verify; is the residual smaller?</div>
 
 $$r(x_1) = \begin{bmatrix}(2/3)^2 + 8/3 - 3\\2/3 + (8/3)^2 - 5\end{bmatrix} = \begin{bmatrix}4/9 + 8/3 - 3\\2/3 + 64/9 - 5\end{bmatrix}$$
 
@@ -544,9 +544,9 @@ $$\text{subject to: } \quad x_1 + x_2 \geq 4, \quad x_1 \geq 0, \quad x_2 \geq 0
 <div class="step-label">Step 1: Convert to standard form (inequality constraints $c_i(x) \geq 0$)</div>
 We have three constraints:
 <ul style="margin-left: 20px;">
-  <li>$c_1(x) = x_1 + x_2 - 4 \geq 0$</li>
-  <li>$c_2(x) = x_1 \geq 0$</li>
-  <li>$c_3(x) = x_2 \geq 0$</li>
+ <li>$c_1(x) = x_1 + x_2 - 4 \geq 0$</li>
+ <li>$c_2(x) = x_1 \geq 0$</li>
+ <li>$c_3(x) = x_2 \geq 0$</li>
 </ul>
 </div>
 
@@ -609,22 +609,22 @@ In any case, $(4, 0)$ gives $f = 16$, which is worse than $(2,2)$ giving $f = 8$
 
 Comparing KKT points:
 <ul style="margin-left: 20px;">
-  <li>$(2, 2)$: $f = 4 + 4 = 8$</li>
-  <li>$(4, 0)$: $f = 16$</li>
-  <li>$(0, 4)$: $f = 16$</li>
+ <li>$(2, 2)$: $f = 4 + 4 = 8$</li>
+ <li>$(4, 0)$: $f = 16$</li>
+ <li>$(0, 4)$: $f = 16$</li>
 </ul>
 
 <div class="result">The optimal solution is $x^* = (2, 2)$ with $f^* = 8$ and multiplier $\lambda_1 = 4$.</div>
 
-<p class="check">Geometric check: we are minimizing distance from origin subject to being on or above the line $x_1 + x_2 = 4$ in the first quadrant. The closest point on that line to the origin is $(2,2)$ (by symmetry). The multiplier $\lambda_1 = 4 &gt; 0$ tells us the constraint is active (binding) and "costs" us &mdash; if we could relax it, we would move closer to the origin.</p>
+<p class="check">Geometric check: we are minimizing distance from origin subject to being on or above the line $x_1 + x_2 = 4$ in the first quadrant. The closest point on that line to the origin is $(2,2)$ (by symmetry). The multiplier $\lambda_1 = 4 &gt; 0$ tells us the constraint is active (binding) and "costs" us; if we could relax it, we would move closer to the origin.</p>
 </div>
 </div>
 
 <!-- ===================== NAV ===================== -->
 <div class="nav">
-  <p><a href="cg-17-method-map.html">&larr; Previous: Page 17 &mdash; How All Methods Connect</a></p>
-  <p><a href="cg-19-exam-theory.html">Next: Page 19 &mdash; Exam Theory &rarr;</a></p>
-  <p style="margin-top: 8px;"><a href="index.html">Back to Index</a></p>
+ <p><a href="cg-17-method-map.html">&larr; Previous: Page 17; How All Methods Connect</a></p>
+ <p><a href="cg-19-exam-theory.html">Next: Page 19; Exam Theory &rarr;</a></p>
+ <p style="margin-top: 8px;"><a href="index.html">Back to Index</a></p>
 </div>
 
 </div>

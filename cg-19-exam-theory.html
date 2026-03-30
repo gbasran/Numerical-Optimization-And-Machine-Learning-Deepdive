@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Page 19 &mdash; Exam Theory | MATH 3850 Course Guide</title>
+<title>Page 19 : Exam Theory | MATH 3850 Course Guide</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+ onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
 
-<span class="tag">PAGE 19 &mdash; SYNTHESIS</span>
+<span class="tag">PAGE 19; SYNTHESIS</span>
 <h1>Exam Prep: Key Theorems &amp; Concepts</h1>
 <p class="subtitle">Every key theorem stated formally, translated to plain English, conditions explained, common "why" questions answered, and pitfalls to avoid</p>
 
@@ -30,7 +30,7 @@ $$\nabla f(x^*) = 0$$
 </div>
 
 <div class="analogy">
-<strong>Plain English:</strong> If you are standing at the bottom of a valley, the ground must be flat in every direction right where you stand. If the ground slopes in any direction, you could walk downhill &mdash; so you are not at the bottom yet.<br><br>
+<strong>Plain English:</strong> If you are standing at the bottom of a valley, the ground must be flat in every direction right where you stand. If the ground slopes in any direction, you could walk downhill; so you are not at the bottom yet.<br><br>
 <strong>Key point:</strong> This is NECESSARY, not sufficient. A flat hilltop also has $\nabla f = 0$, but it is a maximum, not a minimum. A saddle point also has $\nabla f = 0$. That is why we need second-order conditions to distinguish.
 </div>
 
@@ -47,7 +47,7 @@ If $\nabla f(x^*) = 0$ and $\nabla^2 f(x^*)$ is positive definite, then $x^*$ is
 </div>
 
 <div class="analogy">
-<strong>Plain English:</strong> If the ground is flat where you stand (gradient zero) AND the ground curves upward in every direction (positive definite Hessian), then you are definitely at the bottom of a valley. Not just any valley &mdash; a strict one, meaning there is no other point nearby that is equally low.<br><br>
+<strong>Plain English:</strong> If the ground is flat where you stand (gradient zero) AND the ground curves upward in every direction (positive definite Hessian), then you are definitely at the bottom of a valley. Not just any valley; a strict one, meaning there is no other point nearby that is equally low.<br><br>
 <strong>Key point:</strong> This is SUFFICIENT but not necessary. A point can be a local minimizer with a positive <em>semidefinite</em> Hessian (some eigenvalues zero). For example, $f(x) = x^4$ has a minimum at $x=0$ with $f''(0) = 0$.
 </div>
 
@@ -85,14 +85,14 @@ $$\lim_{k \to \infty} \|\nabla f(x_k)\| = 0$$
 </div>
 
 <div class="analogy">
-<strong>Plain English:</strong> The trust-region method with the Cauchy point guarantee will always eventually find a stationary point, no matter where you start. The Cauchy point is the "safety net" &mdash; it is the steepest descent step restricted to the trust region, and it always makes progress. As long as you do at least as well as the Cauchy point at each step, you will converge.<br><br>
+<strong>Plain English:</strong> The trust-region method with the Cauchy point guarantee will always eventually find a stationary point, no matter where you start. The Cauchy point is the "safety net"; it is the steepest descent step restricted to the trust region, and it always makes progress. As long as you do at least as well as the Cauchy point at each step, you will converge.<br><br>
 Full explanation on <a href="cg-09-trust-region.html" style="color:#d4956a;">Page 09</a>.
 </div>
 
 <dl class="breakdown">
 <dt>"Cauchy point guarantee"</dt><dd>At minimum, you must achieve the same function decrease as the Cauchy point. This is a lower bound on progress per step.</dd>
 <dt>"$f$ bounded below"</dt><dd>The function can't go to $-\infty$. Otherwise the algorithm could keep decreasing forever without converging.</dd>
-<dt>"$\|\nabla f(x_k)\| \to 0$"</dt><dd>You approach a stationary point. Note: this does not say you reach a minimizer &mdash; it could be a saddle point!</dd>
+<dt>"$\|\nabla f(x_k)\| \to 0$"</dt><dd>You approach a stationary point. Note: this does not say you reach a minimizer; it could be a saddle point!</dd>
 </dl>
 
 <!-- Theorem 5: CG finite termination -->
@@ -102,7 +102,7 @@ For a positive definite quadratic $f(x) = \frac{1}{2}x^T A x - b^T x$ with $A \i
 </div>
 
 <div class="analogy">
-<strong>Plain English:</strong> CG solves an $n$-dimensional problem in at most $n$ steps. Each step "finishes" one dimension &mdash; it finds the exact minimum along a new conjugate direction, and never needs to revisit that direction again. After $n$ steps, all dimensions are done. Compare this to gradient descent, which might take thousands of zigzag steps on the same problem.<br><br>
+<strong>Plain English:</strong> CG solves an $n$-dimensional problem in at most $n$ steps. Each step "finishes" one dimension; it finds the exact minimum along a new conjugate direction, and never needs to revisit that direction again. After $n$ steps, all dimensions are done. Compare this to gradient descent, which might take thousands of zigzag steps on the same problem.<br><br>
 Full explanation on <a href="cg-10-conjugate-gradient.html" style="color:#d4956a;">Page 10</a>.
 </div>
 
@@ -134,10 +134,10 @@ Full explanation on <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>
 <strong>Theorem: KKT Necessary Conditions (under LICQ)</strong><br><br>
 If $x^*$ is a local minimizer of $\min f(x)$ subject to $c_i(x) = 0$ (equality) and $c_j(x) \geq 0$ (inequality), and the LICQ holds at $x^*$, then there exist multipliers $\lambda_i, \mu_j$ such that:
 <ol style="margin: 12px 0 0 24px;">
-  <li><strong>Stationarity:</strong> $\nabla f(x^*) - \sum \lambda_i \nabla c_i^{eq}(x^*) - \sum \mu_j \nabla c_j^{ineq}(x^*) = 0$</li>
-  <li><strong>Primal feasibility:</strong> $c_i^{eq}(x^*) = 0$, $c_j^{ineq}(x^*) \geq 0$</li>
-  <li><strong>Dual feasibility:</strong> $\mu_j \geq 0$ for all inequality constraints</li>
-  <li><strong>Complementary slackness:</strong> $\mu_j c_j^{ineq}(x^*) = 0$ for each $j$</li>
+ <li><strong>Stationarity:</strong> $\nabla f(x^*) - \sum \lambda_i \nabla c_i^{eq}(x^*) - \sum \mu_j \nabla c_j^{ineq}(x^*) = 0$</li>
+ <li><strong>Primal feasibility:</strong> $c_i^{eq}(x^*) = 0$, $c_j^{ineq}(x^*) \geq 0$</li>
+ <li><strong>Dual feasibility:</strong> $\mu_j \geq 0$ for all inequality constraints</li>
+ <li><strong>Complementary slackness:</strong> $\mu_j c_j^{ineq}(x^*) = 0$ for each $j$</li>
 </ol>
 </div>
 
@@ -160,13 +160,13 @@ Full explanation on <a href="cg-15-constrained.html" style="color:#d4956a;">Page
 <div class="why-box">
 <h3>Why does GD converge slowly on ill-conditioned problems?</h3>
 <p>The condition number $\kappa = \lambda_{\max}/\lambda_{\min}$ of the Hessian controls the convergence rate of gradient descent. On a well-conditioned problem ($\kappa \approx 1$), the contours are nearly circular and the gradient points roughly toward the minimum. On an ill-conditioned problem ($\kappa \gg 1$), the contours are extremely elongated ellipses. The gradient points perpendicular to the contour, which is nearly perpendicular to the direction toward the minimum.</p>
-<p style="margin-top: 8px;">The convergence rate is $\left(\frac{\kappa - 1}{\kappa + 1}\right)^2$. When $\kappa = 100$, this is $(99/101)^2 \approx 0.96$ &mdash; you only reduce the error by 4% each step. You need hundreds of zigzag steps to converge.</p>
+<p style="margin-top: 8px;">The convergence rate is $\left(\frac{\kappa - 1}{\kappa + 1}\right)^2$. When $\kappa = 100$, this is $(99/101)^2 \approx 0.96$; you only reduce the error by 4% each step. You need hundreds of zigzag steps to converge.</p>
 <p style="margin-top: 8px;">Full explanation with SVG diagrams: <a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>.</p>
 </div>
 
 <div class="why-box">
 <h3>Why does Newton converge quadratically?</h3>
-<p>Newton's method replaces $f$ with a quadratic model (Taylor expansion to second order) and jumps directly to the model's minimum. The error in this jump comes from the difference between $f$ and its quadratic model &mdash; which is the third-order Taylor remainder, proportional to $\|x_k - x^*\|^2$. So the error after one step is proportional to the square of the current error.</p>
+<p>Newton's method replaces $f$ with a quadratic model (Taylor expansion to second order) and jumps directly to the model's minimum. The error in this jump comes from the difference between $f$ and its quadratic model; which is the third-order Taylor remainder, proportional to $\|x_k - x^*\|^2$. So the error after one step is proportional to the square of the current error.</p>
 <p style="margin-top: 8px;">Think of it this way: if $f$ were exactly quadratic, Newton would solve it in one step (the model IS the function). The "leftover" error comes from the non-quadratic part of $f$, which gets smaller and smaller as you approach $x^*$.</p>
 <p style="margin-top: 8px;">Full explanation: <a href="cg-07-newton-method.html" style="color:#d4956a;">Page 07</a>.</p>
 </div>
@@ -182,9 +182,9 @@ Full explanation on <a href="cg-15-constrained.html" style="color:#d4956a;">Page
 <h3>Why does the trust-region ratio test work?</h3>
 <p>The ratio $\rho_k = \frac{\text{actual reduction}}{\text{predicted reduction}} = \frac{f(x_k) - f(x_k + p_k)}{m_k(0) - m_k(p_k)}$ measures how well the quadratic model predicts the actual function behavior.</p>
 <ul style="margin: 12px 0 0 20px; line-height: 2;">
-  <li>$\rho_k \approx 1$: Model is accurate. Trust the model more &mdash; expand the radius.</li>
-  <li>$\rho_k$ small or negative: Model is inaccurate. Trust the model less &mdash; shrink the radius.</li>
-  <li>$\rho_k &gt; \eta$ (e.g., $\eta = 0.25$): Good enough to accept the step.</li>
+ <li>$\rho_k \approx 1$: Model is accurate. Trust the model more; expand the radius.</li>
+ <li>$\rho_k$ small or negative: Model is inaccurate. Trust the model less; shrink the radius.</li>
+ <li>$\rho_k &gt; \eta$ (e.g., $\eta = 0.25$): Good enough to accept the step.</li>
 </ul>
 <p style="margin-top: 8px;">Near $x^*$, the quadratic model becomes very accurate (since $f$ looks quadratic locally), so $\rho_k \to 1$ and the radius grows, recovering Newton's full step and quadratic convergence.</p>
 <p style="margin-top: 8px;">Full explanation: <a href="cg-09-trust-region.html" style="color:#d4956a;">Page 09</a>.</p>
@@ -230,7 +230,7 @@ $$\alpha g_k^T A g_k = g_k^T g_k$$
 
 <div class="result">$$\alpha_k = \frac{g_k^T g_k}{g_k^T A g_k}$$</div>
 
-<p class="check">This is the exact step size. Note: $g_k^T A g_k &gt; 0$ since $A$ is PD and $g_k \neq 0$, so $\alpha_k &gt; 0$. This formula only works for quadratics &mdash; for general $f$ we need line search conditions (<a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a>).</p>
+<p class="check">This is the exact step size. Note: $g_k^T A g_k &gt; 0$ since $A$ is PD and $g_k \neq 0$, so $\alpha_k &gt; 0$. This formula only works for quadratics; for general $f$ we need line search conditions (<a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a>).</p>
 </div>
 </div>
 
@@ -303,7 +303,7 @@ $$= H_k y_k + s_k - H_k y_k = s_k$$
 <div class="step-label">Conclusion</div>
 <div class="result">$H_{k+1} y_k = s_k$. The secant condition is satisfied.</div>
 
-<p class="check">The SR1 proof is even simpler than BFGS &mdash; the correction term is designed so that it exactly fills the gap $s_k - H_k y_k$. The denominator ensures the correction has the right magnitude. The key requirement is $(s_k - H_k y_k)^T y_k \neq 0$ (the safeguard condition, <a href="cg-13-sr1-dfp.html" style="color:#d4956a;">Page 13</a>).</p>
+<p class="check">The SR1 proof is even simpler than BFGS; the correction term is designed so that it exactly fills the gap $s_k - H_k y_k$. The denominator ensures the correction has the right magnitude. The key requirement is $(s_k - H_k y_k)^T y_k \neq 0$ (the safeguard condition, <a href="cg-13-sr1-dfp.html" style="color:#d4956a;">Page 13</a>).</p>
 </div>
 </div>
 
@@ -365,9 +365,9 @@ $$= H_k y_k + s_k - H_k y_k = s_k$$
 
 <!-- ===================== NAV ===================== -->
 <div class="nav">
-  <p><a href="cg-18-exam-computations.html">&larr; Previous: Page 18 &mdash; Exam Computations</a></p>
-  <p><a href="cg-20-formula-sheet.html">Next: Page 20 &mdash; Formula Sheet &rarr;</a></p>
-  <p style="margin-top: 8px;"><a href="index.html">Back to Index</a></p>
+ <p><a href="cg-18-exam-computations.html">&larr; Previous: Page 18; Exam Computations</a></p>
+ <p><a href="cg-20-formula-sheet.html">Next: Page 20; Formula Sheet &rarr;</a></p>
+ <p style="margin-top: 8px;"><a href="index.html">Back to Index</a></p>
 </div>
 
 </div>

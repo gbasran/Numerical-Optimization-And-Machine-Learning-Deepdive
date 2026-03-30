@@ -3,32 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Page 01 &mdash; Taylor's Theorem, Norms &amp; Convergence Rates</title>
+<title>Page 01 : Taylor's Theorem, Norms &amp; Convergence Rates</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+ onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
 
 <h1>Page 01: Taylor's Theorem, Norms &amp; Convergence Rates</h1>
-<p class="subtitle">The mathematical toolkit that every optimization method is built on &mdash; explained from scratch with physical analogies</p>
+<p class="subtitle">The mathematical toolkit that every optimization method is built on; explained from scratch with physical analogies</p>
 
 <!-- ═══════════════════════════════════════════════════════════════════ -->
-<!-- PART A: TAYLOR'S THEOREM                                          -->
+<!-- PART A: TAYLOR'S THEOREM -->
 <!-- ═══════════════════════════════════════════════════════════════════ -->
 
-<h2>Part A: Taylor's Theorem &mdash; Predicting Functions from Local Information</h2>
+<h2>Part A: Taylor's Theorem; Predicting Functions from Local Information</h2>
 
 <span class="tag">CORE IDEA</span>
 
 <div class="analogy">
-<strong>Analogy &mdash; GPS prediction.</strong>
-Imagine you are driving down the highway and your GPS is trying to predict where you will be in 10 seconds. With zero information beyond your current location, the GPS would just say "you are right here" &mdash; that is the zeroth-order approximation. Now add your speed: the GPS says "you are here, moving north at 100 km/h, so in 10 seconds you will be about 278 meters north." That is the first-order approximation &mdash; it uses your current position plus your rate of change (velocity). But what if you are accelerating onto a highway ramp? The GPS should also factor in your acceleration: "you are here, moving at 100 km/h, accelerating at 5 m/s&sup2;, so in 10 seconds you will be even farther than the straight-line estimate." That is the second-order approximation.
+<strong>Analogy: GPS prediction.</strong>
+Imagine you are driving down the highway and your GPS is trying to predict where you will be in 10 seconds. With zero information beyond your current location, the GPS would just say "you are right here", that is, the zeroth-order approximation. Now add your speed: the GPS says "you are here, moving north at 100 km/h, so in 10 seconds you will be about 278 meters north." That is the first-order approximation; it uses your current position plus your rate of change (velocity). But what if you are accelerating onto a highway ramp? The GPS should also factor in your acceleration: "you are here, moving at 100 km/h, accelerating at 5 m/s&sup2;, so in 10 seconds you will be even farther than the straight-line estimate." That is the second-order approximation.
 <br><br>
-Taylor's theorem does <em>exactly the same thing</em> for mathematical functions. It approximates a complicated function near a known point using local information: the function value (position), its derivative (speed), and its second derivative (acceleration). The more terms you include, the better your prediction &mdash; but even the first few terms are remarkably powerful, and they are the entire engine behind gradient descent, Newton's method, and trust regions.
+Taylor's theorem does <em>exactly the same thing</em> for mathematical functions. It approximates a complicated function near a known point using local information: the function value (position), its derivative (speed), and its second derivative (acceleration). The more terms you include, the better your prediction; but even the first few terms are remarkably powerful, and they are the entire engine behind gradient descent, Newton's method, and trust regions.
 </div>
 
 <p><strong>First-order Taylor expansion</strong> (linear approximation):</p>
@@ -37,16 +37,16 @@ Taylor's theorem does <em>exactly the same thing</em> for mathematical functions
 $$f(x + p) \approx f(x) + \nabla f(x)^T p$$
 
 <dl class="breakdown">
-  <dt>$f$</dt>
-  <dd>The function we are trying to approximate &mdash; for example, the cost or loss we want to minimize.</dd>
-  <dt>$x$</dt>
-  <dd>The current point &mdash; where we are standing right now (our "GPS location").</dd>
-  <dt>$p$</dt>
-  <dd>The step we are about to take &mdash; a direction and distance from $x$.</dd>
-  <dt>$\nabla f(x)$</dt>
-  <dd>The gradient (vector of partial derivatives) at $x$ &mdash; this is the "velocity" of the function. It tells us the slope in every direction. See <a href="cg-02-multivariable-bridge.html" style="color:#d4956a;">Page 02</a> for a full explanation of the gradient.</dd>
-  <dt>$\nabla f(x)^T p$</dt>
-  <dd>The dot product of the gradient with the step. This gives a single number: the predicted change in $f$ when we move by $p$. Positive means $f$ goes up; negative means $f$ goes down.</dd>
+ <dt>$f$</dt>
+ <dd>The function we are trying to approximate; for example, the cost or loss we want to minimize.</dd>
+ <dt>$x$</dt>
+ <dd>The current point; where we are standing right now (our "GPS location").</dd>
+ <dt>$p$</dt>
+ <dd>The step we are about to take; a direction and distance from $x$.</dd>
+ <dt>$\nabla f(x)$</dt>
+ <dd>The gradient (vector of partial derivatives) at $x$; this is the "velocity" of the function. It tells us the slope in every direction. See <a href="cg-02-multivariable-bridge.html" style="color:#d4956a;">Page 02</a> for a full explanation of the gradient.</dd>
+ <dt>$\nabla f(x)^T p$</dt>
+ <dd>The dot product of the gradient with the step. This gives a single number: the predicted change in $f$ when we move by $p$. Positive means $f$ goes up; negative means $f$ goes down.</dd>
 </dl>
 </div>
 
@@ -56,10 +56,10 @@ $$f(x + p) \approx f(x) + \nabla f(x)^T p$$
 $$f(x + p) \approx f(x) + \nabla f(x)^T p + \frac{1}{2} p^T \nabla^2 f(x)\, p$$
 
 <dl class="breakdown">
-  <dt>$\nabla^2 f(x)$</dt>
-  <dd>The Hessian matrix &mdash; a square matrix of second derivatives. This is the "acceleration" of the function. It captures curvature: how fast the slope itself is changing. See <a href="cg-02-multivariable-bridge.html" style="color:#d4956a;">Page 02, Part C</a> for the full treatment.</dd>
-  <dt>$\frac{1}{2} p^T \nabla^2 f(x)\, p$</dt>
-  <dd>A quadratic form &mdash; it bends the linear approximation into a parabola (or bowl in multiple dimensions). This correction accounts for curvature, making the approximation much more accurate.</dd>
+ <dt>$\nabla^2 f(x)$</dt>
+ <dd>The Hessian matrix; a square matrix of second derivatives. This is the "acceleration" of the function. It captures curvature: how fast the slope itself is changing. See <a href="cg-02-multivariable-bridge.html" style="color:#d4956a;">Page 02, Part C</a> for the full treatment.</dd>
+ <dt>$\frac{1}{2} p^T \nabla^2 f(x)\, p$</dt>
+ <dd>A quadratic form; it bends the linear approximation into a parabola (or bowl in multiple dimensions). This correction accounts for curvature, making the approximation much more accurate.</dd>
 </dl>
 </div>
 
@@ -67,10 +67,10 @@ $$f(x + p) \approx f(x) + \nabla f(x)^T p + \frac{1}{2} p^T \nabla^2 f(x)\, p$$
 <h3>Why Does This Matter for This Course?</h3>
 <p>Every single optimization method you will encounter uses some form of Taylor approximation:</p>
 <ul style="margin-top:8px; margin-left:20px;">
-  <li><strong>Gradient descent</strong> (Pages 04&ndash;05) uses the <em>first-order</em> approximation. It only knows the slope, so it picks the steepest-downhill direction.</li>
-  <li><strong>Newton's method</strong> (Page 07) uses the <em>second-order</em> approximation. It builds a local bowl (quadratic model) and jumps to its bottom in one step.</li>
-  <li><strong>Trust regions</strong> (Page 09) also use the second-order approximation, but they add a "safety leash" that limits step size.</li>
-  <li><strong>Quasi-Newton / BFGS</strong> (Page 12) approximates the Hessian from gradient history, then uses the second-order expansion.</li>
+ <li><strong>Gradient descent</strong> (Pages 04&ndash;05) uses the <em>first-order</em> approximation. It only knows the slope, so it picks the steepest-downhill direction.</li>
+ <li><strong>Newton's method</strong> (Page 07) uses the <em>second-order</em> approximation. It builds a local bowl (quadratic model) and jumps to its bottom in one step.</li>
+ <li><strong>Trust regions</strong> (Page 09) also use the second-order approximation, but they add a "safety leash" that limits step size.</li>
+ <li><strong>Quasi-Newton / BFGS</strong> (Page 12) approximates the Hessian from gradient history, then uses the second-order expansion.</li>
 </ul>
 <p style="margin-top:8px;">If you understand Taylor's theorem, you understand <em>why</em> each method works.</p>
 </div>
@@ -78,44 +78,44 @@ $$f(x + p) \approx f(x) + \nabla f(x)^T p + \frac{1}{2} p^T \nabla^2 f(x)\, p$$
 <!-- SVG: Taylor approximation diagram -->
 <div style="text-align:center; margin: 30px 0;">
 <svg viewBox="0 0 500 300" width="500" height="300" xmlns="http://www.w3.org/2000/svg">
-  <!-- Axes -->
-  <line x1="40" y1="260" x2="480" y2="260" stroke="#555" stroke-width="1"/>
-  <line x1="40" y1="20" x2="40" y2="260" stroke="#555" stroke-width="1"/>
-  <text x="490" y="265" fill="#a8a49c" font-size="13">x</text>
-  <text x="25" y="15" fill="#a8a49c" font-size="13">f</text>
+ <!-- Axes -->
+ <line x1="40" y1="260" x2="480" y2="260" stroke="#555" stroke-width="1"/>
+ <line x1="40" y1="20" x2="40" y2="260" stroke="#555" stroke-width="1"/>
+ <text x="490" y="265" fill="#a8a49c" font-size="13">x</text>
+ <text x="25" y="15" fill="#a8a49c" font-size="13">f</text>
 
-  <!-- True function (a nice curve) -->
-  <path d="M60,200 Q120,230 180,160 Q220,110 260,100 Q300,90 340,120 Q380,150 420,80 Q440,50 460,60"
-        fill="none" stroke="#e8e4dc" stroke-width="2.5"/>
-  <text x="462" y="55" fill="#e8e4dc" font-size="12">f(x) actual</text>
+ <!-- True function (a nice curve) -->
+ <path d="M60,200 Q120,230 180,160 Q220,110 260,100 Q300,90 340,120 Q380,150 420,80 Q440,50 460,60"
+ fill="none" stroke="#e8e4dc" stroke-width="2.5"/>
+ <text x="462" y="55" fill="#e8e4dc" font-size="12">f(x) actual</text>
 
-  <!-- Point of expansion -->
-  <circle cx="260" cy="100" r="5" fill="#d4956a"/>
-  <text x="265" y="92" fill="#d4956a" font-size="12" font-weight="bold">x₀</text>
+ <!-- Point of expansion -->
+ <circle cx="260" cy="100" r="5" fill="#d4956a"/>
+ <text x="265" y="92" fill="#d4956a" font-size="12" font-weight="bold">x₀</text>
 
-  <!-- Linear (first-order) tangent line -->
-  <line x1="140" y1="164" x2="400" y2="22" stroke="#9b89b6" stroke-width="2" stroke-dasharray="6,4"/>
-  <text x="395" y="18" fill="#9b89b6" font-size="12">1st-order (linear)</text>
+ <!-- Linear (first-order) tangent line -->
+ <line x1="140" y1="164" x2="400" y2="22" stroke="#9b89b6" stroke-width="2" stroke-dasharray="6,4"/>
+ <text x="395" y="18" fill="#9b89b6" font-size="12">1st-order (linear)</text>
 
-  <!-- Quadratic (second-order) approximation -->
-  <path d="M140,220 Q200,80 260,100 Q320,120 400,250"
-        fill="none" stroke="#c9a84c" stroke-width="2" stroke-dasharray="3,3"/>
-  <text x="340" y="255" fill="#c9a84c" font-size="12">2nd-order (quadratic)</text>
+ <!-- Quadratic (second-order) approximation -->
+ <path d="M140,220 Q200,80 260,100 Q320,120 400,250"
+ fill="none" stroke="#c9a84c" stroke-width="2" stroke-dasharray="3,3"/>
+ <text x="340" y="255" fill="#c9a84c" font-size="12">2nd-order (quadratic)</text>
 
-  <!-- Legend box -->
-  <rect x="55" y="25" width="175" height="70" rx="6" fill="#25252e" opacity="0.9"/>
-  <line x1="65" y1="45" x2="90" y2="45" stroke="#e8e4dc" stroke-width="2.5"/>
-  <text x="95" y="49" fill="#e8e4dc" font-size="11">True function</text>
-  <line x1="65" y1="62" x2="90" y2="62" stroke="#9b89b6" stroke-width="2" stroke-dasharray="6,4"/>
-  <text x="95" y="66" fill="#9b89b6" font-size="11">Linear approximation</text>
-  <line x1="65" y1="79" x2="90" y2="79" stroke="#c9a84c" stroke-width="2" stroke-dasharray="3,3"/>
-  <text x="95" y="83" fill="#c9a84c" font-size="11">Quadratic approximation</text>
+ <!-- Legend box -->
+ <rect x="55" y="25" width="175" height="70" rx="6" fill="#25252e" opacity="0.9"/>
+ <line x1="65" y1="45" x2="90" y2="45" stroke="#e8e4dc" stroke-width="2.5"/>
+ <text x="95" y="49" fill="#e8e4dc" font-size="11">True function</text>
+ <line x1="65" y1="62" x2="90" y2="62" stroke="#9b89b6" stroke-width="2" stroke-dasharray="6,4"/>
+ <text x="95" y="66" fill="#9b89b6" font-size="11">Linear approximation</text>
+ <line x1="65" y1="79" x2="90" y2="79" stroke="#c9a84c" stroke-width="2" stroke-dasharray="3,3"/>
+ <text x="95" y="83" fill="#c9a84c" font-size="11">Quadratic approximation</text>
 </svg>
 <p style="font-size:14px; color:#a8a49c;">The quadratic (2nd-order) hugs the true curve much more closely near $x_0$.</p>
 </div>
 
 <div class="note">
-<strong>Key takeaway:</strong> Taylor approximation trades <em>global accuracy</em> for <em>local simplicity</em>. Near $x_0$ the approximation is excellent. Far away it breaks down. This is why line searches and trust regions exist &mdash; they make sure we don't step so far that our Taylor model becomes garbage.
+<strong>Key takeaway:</strong> Taylor approximation trades <em>global accuracy</em> for <em>local simplicity</em>. Near $x_0$ the approximation is excellent. Far away it breaks down. This is why line searches and trust regions exist; they make sure we don't step so far that our Taylor model becomes garbage.
 </div>
 
 <div class="hand-calc">
@@ -124,36 +124,36 @@ $$f(x + p) \approx f(x) + \nabla f(x)^T p + \frac{1}{2} p^T \nabla^2 f(x)\, p$$
 <p>This is a single-variable example to build intuition before we hit multiple dimensions.</p>
 
 <div class="step">
-  <span class="step-label">Setup:</span><br>
-  $f(x) = e^x$, expand around $x_0 = 0$. The step is $p = x - x_0 = x$.
+ <span class="step-label">Setup:</span><br>
+ $f(x) = e^x$, expand around $x_0 = 0$. The step is $p = x - x_0 = x$.
 </div>
 
 <div class="step">
-  <span class="step-label">Step 1: Zeroth-order (just the function value).</span><br>
-  $f(0) = e^0 = 1$
-  <br>Approximation: $f(x) \approx 1$. (A horizontal line. Terrible prediction away from 0.)
+ <span class="step-label">Step 1: Zeroth-order (just the function value).</span><br>
+ $f(0) = e^0 = 1$
+ <br>Approximation: $f(x) \approx 1$. (A horizontal line. Terrible prediction away from 0.)
 </div>
 
 <div class="step">
-  <span class="step-label">Step 2: First-order (add the derivative).</span><br>
-  $f'(x) = e^x$, so $f'(0) = 1$.
-  <br>Approximation: $f(x) \approx 1 + 1 \cdot x = 1 + x$. (A straight line through $(0,1)$ with slope 1.)
+ <span class="step-label">Step 2: First-order (add the derivative).</span><br>
+ $f'(x) = e^x$, so $f'(0) = 1$.
+ <br>Approximation: $f(x) \approx 1 + 1 \cdot x = 1 + x$. (A straight line through $(0,1)$ with slope 1.)
 </div>
 
 <div class="step">
-  <span class="step-label">Step 3: Second-order (add curvature).</span><br>
-  $f''(x) = e^x$, so $f''(0) = 1$.
-  <br>Approximation: $f(x) \approx 1 + x + \frac{1}{2}(1)x^2 = 1 + x + \frac{x^2}{2}$. (A parabola &mdash; much closer to $e^x$.)
+ <span class="step-label">Step 3: Second-order (add curvature).</span><br>
+ $f''(x) = e^x$, so $f''(0) = 1$.
+ <br>Approximation: $f(x) \approx 1 + x + \frac{1}{2}(1)x^2 = 1 + x + \frac{x^2}{2}$. (A parabola; much closer to $e^x$.)
 </div>
 
 <div class="step">
-  <span class="step-label">Step 4: Test the predictions at $x = 0.5$.</span><br>
-  True value: $e^{0.5} = 1.6487$
-  <br>Zeroth-order: $1$. &emsp; Error: $0.6487$ (off by 39%)
-  <br>First-order: $1.5$. &emsp; Error: $0.1487$ (off by 9%)
-  <br>Second-order: $1.625$. &emsp; Error: $0.0237$ (off by 1.4%)
-  <br><br>
-  <span class="result">Each additional term dramatically improves accuracy near $x_0$.</span>
+ <span class="step-label">Step 4: Test the predictions at $x = 0.5$.</span><br>
+ True value: $e^{0.5} = 1.6487$
+ <br>Zeroth-order: $1$. &emsp; Error: $0.6487$ (off by 39%)
+ <br>First-order: $1.5$. &emsp; Error: $0.1487$ (off by 9%)
+ <br>Second-order: $1.625$. &emsp; Error: $0.0237$ (off by 1.4%)
+ <br><br>
+ <span class="result">Each additional term dramatically improves accuracy near $x_0$.</span>
 </div>
 
 <p class="check">This is the fundamental pattern: more Taylor terms = more information used = better local prediction. In optimization, the first-order term tells us the slope (gradient), and the second-order term tells us the curvature (Hessian).</p>
@@ -165,22 +165,22 @@ $$f(x + p) \approx f(x) + \nabla f(x)^T p + \frac{1}{2} p^T \nabla^2 f(x)\, p$$
 
 
 <!-- ═══════════════════════════════════════════════════════════════════ -->
-<!-- PART B: NORMS                                                      -->
+<!-- PART B: NORMS -->
 <!-- ═══════════════════════════════════════════════════════════════════ -->
 
-<h2>Part B: Norms &mdash; Measuring Distance and Size</h2>
+<h2>Part B: Norms; Measuring Distance and Size</h2>
 
 <span class="tag">MEASURING TOOL</span>
 
 <div class="analogy">
-<strong>Analogy &mdash; Measuring a road trip.</strong>
+<strong>Analogy: Measuring a road trip.</strong>
 Suppose you need to get from point A to point B in a city. There are different ways to measure how "far" you have to go:
 <br><br>
-<strong>L1 norm (Manhattan / taxi-cab distance):</strong> This is the total distance you actually drive on a grid of city streets &mdash; you can only go north/south or east/west. If you drive 3 blocks east and 4 blocks north, your L1 distance is $3 + 4 = 7$ blocks.
+<strong>L1 norm (Manhattan / taxi-cab distance):</strong> This is the total distance you actually drive on a grid of city streets; you can only go north/south or east/west. If you drive 3 blocks east and 4 blocks north, your L1 distance is $3 + 4 = 7$ blocks.
 <br><br>
 <strong>L2 norm (Euclidean / bird-fly distance):</strong> This is the straight-line distance a bird would fly diagonally from A to B. For 3 blocks east and 4 blocks north, the bird flies $\sqrt{3^2 + 4^2} = 5$ blocks.
 <br><br>
-<strong>L-infinity norm (Chebyshev distance):</strong> This is the longest single stretch in any one direction. Among the 3 blocks east and 4 blocks north, the biggest is 4. So $\|x\|_\infty = 4$. Think of it as "the bottleneck dimension" &mdash; the direction in which you have the farthest to go.
+<strong>L-infinity norm (Chebyshev distance):</strong> This is the longest single stretch in any one direction. Among the 3 blocks east and 4 blocks north, the biggest is 4. So $\|x\|_\infty = 4$. Think of it as "the bottleneck dimension"; the direction in which you have the farthest to go.
 </div>
 
 <div class="formula-box">
@@ -200,39 +200,39 @@ $$\|x\|_\infty = \max(|x_1|, |x_2|, \ldots, |x_n|)$$
 <!-- SVG: Unit balls -->
 <div style="text-align:center; margin: 30px 0;">
 <svg viewBox="0 0 400 400" width="400" height="400" xmlns="http://www.w3.org/2000/svg">
-  <!-- Grid -->
-  <line x1="200" y1="20" x2="200" y2="380" stroke="#2e2e38" stroke-width="1"/>
-  <line x1="20" y1="200" x2="380" y2="200" stroke="#2e2e38" stroke-width="1"/>
-  <!-- Axis labels -->
-  <text x="385" y="195" fill="#a8a49c" font-size="14">x₁</text>
-  <text x="205" y="18" fill="#a8a49c" font-size="14">x₂</text>
-  <!-- Tick marks -->
-  <line x1="320" y1="195" x2="320" y2="205" stroke="#555" stroke-width="1"/>
-  <text x="315" y="220" fill="#666" font-size="11">1</text>
-  <line x1="80" y1="195" x2="80" y2="205" stroke="#555" stroke-width="1"/>
-  <text x="72" y="220" fill="#666" font-size="11">-1</text>
-  <line x1="195" y1="80" x2="205" y2="80" stroke="#555" stroke-width="1"/>
-  <text x="210" y="85" fill="#666" font-size="11">1</text>
-  <line x1="195" y1="320" x2="205" y2="320" stroke="#555" stroke-width="1"/>
-  <text x="210" y="325" fill="#666" font-size="11">-1</text>
+ <!-- Grid -->
+ <line x1="200" y1="20" x2="200" y2="380" stroke="#2e2e38" stroke-width="1"/>
+ <line x1="20" y1="200" x2="380" y2="200" stroke="#2e2e38" stroke-width="1"/>
+ <!-- Axis labels -->
+ <text x="385" y="195" fill="#a8a49c" font-size="14">x₁</text>
+ <text x="205" y="18" fill="#a8a49c" font-size="14">x₂</text>
+ <!-- Tick marks -->
+ <line x1="320" y1="195" x2="320" y2="205" stroke="#555" stroke-width="1"/>
+ <text x="315" y="220" fill="#666" font-size="11">1</text>
+ <line x1="80" y1="195" x2="80" y2="205" stroke="#555" stroke-width="1"/>
+ <text x="72" y="220" fill="#666" font-size="11">-1</text>
+ <line x1="195" y1="80" x2="205" y2="80" stroke="#555" stroke-width="1"/>
+ <text x="210" y="85" fill="#666" font-size="11">1</text>
+ <line x1="195" y1="320" x2="205" y2="320" stroke="#555" stroke-width="1"/>
+ <text x="210" y="325" fill="#666" font-size="11">-1</text>
 
-  <!-- L-infinity unit ball (square) -->
-  <rect x="80" y="80" width="240" height="240" fill="none" stroke="#c9a84c" stroke-width="2" opacity="0.7"/>
+ <!-- L-infinity unit ball (square) -->
+ <rect x="80" y="80" width="240" height="240" fill="none" stroke="#c9a84c" stroke-width="2" opacity="0.7"/>
 
-  <!-- L2 unit ball (circle) -->
-  <circle cx="200" cy="200" r="120" fill="none" stroke="#9b89b6" stroke-width="2.5"/>
+ <!-- L2 unit ball (circle) -->
+ <circle cx="200" cy="200" r="120" fill="none" stroke="#9b89b6" stroke-width="2.5"/>
 
-  <!-- L1 unit ball (diamond) -->
-  <polygon points="200,80 320,200 200,320 80,200" fill="none" stroke="#d4956a" stroke-width="2"/>
+ <!-- L1 unit ball (diamond) -->
+ <polygon points="200,80 320,200 200,320 80,200" fill="none" stroke="#d4956a" stroke-width="2"/>
 
-  <!-- Legend -->
-  <rect x="240" y="30" width="150" height="70" rx="6" fill="#25252e" opacity="0.9"/>
-  <line x1="250" y1="48" x2="275" y2="48" stroke="#d4956a" stroke-width="2"/>
-  <text x="280" y="52" fill="#d4956a" font-size="12">L1 (diamond)</text>
-  <line x1="250" y1="65" x2="275" y2="65" stroke="#9b89b6" stroke-width="2.5"/>
-  <text x="280" y="69" fill="#9b89b6" font-size="12">L2 (circle)</text>
-  <line x1="250" y1="82" x2="275" y2="82" stroke="#c9a84c" stroke-width="2"/>
-  <text x="280" y="86" fill="#c9a84c" font-size="12">L&#8734; (square)</text>
+ <!-- Legend -->
+ <rect x="240" y="30" width="150" height="70" rx="6" fill="#25252e" opacity="0.9"/>
+ <line x1="250" y1="48" x2="275" y2="48" stroke="#d4956a" stroke-width="2"/>
+ <text x="280" y="52" fill="#d4956a" font-size="12">L1 (diamond)</text>
+ <line x1="250" y1="65" x2="275" y2="65" stroke="#9b89b6" stroke-width="2.5"/>
+ <text x="280" y="69" fill="#9b89b6" font-size="12">L2 (circle)</text>
+ <line x1="250" y1="82" x2="275" y2="82" stroke="#c9a84c" stroke-width="2"/>
+ <text x="280" y="86" fill="#c9a84c" font-size="12">L&#8734; (square)</text>
 </svg>
 <p style="font-size:14px; color:#a8a49c;">Unit balls: all points where $\|x\| = 1$ for each norm. <br>The diamond (L1) has corners on the axes. The circle (L2) is round. The square (L-infinity) has flat sides.</p>
 </div>
@@ -241,18 +241,18 @@ $$\|x\|_\infty = \max(|x_1|, |x_2|, \ldots, |x_n|)$$
 <h3>Hand Computation: All Three Norms of $\mathbf{x} = [3, -4]^T$</h3>
 
 <div class="step">
-  <span class="step-label">L1 norm:</span><br>
-  $\|x\|_1 = |3| + |-4| = 3 + 4 = $ <span class="result">7</span>
+ <span class="step-label">L1 norm:</span><br>
+ $\|x\|_1 = |3| + |-4| = 3 + 4 = $ <span class="result">7</span>
 </div>
 
 <div class="step">
-  <span class="step-label">L2 norm:</span><br>
-  $\|x\|_2 = \sqrt{3^2 + (-4)^2} = \sqrt{9 + 16} = \sqrt{25} = $ <span class="result">5</span>
+ <span class="step-label">L2 norm:</span><br>
+ $\|x\|_2 = \sqrt{3^2 + (-4)^2} = \sqrt{9 + 16} = \sqrt{25} = $ <span class="result">5</span>
 </div>
 
 <div class="step">
-  <span class="step-label">L-infinity norm:</span><br>
-  $\|x\|_\infty = \max(|3|, |-4|) = \max(3, 4) = $ <span class="result">4</span>
+ <span class="step-label">L-infinity norm:</span><br>
+ $\|x\|_\infty = \max(|3|, |-4|) = \max(3, 4) = $ <span class="result">4</span>
 </div>
 
 <p class="check">Notice: L2 is always between L-infinity and L1. Here $4 \leq 5 \leq 7$. This is always true.</p>
@@ -264,15 +264,15 @@ $$\|x\|_\infty = \max(|x_1|, |x_2|, \ldots, |x_n|)$$
 
 
 <!-- ═══════════════════════════════════════════════════════════════════ -->
-<!-- PART C: CONVERGENCE RATES                                          -->
+<!-- PART C: CONVERGENCE RATES -->
 <!-- ═══════════════════════════════════════════════════════════════════ -->
 
-<h2>Part C: Convergence Rates &mdash; How Fast Do We Get There?</h2>
+<h2>Part C: Convergence Rates; How Fast Do We Get There?</h2>
 
 <span class="tag">SPEED OF ALGORITHMS</span>
 
 <div class="analogy">
-<strong>Analogy &mdash; Paying off debt.</strong>
+<strong>Analogy: Paying off debt.</strong>
 <br><br>
 <strong>Q-linear convergence</strong> is like paying a fixed percentage of your debt each month. If your debt is &#36;1000 and you pay 50% each month, it goes: &#36;1000, &#36;500, &#36;250, &#36;125, &#36;62.50, ... Every month you cut the debt in half, but you never wipe it out in one fell swoop. The ratio of consecutive debts is always 0.5 (or whatever fixed rate $r$). This is decent, but predictable.
 <br><br>
@@ -285,10 +285,10 @@ $$\|x\|_\infty = \max(|x_1|, |x_2|, \ldots, |x_n|)$$
 <p><strong>Q-linear convergence:</strong></p>
 $$\|x_{k+1} - x^*\| \leq r\, \|x_k - x^*\| \quad \text{for some } r \in (0, 1)$$
 <dl class="breakdown">
-  <dt>$x_k$</dt><dd>The approximation at step $k$.</dd>
-  <dt>$x^*$</dt><dd>The true solution we are converging to.</dd>
-  <dt>$\|x_k - x^*\|$</dt><dd>The error at step $k$ &mdash; how far we are from the answer.</dd>
-  <dt>$r$</dt><dd>The convergence ratio &mdash; a fixed number strictly between 0 and 1. Smaller $r$ means faster convergence.</dd>
+ <dt>$x_k$</dt><dd>The approximation at step $k$.</dd>
+ <dt>$x^*$</dt><dd>The true solution we are converging to.</dd>
+ <dt>$\|x_k - x^*\|$</dt><dd>The error at step $k$; how far we are from the answer.</dd>
+ <dt>$r$</dt><dd>The convergence ratio; a fixed number strictly between 0 and 1. Smaller $r$ means faster convergence.</dd>
 </dl>
 <p style="color:#b8b4ac; font-size:15px; margin-top:8px;">The error shrinks by at least a constant factor each step. Steepest descent achieves Q-linear convergence.</p>
 </div>
@@ -297,7 +297,7 @@ $$\|x_{k+1} - x^*\| \leq r\, \|x_k - x^*\| \quad \text{for some } r \in (0, 1)$$
 <p><strong>Q-superlinear convergence:</strong></p>
 $$\lim_{k \to \infty} \frac{\|x_{k+1} - x^*\|}{\|x_k - x^*\|} = 0$$
 <dl class="breakdown">
-  <dt>Ratio $\to 0$</dt><dd>The ratio of consecutive errors is not stuck at a fixed $r$ &mdash; it shrinks toward zero. Each step is proportionally more effective than the last.</dd>
+ <dt>Ratio $\to 0$</dt><dd>The ratio of consecutive errors is not stuck at a fixed $r$; it shrinks toward zero. Each step is proportionally more effective than the last.</dd>
 </dl>
 <p style="color:#b8b4ac; font-size:15px; margin-top:8px;">Faster than linear, but the ratio decays rather than the error squaring. BFGS achieves this.</p>
 </div>
@@ -306,8 +306,8 @@ $$\lim_{k \to \infty} \frac{\|x_{k+1} - x^*\|}{\|x_k - x^*\|} = 0$$
 <p><strong>Q-quadratic convergence:</strong></p>
 $$\|x_{k+1} - x^*\| \leq M\, \|x_k - x^*\|^2$$
 <dl class="breakdown">
-  <dt>$M$</dt><dd>A positive constant (does not depend on $k$).</dd>
-  <dt>$\|x_k - x^*\|^2$</dt><dd>The error <em>squared</em>. If the error is 0.01, the next error is at most $M \cdot 0.0001$. The number of correct digits roughly doubles each step.</dd>
+ <dt>$M$</dt><dd>A positive constant (does not depend on $k$).</dd>
+ <dt>$\|x_k - x^*\|^2$</dt><dd>The error <em>squared</em>. If the error is 0.01, the next error is at most $M \cdot 0.0001$. The number of correct digits roughly doubles each step.</dd>
 </dl>
 <p style="color:#b8b4ac; font-size:15px; margin-top:8px;">Newton's method achieves Q-quadratic convergence near the solution (when the Hessian is nonsingular).</p>
 </div>
@@ -319,33 +319,33 @@ $$\|x_{k+1} - x^*\| \leq M\, \|x_k - x^*\|^2$$
 <p>The sequence is $x_1 = 1, \; x_2 = 1/2, \; x_3 = 1/6, \; x_4 = 1/24, \; x_5 = 1/120, \; x_6 = 1/720, \ldots$ with $x^* = 0$.</p>
 
 <div class="step">
-  <span class="step-label">Step 1: Write the error.</span><br>
-  $e_k = |x_k - x^*| = |1/k! - 0| = 1/k!$
+ <span class="step-label">Step 1: Write the error.</span><br>
+ $e_k = |x_k - x^*| = |1/k! - 0| = 1/k!$
 </div>
 
 <div class="step">
-  <span class="step-label">Step 2: Compute the ratio $e_{k+1}/e_k$.</span><br>
-  $\displaystyle\frac{e_{k+1}}{e_k} = \frac{1/(k+1)!}{1/k!} = \frac{k!}{(k+1)!} = \frac{1}{k+1}$
+ <span class="step-label">Step 2: Compute the ratio $e_{k+1}/e_k$.</span><br>
+ $\displaystyle\frac{e_{k+1}}{e_k} = \frac{1/(k+1)!}{1/k!} = \frac{k!}{(k+1)!} = \frac{1}{k+1}$
 </div>
 
 <div class="step">
-  <span class="step-label">Step 3: Check for Q-linear.</span><br>
-  For Q-linear convergence we need $e_{k+1}/e_k \leq r$ for some fixed $r &lt; 1$.
-  <br>Since $1/(k+1)$ changes with $k$ (it is not a fixed constant), this is <em>not</em> merely Q-linear &mdash; it is <strong>at least</strong> superlinear.
-  <br>(Technically we could pick $r$ to be the largest ratio, which is $1/2$ at $k=1$, so it <em>is</em> Q-linear too. But the important point is it does better than linear.)
+ <span class="step-label">Step 3: Check for Q-linear.</span><br>
+ For Q-linear convergence we need $e_{k+1}/e_k \leq r$ for some fixed $r &lt; 1$.
+ <br>Since $1/(k+1)$ changes with $k$ (it is not a fixed constant), this is <em>not</em> merely Q-linear; it is <strong>at least</strong> superlinear.
+ <br>(Technically we could pick $r$ to be the largest ratio, which is $1/2$ at $k=1$, so it <em>is</em> Q-linear too. But the important point is it does better than linear.)
 </div>
 
 <div class="step">
-  <span class="step-label">Step 4: Check for Q-superlinear.</span><br>
-  $\displaystyle\lim_{k \to \infty} \frac{e_{k+1}}{e_k} = \lim_{k \to \infty} \frac{1}{k+1} = 0$
-  <br>The limit is 0. <span class="result">This is Q-superlinear convergence.</span>
+ <span class="step-label">Step 4: Check for Q-superlinear.</span><br>
+ $\displaystyle\lim_{k \to \infty} \frac{e_{k+1}}{e_k} = \lim_{k \to \infty} \frac{1}{k+1} = 0$
+ <br>The limit is 0. <span class="result">This is Q-superlinear convergence.</span>
 </div>
 
 <div class="step">
-  <span class="step-label">Step 5: Check for Q-quadratic.</span><br>
-  $\displaystyle\frac{e_{k+1}}{e_k^2} = \frac{1/(k+1)!}{(1/k!)^2} = \frac{(k!)^2}{(k+1)!} = \frac{(k!)^2}{(k+1) \cdot k!} = \frac{k!}{k+1}$
-  <br>As $k \to \infty$, $k!/(k+1) \to \infty$, so this ratio blows up.
-  <br><span class="result">NOT Q-quadratic</span> &mdash; the error does not shrink as fast as the square of the previous error.
+ <span class="step-label">Step 5: Check for Q-quadratic.</span><br>
+ $\displaystyle\frac{e_{k+1}}{e_k^2} = \frac{1/(k+1)!}{(1/k!)^2} = \frac{(k!)^2}{(k+1)!} = \frac{(k!)^2}{(k+1) \cdot k!} = \frac{k!}{k+1}$
+ <br>As $k \to \infty$, $k!/(k+1) \to \infty$, so this ratio blows up.
+ <br><span class="result">NOT Q-quadratic</span>; the error does not shrink as fast as the square of the previous error.
 </div>
 
 <p class="check">Final answer: The sequence $x_k = 1/k!$ converges Q-superlinearly to $0$, but not Q-quadratically.</p>
@@ -353,10 +353,10 @@ $$\|x_{k+1} - x^*\| \leq M\, \|x_k - x^*\|^2$$
 
 <table class="step-table">
 <tr>
-  <th>$k$</th>
-  <th>$x_k = 1/k!$</th>
-  <th>$e_k = 1/k!$</th>
-  <th>$e_{k+1}/e_k = 1/(k+1)$</th>
+ <th>$k$</th>
+ <th>$x_k = 1/k!$</th>
+ <th>$e_k = 1/k!$</th>
+ <th>$e_{k+1}/e_k = 1/(k+1)$</th>
 </tr>
 <tr><td>1</td><td>1</td><td>1</td><td>0.5000</td></tr>
 <tr><td>2</td><td>0.5</td><td>0.5</td><td>0.3333</td></tr>
@@ -366,33 +366,33 @@ $$\|x_{k+1} - x^*\| \leq M\, \|x_k - x^*\|^2$$
 <tr><td>6</td><td>0.001389</td><td>0.001389</td><td>$\to 0$</td></tr>
 </table>
 
-<p style="font-size:15px; color:#a8a49c; margin-top:8px;">The ratio column keeps shrinking toward 0 &mdash; the hallmark of superlinear convergence. Compare this to a Q-linear sequence where the ratio would stay constant (like 0.5 every row).</p>
+<p style="font-size:15px; color:#a8a49c; margin-top:8px;">The ratio column keeps shrinking toward 0; the hallmark of superlinear convergence. Compare this to a Q-linear sequence where the ratio would stay constant (like 0.5 every row).</p>
 
 
 <!-- ═══════════════════════════════════════════════════════════════════ -->
-<!-- PART D: CONDITION NUMBERS                                          -->
+<!-- PART D: CONDITION NUMBERS -->
 <!-- ═══════════════════════════════════════════════════════════════════ -->
 
-<h2>Part D: Condition Numbers &mdash; Why Some Problems Are Harder</h2>
+<h2>Part D: Condition Numbers; Why Some Problems Are Harder</h2>
 
 <span class="tag">PROBLEM DIFFICULTY</span>
 
 <div class="analogy">
-<strong>Analogy &mdash; Bathtub vs. round bowl.</strong>
-Imagine you drop a marble into a perfectly round bowl. The marble rolls straight to the bottom without zigzagging &mdash; the bowl is symmetric in every direction, so the steepest-downhill direction always points straight at the center. This bowl has condition number $\kappa = 1$.
+<strong>Analogy: Bathtub vs. round bowl.</strong>
+Imagine you drop a marble into a perfectly round bowl. The marble rolls straight to the bottom without zigzagging; the bowl is symmetric in every direction, so the steepest-downhill direction always points straight at the center. This bowl has condition number $\kappa = 1$.
 <br><br>
-Now imagine you drop a marble into an elongated bathtub &mdash; the shape of a hot dog. The sides are very steep but the bottom is a long, almost flat valley. The marble does NOT roll straight to the lowest point. Instead it bounces back and forth between the steep sides, making tiny progress along the flat bottom each time. It zigzags, wasting enormous effort. This bathtub has a <em>large</em> condition number.
+Now imagine you drop a marble into an elongated bathtub; the shape of a hot dog. The sides are very steep but the bottom is a long, almost flat valley. The marble does NOT roll straight to the lowest point. Instead it bounces back and forth between the steep sides, making tiny progress along the flat bottom each time. It zigzags, wasting enormous effort. This bathtub has a <em>large</em> condition number.
 <br><br>
-This is <em>exactly</em> what happens to gradient descent on ill-conditioned problems. The gradient (steepest downhill) keeps pointing toward the steep sides, not along the valley floor. The method zigzags back and forth, converging painfully slowly. This is not a bug in gradient descent &mdash; it is a fundamental property of the problem's geometry.
+This is <em>exactly</em> what happens to gradient descent on ill-conditioned problems. The gradient (steepest downhill) keeps pointing toward the steep sides, not along the valley floor. The method zigzags back and forth, converging painfully slowly. This is not a bug in gradient descent; it is a fundamental property of the problem's geometry.
 </div>
 
 <div class="formula-box">
 <p><strong>Condition number of a symmetric positive definite matrix $A$:</strong></p>
 $$\kappa(A) = \frac{\lambda_{\max}}{\lambda_{\min}}$$
 <dl class="breakdown">
-  <dt>$\lambda_{\max}$</dt><dd>The largest eigenvalue of $A$ &mdash; represents the steepest curvature direction.</dd>
-  <dt>$\lambda_{\min}$</dt><dd>The smallest eigenvalue of $A$ &mdash; represents the flattest curvature direction.</dd>
-  <dt>$\kappa(A)$</dt><dd>The ratio. When $\kappa = 1$, all directions have equal curvature (round bowl). When $\kappa$ is large, the landscape is elongated (bathtub).</dd>
+ <dt>$\lambda_{\max}$</dt><dd>The largest eigenvalue of $A$; represents the steepest curvature direction.</dd>
+ <dt>$\lambda_{\min}$</dt><dd>The smallest eigenvalue of $A$; represents the flattest curvature direction.</dd>
+ <dt>$\kappa(A)$</dt><dd>The ratio. When $\kappa = 1$, all directions have equal curvature (round bowl). When $\kappa$ is large, the landscape is elongated (bathtub).</dd>
 </dl>
 </div>
 
@@ -400,18 +400,18 @@ $$\kappa(A) = \frac{\lambda_{\max}}{\lambda_{\min}}$$
 <h3>Why Does the Condition Number Control Convergence Speed?</h3>
 <p>For steepest descent on a quadratic, the convergence factor per step is:</p>
 $$r = \frac{\kappa - 1}{\kappa + 1}$$
-<p style="margin-top:10px;">When $\kappa = 1$: $r = 0/(2) = 0$ &mdash; instant convergence in one step (round bowl).</p>
-<p>When $\kappa = 100$: $r = 99/101 \approx 0.98$ &mdash; each step only reduces the error by about 2%. It takes hundreds of steps.</p>
-<p>When $\kappa = 1000$: $r = 999/1001 \approx 0.998$ &mdash; each step reduces error by 0.2%. Thousands of steps needed.</p>
-<p style="margin-top:12px;">This is why Newton's method and BFGS exist &mdash; they effectively transform the problem so that it "looks" more like a round bowl, dramatically improving the convergence.</p>
+<p style="margin-top:10px;">When $\kappa = 1$: $r = 0/(2) = 0$ , instant convergence in one step (round bowl).</p>
+<p>When $\kappa = 100$: $r = 99/101 \approx 0.98$; each step only reduces the error by about 2%. It takes hundreds of steps.</p>
+<p>When $\kappa = 1000$: $r = 999/1001 \approx 0.998$; each step reduces error by 0.2%. Thousands of steps needed.</p>
+<p style="margin-top:12px;">This is why Newton's method and BFGS exist; they effectively transform the problem so that it "looks" more like a round bowl, dramatically improving the convergence.</p>
 </div>
 
 <table class="step-table">
 <tr>
-  <th>$\kappa$</th>
-  <th>Convergence factor $r = \frac{\kappa-1}{\kappa+1}$</th>
-  <th>Approx. iterations to reduce error by $10^{-6}$</th>
-  <th>Intuition</th>
+ <th>$\kappa$</th>
+ <th>Convergence factor $r = \frac{\kappa-1}{\kappa+1}$</th>
+ <th>Approx. iterations to reduce error by $10^{-6}$</th>
+ <th>Intuition</th>
 </tr>
 <tr><td>1</td><td>0</td><td>1</td><td>Perfect round bowl</td></tr>
 <tr><td>2</td><td>0.333</td><td>~13</td><td>Slightly oval</td></tr>
@@ -421,7 +421,7 @@ $$r = \frac{\kappa - 1}{\kappa + 1}$$
 <tr><td>1000</td><td>0.998</td><td>~6907</td><td>Extreme hot-dog valley</td></tr>
 </table>
 
-<p style="font-size:15px; color:#a8a49c; margin-top:8px;">Iterations estimated as $\lceil \log(10^{-6}) / \log(r) \rceil$ &mdash; the number of steps for the error to shrink by a factor of $10^{-6}$.</p>
+<p style="font-size:15px; color:#a8a49c; margin-top:8px;">Iterations estimated as $\lceil \log(10^{-6}) / \log(r) \rceil$; the number of steps for the error to shrink by a factor of $10^{-6}$.</p>
 
 <div class="note">
 <strong>Cross-reference:</strong> On <a href="cg-04-line-search.html" style="color:#d4956a;">Page 04</a> you will see gradient descent zigzagging on an ill-conditioned Rosenbrock function. On <a href="cg-07-newton.html" style="color:#d4956a;">Page 07</a> you will see Newton's method solving the same problem in far fewer steps because it accounts for curvature via the Hessian.
@@ -429,7 +429,7 @@ $$r = \frac{\kappa - 1}{\kappa + 1}$$
 
 
 <!-- ═══════════════════════════════════════════════════════════════════ -->
-<!-- GLOSSARY                                                           -->
+<!-- GLOSSARY -->
 <!-- ═══════════════════════════════════════════════════════════════════ -->
 
 <h2>Glossary</h2>
@@ -437,58 +437,58 @@ $$r = \frac{\kappa - 1}{\kappa + 1}$$
 <div class="glossary">
 <h3>Key Terms from This Page</h3>
 <dl>
-  <dt>Taylor expansion</dt>
-  <dd>A way to approximate a function near a known point using the function's value, first derivative (gradient), second derivative (Hessian), and higher-order derivatives. The more terms you include, the better the approximation locally.</dd>
+ <dt>Taylor expansion</dt>
+ <dd>A way to approximate a function near a known point using the function's value, first derivative (gradient), second derivative (Hessian), and higher-order derivatives. The more terms you include, the better the approximation locally.</dd>
 
-  <dt>First-order approximation</dt>
-  <dd>Uses only the function value and gradient: $f(x+p) \approx f(x) + \nabla f(x)^T p$. This gives a linear (flat plane) approximation. Gradient descent is based on this.</dd>
+ <dt>First-order approximation</dt>
+ <dd>Uses only the function value and gradient: $f(x+p) \approx f(x) + \nabla f(x)^T p$. This gives a linear (flat plane) approximation. Gradient descent is based on this.</dd>
 
-  <dt>Second-order approximation</dt>
-  <dd>Adds the Hessian term: $f(x+p) \approx f(x) + \nabla f(x)^T p + \frac{1}{2}p^T \nabla^2 f(x) p$. This gives a quadratic (bowl-shaped) approximation. Newton's method is based on this.</dd>
+ <dt>Second-order approximation</dt>
+ <dd>Adds the Hessian term: $f(x+p) \approx f(x) + \nabla f(x)^T p + \frac{1}{2}p^T \nabla^2 f(x) p$. This gives a quadratic (bowl-shaped) approximation. Newton's method is based on this.</dd>
 
-  <dt>Norm</dt>
-  <dd>A function that measures the "size" or "length" of a vector. Must satisfy: (1) $\|x\| \geq 0$ with equality only when $x = 0$, (2) $\|cx\| = |c| \|x\|$ (scaling), (3) $\|x + y\| \leq \|x\| + \|y\|$ (triangle inequality).</dd>
+ <dt>Norm</dt>
+ <dd>A function that measures the "size" or "length" of a vector. Must satisfy: (1) $\|x\| \geq 0$ with equality only when $x = 0$, (2) $\|cx\| = |c| \|x\|$ (scaling), (3) $\|x + y\| \leq \|x\| + \|y\|$ (triangle inequality).</dd>
 
-  <dt>L1 norm ($\|\cdot\|_1$)</dt>
-  <dd>Sum of absolute values: $|x_1| + |x_2| + \cdots + |x_n|$. Also called the Manhattan or taxicab norm. Its unit ball is a diamond shape.</dd>
+ <dt>L1 norm ($\|\cdot\|_1$)</dt>
+ <dd>Sum of absolute values: $|x_1| + |x_2| + \cdots + |x_n|$. Also called the Manhattan or taxicab norm. Its unit ball is a diamond shape.</dd>
 
-  <dt>L2 norm ($\|\cdot\|_2$)</dt>
-  <dd>Euclidean length: $\sqrt{x_1^2 + x_2^2 + \cdots + x_n^2}$. The "default" norm. Its unit ball is a circle (in 2D) or sphere (in 3D).</dd>
+ <dt>L2 norm ($\|\cdot\|_2$)</dt>
+ <dd>Euclidean length: $\sqrt{x_1^2 + x_2^2 + \cdots + x_n^2}$. The "default" norm. Its unit ball is a circle (in 2D) or sphere (in 3D).</dd>
 
-  <dt>L-infinity norm ($\|\cdot\|_\infty$)</dt>
-  <dd>Maximum absolute component: $\max(|x_1|, |x_2|, \ldots, |x_n|)$. Also called the Chebyshev norm. Its unit ball is a square (in 2D) or cube (in 3D).</dd>
+ <dt>L-infinity norm ($\|\cdot\|_\infty$)</dt>
+ <dd>Maximum absolute component: $\max(|x_1|, |x_2|, \ldots, |x_n|)$. Also called the Chebyshev norm. Its unit ball is a square (in 2D) or cube (in 3D).</dd>
 
-  <dt>Convergence rate</dt>
-  <dd>A measure of how quickly an iterative method approaches the true solution. Faster convergence means fewer iterations (and less computation) to reach a given accuracy.</dd>
+ <dt>Convergence rate</dt>
+ <dd>A measure of how quickly an iterative method approaches the true solution. Faster convergence means fewer iterations (and less computation) to reach a given accuracy.</dd>
 
-  <dt>Q-linear convergence</dt>
-  <dd>The error decreases by at least a constant factor each step: $e_{k+1} \leq r \cdot e_k$ for some fixed $r \in (0,1)$. Steepest descent achieves this. "Q" stands for "quotient" (we look at the ratio of consecutive errors).</dd>
+ <dt>Q-linear convergence</dt>
+ <dd>The error decreases by at least a constant factor each step: $e_{k+1} \leq r \cdot e_k$ for some fixed $r \in (0,1)$. Steepest descent achieves this. "Q" stands for "quotient" (we look at the ratio of consecutive errors).</dd>
 
-  <dt>Q-superlinear convergence</dt>
-  <dd>The ratio of consecutive errors $e_{k+1}/e_k$ shrinks to zero. Each step becomes proportionally more effective. BFGS and secant methods achieve this. Faster than Q-linear, slower than Q-quadratic.</dd>
+ <dt>Q-superlinear convergence</dt>
+ <dd>The ratio of consecutive errors $e_{k+1}/e_k$ shrinks to zero. Each step becomes proportionally more effective. BFGS and secant methods achieve this. Faster than Q-linear, slower than Q-quadratic.</dd>
 
-  <dt>Q-quadratic convergence</dt>
-  <dd>The error satisfies $e_{k+1} \leq M \cdot e_k^2$. The number of correct digits roughly doubles each step. Newton's method achieves this near the solution. Spectacularly fast once you are close.</dd>
+ <dt>Q-quadratic convergence</dt>
+ <dd>The error satisfies $e_{k+1} \leq M \cdot e_k^2$. The number of correct digits roughly doubles each step. Newton's method achieves this near the solution. Spectacularly fast once you are close.</dd>
 
-  <dt>R-convergence</dt>
-  <dd>A weaker notion of convergence rate that looks at the overall sequence behavior rather than step-to-step ratios. A sequence has R-linear convergence of order $r$ if $e_k \leq C \cdot r^k$ for some constant $C$. The error is bounded by a geometric sequence, even if individual ratios fluctuate.</dd>
+ <dt>R-convergence</dt>
+ <dd>A weaker notion of convergence rate that looks at the overall sequence behavior rather than step-to-step ratios. A sequence has R-linear convergence of order $r$ if $e_k \leq C \cdot r^k$ for some constant $C$. The error is bounded by a geometric sequence, even if individual ratios fluctuate.</dd>
 
-  <dt>Condition number ($\kappa$)</dt>
-  <dd>The ratio $\lambda_{\max}/\lambda_{\min}$ of the largest to smallest eigenvalue of a positive definite matrix. Measures how "elongated" the problem's geometry is. $\kappa = 1$ means perfectly round (easy). Large $\kappa$ means badly stretched (hard for gradient descent). Gradient descent's convergence factor is $(\kappa - 1)/(\kappa + 1)$.</dd>
+ <dt>Condition number ($\kappa$)</dt>
+ <dd>The ratio $\lambda_{\max}/\lambda_{\min}$ of the largest to smallest eigenvalue of a positive definite matrix. Measures how "elongated" the problem's geometry is. $\kappa = 1$ means perfectly round (easy). Large $\kappa$ means badly stretched (hard for gradient descent). Gradient descent's convergence factor is $(\kappa - 1)/(\kappa + 1)$.</dd>
 
-  <dt>Error sequence</dt>
-  <dd>The sequence of distances $e_k = \|x_k - x^*\|$ from each iterate to the true solution. Analyzing this sequence (ratios, limits, bounds) is how we determine the convergence rate of an algorithm.</dd>
+ <dt>Error sequence</dt>
+ <dd>The sequence of distances $e_k = \|x_k - x^*\|$ from each iterate to the true solution. Analyzing this sequence (ratios, limits, bounds) is how we determine the convergence rate of an algorithm.</dd>
 </dl>
 </div>
 
 
 <!-- ═══════════════════════════════════════════════════════════════════ -->
-<!-- NAVIGATION                                                         -->
+<!-- NAVIGATION -->
 <!-- ═══════════════════════════════════════════════════════════════════ -->
 
 <div class="nav">
-  <p><a href="index.html">&larr; Back to Index</a></p>
-  <p><a href="cg-02-multivariable-bridge.html">Next: Page 02 &mdash; Multivariable Calculus Bridge &rarr;</a></p>
+ <p><a href="index.html">&larr; Back to Index</a></p>
+ <p><a href="cg-02-multivariable-bridge.html">Next: Page 02; Multivariable Calculus Bridge &rarr;</a></p>
 </div>
 
 </div><!-- .container -->

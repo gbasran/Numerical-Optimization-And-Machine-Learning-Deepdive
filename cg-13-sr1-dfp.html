@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Page 13 &mdash; SR1 and DFP Methods | MATH 3850 Course Guide</title>
+<title>Page 13 : SR1 and DFP Methods | MATH 3850 Course Guide</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+ onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,14 +15,14 @@
 
 <span class="tag">PAGE 13</span>
 <h1>SR1 and DFP Methods</h1>
-<p class="subtitle">Two more quasi-Newton updates &mdash; SR1 is simpler (rank 1), DFP is BFGS's older sibling (rank 2)</p>
+<p class="subtitle">Two more quasi-Newton updates; SR1 is simpler (rank 1), DFP is BFGS's older sibling (rank 2)</p>
 
 <!-- ===================== PART A ===================== -->
-<h2>Part A: SR1 &mdash; Symmetric Rank-One Update</h2>
+<h2>Part A: SR1; Symmetric Rank-One Update</h2>
 
 <div class="analogy">
-<strong>Physical analogy &mdash; tuning one string at a time.</strong><br><br>
-On <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>, we saw that BFGS updates the Hessian approximation with a <strong>rank-2 correction</strong> &mdash; it adjusts two "dimensions" of the curvature map each step. Think of it like tuning a piano: BFGS adjusts two strings at once to bring them into harmony.<br><br>
+<strong>Physical analogy; tuning one string at a time.</strong><br><br>
+On <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>, we saw that BFGS updates the Hessian approximation with a <strong>rank-2 correction</strong>; it adjusts two "dimensions" of the curvature map each step. Think of it like tuning a piano: BFGS adjusts two strings at once to bring them into harmony.<br><br>
 SR1 (Symmetric Rank-One) is simpler: it only adjusts <strong>one string per step</strong>. The correction matrix has rank 1 instead of rank 2. This makes the formula shorter and easier to compute, but there is a trade-off: SR1 does NOT guarantee the curvature map stays bowl-shaped (positive definite). Sometimes the map can develop "saddle" directions, which means the search direction might not point downhill.<br><br>
 Despite this, SR1 has a remarkable property: it can learn the exact curvature map ($H_k = Q^{-1}$) in fewer steps than BFGS on some problems. In the worked example below, SR1 recovers $Q^{-1}$ in just ONE iteration.
 </div>
@@ -33,13 +33,13 @@ Despite this, SR1 has a remarkable property: it can learn the exact curvature ma
 $$H_{k+1} = H_k + \frac{(s_k - H_k y_k)(s_k - H_k y_k)^T}{(s_k - H_k y_k)^T y_k}$$
 
 <dl class="breakdown">
-  <dt>$H_k$</dt><dd>current inverse Hessian approximation (recall from <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>)</dd>
-  <dt>$s_k = x_{k+1} - x_k$</dt><dd>step taken (same as in BFGS)</dd>
-  <dt>$y_k = g_{k+1} - g_k$</dt><dd>gradient change (same as in BFGS)</dd>
-  <dt>$H_k y_k$</dt><dd>what our current map <em>predicts</em> the step should have been, given the observed gradient change. If $H_k$ were perfect ($H_k = \nabla^2 f^{-1}$), then $H_k y_k$ would equal $s_k$ exactly (by the secant condition).</dd>
-  <dt>$s_k - H_k y_k$</dt><dd>the <strong>prediction error</strong> &mdash; how wrong our map was. If zero, the map already predicted perfectly and no update is needed.</dd>
-  <dt>$(s_k - H_k y_k)(s_k - H_k y_k)^T$</dt><dd>an outer product of the error with itself &mdash; a rank-1 matrix (one "dimension" of correction)</dd>
-  <dt>$(s_k - H_k y_k)^T y_k$</dt><dd>a scalar (the denominator) &mdash; projects the error onto the gradient change direction</dd>
+ <dt>$H_k$</dt><dd>current inverse Hessian approximation (recall from <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>)</dd>
+ <dt>$s_k = x_{k+1} - x_k$</dt><dd>step taken (same as in BFGS)</dd>
+ <dt>$y_k = g_{k+1} - g_k$</dt><dd>gradient change (same as in BFGS)</dd>
+ <dt>$H_k y_k$</dt><dd>what our current map <em>predicts</em> the step should have been, given the observed gradient change. If $H_k$ were perfect ($H_k = \nabla^2 f^{-1}$), then $H_k y_k$ would equal $s_k$ exactly (by the secant condition).</dd>
+ <dt>$s_k - H_k y_k$</dt><dd>the <strong>prediction error</strong>; how wrong our map was. If zero, the map already predicted perfectly and no update is needed.</dd>
+ <dt>$(s_k - H_k y_k)(s_k - H_k y_k)^T$</dt><dd>an outer product of the error with itself; a rank-1 matrix (one "dimension" of correction)</dd>
+ <dt>$(s_k - H_k y_k)^T y_k$</dt><dd>a scalar (the denominator); projects the error onto the gradient change direction</dd>
 </dl>
 
 <p style="margin-top:12px;"><strong>Key structural observation:</strong> The numerator is $(s_k - H_k y_k)(s_k - H_k y_k)^T$, which is a rank-1 matrix (outer product of a vector with itself). So the entire correction is rank 1. Compare with BFGS, which subtracts one rank-1 matrix and adds another, giving a rank-2 correction.</p>
@@ -60,7 +60,7 @@ $$= H_k y_k + (s_k - H_k y_k) = s_k \quad \checkmark$$
 
 <div class="formula-box">
 <strong>The problem: the denominator can blow up</strong><br><br>
-<p>The SR1 update has denominator $(s_k - H_k y_k)^T y_k$. If this is zero or very close to zero, we are dividing by (nearly) zero, and the update matrix would have enormous entries &mdash; numerical disaster.</p>
+<p>The SR1 update has denominator $(s_k - H_k y_k)^T y_k$. If this is zero or very close to zero, we are dividing by (nearly) zero, and the update matrix would have enormous entries; numerical disaster.</p>
 
 <p style="margin-top:8px;">This happens when the prediction error $s_k - H_k y_k$ is (nearly) perpendicular to $y_k$. In that case, the gradient change doesnt give us useful information in the error direction, and we should skip the update.</p>
 </div>
@@ -71,13 +71,13 @@ $$= H_k y_k + (s_k - H_k y_k) = s_k \quad \checkmark$$
 $$\text{Skip the SR1 update if } \quad |(s_k - H_k y_k)^T y_k| &lt; r \, \|s_k - H_k y_k\| \cdot \|y_k\|$$
 
 <dl class="breakdown">
-  <dt>$r$</dt><dd>a small positive number, typically $r = 10^{-8}$</dd>
-  <dt>$|\cdot|$</dt><dd>absolute value of the scalar</dd>
-  <dt>$\|s_k - H_k y_k\|$</dt><dd>length of the prediction error vector</dd>
-  <dt>$\|y_k\|$</dt><dd>length of the gradient change vector</dd>
+ <dt>$r$</dt><dd>a small positive number, typically $r = 10^{-8}$</dd>
+ <dt>$|\cdot|$</dt><dd>absolute value of the scalar</dd>
+ <dt>$\|s_k - H_k y_k\|$</dt><dd>length of the prediction error vector</dd>
+ <dt>$\|y_k\|$</dt><dd>length of the gradient change vector</dd>
 </dl>
 
-<p style="margin-top:12px;">The right-hand side is $r$ times the product of the two vector lengths. By the Cauchy-Schwarz inequality, $|(s_k - H_k y_k)^T y_k| \leq \|s_k - H_k y_k\| \cdot \|y_k\|$, so this condition triggers when the cosine of the angle between the two vectors is smaller than $r$ &mdash; i.e., they are nearly perpendicular.</p>
+<p style="margin-top:12px;">The right-hand side is $r$ times the product of the two vector lengths. By the Cauchy-Schwarz inequality, $|(s_k - H_k y_k)^T y_k| \leq \|s_k - H_k y_k\| \cdot \|y_k\|$, so this condition triggers when the cosine of the angle between the two vectors is smaller than $r$; i.e., they are nearly perpendicular.</p>
 
 <p style="margin-top:8px;">When the safeguard triggers, we simply keep $H_{k+1} = H_k$ (dont update) and move on to the next iteration.</p>
 </div>
@@ -92,17 +92,17 @@ $$\text{Skip the SR1 update if } \quad |(s_k - H_k y_k)^T y_k| &lt; r \, \|s_k -
 <div class="note">
 <strong>Summary of SR1 trade-offs:</strong>
 <ul style="margin-top:8px; margin-left:20px;">
-  <li><strong>Pro:</strong> Simpler formula (rank-1 vs rank-2)</li>
-  <li><strong>Pro:</strong> Can learn $Q^{-1}$ faster on some problems</li>
-  <li><strong>Pro:</strong> Can capture non-convex curvature (useful for saddle points)</li>
-  <li><strong>Con:</strong> No positive definiteness guarantee &mdash; needs trust region or safeguard</li>
-  <li><strong>Con:</strong> Denominator can vanish &mdash; needs skip rule</li>
+ <li><strong>Pro:</strong> Simpler formula (rank-1 vs rank-2)</li>
+ <li><strong>Pro:</strong> Can learn $Q^{-1}$ faster on some problems</li>
+ <li><strong>Pro:</strong> Can capture non-convex curvature (useful for saddle points)</li>
+ <li><strong>Con:</strong> No positive definiteness guarantee; needs trust region or safeguard</li>
+ <li><strong>Con:</strong> Denominator can vanish; needs skip rule</li>
 </ul>
 </div>
 
 
 <!-- ===================== PART C ===================== -->
-<h2>Part C: Full Hand Computation &mdash; Mirrors Assignment 2 Q2</h2>
+<h2>Part C: Full Hand Computation; Mirrors Assignment 2 Q2</h2>
 
 <div class="exam-flag">
 <h4>EXAM ALERT</h4>
@@ -199,7 +199,7 @@ $$= \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} + \begin{bmatrix} -1/2 & 0 \\ 0
 </div>
 </div>
 
-<p style="margin-top:24px; color:#9b89b6; font-weight:bold; font-size:20px;">ITERATION 1 ($k = 1$) &mdash; Confirmation</p>
+<p style="margin-top:24px; color:#9b89b6; font-weight:bold; font-size:20px;">ITERATION 1 ($k = 1$); Confirmation</p>
 
 <div class="hand-calc">
 <h3>Since $H_1 = Q^{-1}$, the next step is a Newton step and converges exactly.</h3>
@@ -227,14 +227,14 @@ $$x_2 = x_1 + \alpha_1 p_1 = \begin{bmatrix} -1/9 \\ 4/9 \end{bmatrix} + 1 \cdot
 
 <p class="result">Converged to the exact minimum in 2 total iterations! &#10003;</p>
 
-<p class="check">Notice that $\alpha_1 = 1$ &mdash; the full Newton step. When $H_k = Q^{-1}$ exactly, the quasi-Newton direction equals the Newton direction, and the exact line search gives $\alpha = 1$. This is the hallmark of a perfect inverse Hessian approximation.</p>
+<p class="check">Notice that $\alpha_1 = 1$ , the full Newton step. When $H_k = Q^{-1}$ exactly, the quasi-Newton direction equals the Newton direction, and the exact line search gives $\alpha = 1$. This is the hallmark of a perfect inverse Hessian approximation.</p>
 </div>
 </div>
 
 <div class="why-box">
 <h3>Why Did SR1 Recover $Q^{-1}$ in One Step?</h3>
 <p>For this particular problem, $Q$ is diagonal with entries 2 and 1. The identity $H_0 = I$ already has the correct $(2,2)$ entry ($Q^{-1}_{22} = 1/1 = 1 = I_{22}$). Only the $(1,1)$ entry is wrong ($Q^{-1}_{11} = 1/2 \neq 1 = I_{11}$). Since the error is rank 1 (only one entry needs fixing), a single rank-1 SR1 update can fix it exactly.</p>
-<p style="margin-top:8px;">In general, if $H_0$ differs from $Q^{-1}$ by a matrix of rank $r$, then SR1 needs exactly $r$ iterations to recover $Q^{-1}$ (on a quadratic with exact line search). BFGS, with its rank-2 updates, needs at most $\lceil r/2 \rceil$ iterations &mdash; but the situation is more nuanced in practice.</p>
+<p style="margin-top:8px;">In general, if $H_0$ differs from $Q^{-1}$ by a matrix of rank $r$, then SR1 needs exactly $r$ iterations to recover $Q^{-1}$ (on a quadratic with exact line search). BFGS, with its rank-2 updates, needs at most $\lceil r/2 \rceil$ iterations; but the situation is more nuanced in practice.</p>
 </div>
 
 
@@ -242,7 +242,7 @@ $$x_2 = x_1 + \alpha_1 p_1 = \begin{bmatrix} -1/9 \\ 4/9 \end{bmatrix} + 1 \cdot
 <h2>Part D: DFP Method</h2>
 
 <div class="analogy">
-<strong>Physical analogy &mdash; BFGS's older sibling.</strong><br><br>
+<strong>Physical analogy; BFGS's older sibling.</strong><br><br>
 DFP (Davidon-Fletcher-Powell) was the FIRST quasi-Newton method, published in 1959 by William Davidon and refined by Fletcher and Powell. It predates BFGS by about a decade. Think of DFP as the prototype and BFGS as the improved version. They share the same overall idea (update an inverse Hessian approximation using $s_k$ and $y_k$), but BFGS turns out to be more numerically stable in practice.
 </div>
 
@@ -252,14 +252,14 @@ DFP (Davidon-Fletcher-Powell) was the FIRST quasi-Newton method, published in 19
 $$H_{k+1} = H_k - \frac{H_k y_k y_k^T H_k}{y_k^T H_k y_k} + \frac{s_k s_k^T}{s_k^T y_k}$$
 
 <dl class="breakdown">
-  <dt>$H_k$</dt><dd>current inverse Hessian approximation</dd>
-  <dt>$y_k = g_{k+1} - g_k$</dt><dd>gradient change</dd>
-  <dt>$s_k = x_{k+1} - x_k$</dt><dd>step taken</dd>
-  <dt>$H_k y_k$</dt><dd>matrix-vector product: $H_k$ times the gradient change</dd>
-  <dt>$H_k y_k y_k^T H_k$</dt><dd>outer product involving $H_k y_k$ &mdash; a rank-1 matrix</dd>
-  <dt>$y_k^T H_k y_k$</dt><dd>a scalar: the gradient change's "energy" under the current inverse Hessian</dd>
-  <dt>$s_k s_k^T$</dt><dd>outer product of the step with itself &mdash; rank-1 matrix</dd>
-  <dt>$s_k^T y_k$</dt><dd>a scalar: the curvature condition value (must be $&gt; 0$ for the update to be valid)</dd>
+ <dt>$H_k$</dt><dd>current inverse Hessian approximation</dd>
+ <dt>$y_k = g_{k+1} - g_k$</dt><dd>gradient change</dd>
+ <dt>$s_k = x_{k+1} - x_k$</dt><dd>step taken</dd>
+ <dt>$H_k y_k$</dt><dd>matrix-vector product: $H_k$ times the gradient change</dd>
+ <dt>$H_k y_k y_k^T H_k$</dt><dd>outer product involving $H_k y_k$; a rank-1 matrix</dd>
+ <dt>$y_k^T H_k y_k$</dt><dd>a scalar: the gradient change's "energy" under the current inverse Hessian</dd>
+ <dt>$s_k s_k^T$</dt><dd>outer product of the step with itself; rank-1 matrix</dd>
+ <dt>$s_k^T y_k$</dt><dd>a scalar: the curvature condition value (must be $&gt; 0$ for the update to be valid)</dd>
 </dl>
 
 <p style="margin-top:12px;">Like BFGS, this is a <strong>rank-2 update</strong>: subtract one rank-1 matrix ($\frac{H_k y_k y_k^T H_k}{y_k^T H_k y_k}$) and add another ($\frac{s_k s_k^T}{s_k^T y_k}$).</p>
@@ -269,98 +269,98 @@ $$H_{k+1} = H_k - \frac{H_k y_k y_k^T H_k}{y_k^T H_k y_k} + \frac{s_k s_k^T}{s_k
 <h3>DFP is the "Dual" of BFGS</h3>
 <p>There is a beautiful mathematical relationship between DFP and BFGS:</p>
 <ul style="margin-top:8px; margin-left:20px;">
-  <li><strong>BFGS updates $H_k$</strong> (inverse Hessian) using $s_k$ and $y_k$ in a certain pattern.</li>
-  <li><strong>DFP updates $H_k$</strong> using the SAME formula structure, but with the roles of $s$ and $y$ swapped in a specific way.</li>
+ <li><strong>BFGS updates $H_k$</strong> (inverse Hessian) using $s_k$ and $y_k$ in a certain pattern.</li>
+ <li><strong>DFP updates $H_k$</strong> using the SAME formula structure, but with the roles of $s$ and $y$ swapped in a specific way.</li>
 </ul>
 <p style="margin-top:8px;">Equivalently:</p>
 <ul style="margin-top:4px; margin-left:20px;">
-  <li>If you apply the BFGS formula to update the <em>direct</em> Hessian $B_k$ and then invert, you get the DFP formula for $H_k$.</li>
-  <li>If you apply the DFP formula to update $B_k$ and then invert, you get the BFGS formula for $H_k$.</li>
+ <li>If you apply the BFGS formula to update the <em>direct</em> Hessian $B_k$ and then invert, you get the DFP formula for $H_k$.</li>
+ <li>If you apply the DFP formula to update $B_k$ and then invert, you get the BFGS formula for $H_k$.</li>
 </ul>
-<p style="margin-top:8px;">They are "complementary" or "dual" methods. On a quadratic with exact line search, they produce the same sequence of iterates. On general functions, they differ &mdash; and BFGS is consistently better.</p>
+<p style="margin-top:8px;">They are "complementary" or "dual" methods. On a quadratic with exact line search, they produce the same sequence of iterates. On general functions, they differ; and BFGS is consistently better.</p>
 </div>
 
 <div class="formula-box">
 <strong>Why BFGS is preferred over DFP:</strong>
 <ul style="margin-top:8px; margin-left:20px;">
-  <li><strong>Self-correcting behavior:</strong> BFGS has better self-correcting properties. If $H_k$ has accumulated errors, BFGS tends to fix them faster than DFP.</li>
-  <li><strong>Numerical stability:</strong> DFP can become ill-conditioned more easily in the presence of round-off errors.</li>
-  <li><strong>Empirical evidence:</strong> Decades of computational experiments show BFGS outperforms DFP on almost all practical problems.</li>
-  <li><strong>Scale sensitivity:</strong> DFP is more sensitive to the scaling of the objective function.</li>
+ <li><strong>Self-correcting behavior:</strong> BFGS has better self-correcting properties. If $H_k$ has accumulated errors, BFGS tends to fix them faster than DFP.</li>
+ <li><strong>Numerical stability:</strong> DFP can become ill-conditioned more easily in the presence of round-off errors.</li>
+ <li><strong>Empirical evidence:</strong> Decades of computational experiments show BFGS outperforms DFP on almost all practical problems.</li>
+ <li><strong>Scale sensitivity:</strong> DFP is more sensitive to the scaling of the objective function.</li>
 </ul>
 </div>
 
 
 <!-- ===================== COMPARISON TABLE ===================== -->
-<h2>Part E: Comparison &mdash; BFGS vs SR1 vs DFP</h2>
+<h2>Part E: Comparison; BFGS vs SR1 vs DFP</h2>
 
 <table class="step-table">
 <tr>
-  <th>Property</th>
-  <th>BFGS</th>
-  <th>SR1</th>
-  <th>DFP</th>
+ <th>Property</th>
+ <th>BFGS</th>
+ <th>SR1</th>
+ <th>DFP</th>
 </tr>
 <tr>
-  <td style="text-align:left; color:#d4956a;">Update rank</td>
-  <td>Rank 2</td>
-  <td>Rank 1</td>
-  <td>Rank 2</td>
+ <td style="text-align:left; color:#d4956a;">Update rank</td>
+ <td>Rank 2</td>
+ <td>Rank 1</td>
+ <td>Rank 2</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#d4956a;">Preserves PD?</td>
-  <td>Yes (with $s_k^Ty_k &gt; 0$)</td>
-  <td><strong>No</strong> &mdash; can lose PD</td>
-  <td>Yes (with $s_k^Ty_k &gt; 0$)</td>
+ <td style="text-align:left; color:#d4956a;">Preserves PD?</td>
+ <td>Yes (with $s_k^Ty_k &gt; 0$)</td>
+ <td><strong>No</strong>; can lose PD</td>
+ <td>Yes (with $s_k^Ty_k &gt; 0$)</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#d4956a;">Needs safeguard?</td>
-  <td>No (Wolfe guarantees $s_k^Ty_k &gt; 0$)</td>
-  <td>Yes &mdash; skip rule for small denominator</td>
-  <td>No (Wolfe guarantees $s_k^Ty_k &gt; 0$)</td>
+ <td style="text-align:left; color:#d4956a;">Needs safeguard?</td>
+ <td>No (Wolfe guarantees $s_k^Ty_k &gt; 0$)</td>
+ <td>Yes; skip rule for small denominator</td>
+ <td>No (Wolfe guarantees $s_k^Ty_k &gt; 0$)</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#d4956a;">Best framework</td>
-  <td>Line search</td>
-  <td>Trust region</td>
-  <td>Line search</td>
+ <td style="text-align:left; color:#d4956a;">Best framework</td>
+ <td>Line search</td>
+ <td>Trust region</td>
+ <td>Line search</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#d4956a;">Self-correcting?</td>
-  <td>Very good</td>
-  <td>Moderate</td>
-  <td>Weaker</td>
+ <td style="text-align:left; color:#d4956a;">Self-correcting?</td>
+ <td>Very good</td>
+ <td>Moderate</td>
+ <td>Weaker</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#d4956a;">Cost per iteration</td>
-  <td>$O(n^2)$</td>
-  <td>$O(n^2)$</td>
-  <td>$O(n^2)$</td>
+ <td style="text-align:left; color:#d4956a;">Cost per iteration</td>
+ <td>$O(n^2)$</td>
+ <td>$O(n^2)$</td>
+ <td>$O(n^2)$</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#d4956a;">Practical ranking</td>
-  <td><strong>1st</strong> (default choice)</td>
-  <td>2nd (with trust region)</td>
-  <td>3rd (historical interest)</td>
+ <td style="text-align:left; color:#d4956a;">Practical ranking</td>
+ <td><strong>1st</strong> (default choice)</td>
+ <td>2nd (with trust region)</td>
+ <td>3rd (historical interest)</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#d4956a;">Convergence rate</td>
-  <td>Q-superlinear</td>
-  <td>Q-superlinear (if updates arent skipped)</td>
-  <td>Q-superlinear</td>
+ <td style="text-align:left; color:#d4956a;">Convergence rate</td>
+ <td>Q-superlinear</td>
+ <td>Q-superlinear (if updates arent skipped)</td>
+ <td>Q-superlinear</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#d4956a;">On quadratics</td>
-  <td colspan="3">All three recover $Q^{-1}$ in at most $n$ iterations with exact line search</td>
+ <td style="text-align:left; color:#d4956a;">On quadratics</td>
+ <td colspan="3">All three recover $Q^{-1}$ in at most $n$ iterations with exact line search</td>
 </tr>
 </table>
 
 <div class="note">
 <strong>Exam takeaway:</strong> You should know all three formulas and their key properties. On a computation problem, the most likely questions are:
 <ul style="margin-top:8px; margin-left:20px;">
-  <li>BFGS inverse update with full matrix computation (Quiz 6 style, see <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>)</li>
-  <li>SR1 update showing recovery of $Q^{-1}$ (Assignment 2 Q2 style, done above)</li>
-  <li>"Compare and contrast" theoretical question about PD preservation, rank, and when to use each</li>
+ <li>BFGS inverse update with full matrix computation (Quiz 6 style, see <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>)</li>
+ <li>SR1 update showing recovery of $Q^{-1}$ (Assignment 2 Q2 style, done above)</li>
+ <li>"Compare and contrast" theoretical question about PD preservation, rank, and when to use each</li>
 </ul>
 </div>
 
@@ -369,41 +369,41 @@ $$H_{k+1} = H_k - \frac{H_k y_k y_k^T H_k}{y_k^T H_k y_k} + \frac{s_k s_k^T}{s_k
 <div class="glossary">
 <h3>Glossary</h3>
 <dl>
-  <dt>SR1 (Symmetric Rank-One)</dt>
-  <dd>A quasi-Newton update that adds a rank-1 correction to the Hessian approximation. Simpler than BFGS but does not preserve positive definiteness.</dd>
+ <dt>SR1 (Symmetric Rank-One)</dt>
+ <dd>A quasi-Newton update that adds a rank-1 correction to the Hessian approximation. Simpler than BFGS but does not preserve positive definiteness.</dd>
 
-  <dt>DFP (Davidon-Fletcher-Powell)</dt>
-  <dd>The first quasi-Newton method (1959). A rank-2 update that is the "dual" of BFGS. Preserves PD but is less numerically stable than BFGS.</dd>
+ <dt>DFP (Davidon-Fletcher-Powell)</dt>
+ <dd>The first quasi-Newton method (1959). A rank-2 update that is the "dual" of BFGS. Preserves PD but is less numerically stable than BFGS.</dd>
 
-  <dt>Rank of an update</dt>
-  <dd>The maximum number of independent "directions" the correction matrix can change. Rank 1 = one direction changed. Rank 2 = two directions changed.</dd>
+ <dt>Rank of an update</dt>
+ <dd>The maximum number of independent "directions" the correction matrix can change. Rank 1 = one direction changed. Rank 2 = two directions changed.</dd>
 
-  <dt>Prediction error ($s_k - H_k y_k$)</dt>
-  <dd>How wrong the current inverse Hessian approximation was in predicting the step from the gradient change. If zero, the approximation is already correct on that step.</dd>
+ <dt>Prediction error ($s_k - H_k y_k$)</dt>
+ <dd>How wrong the current inverse Hessian approximation was in predicting the step from the gradient change. If zero, the approximation is already correct on that step.</dd>
 
-  <dt>Safeguard (skip rule)</dt>
-  <dd>A check that prevents the SR1 update when the denominator is too small. Skips the update and keeps $H_{k+1} = H_k$.</dd>
+ <dt>Safeguard (skip rule)</dt>
+ <dd>A check that prevents the SR1 update when the denominator is too small. Skips the update and keeps $H_{k+1} = H_k$.</dd>
 
-  <dt>Positive definiteness (PD)</dt>
-  <dd>A matrix property meaning "bowl-shaped" (all eigenvalues positive). BFGS and DFP preserve this; SR1 does not. See <a href="cg-03-linear-algebra.html" style="color:#d4956a;">Page 03</a> for full explanation.</dd>
+ <dt>Positive definiteness (PD)</dt>
+ <dd>A matrix property meaning "bowl-shaped" (all eigenvalues positive). BFGS and DFP preserve this; SR1 does not. See <a href="cg-03-linear-algebra.html" style="color:#d4956a;">Page 03</a> for full explanation.</dd>
 
-  <dt>Trust region</dt>
-  <dd>A framework that bounds the step size by a radius $\Delta_k$, making it safe to use non-PD Hessian approximations. See <a href="cg-09-trust-region.html" style="color:#d4956a;">Page 09</a>.</dd>
+ <dt>Trust region</dt>
+ <dd>A framework that bounds the step size by a radius $\Delta_k$, making it safe to use non-PD Hessian approximations. See <a href="cg-09-trust-region.html" style="color:#d4956a;">Page 09</a>.</dd>
 
-  <dt>Dual methods</dt>
-  <dd>BFGS and DFP are duals: swap the roles of $s_k$ and $y_k$ (and $B_k$ and $H_k$) in one to get the other.</dd>
+ <dt>Dual methods</dt>
+ <dd>BFGS and DFP are duals: swap the roles of $s_k$ and $y_k$ (and $B_k$ and $H_k$) in one to get the other.</dd>
 
-  <dt>Secant condition</dt>
-  <dd>$H_{k+1} y_k = s_k$ (inverse form) or $B_{k+1} s_k = y_k$ (direct form). All quasi-Newton methods satisfy this. See <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>.</dd>
+ <dt>Secant condition</dt>
+ <dd>$H_{k+1} y_k = s_k$ (inverse form) or $B_{k+1} s_k = y_k$ (direct form). All quasi-Newton methods satisfy this. See <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>.</dd>
 </dl>
 </div>
 
 
 <!-- ===================== NAV ===================== -->
 <div class="nav">
-  <p><a href="cg-12-bfgs.html">&larr; Previous: Page 12 &mdash; BFGS Method</a></p>
-  <p><a href="cg-14-nonlinear-equations.html">Next: Page 14 &mdash; Newton for Nonlinear Equations &rarr;</a></p>
-  <p style="margin-top:8px;"><a href="index.html">Back to Index</a></p>
+ <p><a href="cg-12-bfgs.html">&larr; Previous: Page 12; BFGS Method</a></p>
+ <p><a href="cg-14-nonlinear-equations.html">Next: Page 14; Newton for Nonlinear Equations &rarr;</a></p>
+ <p style="margin-top:8px;"><a href="index.html">Back to Index</a></p>
 </div>
 
 </div>

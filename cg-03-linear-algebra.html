@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Page 03 &mdash; Linear Algebra Essentials | MATH 3850 Course Guide</title>
+<title>Page 03 : Linear Algebra Essentials | MATH 3850 Course Guide</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+ onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,19 +15,19 @@
 
 <span class="tag">PAGE 03</span>
 <h1>Linear Algebra Essentials</h1>
-<p class="subtitle">The matrix toolkit you need for optimization &mdash; eigenvalues, positive definiteness, matrix operations, and SVD</p>
+<p class="subtitle">The matrix toolkit you need for optimization; eigenvalues, positive definiteness, matrix operations, and SVD</p>
 
 <!-- ===================== PART A ===================== -->
-<h2>Part A: Eigenvalues &mdash; The DNA of a Matrix</h2>
+<h2>Part A: Eigenvalues; The DNA of a Matrix</h2>
 
 <div class="analogy">
-<strong>Physical analogy &mdash; Resonant frequencies of a bell.</strong><br><br>
-Pick up a bell and strike it. It vibrates at certain specific frequencies &mdash; its natural notes. A small bell rings at a high pitch; a big bell booms low. Those frequencies are not random; they are baked into the bell's shape and material. You cannot change the frequencies without physically changing the bell.<br><br>
+<strong>Physical analogy; Resonant frequencies of a bell.</strong><br><br>
+Pick up a bell and strike it. It vibrates at certain specific frequencies; its natural notes. A small bell rings at a high pitch; a big bell booms low. Those frequencies are not random; they are baked into the bell's shape and material. You cannot change the frequencies without physically changing the bell.<br><br>
 Every matrix has the same kind of "natural frequencies." They are called <strong>eigenvalues</strong>. The specific directions the bell vibrates along are the <strong>eigenvectors</strong>. The amount of vibration (amplitude) in each direction is the eigenvalue for that direction.<br><br>
 Why does this matter for optimization? Because the eigenvalues of a matrix tell you <em>everything</em> about its character:<br>
-&bull; Are all eigenvalues positive? Then the matrix makes a <strong>bowl</strong> shape &mdash; perfect for minimization.<br>
-&bull; Are some positive and some negative? Then the matrix makes a <strong>saddle</strong> &mdash; you are at neither a minimum nor a maximum.<br>
-&bull; How spread out are the eigenvalues? That tells you how elongated the bowl is &mdash; which directly controls how fast algorithms converge (recall the <a href="cg-01-math-foundations.html">condition number from Page 01</a>).
+&bull; Are all eigenvalues positive? Then the matrix makes a <strong>bowl</strong> shape; perfect for minimization.<br>
+&bull; Are some positive and some negative? Then the matrix makes a <strong>saddle</strong>; you are at neither a minimum nor a maximum.<br>
+&bull; How spread out are the eigenvalues? That tells you how elongated the bowl is; which directly controls how fast algorithms converge (recall the <a href="cg-01-math-foundations.html">condition number from Page 01</a>).
 </div>
 
 <div class="formula-box">
@@ -35,12 +35,12 @@ Why does this matter for optimization? Because the eigenvalues of a matrix tell 
 $$A\mathbf{v} = \lambda \mathbf{v}$$
 
 <dl class="breakdown">
-  <dt>$A$</dt><dd>a square matrix (like a Hessian &mdash; see <a href="cg-02-multivariable-bridge.html">Page 02</a>)</dd>
-  <dt>$\mathbf{v}$</dt><dd>the <strong>eigenvector</strong> &mdash; a nonzero vector that does NOT change direction when $A$ acts on it</dd>
-  <dt>$\lambda$</dt><dd>the <strong>eigenvalue</strong> &mdash; the scalar that tells you how much $A$ stretches (or shrinks) $\mathbf{v}$</dd>
+ <dt>$A$</dt><dd>a square matrix (like a Hessian → see <a href="cg-02-multivariable-bridge.html">Page 02</a>)</dd>
+ <dt>$\mathbf{v}$</dt><dd>the <strong>eigenvector</strong>; a nonzero vector that does NOT change direction when $A$ acts on it</dd>
+ <dt>$\lambda$</dt><dd>the <strong>eigenvalue</strong>; the scalar that tells you how much $A$ stretches (or shrinks) $\mathbf{v}$</dd>
 </dl>
 
-<p style="margin-top:12px;">In words: multiply the matrix $A$ by the special vector $\mathbf{v}$, and you get back that same vector $\mathbf{v}$ scaled by $\lambda$. The direction doesn't change &mdash; only the magnitude.</p>
+<p style="margin-top:12px;">In words: multiply the matrix $A$ by the special vector $\mathbf{v}$, and you get back that same vector $\mathbf{v}$ scaled by $\lambda$. The direction doesn't change; only the magnitude.</p>
 </div>
 
 <div class="formula-box">
@@ -51,15 +51,15 @@ We need to solve $A\mathbf{v} = \lambda \mathbf{v}$. Rearrange:
 $$(A - \lambda I)\mathbf{v} = \mathbf{0}$$
 
 <dl class="breakdown">
-  <dt>$I$</dt><dd>the identity matrix $\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$</dd>
-  <dt>$\lambda I$</dt><dd>subtract $\lambda$ from every diagonal entry of $A$</dd>
+ <dt>$I$</dt><dd>the identity matrix $\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$</dd>
+ <dt>$\lambda I$</dt><dd>subtract $\lambda$ from every diagonal entry of $A$</dd>
 </dl>
 
 For a nonzero solution $\mathbf{v}$ to exist, the matrix $(A - \lambda I)$ must be "singular" (not invertible). That happens when its determinant is zero:
 
 $$\det(A - \lambda I) = 0$$
 
-This gives us the <strong>characteristic polynomial</strong> &mdash; a polynomial in $\lambda$ whose roots are the eigenvalues.
+This gives us the <strong>characteristic polynomial</strong>; a polynomial in $\lambda$ whose roots are the eigenvalues.
 
 <p style="margin-top:12px;">For a 2&times;2 matrix $A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}$:</p>
 
@@ -70,8 +70,8 @@ This expands to:
 $$\lambda^2 - (a+d)\lambda + (ad - bc) = 0$$
 
 <dl class="breakdown">
-  <dt>$a + d$</dt><dd>the <strong>trace</strong> of $A$ (sum of diagonal entries)</dd>
-  <dt>$ad - bc$</dt><dd>the <strong>determinant</strong> of $A$</dd>
+ <dt>$a + d$</dt><dd>the <strong>trace</strong> of $A$ (sum of diagonal entries)</dd>
+ <dt>$ad - bc$</dt><dd>the <strong>determinant</strong> of $A$</dd>
 </dl>
 
 So the characteristic polynomial is: $\lambda^2 - \text{trace}(A)\,\lambda + \det(A) = 0$. Solve with the quadratic formula!
@@ -82,18 +82,18 @@ So the characteristic polynomial is: $\lambda^2 - \text{trace}(A)\,\lambda + \de
 <p>Find the eigenvalues of $A = \begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}$.</p>
 
 <div class="step">
-  <div class="step-label">Step 1: Write the characteristic polynomial</div>
-  $$\det(A - \lambda I) = \det\begin{bmatrix} 2 - \lambda & 0 \\ 0 & 3 - \lambda \end{bmatrix} = (2 - \lambda)(3 - \lambda) - (0)(0) = (2 - \lambda)(3 - \lambda)$$
+ <div class="step-label">Step 1: Write the characteristic polynomial</div>
+ $$\det(A - \lambda I) = \det\begin{bmatrix} 2 - \lambda & 0 \\ 0 & 3 - \lambda \end{bmatrix} = (2 - \lambda)(3 - \lambda) - (0)(0) = (2 - \lambda)(3 - \lambda)$$
 </div>
 
 <div class="step">
-  <div class="step-label">Step 2: Set equal to zero and solve</div>
-  $$(2 - \lambda)(3 - \lambda) = 0$$
-  So $\lambda_1 = 2$ and $\lambda_2 = 3$.
+ <div class="step-label">Step 2: Set equal to zero and solve</div>
+ $$(2 - \lambda)(3 - \lambda) = 0$$
+ So $\lambda_1 = 2$ and $\lambda_2 = 3$.
 </div>
 
 <div class="step">
-  <div class="result">Result: The eigenvalues are $\lambda_1 = 2$ and $\lambda_2 = 3$ &mdash; exactly the diagonal entries!</div>
+ <div class="result">Result: The eigenvalues are $\lambda_1 = 2$ and $\lambda_2 = 3$; exactly the diagonal entries!</div>
 </div>
 
 <div class="check">Shortcut: for a diagonal matrix, the eigenvalues are ALWAYS just the entries on the diagonal. No computation needed.</div>
@@ -104,29 +104,29 @@ So the characteristic polynomial is: $\lambda^2 - \text{trace}(A)\,\lambda + \de
 <p>Find the eigenvalues of $A = \begin{bmatrix} 5 & 2 \\ 2 & 2 \end{bmatrix}$. This is the matrix from Conjugate Gradient problems.</p>
 
 <div class="step">
-  <div class="step-label">Step 1: Set up $A - \lambda I$</div>
-  $$A - \lambda I = \begin{bmatrix} 5 - \lambda & 2 \\ 2 & 2 - \lambda \end{bmatrix}$$
+ <div class="step-label">Step 1: Set up $A - \lambda I$</div>
+ $$A - \lambda I = \begin{bmatrix} 5 - \lambda & 2 \\ 2 & 2 - \lambda \end{bmatrix}$$
 </div>
 
 <div class="step">
-  <div class="step-label">Step 2: Compute the determinant</div>
-  $$\det(A - \lambda I) = (5 - \lambda)(2 - \lambda) - (2)(2)$$
-  Expand the first product:
-  $$(5 - \lambda)(2 - \lambda) = 10 - 5\lambda - 2\lambda + \lambda^2 = \lambda^2 - 7\lambda + 10$$
-  Subtract the second product:
-  $$\lambda^2 - 7\lambda + 10 - 4 = \lambda^2 - 7\lambda + 6$$
+ <div class="step-label">Step 2: Compute the determinant</div>
+ $$\det(A - \lambda I) = (5 - \lambda)(2 - \lambda) - (2)(2)$$
+ Expand the first product:
+ $$(5 - \lambda)(2 - \lambda) = 10 - 5\lambda - 2\lambda + \lambda^2 = \lambda^2 - 7\lambda + 10$$
+ Subtract the second product:
+ $$\lambda^2 - 7\lambda + 10 - 4 = \lambda^2 - 7\lambda + 6$$
 </div>
 
 <div class="step">
-  <div class="step-label">Step 3: Solve the characteristic polynomial</div>
-  $$\lambda^2 - 7\lambda + 6 = 0$$
-  Factor: we need two numbers that multiply to 6 and add to 7. That is 1 and 6.
-  $$(\lambda - 1)(\lambda - 6) = 0$$
-  So $\lambda_1 = 1$ and $\lambda_2 = 6$.
+ <div class="step-label">Step 3: Solve the characteristic polynomial</div>
+ $$\lambda^2 - 7\lambda + 6 = 0$$
+ Factor: we need two numbers that multiply to 6 and add to 7. That is 1 and 6.
+ $$(\lambda - 1)(\lambda - 6) = 0$$
+ So $\lambda_1 = 1$ and $\lambda_2 = 6$.
 </div>
 
 <div class="step">
-  <div class="result">Result: $\lambda_1 = 1$, $\lambda_2 = 6$.</div>
+ <div class="result">Result: $\lambda_1 = 1$, $\lambda_2 = 6$.</div>
 </div>
 
 <div class="check">
@@ -145,53 +145,53 @@ These give you two fast checks after computing eigenvalues.
 
 
 <!-- ===================== PART B ===================== -->
-<h2>Part B: Positive Definiteness &mdash; Is It a Bowl?</h2>
+<h2>Part B: Positive Definiteness; Is It a Bowl?</h2>
 
 <div class="analogy">
-<strong>Physical analogy &mdash; Bowl vs saddle vs dome.</strong><br><br>
+<strong>Physical analogy; Bowl vs saddle vs dome.</strong><br><br>
 Imagine placing a marble on different surfaces:<br><br>
-<strong>Bowl (positive definite):</strong> Drop a marble anywhere and it rolls to the bottom. The surface curves UPWARD in every direction. No matter which way you walk from the lowest point, you go uphill. This is the shape we WANT for optimization &mdash; there is a clear unique minimum.<br><br>
-<strong>Dome (negative definite):</strong> Place a marble on top and it rolls off in every direction. The surface curves DOWNWARD everywhere. This is a maximum &mdash; the opposite of what we want when minimizing.<br><br>
+<strong>Bowl (positive definite):</strong> Drop a marble anywhere and it rolls to the bottom. The surface curves UPWARD in every direction. No matter which way you walk from the lowest point, you go uphill. This is the shape we WANT for optimization; there is a clear unique minimum.<br><br>
+<strong>Dome (negative definite):</strong> Place a marble on top and it rolls off in every direction. The surface curves DOWNWARD everywhere. This is a maximum , the opposite of what we want when minimizing.<br><br>
 <strong>Saddle (indefinite):</strong> Think of a horse saddle or a mountain pass. Walk north-south and you go downhill. Walk east-west and you go uphill. The marble might sit momentarily at the center, but it is not at a minimum or maximum. It is a saddle point.<br><br>
 The eigenvalues of a matrix tell you which of these shapes you have. All positive eigenvalues = bowl. All negative = dome. Mixed signs = saddle.
 </div>
 
 <!-- SVG: Three surfaces -->
 <svg viewBox="0 0 900 260" style="width:100%; margin:24px 0;">
-  <!-- Bowl (PD) -->
-  <g transform="translate(0,0)">
-    <text x="150" y="20" text-anchor="middle" fill="#d4956a" font-size="15" font-weight="bold">Bowl (Positive Definite)</text>
-    <text x="150" y="38" text-anchor="middle" fill="#a8a49c" font-size="12">All eigenvalues &gt; 0</text>
-    <ellipse cx="150" cy="200" rx="120" ry="30" fill="none" stroke="#3a3a46" stroke-width="1.5"/>
-    <path d="M30,200 Q90,80 150,120 Q210,80 270,200" fill="none" stroke="#d4956a" stroke-width="2.5"/>
-    <path d="M70,200 Q110,110 150,135 Q190,110 230,200" fill="none" stroke="#d4956a" stroke-width="1.5" opacity="0.5"/>
-    <circle cx="150" cy="138" r="5" fill="#c9a84c"/>
-    <text x="150" y="170" text-anchor="middle" fill="#c9a84c" font-size="12">minimum</text>
-    <text x="150" y="248" text-anchor="middle" fill="#b8b4ac" font-size="12">Marble rolls to bottom</text>
-  </g>
-  <!-- Saddle (Indefinite) -->
-  <g transform="translate(300,0)">
-    <text x="150" y="20" text-anchor="middle" fill="#c47070" font-size="15" font-weight="bold">Saddle (Indefinite)</text>
-    <text x="150" y="38" text-anchor="middle" fill="#a8a49c" font-size="12">Mixed-sign eigenvalues</text>
-    <path d="M30,160 Q90,220 150,140 Q210,60 270,120" fill="none" stroke="#c47070" stroke-width="2.5"/>
-    <path d="M80,80 Q120,120 150,140 Q180,160 220,200" fill="none" stroke="#c47070" stroke-width="2.5"/>
-    <circle cx="150" cy="140" r="5" fill="#c9a84c"/>
-    <text x="150" y="170" text-anchor="middle" fill="#c9a84c" font-size="12">saddle point</text>
-    <text x="80" y="200" text-anchor="middle" fill="#a8a49c" font-size="11">up in one dir</text>
-    <text x="230" y="90" text-anchor="middle" fill="#a8a49c" font-size="11">down in other</text>
-    <text x="150" y="248" text-anchor="middle" fill="#b8b4ac" font-size="12">Marble unstable</text>
-  </g>
-  <!-- Dome (ND) -->
-  <g transform="translate(600,0)">
-    <text x="150" y="20" text-anchor="middle" fill="#9b89b6" font-size="15" font-weight="bold">Dome (Negative Definite)</text>
-    <text x="150" y="38" text-anchor="middle" fill="#a8a49c" font-size="12">All eigenvalues &lt; 0</text>
-    <ellipse cx="150" cy="200" rx="120" ry="30" fill="none" stroke="#3a3a46" stroke-width="1.5"/>
-    <path d="M30,200 Q90,160 150,90 Q210,160 270,200" fill="none" stroke="#9b89b6" stroke-width="2.5"/>
-    <path d="M70,200 Q110,170 150,105 Q190,170 230,200" fill="none" stroke="#9b89b6" stroke-width="1.5" opacity="0.5"/>
-    <circle cx="150" cy="90" r="5" fill="#c9a84c"/>
-    <text x="150" y="78" text-anchor="middle" fill="#c9a84c" font-size="12">maximum</text>
-    <text x="150" y="248" text-anchor="middle" fill="#b8b4ac" font-size="12">Marble rolls off</text>
-  </g>
+ <!-- Bowl (PD) -->
+ <g transform="translate(0,0)">
+ <text x="150" y="20" text-anchor="middle" fill="#d4956a" font-size="15" font-weight="bold">Bowl (Positive Definite)</text>
+ <text x="150" y="38" text-anchor="middle" fill="#a8a49c" font-size="12">All eigenvalues &gt; 0</text>
+ <ellipse cx="150" cy="200" rx="120" ry="30" fill="none" stroke="#3a3a46" stroke-width="1.5"/>
+ <path d="M30,200 Q90,80 150,120 Q210,80 270,200" fill="none" stroke="#d4956a" stroke-width="2.5"/>
+ <path d="M70,200 Q110,110 150,135 Q190,110 230,200" fill="none" stroke="#d4956a" stroke-width="1.5" opacity="0.5"/>
+ <circle cx="150" cy="138" r="5" fill="#c9a84c"/>
+ <text x="150" y="170" text-anchor="middle" fill="#c9a84c" font-size="12">minimum</text>
+ <text x="150" y="248" text-anchor="middle" fill="#b8b4ac" font-size="12">Marble rolls to bottom</text>
+ </g>
+ <!-- Saddle (Indefinite) -->
+ <g transform="translate(300,0)">
+ <text x="150" y="20" text-anchor="middle" fill="#c47070" font-size="15" font-weight="bold">Saddle (Indefinite)</text>
+ <text x="150" y="38" text-anchor="middle" fill="#a8a49c" font-size="12">Mixed-sign eigenvalues</text>
+ <path d="M30,160 Q90,220 150,140 Q210,60 270,120" fill="none" stroke="#c47070" stroke-width="2.5"/>
+ <path d="M80,80 Q120,120 150,140 Q180,160 220,200" fill="none" stroke="#c47070" stroke-width="2.5"/>
+ <circle cx="150" cy="140" r="5" fill="#c9a84c"/>
+ <text x="150" y="170" text-anchor="middle" fill="#c9a84c" font-size="12">saddle point</text>
+ <text x="80" y="200" text-anchor="middle" fill="#a8a49c" font-size="11">up in one dir</text>
+ <text x="230" y="90" text-anchor="middle" fill="#a8a49c" font-size="11">down in other</text>
+ <text x="150" y="248" text-anchor="middle" fill="#b8b4ac" font-size="12">Marble unstable</text>
+ </g>
+ <!-- Dome (ND) -->
+ <g transform="translate(600,0)">
+ <text x="150" y="20" text-anchor="middle" fill="#9b89b6" font-size="15" font-weight="bold">Dome (Negative Definite)</text>
+ <text x="150" y="38" text-anchor="middle" fill="#a8a49c" font-size="12">All eigenvalues &lt; 0</text>
+ <ellipse cx="150" cy="200" rx="120" ry="30" fill="none" stroke="#3a3a46" stroke-width="1.5"/>
+ <path d="M30,200 Q90,160 150,90 Q210,160 270,200" fill="none" stroke="#9b89b6" stroke-width="2.5"/>
+ <path d="M70,200 Q110,170 150,105 Q190,170 230,200" fill="none" stroke="#9b89b6" stroke-width="1.5" opacity="0.5"/>
+ <circle cx="150" cy="90" r="5" fill="#c9a84c"/>
+ <text x="150" y="78" text-anchor="middle" fill="#c9a84c" font-size="12">maximum</text>
+ <text x="150" y="248" text-anchor="middle" fill="#b8b4ac" font-size="12">Marble rolls off</text>
+ </g>
 </svg>
 
 <div class="formula-box">
@@ -200,16 +200,16 @@ The eigenvalues of a matrix tell you which of these shapes you have. All positiv
 $$\text{A symmetric matrix } A \text{ is positive definite (PD) if } \mathbf{x}^T A \mathbf{x} &gt; 0 \text{ for all } \mathbf{x} \neq \mathbf{0}$$
 
 <dl class="breakdown">
-  <dt>$\mathbf{x}$</dt><dd>any nonzero vector (any direction you might walk)</dd>
-  <dt>$\mathbf{x}^T A \mathbf{x}$</dt><dd>a scalar number &mdash; the "curvature" in direction $\mathbf{x}$</dd>
-  <dt>$&gt; 0$</dt><dd>the curvature is positive (upward) in EVERY direction</dd>
+ <dt>$\mathbf{x}$</dt><dd>any nonzero vector (any direction you might walk)</dd>
+ <dt>$\mathbf{x}^T A \mathbf{x}$</dt><dd>a scalar number; the "curvature" in direction $\mathbf{x}$</dd>
+ <dt>$&gt; 0$</dt><dd>the curvature is positive (upward) in EVERY direction</dd>
 </dl>
 
 <p style="margin-top:12px;"><strong>Equivalent characterizations (any one is enough):</strong></p>
 <ol style="margin-left:20px; margin-top:8px;">
-  <li>All eigenvalues of $A$ are strictly positive: $\lambda_i &gt; 0$ for all $i$</li>
-  <li>$\mathbf{x}^T A \mathbf{x} &gt; 0$ for all $\mathbf{x} \neq \mathbf{0}$</li>
-  <li>For 2&times;2: the top-left entry $a_{11} &gt; 0$ AND the determinant $\det(A) &gt; 0$</li>
+ <li>All eigenvalues of $A$ are strictly positive: $\lambda_i &gt; 0$ for all $i$</li>
+ <li>$\mathbf{x}^T A \mathbf{x} &gt; 0$ for all $\mathbf{x} \neq \mathbf{0}$</li>
+ <li>For 2&times;2: the top-left entry $a_{11} &gt; 0$ AND the determinant $\det(A) &gt; 0$</li>
 </ol>
 </div>
 
@@ -237,37 +237,37 @@ This is faster than computing eigenvalues!
 </div>
 
 <div class="hand-calc">
-<h3>Hand Computation: Positive Definiteness Check &mdash; Quiz 2 Hessian</h3>
+<h3>Hand Computation: Positive Definiteness Check; Quiz 2 Hessian</h3>
 <p>Consider the Hessian $H = \begin{bmatrix} 12x_1 - 6 - 12x_2 & -12x_1 + 12x_2 + 6 \\ -12x_1 + 12x_2 + 6 & 12x_2 + 6 \end{bmatrix}$ from Quiz 2.</p>
 <p>We evaluate at the stationary point $(0, 0)$:</p>
 
 <div class="step">
-  <div class="step-label">Step 1: Plug in $x_1 = 0, x_2 = 0$</div>
-  $$H(0,0) = \begin{bmatrix} 0 - 6 - 0 & 0 + 0 + 6 \\ 0 + 0 + 6 & 0 + 6 \end{bmatrix} = \begin{bmatrix} -6 & 6 \\ 6 & 6 \end{bmatrix}$$
+ <div class="step-label">Step 1: Plug in $x_1 = 0, x_2 = 0$</div>
+ $$H(0,0) = \begin{bmatrix} 0 - 6 - 0 & 0 + 0 + 6 \\ 0 + 0 + 6 & 0 + 6 \end{bmatrix} = \begin{bmatrix} -6 & 6 \\ 6 & 6 \end{bmatrix}$$
 </div>
 
 <div class="step">
-  <div class="step-label">Step 2: Use the 2&times;2 shortcut</div>
-  $a_{11} = -6 &lt; 0$ and $\det(H) = (-6)(6) - (6)(6) = -36 - 36 = -72 &lt; 0$.
-  <br><br>
-  Since $\det &lt; 0$, the matrix is <strong>indefinite</strong> (mixed eigenvalues).
+ <div class="step-label">Step 2: Use the 2&times;2 shortcut</div>
+ $a_{11} = -6 &lt; 0$ and $\det(H) = (-6)(6) - (6)(6) = -36 - 36 = -72 &lt; 0$.
+ <br><br>
+ Since $\det &lt; 0$, the matrix is <strong>indefinite</strong> (mixed eigenvalues).
 </div>
 
 <div class="step">
-  <div class="step-label">Step 3: Verify with eigenvalues</div>
-  Characteristic polynomial: $\lambda^2 - (−6+6)\lambda + (−72) = \lambda^2 - 72 = 0$
-  <br>
-  Wait, let us be more careful: trace $= -6 + 6 = 0$, det $= -72$.
-  $$\lambda^2 - 0\cdot\lambda + (-72) = \lambda^2 - 72 = 0$$
-  $$\lambda = \pm\sqrt{72} = \pm 6\sqrt{2} \approx \pm 8.49$$
+ <div class="step-label">Step 3: Verify with eigenvalues</div>
+ Characteristic polynomial: $\lambda^2 - (−6+6)\lambda + (−72) = \lambda^2 - 72 = 0$
+ <br>
+ Wait, let us be more careful: trace $= -6 + 6 = 0$, det $= -72$.
+ $$\lambda^2 - 0\cdot\lambda + (-72) = \lambda^2 - 72 = 0$$
+ $$\lambda = \pm\sqrt{72} = \pm 6\sqrt{2} \approx \pm 8.49$$
 </div>
 
 <div class="step">
-  <div class="result">Result: Eigenvalues are $\lambda_1 = 6\sqrt{2} &gt; 0$ and $\lambda_2 = -6\sqrt{2} &lt; 0$. Mixed signs = indefinite = saddle point at $(0,0)$.</div>
+ <div class="result">Result: Eigenvalues are $\lambda_1 = 6\sqrt{2} &gt; 0$ and $\lambda_2 = -6\sqrt{2} &lt; 0$. Mixed signs = indefinite = saddle point at $(0,0)$.</div>
 </div>
 
 <div class="check">
-This matches: the 2&times;2 shortcut told us $\det &lt; 0$ which means indefinite, and indeed one eigenvalue is positive and one is negative. The point $(0,0)$ is a saddle point &mdash; see <a href="cg-04-optimality.html">Page 04</a> for the full classification.
+This matches: the 2&times;2 shortcut told us $\det &lt; 0$ which means indefinite, and indeed one eigenvalue is positive and one is negative. The point $(0,0)$ is a saddle point → see <a href="cg-04-optimality.html">Page 04</a> for the full classification.
 </div>
 </div>
 
@@ -275,11 +275,11 @@ This matches: the 2&times;2 shortcut told us $\det &lt; 0$ which means indefinit
 <h3>Why Does Positive Definiteness Keep Appearing?</h3>
 <p>Positive definiteness is THE central concept in optimization. It shows up everywhere:</p>
 <ul style="margin-left:20px; margin-top:8px;">
-  <li><strong>Second-order sufficient conditions (<a href="cg-04-optimality.html">Page 04</a>)</strong>: a stationary point is a local minimizer if the Hessian is PD there.</li>
-  <li><strong>Convexity (<a href="cg-05-convexity.html">Page 05</a>)</strong>: a function is convex iff its Hessian is PSD everywhere.</li>
-  <li><strong>Conjugate Gradient (<a href="cg-10-conjugate-gradient.html">Page 10</a>)</strong>: linear CG only works when $A$ is PD (the system $Ax = b$ must come from a bowl-shaped quadratic).</li>
-  <li><strong>BFGS (<a href="cg-12-bfgs.html">Page 12</a>)</strong>: the BFGS update formula is specifically designed to keep the Hessian approximation PD at every step.</li>
-  <li><strong>Trust regions (<a href="cg-09-trust-region.html">Page 09</a>)</strong>: the trust-region subproblem needs PD for a clean solution.</li>
+ <li><strong>Second-order sufficient conditions (<a href="cg-04-optimality.html">Page 04</a>)</strong>: a stationary point is a local minimizer if the Hessian is PD there.</li>
+ <li><strong>Convexity (<a href="cg-05-convexity.html">Page 05</a>)</strong>: a function is convex iff its Hessian is PSD everywhere.</li>
+ <li><strong>Conjugate Gradient (<a href="cg-10-conjugate-gradient.html">Page 10</a>)</strong>: linear CG only works when $A$ is PD (the system $Ax = b$ must come from a bowl-shaped quadratic).</li>
+ <li><strong>BFGS (<a href="cg-12-bfgs.html">Page 12</a>)</strong>: the BFGS update formula is specifically designed to keep the Hessian approximation PD at every step.</li>
+ <li><strong>Trust regions (<a href="cg-09-trust-region.html">Page 09</a>)</strong>: the trust-region subproblem needs PD for a clean solution.</li>
 </ul>
 <p style="margin-top:8px;">If you understand nothing else from linear algebra, understand this: <strong>PD = bowl = minimum = good for optimization</strong>.</p>
 </div>
@@ -297,8 +297,8 @@ $$\begin{bmatrix} a & b \\ c & d \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatr
 
 <p style="margin-top:12px;"><strong>How to read it:</strong> Each entry of the result is a <em>dot product</em> of a row of the matrix with the vector.</p>
 <ul style="margin-left:20px; margin-top:8px;">
-  <li>First entry: (row 1 of $A$) $\cdot$ (vector) $= ax + by$</li>
-  <li>Second entry: (row 2 of $A$) $\cdot$ (vector) $= cx + dy$</li>
+ <li>First entry: (row 1 of $A$) $\cdot$ (vector) $= ax + by$</li>
+ <li>Second entry: (row 2 of $A$) $\cdot$ (vector) $= cx + dy$</li>
 </ul>
 </div>
 
@@ -307,17 +307,17 @@ $$\begin{bmatrix} a & b \\ c & d \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatr
 <p>Compute $A\mathbf{x}$ where $A = \begin{bmatrix} 5 & 2 \\ 2 & 2 \end{bmatrix}$ and $\mathbf{x} = \begin{bmatrix} 1 \\ -3 \end{bmatrix}$.</p>
 
 <div class="step">
-  <div class="step-label">Row 1 dot vector:</div>
-  $(5)(1) + (2)(-3) = 5 - 6 = -1$
+ <div class="step-label">Row 1 dot vector:</div>
+ $(5)(1) + (2)(-3) = 5 - 6 = -1$
 </div>
 
 <div class="step">
-  <div class="step-label">Row 2 dot vector:</div>
-  $(2)(1) + (2)(-3) = 2 - 6 = -4$
+ <div class="step-label">Row 2 dot vector:</div>
+ $(2)(1) + (2)(-3) = 2 - 6 = -4$
 </div>
 
 <div class="step">
-  <div class="result">Result: $A\mathbf{x} = \begin{bmatrix} -1 \\ -4 \end{bmatrix}$</div>
+ <div class="result">Result: $A\mathbf{x} = \begin{bmatrix} -1 \\ -4 \end{bmatrix}$</div>
 </div>
 </div>
 
@@ -329,9 +329,9 @@ $$\begin{bmatrix} a & b \\ c & d \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatr
 $$\begin{bmatrix} v_1 \\ v_2 \end{bmatrix} \begin{bmatrix} w_1 & w_2 \end{bmatrix} = \begin{bmatrix} v_1 w_1 & v_1 w_2 \\ v_2 w_1 & v_2 w_2 \end{bmatrix}$$
 
 <dl class="breakdown">
-  <dt>$\mathbf{v}$</dt><dd>a column vector ($n \times 1$)</dd>
-  <dt>$\mathbf{w}^T$</dt><dd>a row vector ($1 \times n$) &mdash; the transpose of a column vector</dd>
-  <dt>$\mathbf{v}\mathbf{w}^T$</dt><dd>an $n \times n$ matrix &mdash; each entry is $v_i w_j$</dd>
+ <dt>$\mathbf{v}$</dt><dd>a column vector ($n \times 1$)</dd>
+ <dt>$\mathbf{w}^T$</dt><dd>a row vector ($1 \times n$); the transpose of a column vector</dd>
+ <dt>$\mathbf{v}\mathbf{w}^T$</dt><dd>an $n \times n$ matrix; each entry is $v_i w_j$</dd>
 </dl>
 
 <p style="margin-top:12px;">This operation appears in the <a href="cg-12-bfgs.html">BFGS update formula (Page 12)</a> and the <a href="cg-13-sr1-dfp.html">SR1 update (Page 13)</a>. Both build rank-1 or rank-2 corrections to the Hessian approximation using outer products.</p>
@@ -342,12 +342,12 @@ $$\begin{bmatrix} v_1 \\ v_2 \end{bmatrix} \begin{bmatrix} w_1 & w_2 \end{bmatri
 <p>Compute $\mathbf{v}\mathbf{w}^T$ where $\mathbf{v} = \begin{bmatrix} 3 \\ 1 \end{bmatrix}$ and $\mathbf{w} = \begin{bmatrix} 2 \\ -1 \end{bmatrix}$.</p>
 
 <div class="step">
-  <div class="step-label">Form the outer product:</div>
-  $$\begin{bmatrix} 3 \\ 1 \end{bmatrix} \begin{bmatrix} 2 & -1 \end{bmatrix} = \begin{bmatrix} (3)(2) & (3)(-1) \\ (1)(2) & (1)(-1) \end{bmatrix} = \begin{bmatrix} 6 & -3 \\ 2 & -1 \end{bmatrix}$$
+ <div class="step-label">Form the outer product:</div>
+ $$\begin{bmatrix} 3 \\ 1 \end{bmatrix} \begin{bmatrix} 2 & -1 \end{bmatrix} = \begin{bmatrix} (3)(2) & (3)(-1) \\ (1)(2) & (1)(-1) \end{bmatrix} = \begin{bmatrix} 6 & -3 \\ 2 & -1 \end{bmatrix}$$
 </div>
 
 <div class="step">
-  <div class="check">Compare: the dot product $\mathbf{v}^T \mathbf{w} = (3)(2) + (1)(-1) = 5$ is a single number. The outer product is a whole matrix. Know the difference!</div>
+ <div class="check">Compare: the dot product $\mathbf{v}^T \mathbf{w} = (3)(2) + (1)(-1) = 5$ is a single number. The outer product is a whole matrix. Know the difference!</div>
 </div>
 </div>
 
@@ -357,8 +357,8 @@ $$\begin{bmatrix} v_1 \\ v_2 \end{bmatrix} \begin{bmatrix} w_1 & w_2 \end{bmatri
 $$\begin{bmatrix} a & b \\ c & d \end{bmatrix}^{-1} = \frac{1}{ad - bc}\begin{bmatrix} d & -b \\ -c & a \end{bmatrix}$$
 
 <dl class="breakdown">
-  <dt>$ad - bc$</dt><dd>the <strong>determinant</strong> of the matrix &mdash; it must be nonzero for the inverse to exist</dd>
-  <dt>recipe</dt><dd>swap the diagonals ($a \leftrightarrow d$), negate the off-diagonals ($b \to -b$, $c \to -c$), divide everything by the determinant</dd>
+ <dt>$ad - bc$</dt><dd>the <strong>determinant</strong> of the matrix; it must be nonzero for the inverse to exist</dd>
+ <dt>recipe</dt><dd>swap the diagonals ($a \leftrightarrow d$), negate the off-diagonals ($b \to -b$, $c \to -c$), divide everything by the determinant</dd>
 </dl>
 
 <p style="margin-top:12px;">You need this for Newton's method: the Newton step is $\mathbf{p} = -(\nabla^2 f)^{-1} \nabla f$, which requires inverting the Hessian. See <a href="cg-07-newton-method.html">Page 07</a>.</p>
@@ -369,17 +369,17 @@ $$\begin{bmatrix} a & b \\ c & d \end{bmatrix}^{-1} = \frac{1}{ad - bc}\begin{bm
 <p>Invert $H = \begin{bmatrix} 28 & -2 \\ -2 & 2 \end{bmatrix}$.</p>
 
 <div class="step">
-  <div class="step-label">Step 1: Compute the determinant</div>
-  $$\det(H) = (28)(2) - (-2)(-2) = 56 - 4 = 52$$
+ <div class="step-label">Step 1: Compute the determinant</div>
+ $$\det(H) = (28)(2) - (-2)(-2) = 56 - 4 = 52$$
 </div>
 
 <div class="step">
-  <div class="step-label">Step 2: Apply the formula</div>
-  $$H^{-1} = \frac{1}{52}\begin{bmatrix} 2 & 2 \\ 2 & 28 \end{bmatrix} = \begin{bmatrix} 2/52 & 2/52 \\ 2/52 & 28/52 \end{bmatrix} = \begin{bmatrix} 1/26 & 1/26 \\ 1/26 & 7/13 \end{bmatrix}$$
+ <div class="step-label">Step 2: Apply the formula</div>
+ $$H^{-1} = \frac{1}{52}\begin{bmatrix} 2 & 2 \\ 2 & 28 \end{bmatrix} = \begin{bmatrix} 2/52 & 2/52 \\ 2/52 & 28/52 \end{bmatrix} = \begin{bmatrix} 1/26 & 1/26 \\ 1/26 & 7/13 \end{bmatrix}$$
 </div>
 
 <div class="step">
-  <div class="result">Result: $H^{-1} = \frac{1}{52}\begin{bmatrix} 2 & 2 \\ 2 & 28 \end{bmatrix}$</div>
+ <div class="result">Result: $H^{-1} = \frac{1}{52}\begin{bmatrix} 2 & 2 \\ 2 & 28 \end{bmatrix}$</div>
 </div>
 
 <div class="check">
@@ -388,7 +388,7 @@ Sanity check: $HH^{-1}$ should equal $I$. Row 1: $(28)(1/26) + (-2)(1/26) = 28/2
 </div>
 
 <div class="note">
-<strong>Inner product (dot product) vs outer product &mdash; keep them straight:</strong><br>
+<strong>Inner product (dot product) vs outer product; keep them straight:</strong><br>
 &bull; $\mathbf{v}^T \mathbf{w}$ = <strong>dot product</strong> = a scalar number (one value)<br>
 &bull; $\mathbf{v}\mathbf{w}^T$ = <strong>outer product</strong> = an $n \times n$ matrix<br>
 The only difference is the order: $\mathbf{v}^T\mathbf{w}$ (row times column = scalar) vs $\mathbf{v}\mathbf{w}^T$ (column times row = matrix).
@@ -399,7 +399,7 @@ The only difference is the order: $\mathbf{v}^T\mathbf{w}$ (row times column = s
 <h2>Part D: SVD and Matrix Norms (Conceptual)</h2>
 
 <div class="analogy">
-<strong>Physical analogy &mdash; Any transformation = rotate, stretch, rotate.</strong><br><br>
+<strong>Physical analogy; Any transformation = rotate, stretch, rotate.</strong><br><br>
 Think about what a matrix does to a circle of vectors. It stretches the circle into an ellipse. The SVD (Singular Value Decomposition) breaks this action into three simple steps:<br><br>
 1. <strong>Rotate</strong> the circle (align it with special directions)<br>
 2. <strong>Stretch</strong> along each axis (by the singular values $\sigma_1, \sigma_2, \ldots$)<br>
@@ -411,9 +411,9 @@ No matter how complicated the matrix, its action is just rotate-stretch-rotate. 
 <strong>SVD: $A = U \Sigma V^T$</strong>
 
 <dl class="breakdown">
-  <dt>$U$</dt><dd>rotation matrix for the output (columns are left singular vectors)</dd>
-  <dt>$\Sigma$</dt><dd>diagonal matrix of singular values $\sigma_1 \geq \sigma_2 \geq \cdots \geq 0$</dd>
-  <dt>$V^T$</dt><dd>rotation matrix for the input (rows are right singular vectors)</dd>
+ <dt>$U$</dt><dd>rotation matrix for the output (columns are left singular vectors)</dd>
+ <dt>$\Sigma$</dt><dd>diagonal matrix of singular values $\sigma_1 \geq \sigma_2 \geq \cdots \geq 0$</dd>
+ <dt>$V^T$</dt><dd>rotation matrix for the input (rows are right singular vectors)</dd>
 </dl>
 
 <p style="margin-top:12px;">For a symmetric PD matrix $A$, the singular values equal the eigenvalues, and $U = V$. So for the matrices in our optimization course, SVD and eigendecomposition are essentially the same thing.</p>
@@ -425,9 +425,9 @@ No matter how complicated the matrix, its action is just rotate-stretch-rotate. 
 $$\kappa(A) = \frac{\sigma_{\max}}{\sigma_{\min}} = \frac{\lambda_{\max}}{\lambda_{\min}} \quad \text{(for symmetric PD matrices)}$$
 
 <dl class="breakdown">
-  <dt>$\sigma_{\max}$</dt><dd>the largest singular value &mdash; the maximum stretching</dd>
-  <dt>$\sigma_{\min}$</dt><dd>the smallest singular value &mdash; the minimum stretching</dd>
-  <dt>$\kappa(A)$</dt><dd>the condition number &mdash; the ratio of maximum to minimum stretching</dd>
+ <dt>$\sigma_{\max}$</dt><dd>the largest singular value; the maximum stretching</dd>
+ <dt>$\sigma_{\min}$</dt><dd>the smallest singular value; the minimum stretching</dd>
+ <dt>$\kappa(A)$</dt><dd>the condition number; the ratio of maximum to minimum stretching</dd>
 </dl>
 
 <p style="margin-top:12px;"><strong>What it means:</strong> A large condition number means the matrix stretches MUCH more in one direction than another. The bowl is very elongated. This makes optimization algorithms converge slowly because they zigzag back and forth.</p>
@@ -453,59 +453,59 @@ $$\kappa(A) = \frac{\sigma_{\max}}{\sigma_{\min}} = \frac{\lambda_{\max}}{\lambd
 <div class="glossary">
 <h3>Glossary</h3>
 <dl>
-  <dt>Eigenvalue ($\lambda$)</dt>
-  <dd>A scalar such that $A\mathbf{v} = \lambda\mathbf{v}$ for some nonzero vector $\mathbf{v}$. The "natural frequency" of the matrix in direction $\mathbf{v}$.</dd>
+ <dt>Eigenvalue ($\lambda$)</dt>
+ <dd>A scalar such that $A\mathbf{v} = \lambda\mathbf{v}$ for some nonzero vector $\mathbf{v}$. The "natural frequency" of the matrix in direction $\mathbf{v}$.</dd>
 
-  <dt>Eigenvector ($\mathbf{v}$)</dt>
-  <dd>A nonzero vector that only gets scaled (not rotated) when multiplied by $A$. The "natural direction" associated with eigenvalue $\lambda$.</dd>
+ <dt>Eigenvector ($\mathbf{v}$)</dt>
+ <dd>A nonzero vector that only gets scaled (not rotated) when multiplied by $A$. The "natural direction" associated with eigenvalue $\lambda$.</dd>
 
-  <dt>Characteristic Polynomial</dt>
-  <dd>$\det(A - \lambda I) = 0$. A polynomial whose roots are the eigenvalues of $A$. For $n \times n$ matrices, it is degree $n$.</dd>
+ <dt>Characteristic Polynomial</dt>
+ <dd>$\det(A - \lambda I) = 0$. A polynomial whose roots are the eigenvalues of $A$. For $n \times n$ matrices, it is degree $n$.</dd>
 
-  <dt>Positive Definite (PD)</dt>
-  <dd>A symmetric matrix with all eigenvalues strictly positive. Geometrically: a bowl. $\mathbf{x}^T A \mathbf{x} &gt; 0$ for all $\mathbf{x} \neq 0$.</dd>
+ <dt>Positive Definite (PD)</dt>
+ <dd>A symmetric matrix with all eigenvalues strictly positive. Geometrically: a bowl. $\mathbf{x}^T A \mathbf{x} &gt; 0$ for all $\mathbf{x} \neq 0$.</dd>
 
-  <dt>Negative Definite (ND)</dt>
-  <dd>A symmetric matrix with all eigenvalues strictly negative. Geometrically: a dome (upside-down bowl).</dd>
+ <dt>Negative Definite (ND)</dt>
+ <dd>A symmetric matrix with all eigenvalues strictly negative. Geometrically: a dome (upside-down bowl).</dd>
 
-  <dt>Indefinite</dt>
-  <dd>A symmetric matrix with both positive and negative eigenvalues. Geometrically: a saddle shape.</dd>
+ <dt>Indefinite</dt>
+ <dd>A symmetric matrix with both positive and negative eigenvalues. Geometrically: a saddle shape.</dd>
 
-  <dt>Positive Semidefinite (PSD)</dt>
-  <dd>A symmetric matrix with all eigenvalues $\geq 0$ (some may be zero). Like PD but the bowl may have flat directions.</dd>
+ <dt>Positive Semidefinite (PSD)</dt>
+ <dd>A symmetric matrix with all eigenvalues $\geq 0$ (some may be zero). Like PD but the bowl may have flat directions.</dd>
 
-  <dt>Symmetric Matrix</dt>
-  <dd>A matrix equal to its own transpose: $A = A^T$. Equivalently, $a_{ij} = a_{ji}$. All Hessians are symmetric (if the function is smooth enough).</dd>
+ <dt>Symmetric Matrix</dt>
+ <dd>A matrix equal to its own transpose: $A = A^T$. Equivalently, $a_{ij} = a_{ji}$. All Hessians are symmetric (if the function is smooth enough).</dd>
 
-  <dt>Matrix Inverse ($A^{-1}$)</dt>
-  <dd>The matrix such that $AA^{-1} = A^{-1}A = I$. Only exists if $\det(A) \neq 0$. For 2&times;2: swap diagonals, negate off-diagonals, divide by det.</dd>
+ <dt>Matrix Inverse ($A^{-1}$)</dt>
+ <dd>The matrix such that $AA^{-1} = A^{-1}A = I$. Only exists if $\det(A) \neq 0$. For 2&times;2: swap diagonals, negate off-diagonals, divide by det.</dd>
 
-  <dt>Determinant ($\det A$)</dt>
-  <dd>For 2&times;2: $ad - bc$. Equals the product of all eigenvalues. If $\det = 0$, the matrix is singular (not invertible).</dd>
+ <dt>Determinant ($\det A$)</dt>
+ <dd>For 2&times;2: $ad - bc$. Equals the product of all eigenvalues. If $\det = 0$, the matrix is singular (not invertible).</dd>
 
-  <dt>Trace ($\text{tr}(A)$)</dt>
-  <dd>Sum of diagonal entries. Equals the sum of all eigenvalues. For 2&times;2: $a + d$.</dd>
+ <dt>Trace ($\text{tr}(A)$)</dt>
+ <dd>Sum of diagonal entries. Equals the sum of all eigenvalues. For 2&times;2: $a + d$.</dd>
 
-  <dt>Outer Product ($\mathbf{v}\mathbf{w}^T$)</dt>
-  <dd>A column vector times a row vector, producing an $n \times n$ matrix. Used in BFGS and SR1 update formulas.</dd>
+ <dt>Outer Product ($\mathbf{v}\mathbf{w}^T$)</dt>
+ <dd>A column vector times a row vector, producing an $n \times n$ matrix. Used in BFGS and SR1 update formulas.</dd>
 
-  <dt>SVD (Singular Value Decomposition)</dt>
-  <dd>$A = U\Sigma V^T$. Decomposes any matrix into rotate-stretch-rotate. The diagonal entries of $\Sigma$ are the singular values.</dd>
+ <dt>SVD (Singular Value Decomposition)</dt>
+ <dd>$A = U\Sigma V^T$. Decomposes any matrix into rotate-stretch-rotate. The diagonal entries of $\Sigma$ are the singular values.</dd>
 
-  <dt>Condition Number ($\kappa$)</dt>
-  <dd>$\kappa = \sigma_{\max}/\sigma_{\min}$. Measures how "elongated" the bowl is. Large $\kappa$ means slow convergence for iterative methods.</dd>
+ <dt>Condition Number ($\kappa$)</dt>
+ <dd>$\kappa = \sigma_{\max}/\sigma_{\min}$. Measures how "elongated" the bowl is. Large $\kappa$ means slow convergence for iterative methods.</dd>
 
-  <dt>Matrix Norm</dt>
-  <dd>A way to measure the "size" of a matrix. The spectral norm $\|A\|_2 = \sigma_{\max}$ is the most common in optimization theory.</dd>
+ <dt>Matrix Norm</dt>
+ <dd>A way to measure the "size" of a matrix. The spectral norm $\|A\|_2 = \sigma_{\max}$ is the most common in optimization theory.</dd>
 </dl>
 </div>
 
 
 <!-- ===================== NAV ===================== -->
 <div class="nav">
-  <p><a href="cg-02-multivariable-bridge.html">&larr; Previous: Page 02 &mdash; Multivariable Calculus Bridge</a></p>
-  <p><a href="cg-04-optimality.html">Next: Page 04 &mdash; Optimality Conditions &rarr;</a></p>
-  <p style="margin-top:12px;"><a href="index.html">Back to Index</a></p>
+ <p><a href="cg-02-multivariable-bridge.html">&larr; Previous: Page 02; Multivariable Calculus Bridge</a></p>
+ <p><a href="cg-04-optimality.html">Next: Page 04; Optimality Conditions &rarr;</a></p>
+ <p style="margin-top:12px;"><a href="index.html">Back to Index</a></p>
 </div>
 
 </div>

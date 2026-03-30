@@ -3,29 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Page 07 &mdash; Newton's Method for Optimization | MATH 3850 Course Guide</title>
+<title>Page 07 : Newton's Method for Optimization | MATH 3850 Course Guide</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+ onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
 
-<span class="tag">PAGE 07 &mdash; POST-MIDTERM</span>
+<span class="tag">PAGE 07; POST-MIDTERM</span>
 <h1>Newton's Method for Optimization</h1>
-<p class="subtitle">Use curvature to build a local bowl model, then jump to its bottom &mdash; the fastest local method</p>
+<p class="subtitle">Use curvature to build a local bowl model, then jump to its bottom; the fastest local method</p>
 
 <!-- ===================== PART A ===================== -->
-<h2>Part A: The Idea &mdash; Build a Local Bowl, Jump to Its Bottom</h2>
+<h2>Part A: The Idea; Build a Local Bowl, Jump to Its Bottom</h2>
 
 <div class="analogy">
-<strong>Physical analogy &mdash; From feeling the slope to building a model.</strong><br><br>
-Remember gradient descent from <a href="cg-06-gradient-descent.html">Page 06</a>? You are blindfolded on a mountain and all you can do is feel the slope under your feet. You take a step in the steepest downhill direction. That is first-order information &mdash; the gradient tells you the slope.<br><br>
+<strong>Physical analogy; From feeling the slope to building a model.</strong><br><br>
+Remember gradient descent from <a href="cg-06-gradient-descent.html">Page 06</a>? You are blindfolded on a mountain and all you can do is feel the slope under your feet. You take a step in the steepest downhill direction. That is first-order information; the gradient tells you the slope.<br><br>
 Now imagine you have a superpower: not only can you feel the slope, but you can also feel the <strong>curvature</strong> of the ground. You can tell whether the slope is getting steeper, flattening out, or curving back up. With this extra information, you can build a little <strong>bowl-shaped model</strong> of the ground around your feet. It is like sculpting a small bowl out of clay that matches the slope and curvature of the real ground where you stand.<br><br>
 Once you have this bowl model, you know exactly where the bottom of the bowl is. So instead of taking a cautious step downhill, you <strong>jump directly to the bottom of the bowl</strong>. If the bowl model accurately represents the actual terrain, you land right at the minimum (or very close to it).<br><br>
-That is Newton's method: measure both slope (gradient) and curvature (Hessian), build a quadratic bowl model, jump to its bottom. The key insight is that Newton uses <strong>second-order information</strong> (the Hessian = curvature), while gradient descent only uses <strong>first-order information</strong> (the gradient = slope). This extra information is what makes Newton so much faster &mdash; but also more expensive and sometimes unreliable far from the solution.
+That is Newton's method: measure both slope (gradient) and curvature (Hessian), build a quadratic bowl model, jump to its bottom. The key insight is that Newton uses <strong>second-order information</strong> (the Hessian = curvature), while gradient descent only uses <strong>first-order information</strong> (the gradient = slope). This extra information is what makes Newton so much faster; but also more expensive and sometimes unreliable far from the solution.
 </div>
 
 <div class="formula-box">
@@ -34,10 +34,10 @@ That is Newton's method: measure both slope (gradient) and curvature (Hessian), 
 $$m_k(p) = f(x_k) + \nabla f(x_k)^T p + \frac{1}{2} p^T \nabla^2 f(x_k)\, p$$
 
 <dl class="breakdown">
-  <dt>$m_k(p)$</dt><dd>the model &mdash; a quadratic function that approximates $f$ near $x_k$. The variable $p$ represents a step away from $x_k$.</dd>
-  <dt>$f(x_k)$</dt><dd>the current function value &mdash; the "height" at your current position. This is a constant (just a number).</dd>
-  <dt>$\nabla f(x_k)^T p$</dt><dd>the slope term &mdash; how much the function changes as you move by $p$, according to the linear approximation. This is the gradient (from <a href="cg-02-multivariable-bridge.html">Page 02</a>) dotted with the step.</dd>
-  <dt>$\frac{1}{2} p^T \nabla^2 f(x_k)\, p$</dt><dd>the curvature term &mdash; how the slope itself changes as you move by $p$. This uses the Hessian matrix $\nabla^2 f(x_k)$ (from <a href="cg-02-multivariable-bridge.html">Page 02</a>).</dd>
+ <dt>$m_k(p)$</dt><dd>the model; a quadratic function that approximates $f$ near $x_k$. The variable $p$ represents a step away from $x_k$.</dd>
+ <dt>$f(x_k)$</dt><dd>the current function value; the "height" at your current position. This is a constant (just a number).</dd>
+ <dt>$\nabla f(x_k)^T p$</dt><dd>the slope term; how much the function changes as you move by $p$, according to the linear approximation. This is the gradient (from <a href="cg-02-multivariable-bridge.html">Page 02</a>) dotted with the step.</dd>
+ <dt>$\frac{1}{2} p^T \nabla^2 f(x_k)\, p$</dt><dd>the curvature term; how the slope itself changes as you move by $p$. This uses the Hessian matrix $\nabla^2 f(x_k)$ (from <a href="cg-02-multivariable-bridge.html">Page 02</a>).</dd>
 </dl>
 
 <p style="margin-top:12px;">This is just the second-order Taylor expansion of $f$ around $x_k$ (recall Taylor's theorem from <a href="cg-01-math-foundations.html">Page 01</a>). For a general function, this model is an <em>approximation</em>. For a quadratic function, this model is <em>exact</em>.</p>
@@ -84,16 +84,16 @@ $$\nabla^2 f(x_k) \, p_k = -\nabla f(x_k)$$
 $$x_{k+1} = x_k + p_k$$
 
 <dl class="breakdown">
-  <dt>$\nabla^2 f(x_k)$</dt><dd>the Hessian matrix at $x_k$ &mdash; an $n \times n$ matrix of second partial derivatives. Captures the curvature. (recall from <a href="cg-02-multivariable-bridge.html">Page 02</a>)</dd>
-  <dt>$\nabla f(x_k)$</dt><dd>the gradient at $x_k$ &mdash; the vector of first partial derivatives. Captures the slope.</dd>
-  <dt>$p_k$</dt><dd>the Newton step &mdash; the direction and distance to move. Unlike GD, the step has a "built-in" step size (no separate $\alpha$ needed for the pure method).</dd>
+ <dt>$\nabla^2 f(x_k)$</dt><dd>the Hessian matrix at $x_k$; an $n \times n$ matrix of second partial derivatives. Captures the curvature. (recall from <a href="cg-02-multivariable-bridge.html">Page 02</a>)</dd>
+ <dt>$\nabla f(x_k)$</dt><dd>the gradient at $x_k$; the vector of first partial derivatives. Captures the slope.</dd>
+ <dt>$p_k$</dt><dd>the Newton step; the direction and distance to move. Unlike GD, the step has a "built-in" step size (no separate $\alpha$ needed for the pure method).</dd>
 </dl>
 </div>
 
 <div class="why-box">
-<h3>GD vs Newton &mdash; The Key Difference</h3>
+<h3>GD vs Newton; The Key Difference</h3>
 <p><strong>Gradient Descent:</strong> $p_k = -\alpha_k \nabla f(x_k)$. Uses only the gradient. Needs a separate step size $\alpha_k$. Treats all directions equally.</p>
-<p style="margin-top:8px;"><strong>Newton:</strong> $p_k = -[\nabla^2 f(x_k)]^{-1} \nabla f(x_k)$. Uses both gradient and Hessian. The Hessian inverse plays the role of a "variable-specific step size" &mdash; it stretches and rotates the gradient to account for different curvatures in different directions.</p>
+<p style="margin-top:8px;"><strong>Newton:</strong> $p_k = -[\nabla^2 f(x_k)]^{-1} \nabla f(x_k)$. Uses both gradient and Hessian. The Hessian inverse plays the role of a "variable-specific step size"; it stretches and rotates the gradient to account for different curvatures in different directions.</p>
 <p style="margin-top:8px;">Think of it this way: GD gives every variable the same step size. Newton gives each variable a step size proportional to how curved the function is in that direction. Variables with high curvature get small steps (to avoid overshooting), and variables with low curvature get big steps (to make progress faster).</p>
 </div>
 
@@ -119,8 +119,8 @@ $$x_{k+1} = x_k + p_k$$
 
 <p>For $f(x) = \frac{1}{2}x^T Q x + b^T x + c$ (where $Q$ is symmetric positive definite):</p>
 <ul style="margin: 12px 0 0 20px;">
-  <li>Gradient: $\nabla f(x) = Qx + b$</li>
-  <li>Hessian: $\nabla^2 f(x) = Q$ &mdash; this is constant (does not depend on $x$)!</li>
+ <li>Gradient: $\nabla f(x) = Qx + b$</li>
+ <li>Hessian: $\nabla^2 f(x) = Q$ , this is constant (does not depend on $x$)!</li>
 </ul>
 
 <p style="margin-top:12px;">The Newton step from $x_0$ is:</p>
@@ -170,21 +170,21 @@ $$x_1 = x_0 + p_0 = \begin{bmatrix} 1 \\ 1 \end{bmatrix} + \begin{bmatrix} -1 \\
 <p class="result">Newton reached the exact minimum in ONE step!</p>
 </div>
 
-<div class="check">Compare: on <a href="cg-06-gradient-descent.html">Page 06</a>, gradient descent with the same starting point gave $x_1 = [9/35, -4/35]$ and $x_2 = [6/175, 6/175]$ &mdash; still not at the minimum after two steps. Newton got there instantly.</div>
+<div class="check">Compare: on <a href="cg-06-gradient-descent.html">Page 06</a>, gradient descent with the same starting point gave $x_1 = [9/35, -4/35]$ and $x_2 = [6/175, 6/175]$; still not at the minimum after two steps. Newton got there instantly.</div>
 </div>
 
 <div class="note">
-<strong>The price of this speed:</strong> Newton needed to compute the Hessian (a $2 \times 2$ matrix here, but $n \times n$ in general) AND solve a linear system. For large problems ($n$ = millions), this cost is prohibitive. That is what motivates quasi-Newton methods like BFGS (<a href="cg-12-bfgs.html">Page 12</a>) &mdash; they approximate the Hessian cheaply.
+<strong>The price of this speed:</strong> Newton needed to compute the Hessian (a $2 \times 2$ matrix here, but $n \times n$ in general) AND solve a linear system. For large problems ($n$ = millions), this cost is prohibitive. That is what motivates quasi-Newton methods like BFGS (<a href="cg-12-bfgs.html">Page 12</a>); they approximate the Hessian cheaply.
 </div>
 
 <!-- ===================== PART C ===================== -->
-<h2>Part C: Theorem 3.5 &mdash; Local Quadratic Convergence</h2>
+<h2>Part C: Theorem 3.5; Local Quadratic Convergence</h2>
 
 <div class="analogy">
-<strong>Physical analogy &mdash; A GPS that only works within city limits.</strong><br><br>
-Newton's method is like a GPS that gives perfect directions &mdash; but only when you are already within city limits. If you are close to the destination, the GPS is <em>spectacularly</em> fast: each instruction doubles the number of correct digits in your position. After a few instructions you are essentially there.<br><br>
-But if you are out in the countryside, far from the city, the GPS might give nonsensical directions that take you in the wrong direction or even farther away. This is the "local" in "local convergence" &mdash; Newton only guarantees convergence when you start close enough to the solution.<br><br>
-"Close enough" depends on the function. For well-behaved functions with smooth curvature, the "city limits" are large. For wild, rapidly-changing functions, the "city limits" might be tiny. This is where the "Lipschitz continuous Hessian" condition comes in &mdash; it guarantees the curvature does not change too wildly.
+<strong>Physical analogy; A GPS that only works within city limits.</strong><br><br>
+Newton's method is like a GPS that gives perfect directions; but only when you are already within city limits. If you are close to the destination, the GPS is <em>spectacularly</em> fast: each instruction doubles the number of correct digits in your position. After a few instructions you are essentially there.<br><br>
+But if you are out in the countryside, far from the city, the GPS might give nonsensical directions that take you in the wrong direction or even farther away. This is the "local" in "local convergence"; Newton only guarantees convergence when you start close enough to the solution.<br><br>
+"Close enough" depends on the function. For well-behaved functions with smooth curvature, the "city limits" are large. For wild, rapidly-changing functions, the "city limits" might be tiny. This is where the "Lipschitz continuous Hessian" condition comes in; it guarantees the curvature does not change too wildly.
 </div>
 
 <div class="formula-box">
@@ -192,9 +192,9 @@ But if you are out in the countryside, far from the city, the GPS might give non
 
 <p style="margin-bottom:12px;">Suppose:</p>
 <ol style="margin-left:24px; margin-bottom:16px;">
-  <li style="margin:6px 0;"><strong>(Smooth Hessian)</strong> The Hessian $\nabla^2 f$ is Lipschitz continuous: there exists $L &gt; 0$ such that $\|\nabla^2 f(x) - \nabla^2 f(y)\| \leq L\|x - y\|$ for all $x, y$ near $x^*$.</li>
-  <li style="margin:6px 0;"><strong>(Non-degenerate minimum)</strong> $\nabla f(x^*) = 0$ and $\nabla^2 f(x^*)$ is positive definite (i.e., $x^*$ is a strong local minimum).</li>
-  <li style="margin:6px 0;"><strong>(Close enough start)</strong> $x_0$ is sufficiently close to $x^*$.</li>
+ <li style="margin:6px 0;"><strong>(Smooth Hessian)</strong> The Hessian $\nabla^2 f$ is Lipschitz continuous: there exists $L &gt; 0$ such that $\|\nabla^2 f(x) - \nabla^2 f(y)\| \leq L\|x - y\|$ for all $x, y$ near $x^*$.</li>
+ <li style="margin:6px 0;"><strong>(Non-degenerate minimum)</strong> $\nabla f(x^*) = 0$ and $\nabla^2 f(x^*)$ is positive definite (i.e., $x^*$ is a strong local minimum).</li>
+ <li style="margin:6px 0;"><strong>(Close enough start)</strong> $x_0$ is sufficiently close to $x^*$.</li>
 </ol>
 
 <p>Then Newton's method converges <strong>quadratically</strong>:</p>
@@ -207,11 +207,11 @@ $$\|x_{k+1} - x^*\| \leq C \|x_k - x^*\|^2$$
 
 <div class="why-box">
 <h3>What each condition means</h3>
-<p><strong>Condition 1: "Lipschitz continuous Hessian"</strong> &mdash; The curvature of the function changes smoothly and gradually, not in sudden jumps. Imagine driving on a road: the road curves, but the curvature changes gradually (smooth road) rather than suddenly (right angle). The constant $L$ measures how fast the curvature can change. Smaller $L$ means smoother curvature and a bigger "safe zone" around the solution.</p>
+<p><strong>Condition 1: "Lipschitz continuous Hessian"</strong>; The curvature of the function changes smoothly and gradually, not in sudden jumps. Imagine driving on a road: the road curves, but the curvature changes gradually (smooth road) rather than suddenly (right angle). The constant $L$ measures how fast the curvature can change. Smaller $L$ means smoother curvature and a bigger "safe zone" around the solution.</p>
 
-<p style="margin-top:12px;"><strong>Condition 2: "Positive definite Hessian at $x^*$"</strong> &mdash; The solution $x^*$ is a genuine bowl-bottom, not a saddle point or flat area. This ensures the Hessian is invertible at the solution (recall from <a href="cg-03-linear-algebra.html">Page 03</a> that positive definite matrices are always invertible).</p>
+<p style="margin-top:12px;"><strong>Condition 2: "Positive definite Hessian at $x^*$"</strong>; The solution $x^*$ is a genuine bowl-bottom, not a saddle point or flat area. This ensures the Hessian is invertible at the solution (recall from <a href="cg-03-linear-algebra.html">Page 03</a> that positive definite matrices are always invertible).</p>
 
-<p style="margin-top:12px;"><strong>Condition 3: "Close enough start"</strong> &mdash; You must already be near the solution. How near? Roughly, within a region where the quadratic model is a good approximation of $f$. This is the "city limits" from the GPS analogy.</p>
+<p style="margin-top:12px;"><strong>Condition 3: "Close enough start"</strong>; You must already be near the solution. How near? Roughly, within a region where the quadratic model is a good approximation of $f$. This is the "city limits" from the GPS analogy.</p>
 </div>
 
 <div class="why-box">
@@ -234,8 +234,8 @@ $$\|x_{k+1} - x^*\| \leq C \|x_k - x^*\|^2$$
 <h4>Exam Pattern: "Compare convergence rates"</h4>
 <p>You may be asked to compare GD (linear convergence) vs Newton (quadratic convergence). Key contrast:</p>
 <ul style="margin-left:20px; margin-top:8px;">
-  <li><strong>GD:</strong> $\|e_{k+1}\| \leq c \|e_k\|$ with $c &lt; 1$. Error decreases by a constant factor each step. Needs many iterations for high precision.</li>
-  <li><strong>Newton:</strong> $\|e_{k+1}\| \leq C \|e_k\|^2$. Error gets squared each step. Very few iterations for high precision, but only works near the solution and costs more per iteration.</li>
+ <li><strong>GD:</strong> $\|e_{k+1}\| \leq c \|e_k\|$ with $c &lt; 1$. Error decreases by a constant factor each step. Needs many iterations for high precision.</li>
+ <li><strong>Newton:</strong> $\|e_{k+1}\| \leq C \|e_k\|^2$. Error gets squared each step. Very few iterations for high precision, but only works near the solution and costs more per iteration.</li>
 </ul>
 </div>
 
@@ -286,7 +286,7 @@ $$x_1 = x_0 + p_0 = \begin{bmatrix} 0 \\ 0 \end{bmatrix} + \begin{bmatrix} 2 \\ 
 </div>
 
 <div class="step">
-<span class="step-label">Step 6: Verify &mdash; is this the minimum?</span><br>
+<span class="step-label">Step 6: Verify; is this the minimum?</span><br>
 $$\nabla f(x_1) = \begin{bmatrix} 2(2) + (-1) - 3 \\ 2 + 2(-1) \end{bmatrix} = \begin{bmatrix} 4 - 1 - 3 \\ 2 - 2 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$$
 <p class="result">The gradient is exactly zero! $x^* = [2, -1]^T$ is the minimum. Newton converged in ONE step because this function is quadratic (even though it does not look like the standard form $\frac{1}{2}x^TAx$).</p>
 </div>
@@ -333,7 +333,7 @@ $$x_4 \approx 0.6931$$
 <p class="result">After 4 iterations: $x_4 \approx 0.6931 \approx \ln 2 = x^*$. Four correct digits.</p>
 </div>
 
-<div class="check">Notice the error pattern: $|x_k - x^*|$ was roughly $0.69, 0.31, 0.043, 0.001, 0.000001$ &mdash; the number of correct digits roughly doubles each step after we get close. That is quadratic convergence in action!</div>
+<div class="check">Notice the error pattern: $|x_k - x^*|$ was roughly $0.69, 0.31, 0.043, 0.001, 0.000001$; the number of correct digits roughly doubles each step after we get close. That is quadratic convergence in action!</div>
 </div>
 
 <!-- ===================== PART E ===================== -->
@@ -348,13 +348,13 @@ $$x_4 \approx 0.6931$$
 
 <div class="exam-flag">
 <h4>Limitation 2: Hessian might not be positive definite</h4>
-<p>If $\nabla^2 f(x_k)$ is not positive definite (e.g., the function has a saddle shape at $x_k$), the Newton step $p_k$ might point <em>uphill</em> &mdash; toward a maximum or saddle point, not a minimum. The quadratic model $m_k(p)$ would be a saddle or dome, not a bowl, so "jumping to the bottom" is meaningless.</p>
+<p>If $\nabla^2 f(x_k)$ is not positive definite (e.g., the function has a saddle shape at $x_k$), the Newton step $p_k$ might point <em>uphill</em>; toward a maximum or saddle point, not a minimum. The quadratic model $m_k(p)$ would be a saddle or dome, not a bowl, so "jumping to the bottom" is meaningless.</p>
 <p style="margin-top:8px;"><strong>Fix:</strong> Modified Newton methods add a correction to make the Hessian positive definite. Trust-region methods (<a href="cg-09-trust-region.html">Page 09</a>) handle this naturally by restricting the step size.</p>
 </div>
 
 <div class="exam-flag">
 <h4>Limitation 3: Only locally convergent</h4>
-<p>Theorem 3.5 requires starting "close enough." If you start far from the solution, Newton can diverge, oscillate, or converge to a wrong stationary point. The pure Newton method has <strong>no globalization</strong> &mdash; no guarantee of making progress from a distant starting point.</p>
+<p>Theorem 3.5 requires starting "close enough." If you start far from the solution, Newton can diverge, oscillate, or converge to a wrong stationary point. The pure Newton method has <strong>no globalization</strong>; no guarantee of making progress from a distant starting point.</p>
 <p style="margin-top:8px;"><strong>Fix:</strong> Line search (<a href="cg-08-line-search.html">Page 08</a>) and trust regions (<a href="cg-09-trust-region.html">Page 09</a>) provide globalization. They modify the Newton step to ensure sufficient decrease in $f$ at every iteration, turning Newton from a "locally perfect" method into a "globally reliable" one.</p>
 </div>
 
@@ -362,39 +362,39 @@ $$x_4 \approx 0.6931$$
 <h3>The Landscape of Methods</h3>
 <table class="step-table" style="margin-top:12px;">
 <tr>
-  <th>Method</th>
-  <th>Info Used</th>
-  <th>Cost per Step</th>
-  <th>Convergence</th>
-  <th>Global?</th>
+ <th>Method</th>
+ <th>Info Used</th>
+ <th>Cost per Step</th>
+ <th>Convergence</th>
+ <th>Global?</th>
 </tr>
 <tr>
-  <td style="text-align:left;">GD (<a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>)</td>
-  <td>Gradient</td>
-  <td>$O(n)$</td>
-  <td>Linear</td>
-  <td>With line search</td>
+ <td style="text-align:left;">GD (<a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>)</td>
+ <td>Gradient</td>
+ <td>$O(n)$</td>
+ <td>Linear</td>
+ <td>With line search</td>
 </tr>
 <tr>
-  <td style="text-align:left;">Newton (this page)</td>
-  <td>Gradient + Hessian</td>
-  <td>$O(n^3)$</td>
-  <td>Quadratic</td>
-  <td>No (local only)</td>
+ <td style="text-align:left;">Newton (this page)</td>
+ <td>Gradient + Hessian</td>
+ <td>$O(n^3)$</td>
+ <td>Quadratic</td>
+ <td>No (local only)</td>
 </tr>
 <tr>
-  <td style="text-align:left;">CG (<a href="cg-10-conjugate-gradient.html" style="color:#d4956a;">Page 10</a>)</td>
-  <td>Gradient</td>
-  <td>$O(n)$</td>
-  <td>$\leq n$ steps</td>
-  <td>With line search</td>
+ <td style="text-align:left;">CG (<a href="cg-10-conjugate-gradient.html" style="color:#d4956a;">Page 10</a>)</td>
+ <td>Gradient</td>
+ <td>$O(n)$</td>
+ <td>$\leq n$ steps</td>
+ <td>With line search</td>
 </tr>
 <tr>
-  <td style="text-align:left;">BFGS (<a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>)</td>
-  <td>Gradient (approx Hessian)</td>
-  <td>$O(n^2)$</td>
-  <td>Superlinear</td>
-  <td>With Wolfe line search</td>
+ <td style="text-align:left;">BFGS (<a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>)</td>
+ <td>Gradient (approx Hessian)</td>
+ <td>$O(n^2)$</td>
+ <td>Superlinear</td>
+ <td>With Wolfe line search</td>
 </tr>
 </table>
 </div>
@@ -403,37 +403,37 @@ $$x_4 \approx 0.6931$$
 <div class="glossary">
 <h3>Glossary</h3>
 <dl>
-  <dt>Newton's Method (for Optimization)</dt>
-  <dd>An iterative method that uses both gradient and Hessian to build a quadratic model at each point and jumps to the model's minimum. The step solves $\nabla^2 f(x_k) p_k = -\nabla f(x_k)$.</dd>
+ <dt>Newton's Method (for Optimization)</dt>
+ <dd>An iterative method that uses both gradient and Hessian to build a quadratic model at each point and jumps to the model's minimum. The step solves $\nabla^2 f(x_k) p_k = -\nabla f(x_k)$.</dd>
 
-  <dt>Quadratic Model $m_k(p)$</dt>
-  <dd>The second-order Taylor approximation of $f$ around $x_k$: $m_k(p) = f(x_k) + \nabla f(x_k)^Tp + \frac{1}{2}p^T\nabla^2 f(x_k)p$. Newton minimizes this model at each step.</dd>
+ <dt>Quadratic Model $m_k(p)$</dt>
+ <dd>The second-order Taylor approximation of $f$ around $x_k$: $m_k(p) = f(x_k) + \nabla f(x_k)^Tp + \frac{1}{2}p^T\nabla^2 f(x_k)p$. Newton minimizes this model at each step.</dd>
 
-  <dt>Newton Step $p_k$</dt>
-  <dd>$p_k = -[\nabla^2 f(x_k)]^{-1}\nabla f(x_k)$. The direction and distance to the bottom of the local quadratic model.</dd>
+ <dt>Newton Step $p_k$</dt>
+ <dd>$p_k = -[\nabla^2 f(x_k)]^{-1}\nabla f(x_k)$. The direction and distance to the bottom of the local quadratic model.</dd>
 
-  <dt>Newton System</dt>
-  <dd>The linear system $\nabla^2 f(x_k) p_k = -\nabla f(x_k)$ that must be solved to find the Newton step. Solving this costs $O(n^3)$.</dd>
+ <dt>Newton System</dt>
+ <dd>The linear system $\nabla^2 f(x_k) p_k = -\nabla f(x_k)$ that must be solved to find the Newton step. Solving this costs $O(n^3)$.</dd>
 
-  <dt>Quadratic Convergence</dt>
-  <dd>$\|x_{k+1} - x^*\| \leq C\|x_k - x^*\|^2$. The error gets squared each step, so the number of correct digits approximately doubles each iteration.</dd>
+ <dt>Quadratic Convergence</dt>
+ <dd>$\|x_{k+1} - x^*\| \leq C\|x_k - x^*\|^2$. The error gets squared each step, so the number of correct digits approximately doubles each iteration.</dd>
 
-  <dt>Local Convergence</dt>
-  <dd>The method only guarantees convergence when started "close enough" to the solution. Far from the solution, Newton may diverge.</dd>
+ <dt>Local Convergence</dt>
+ <dd>The method only guarantees convergence when started "close enough" to the solution. Far from the solution, Newton may diverge.</dd>
 
-  <dt>Lipschitz Continuous Hessian</dt>
-  <dd>$\|\nabla^2 f(x) - \nabla^2 f(y)\| \leq L\|x - y\|$. The curvature changes smoothly &mdash; no sudden jumps. Required for Theorem 3.5.</dd>
+ <dt>Lipschitz Continuous Hessian</dt>
+ <dd>$\|\nabla^2 f(x) - \nabla^2 f(y)\| \leq L\|x - y\|$. The curvature changes smoothly; no sudden jumps. Required for Theorem 3.5.</dd>
 
-  <dt>Globalization</dt>
-  <dd>Strategies (line search, trust region) that modify Newton's method to guarantee progress from any starting point, not just nearby points.</dd>
+ <dt>Globalization</dt>
+ <dd>Strategies (line search, trust region) that modify Newton's method to guarantee progress from any starting point, not just nearby points.</dd>
 </dl>
 </div>
 
 <!-- ===================== NAV ===================== -->
 <div class="nav">
-  <p><a href="cg-06-gradient-descent.html">&larr; Previous: Page 06 &mdash; Gradient Descent</a></p>
-  <p><a href="cg-08-line-search.html">Next: Page 08 &mdash; Line Search Methods &rarr;</a></p>
-  <p><a href="index.html">Back to Index</a></p>
+ <p><a href="cg-06-gradient-descent.html">&larr; Previous: Page 06; Gradient Descent</a></p>
+ <p><a href="cg-08-line-search.html">Next: Page 08; Line Search Methods &rarr;</a></p>
+ <p><a href="index.html">Back to Index</a></p>
 </div>
 
 </div>

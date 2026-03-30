@@ -3,30 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Page 06 &mdash; Gradient Descent Deep Dive | MATH 3850 Course Guide</title>
+<title>Page 06 : Gradient Descent Deep Dive | MATH 3850 Course Guide</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+ onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
 
-<span class="tag">PAGE 06 &mdash; POST-MIDTERM</span>
+<span class="tag">PAGE 06; POST-MIDTERM</span>
 <h1>Gradient Descent Deep Dive</h1>
-<p class="subtitle">The simplest optimization algorithm &mdash; and understanding its strengths and weaknesses tells you why every other method exists</p>
+<p class="subtitle">The simplest optimization algorithm; and understanding its strengths and weaknesses tells you why every other method exists</p>
 
 <!-- ===================== PART A ===================== -->
-<h2>Part A: The Algorithm &mdash; Walk Downhill</h2>
+<h2>Part A: The Algorithm; Walk Downhill</h2>
 
 <div class="analogy">
-<strong>Physical analogy &mdash; Blindfolded on a mountain in dense fog.</strong><br><br>
+<strong>Physical analogy; Blindfolded on a mountain in dense fog.</strong><br><br>
 Imagine you are standing on a mountain and you need to get to the valley floor. There is just one problem: you are blindfolded. Dense fog surrounds you. You cannot see the bottom. You cannot see more than an inch in any direction. All you can do is feel the ground under your feet and figure out which way is steepest downhill <em>right where you are standing</em>.<br><br>
 So here is your strategy: crouch down, feel the slope, figure out the direction that goes downhill the fastest. Take a step in that direction. Stand up. Crouch down again. Feel the slope again. Take another step. Repeat.<br><br>
 Each step, you move in the direction that goes downhill fastest <em>at your current position</em>. That is gradient descent.<br><br>
 But there is a catch. "Steepest locally" does not mean "best path overall." Think about a long, narrow valley shaped like a bathtub. The steepest downhill direction at any point along the sides of the bathtub is straight across the valley floor, not along the length of the tub toward the drain. So you end up zigzagging back and forth between the steep walls, barely making any progress toward the actual lowest point at the drain. This zigzag behavior is the fundamental weakness of gradient descent, and it is <em>exactly</em> what motivates every method we study after this page.<br><br>
-Despite this weakness, gradient descent is the foundation. Understanding it deeply is the key to understanding Newton's method (<a href="cg-07-newton-method.html">Page 07</a>), conjugate gradients (<a href="cg-10-conjugate-gradient.html">Page 10</a>), and BFGS (<a href="cg-12-bfgs.html">Page 12</a>) &mdash; because each of those methods is specifically designed to fix one or more of gradient descent's problems.
+Despite this weakness, gradient descent is the foundation. Understanding it deeply is the key to understanding Newton's method (<a href="cg-07-newton-method.html">Page 07</a>), conjugate gradients (<a href="cg-10-conjugate-gradient.html">Page 10</a>), and BFGS (<a href="cg-12-bfgs.html">Page 12</a>); because each of those methods is specifically designed to fix one or more of gradient descent's problems.
 </div>
 
 <div class="algo-box">
@@ -34,7 +34,7 @@ Despite this weakness, gradient descent is the foundation. Understanding it deep
 <div class="algo-line"><strong style="color:#d4956a;">Input:</strong> starting point $x_0$, tolerance $\epsilon &gt; 0$</div>
 <div class="algo-line"><strong style="color:#d4956a;">Step 0:</strong> Set $k = 0$</div>
 <div class="algo-line"><strong style="color:#d4956a;">Step 1:</strong> Compute the gradient $g_k = \nabla f(x_k)$ <span class="algo-comment">&larr; feel the slope (recall gradient from <a href="cg-02-multivariable-bridge.html" style="color:#d4956a;">Page 02</a>)</span></div>
-<div class="algo-line"><strong style="color:#d4956a;">Step 2:</strong> If $\|g_k\| &lt; \epsilon$, STOP &mdash; declare $x_k$ as the solution <span class="algo-comment">&larr; ground is flat enough (recall norms from <a href="cg-01-math-foundations.html" style="color:#d4956a;">Page 01</a>)</span></div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 2:</strong> If $\|g_k\| &lt; \epsilon$, STOP; declare $x_k$ as the solution <span class="algo-comment">&larr; ground is flat enough (recall norms from <a href="cg-01-math-foundations.html" style="color:#d4956a;">Page 01</a>)</span></div>
 <div class="algo-line"><strong style="color:#d4956a;">Step 3:</strong> Set the search direction $d_k = -g_k$ <span class="algo-comment">&larr; the steepest downhill direction</span></div>
 <div class="algo-line"><strong style="color:#d4956a;">Step 4:</strong> Choose step size $\alpha_k &gt; 0$ <span class="algo-comment">&larr; how far to walk (see <a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a> for how)</span></div>
 <div class="algo-line"><strong style="color:#d4956a;">Step 5:</strong> Update: $x_{k+1} = x_k + \alpha_k d_k = x_k - \alpha_k g_k$ <span class="algo-comment">&larr; take the step</span></div>
@@ -47,12 +47,12 @@ Despite this weakness, gradient descent is the foundation. Understanding it deep
 $$x_{k+1} = x_k - \alpha_k \nabla f(x_k)$$
 
 <dl class="breakdown">
-  <dt>$x_{k+1}$</dt><dd>the next point &mdash; where you will be after this step</dd>
-  <dt>$x_k$</dt><dd>the current point &mdash; where you are standing right now</dd>
-  <dt>$\alpha_k$</dt><dd>the step size (also called "learning rate") &mdash; how far you walk. Must be positive. Subscript $k$ means it can change at every iteration.</dd>
-  <dt>$\nabla f(x_k)$</dt><dd>the gradient of $f$ evaluated at $x_k$ &mdash; a vector pointing in the direction of steepest <em>ascent</em> (uphill)</dd>
-  <dt>$-\nabla f(x_k)$</dt><dd>the negative gradient &mdash; points in the direction of steepest <em>descent</em> (downhill). The minus sign flips the direction.</dd>
-  <dt>$\alpha_k \nabla f(x_k)$</dt><dd>the step size times the gradient &mdash; this scales how far you go in the descent direction</dd>
+ <dt>$x_{k+1}$</dt><dd>the next point; where you will be after this step</dd>
+ <dt>$x_k$</dt><dd>the current point; where you are standing right now</dd>
+ <dt>$\alpha_k$</dt><dd>the step size (also called "learning rate"); how far you walk. Must be positive. Subscript $k$ means it can change at every iteration.</dd>
+ <dt>$\nabla f(x_k)$</dt><dd>the gradient of $f$ evaluated at $x_k$; a vector pointing in the direction of steepest <em>ascent</em> (uphill)</dd>
+ <dt>$-\nabla f(x_k)$</dt><dd>the negative gradient; points in the direction of steepest <em>descent</em> (downhill). The minus sign flips the direction.</dd>
+ <dt>$\alpha_k \nabla f(x_k)$</dt><dd>the step size times the gradient; this scales how far you go in the descent direction</dd>
 </dl>
 </div>
 
@@ -63,7 +63,7 @@ $$x_{k+1} = x_k - \alpha_k \nabla f(x_k)$$
 </div>
 
 <!-- ===================== PART B ===================== -->
-<h2>Part B: The Quadratic Case &mdash; Where We Can Analyze Everything</h2>
+<h2>Part B: The Quadratic Case; Where We Can Analyze Everything</h2>
 
 <p>Quadratic functions are the "lab rats" of optimization. They are simple enough that we can derive exact formulas and prove things rigorously, yet rich enough to reveal the core behavior of any algorithm. Every method in this course is first analyzed on quadratics, then extended to general functions.</p>
 
@@ -73,11 +73,11 @@ $$x_{k+1} = x_k - \alpha_k \nabla f(x_k)$$
 $$f(x) = \frac{1}{2} x^T A x + b^T x + c$$
 
 <dl class="breakdown">
-  <dt>$x$</dt><dd>an $n$-dimensional vector &mdash; the point where we evaluate the function</dd>
-  <dt>$A$</dt><dd>an $n \times n$ symmetric positive definite matrix &mdash; controls the shape (curvature) of the bowl</dd>
-  <dt>$b$</dt><dd>an $n$-dimensional vector &mdash; shifts where the minimum is</dd>
-  <dt>$c$</dt><dd>a scalar constant &mdash; shifts the function value up or down (does not affect where the minimum is)</dd>
-  <dt>$\frac{1}{2}$</dt><dd>a convenience factor &mdash; makes the gradient formula cleaner (the 2 from the quadratic cancels with this 1/2)</dd>
+ <dt>$x$</dt><dd>an $n$-dimensional vector; the point where we evaluate the function</dd>
+ <dt>$A$</dt><dd>an $n \times n$ symmetric positive definite matrix; controls the shape (curvature) of the bowl</dd>
+ <dt>$b$</dt><dd>an $n$-dimensional vector; shifts where the minimum is</dd>
+ <dt>$c$</dt><dd>a scalar constant; shifts the function value up or down (does not affect where the minimum is)</dd>
+ <dt>$\frac{1}{2}$</dt><dd>a convenience factor; makes the gradient formula cleaner (the 2 from the quadratic cancels with this 1/2)</dd>
 </dl>
 
 <p style="margin-top:12px;">The gradient is:</p>
@@ -86,7 +86,7 @@ $$\nabla f(x) = Ax + b$$
 <p>This comes from the rules of matrix calculus. The gradient of $\frac{1}{2}x^TAx$ is $Ax$ (when $A$ is symmetric), and the gradient of $b^Tx$ is $b$. The constant $c$ vanishes.</p>
 </div>
 
-<p>On a quadratic, we can derive the <em>exact</em> optimal step size &mdash; the $\alpha_k$ that decreases $f$ as much as possible in the gradient direction. Here is the full derivation.</p>
+<p>On a quadratic, we can derive the <em>exact</em> optimal step size; the $\alpha_k$ that decreases $f$ as much as possible in the gradient direction. Here is the full derivation.</p>
 
 <div class="hand-calc">
 <h3>Derivation: Exact Step Size on a Quadratic</h3>
@@ -132,13 +132,13 @@ $$\alpha \, g_k^T A g_k = g_k^T g_k$$
 $$\boxed{\alpha_k = \frac{g_k^T g_k}{g_k^T A g_k}}$$
 </div>
 
-<div class="check">This is the exact step size that minimizes $f$ along the steepest descent direction from $x_k$. No line search needed &mdash; we have a closed-form formula.</div>
+<div class="check">This is the exact step size that minimizes $f$ along the steepest descent direction from $x_k$. No line search needed; we have a closed-form formula.</div>
 </div>
 
 <div class="why-box">
 <h3>What do the numerator and denominator mean?</h3>
-<p><strong>Numerator: $g_k^T g_k = \|g_k\|^2$</strong> &mdash; This is the squared magnitude of the gradient. It measures how steep the slope is. Steeper slope means you want to take a bigger step.</p>
-<p style="margin-top:8px;"><strong>Denominator: $g_k^T A g_k$</strong> &mdash; This measures how curved the surface is along the gradient direction. If the curvature is high (the bowl is tight), you should take a smaller step so you do not overshoot. If the curvature is low (the bowl is wide), you can afford a bigger step.</p>
+<p><strong>Numerator: $g_k^T g_k = \|g_k\|^2$</strong>; This is the squared magnitude of the gradient. It measures how steep the slope is. Steeper slope means you want to take a bigger step.</p>
+<p style="margin-top:8px;"><strong>Denominator: $g_k^T A g_k$</strong>; This measures how curved the surface is along the gradient direction. If the curvature is high (the bowl is tight), you should take a smaller step so you do not overshoot. If the curvature is low (the bowl is wide), you can afford a bigger step.</p>
 <p style="margin-top:8px;">So the ratio $\frac{\|g_k\|^2}{g_k^T A g_k}$ balances "how steep" vs "how curved." Steep + flat curvature = big step. Gentle + high curvature = small step.</p>
 </div>
 
@@ -165,7 +165,7 @@ $$x_1 = x_0 - \alpha_0 g_0 = \begin{bmatrix} 1 \\ 1 \end{bmatrix} - \frac{13}{35
 </div>
 
 <div class="step">
-<span class="step-label">Step 4: Check &mdash; did we reach the minimum?</span><br>
+<span class="step-label">Step 4: Check; did we reach the minimum?</span><br>
 <p>The minimum is at $x^* = [0, 0]^T$. Our point is $x_1 = [9/35, -4/35]^T \approx [0.257, -0.114]^T$.</p>
 <p class="result">We did NOT reach the minimum in one step. GD on this non-round quadratic needs more iterations.</p>
 <p class="check">Notice: $x_0 = [1, 1]$ was at distance $\sqrt{2} \approx 1.414$ from the origin. $x_1$ is at distance $\sqrt{(9/35)^2 + (4/35)^2} = \sqrt{81 + 16}/35 = \sqrt{97}/35 \approx 0.281$. We got much closer, but we are not there yet.</p>
@@ -192,9 +192,9 @@ $$x_2 = \begin{bmatrix} 270/1050 - 234/1050 \\ -120/1050 + 156/1050 \end{bmatrix
 <h2>Part C: Convergence and the Condition Number</h2>
 
 <div class="analogy">
-<strong>Physical analogy &mdash; Skiing down an elliptical valley.</strong><br><br>
+<strong>Physical analogy; Skiing down an elliptical valley.</strong><br><br>
 Imagine skiing down a valley-shaped bowl. If the bowl is perfectly round (like a satellite dish), you can ski straight down to the bottom in essentially one swooping turn. The steepest path from any point on the rim leads directly to the center.<br><br>
-Now imagine the bowl is elongated like a bathtub &mdash; narrow from side to side but long from end to end. If you start on the steep sidewall and follow the steepest direction, you ski across the narrow width and slam into the opposite wall. Then the steepest direction takes you back to the first wall. You zigzag endlessly across the narrow dimension while barely creeping along the long dimension toward the drain.<br><br>
+Now imagine the bowl is elongated like a bathtub; narrow from side to side but long from end to end. If you start on the steep sidewall and follow the steepest direction, you ski across the narrow width and slam into the opposite wall. Then the steepest direction takes you back to the first wall. You zigzag endlessly across the narrow dimension while barely creeping along the long dimension toward the drain.<br><br>
 The <strong>condition number</strong> $\kappa$ measures how "bathtub-shaped" the problem is. $\kappa = 1$ means perfectly round (great for GD). $\kappa = 100$ means a bathtub that is 100 times longer than it is wide (terrible for GD). The condition number is the single most important quantity for predicting how fast gradient descent will converge.
 </div>
 
@@ -208,10 +208,10 @@ $$f(x_{k+1}) - f(x^*) \leq \left(\frac{\kappa - 1}{\kappa + 1}\right)^2 \bigl(f(
 $$\|x_{k+1} - x^*\|_A \leq \left(\frac{\kappa - 1}{\kappa + 1}\right) \|x_k - x^*\|_A$$
 
 <dl class="breakdown">
-  <dt>$x^*$</dt><dd>the true minimum of $f$</dd>
-  <dt>$\kappa$</dt><dd>the condition number of $A$: $\kappa = \frac{\lambda_{\max}}{\lambda_{\min}}$ where $\lambda_{\max}$ and $\lambda_{\min}$ are the largest and smallest eigenvalues of $A$ (recall eigenvalues from <a href="cg-03-linear-algebra.html">Page 03</a>)</dd>
-  <dt>$\frac{\kappa - 1}{\kappa + 1}$</dt><dd>the convergence factor &mdash; the fraction of the error that remains after each step. Always between 0 and 1.</dd>
-  <dt>$\|\cdot\|_A$</dt><dd>the A-norm: $\|x\|_A = \sqrt{x^TAx}$ &mdash; a norm that accounts for the shape of the bowl (recall norms from <a href="cg-01-math-foundations.html">Page 01</a>)</dd>
+ <dt>$x^*$</dt><dd>the true minimum of $f$</dd>
+ <dt>$\kappa$</dt><dd>the condition number of $A$: $\kappa = \frac{\lambda_{\max}}{\lambda_{\min}}$ where $\lambda_{\max}$ and $\lambda_{\min}$ are the largest and smallest eigenvalues of $A$ (recall eigenvalues from <a href="cg-03-linear-algebra.html">Page 03</a>)</dd>
+ <dt>$\frac{\kappa - 1}{\kappa + 1}$</dt><dd>the convergence factor; the fraction of the error that remains after each step. Always between 0 and 1.</dd>
+ <dt>$\|\cdot\|_A$</dt><dd>the A-norm: $\|x\|_A = \sqrt{x^TAx}$; a norm that accounts for the shape of the bowl (recall norms from <a href="cg-01-math-foundations.html">Page 01</a>)</dd>
 </dl>
 </div>
 
@@ -219,10 +219,10 @@ $$\|x_{k+1} - x^*\|_A \leq \left(\frac{\kappa - 1}{\kappa + 1}\right) \|x_k - x^
 
 <table class="step-table">
 <tr>
-  <th>$\kappa$ (condition number)</th>
-  <th>$\frac{\kappa - 1}{\kappa + 1}$ (convergence factor)</th>
-  <th>$\left(\frac{\kappa-1}{\kappa+1}\right)^2$ (error reduction per step)</th>
-  <th>Approx. iterations for $10^{-6}$ accuracy</th>
+ <th>$\kappa$ (condition number)</th>
+ <th>$\frac{\kappa - 1}{\kappa + 1}$ (convergence factor)</th>
+ <th>$\left(\frac{\kappa-1}{\kappa+1}\right)^2$ (error reduction per step)</th>
+ <th>Approx. iterations for $10^{-6}$ accuracy</th>
 </tr>
 <tr><td>$1$</td><td>$0$</td><td>$0$</td><td>$1$</td></tr>
 <tr><td>$2$</td><td>$0.333$</td><td>$0.111$</td><td>$7$</td></tr>
@@ -241,38 +241,38 @@ $$\|x_{k+1} - x^*\|_A \leq \left(\frac{\kappa - 1}{\kappa + 1}\right) \|x_k - x^
 <p>Here is a visual comparison showing gradient descent paths on round vs elongated contours:</p>
 
 <svg viewBox="0 0 850 320" style="width:100%;max-width:850px;margin:24px auto;display:block;">
-  <!-- LEFT: well-conditioned -->
-  <text x="200" y="22" fill="#d4956a" font-size="15" text-anchor="middle" font-weight="bold">Well-conditioned (kappa = 1.5)</text>
-  <!-- concentric circles -->
-  <ellipse cx="200" cy="180" rx="140" ry="120" fill="none" stroke="#2e2e38" stroke-width="1"/>
-  <ellipse cx="200" cy="180" rx="105" ry="90" fill="none" stroke="#2e2e38" stroke-width="1"/>
-  <ellipse cx="200" cy="180" rx="70" ry="60" fill="none" stroke="#2e2e38" stroke-width="1"/>
-  <ellipse cx="200" cy="180" rx="35" ry="30" fill="none" stroke="#3a3a46" stroke-width="1"/>
-  <!-- minimum -->
-  <circle cx="200" cy="180" r="4" fill="#d4956a"/>
-  <text x="212" y="176" fill="#d4956a" font-size="12">x*</text>
-  <!-- GD path: nearly direct -->
-  <circle cx="80" cy="100" r="5" fill="#c9a84c"/>
-  <text x="65" y="94" fill="#c9a84c" font-size="12">x0</text>
-  <polyline points="80,100 150,145 185,168 195,177 200,180" fill="none" stroke="#c9a84c" stroke-width="2.5" stroke-dasharray="6,3"/>
-  <text x="60" y="290" fill="#a8a49c" font-size="13" text-anchor="start">Nearly straight path &mdash; few iterations</text>
+ <!-- LEFT: well-conditioned -->
+ <text x="200" y="22" fill="#d4956a" font-size="15" text-anchor="middle" font-weight="bold">Well-conditioned (kappa = 1.5)</text>
+ <!-- concentric circles -->
+ <ellipse cx="200" cy="180" rx="140" ry="120" fill="none" stroke="#2e2e38" stroke-width="1"/>
+ <ellipse cx="200" cy="180" rx="105" ry="90" fill="none" stroke="#2e2e38" stroke-width="1"/>
+ <ellipse cx="200" cy="180" rx="70" ry="60" fill="none" stroke="#2e2e38" stroke-width="1"/>
+ <ellipse cx="200" cy="180" rx="35" ry="30" fill="none" stroke="#3a3a46" stroke-width="1"/>
+ <!-- minimum -->
+ <circle cx="200" cy="180" r="4" fill="#d4956a"/>
+ <text x="212" y="176" fill="#d4956a" font-size="12">x*</text>
+ <!-- GD path: nearly direct -->
+ <circle cx="80" cy="100" r="5" fill="#c9a84c"/>
+ <text x="65" y="94" fill="#c9a84c" font-size="12">x0</text>
+ <polyline points="80,100 150,145 185,168 195,177 200,180" fill="none" stroke="#c9a84c" stroke-width="2.5" stroke-dasharray="6,3"/>
+ <text x="60" y="290" fill="#a8a49c" font-size="13" text-anchor="start">Nearly straight path; few iterations</text>
 
-  <!-- RIGHT: ill-conditioned -->
-  <text x="625" y="22" fill="#c47070" font-size="15" text-anchor="middle" font-weight="bold">Ill-conditioned (kappa = 10)</text>
-  <!-- elongated ellipses -->
-  <ellipse cx="625" cy="180" rx="180" ry="40" fill="none" stroke="#2e2e38" stroke-width="1"/>
-  <ellipse cx="625" cy="180" rx="135" ry="30" fill="none" stroke="#2e2e38" stroke-width="1"/>
-  <ellipse cx="625" cy="180" rx="90" ry="20" fill="none" stroke="#2e2e38" stroke-width="1"/>
-  <ellipse cx="625" cy="180" rx="45" ry="10" fill="none" stroke="#3a3a46" stroke-width="1"/>
-  <!-- minimum -->
-  <circle cx="625" cy="180" r="4" fill="#d4956a"/>
-  <text x="637" y="176" fill="#d4956a" font-size="12">x*</text>
-  <!-- GD path: zigzag -->
-  <circle cx="770" cy="148" r="5" fill="#c47070"/>
-  <text x="778" y="144" fill="#c47070" font-size="12">x0</text>
-  <polyline points="770,148 740,210 720,155 700,205 685,162 672,198 663,170 655,190 648,176 638,184 630,178 625,180"
-            fill="none" stroke="#c47070" stroke-width="2" stroke-dasharray="6,3"/>
-  <text x="480" y="290" fill="#a8a49c" font-size="13" text-anchor="start">Zigzag path &mdash; many wasted iterations</text>
+ <!-- RIGHT: ill-conditioned -->
+ <text x="625" y="22" fill="#c47070" font-size="15" text-anchor="middle" font-weight="bold">Ill-conditioned (kappa = 10)</text>
+ <!-- elongated ellipses -->
+ <ellipse cx="625" cy="180" rx="180" ry="40" fill="none" stroke="#2e2e38" stroke-width="1"/>
+ <ellipse cx="625" cy="180" rx="135" ry="30" fill="none" stroke="#2e2e38" stroke-width="1"/>
+ <ellipse cx="625" cy="180" rx="90" ry="20" fill="none" stroke="#2e2e38" stroke-width="1"/>
+ <ellipse cx="625" cy="180" rx="45" ry="10" fill="none" stroke="#3a3a46" stroke-width="1"/>
+ <!-- minimum -->
+ <circle cx="625" cy="180" r="4" fill="#d4956a"/>
+ <text x="637" y="176" fill="#d4956a" font-size="12">x*</text>
+ <!-- GD path: zigzag -->
+ <circle cx="770" cy="148" r="5" fill="#c47070"/>
+ <text x="778" y="144" fill="#c47070" font-size="12">x0</text>
+ <polyline points="770,148 740,210 720,155 700,205 685,162 672,198 663,170 655,190 648,176 638,184 630,178 625,180"
+ fill="none" stroke="#c47070" stroke-width="2" stroke-dasharray="6,3"/>
+ <text x="480" y="290" fill="#a8a49c" font-size="13" text-anchor="start">Zigzag path; many wasted iterations</text>
 </svg>
 
 <div class="why-box">
@@ -302,7 +302,7 @@ $$\left(\frac{\kappa - 1}{\kappa + 1}\right)^2 = 0.04$$
 <p class="result">Each iteration reduces the error (in function value) to about 4% of its previous value. That is fast! $\kappa = 1.5$ is a well-conditioned problem.</p>
 </div>
 
-<div class="check">If $\kappa$ were 100, the error would reduce to $0.96$ of its previous value &mdash; only 4% improvement per step. You would need hundreds of iterations.</div>
+<div class="check">If $\kappa$ were 100, the error would reduce to $0.96$ of its previous value; only 4% improvement per step. You would need hundreds of iterations.</div>
 </div>
 
 <!-- ===================== PART D ===================== -->
@@ -315,8 +315,8 @@ $$\left(\frac{\kappa - 1}{\kappa + 1}\right)^2 = 0.04$$
 $$\|\nabla f(x_k)\| &lt; \epsilon$$
 <p style="margin-top:8px;">Stop when the gradient is small enough. This is the most common criterion. Recall from <a href="cg-04-optimality.html">Page 04</a> that a necessary condition for a minimum is $\nabla f(x^*) = 0$. So a small gradient means we are close to a stationary point.</p>
 <dl class="breakdown">
-  <dt>$\epsilon$</dt><dd>the tolerance &mdash; a small positive number chosen by the user (e.g., $10^{-6}$)</dd>
-  <dt>$\|\cdot\|$</dt><dd>typically the Euclidean (L2) norm</dd>
+ <dt>$\epsilon$</dt><dd>the tolerance; a small positive number chosen by the user (e.g., $10^{-6}$)</dd>
+ <dt>$\|\cdot\|$</dt><dd>typically the Euclidean (L2) norm</dd>
 </dl>
 <p style="margin-top:8px; color:#c9a84c;"><strong>Caveat:</strong> The gradient norm depends on the scale of $f$. If you multiply $f$ by 1000, the gradient gets 1000 times bigger. A relative version $\|\nabla f(x_k)\| / \|\nabla f(x_0)\| &lt; \epsilon$ is more robust.</p>
 </div>
@@ -363,8 +363,8 @@ $$\frac{|f(x_{k+1}) - f(x_k)|}{\max(1, |f(x_k)|)} &lt; \epsilon$$
 <div class="why-box">
 <h3>The Big Picture: How the methods connect</h3>
 <p><strong>Gradient Descent</strong> (this page) is the simplest: just follow the slope. But it has the three limitations above.</p>
-<p style="margin-top:8px;"><strong>Newton's Method</strong> (<a href="cg-07-newton-method.html">Page 07</a>) fixes Limitation 3 by using curvature, but it only converges locally &mdash; it needs "globalization."</p>
-<p style="margin-top:8px;"><strong>Line Search</strong> (<a href="cg-08-line-search.html">Page 08</a>) and <strong>Trust Regions</strong> (<a href="cg-09-trust-region.html">Page 09</a>) provide that globalization &mdash; they ensure every step makes sufficient progress.</p>
+<p style="margin-top:8px;"><strong>Newton's Method</strong> (<a href="cg-07-newton-method.html">Page 07</a>) fixes Limitation 3 by using curvature, but it only converges locally; it needs "globalization."</p>
+<p style="margin-top:8px;"><strong>Line Search</strong> (<a href="cg-08-line-search.html">Page 08</a>) and <strong>Trust Regions</strong> (<a href="cg-09-trust-region.html">Page 09</a>) provide that globalization , they ensure every step makes sufficient progress.</p>
 <p style="margin-top:8px;"><strong>Conjugate Gradient</strong> (<a href="cg-10-conjugate-gradient.html">Page 10</a>) fixes Limitation 1 by choosing smart directions that avoid zigzag.</p>
 <p style="margin-top:8px;"><strong>BFGS</strong> (<a href="cg-12-bfgs.html">Page 12</a>) fixes Limitations 1 and 3 by building an approximate Hessian from gradient history.</p>
 </div>
@@ -373,37 +373,37 @@ $$\frac{|f(x_{k+1}) - f(x_k)|}{\max(1, |f(x_k)|)} &lt; \epsilon$$
 <div class="glossary">
 <h3>Glossary</h3>
 <dl>
-  <dt>Gradient Descent (Steepest Descent)</dt>
-  <dd>An iterative algorithm that moves in the direction of $-\nabla f(x_k)$ at each step. The simplest first-order optimization method.</dd>
+ <dt>Gradient Descent (Steepest Descent)</dt>
+ <dd>An iterative algorithm that moves in the direction of $-\nabla f(x_k)$ at each step. The simplest first-order optimization method.</dd>
 
-  <dt>Step Size (Learning Rate) $\alpha_k$</dt>
-  <dd>A positive scalar controlling how far to move in the search direction. Can be fixed, exact (minimizing along the line), or chosen by a line search method.</dd>
+ <dt>Step Size (Learning Rate) $\alpha_k$</dt>
+ <dd>A positive scalar controlling how far to move in the search direction. Can be fixed, exact (minimizing along the line), or chosen by a line search method.</dd>
 
-  <dt>Exact Step Size (Quadratic Case)</dt>
-  <dd>$\alpha_k = g_k^T g_k / (g_k^T A g_k)$. The optimal step size when $f$ is a quadratic $\frac{1}{2}x^TAx + b^Tx + c$.</dd>
+ <dt>Exact Step Size (Quadratic Case)</dt>
+ <dd>$\alpha_k = g_k^T g_k / (g_k^T A g_k)$. The optimal step size when $f$ is a quadratic $\frac{1}{2}x^TAx + b^Tx + c$.</dd>
 
-  <dt>Condition Number $\kappa(A)$</dt>
-  <dd>$\kappa = \lambda_{\max}/\lambda_{\min}$. Measures how "elongated" the contours of a quadratic are. Large $\kappa$ means slow convergence for GD.</dd>
+ <dt>Condition Number $\kappa(A)$</dt>
+ <dd>$\kappa = \lambda_{\max}/\lambda_{\min}$. Measures how "elongated" the contours of a quadratic are. Large $\kappa$ means slow convergence for GD.</dd>
 
-  <dt>Convergence Factor</dt>
-  <dd>$(\kappa - 1)/(\kappa + 1)$. The fraction of the error (in A-norm) that survives each GD iteration. Closer to 0 is better; closer to 1 is worse.</dd>
+ <dt>Convergence Factor</dt>
+ <dd>$(\kappa - 1)/(\kappa + 1)$. The fraction of the error (in A-norm) that survives each GD iteration. Closer to 0 is better; closer to 1 is worse.</dd>
 
-  <dt>Linear Convergence</dt>
-  <dd>Error decreases by a constant factor each step: $e_{k+1} \leq c \cdot e_k$ for some $c &lt; 1$. GD achieves linear convergence on quadratics.</dd>
+ <dt>Linear Convergence</dt>
+ <dd>Error decreases by a constant factor each step: $e_{k+1} \leq c \cdot e_k$ for some $c &lt; 1$. GD achieves linear convergence on quadratics.</dd>
 
-  <dt>Stopping Criterion</dt>
-  <dd>A condition that triggers the algorithm to stop. Common choices: gradient norm, relative change in $x$, relative change in $f(x)$.</dd>
+ <dt>Stopping Criterion</dt>
+ <dd>A condition that triggers the algorithm to stop. Common choices: gradient norm, relative change in $x$, relative change in $f(x)$.</dd>
 
-  <dt>A-norm</dt>
-  <dd>$\|x\|_A = \sqrt{x^TAx}$. A norm that measures distance "shaped by the matrix $A$." Natural for analyzing convergence on quadratics.</dd>
+ <dt>A-norm</dt>
+ <dd>$\|x\|_A = \sqrt{x^TAx}$. A norm that measures distance "shaped by the matrix $A$." Natural for analyzing convergence on quadratics.</dd>
 </dl>
 </div>
 
 <!-- ===================== NAV ===================== -->
 <div class="nav">
-  <p><a href="cg-05-convexity.html">&larr; Previous: Page 05 &mdash; Convexity</a></p>
-  <p><a href="cg-07-newton-method.html">Next: Page 07 &mdash; Newton's Method &rarr;</a></p>
-  <p><a href="index.html">Back to Index</a></p>
+ <p><a href="cg-05-convexity.html">&larr; Previous: Page 05; Convexity</a></p>
+ <p><a href="cg-07-newton-method.html">Next: Page 07; Newton's Method &rarr;</a></p>
+ <p><a href="index.html">Back to Index</a></p>
 </div>
 
 </div>

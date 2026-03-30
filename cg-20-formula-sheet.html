@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Page 20 &mdash; Formula Sheet | MATH 3850 Course Guide</title>
+<title>Page 20 : Formula Sheet | MATH 3850 Course Guide</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+ onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
 
-<span class="tag">PAGE 20 &mdash; SYNTHESIS</span>
+<span class="tag">PAGE 20; SYNTHESIS</span>
 <h1>Complete Formula Reference Sheet</h1>
-<p class="subtitle">Every algorithm and formula from the entire course, organized by topic &mdash; the page to have open during final review</p>
+<p class="subtitle">Every algorithm and formula from the entire course, organized by topic; the page to have open during final review</p>
 
 <div class="note">
 <strong>How to use:</strong> This is a pure reference. Minimal text, maximum formulas. Each box has the formula, a one-line reminder of what it does, and a link to the full explanation. If a formula seems unfamiliar, click the link to go back to the page where it was derived and explained with analogies.
@@ -86,16 +86,16 @@ $$\nabla f(x_k + \alpha p_k)^T p_k \geq c_2 \nabla f(x_k)^T p_k$$
 <div class="formula-box">
 <strong>Strong Wolfe Curvature Condition</strong>
 $$|\nabla f(x_k + \alpha p_k)^T p_k| \leq c_2 |\nabla f(x_k)^T p_k|$$
-<em>Absolute value version &mdash; prevents going too far past the minimum. Required for nonlinear CG.</em>
+<em>Absolute value version; prevents going too far past the minimum. Required for nonlinear CG.</em>
 <p class="ref"><a href="cg-08-line-search.html">Page 08</a></p>
 </div>
 
 <div class="formula-box">
 <strong>Backtracking Algorithm</strong>
 <ol style="margin-left: 24px; font-size: 16px;">
-  <li>Start with $\alpha = \bar{\alpha}$ (e.g., $\bar{\alpha} = 1$)</li>
-  <li>While Armijo condition is violated: $\alpha \leftarrow \rho \alpha$ (shrink by $\rho \in (0,1)$, typically $\rho = 0.5$)</li>
-  <li>Return $\alpha$</li>
+ <li>Start with $\alpha = \bar{\alpha}$ (e.g., $\bar{\alpha} = 1$)</li>
+ <li>While Armijo condition is violated: $\alpha \leftarrow \rho \alpha$ (shrink by $\rho \in (0,1)$, typically $\rho = 0.5$)</li>
+ <li>Return $\alpha$</li>
 </ol>
 <em>Simple and effective. Only checks Armijo, not curvature. Use $\bar{\alpha} = 1$ for Newton/quasi-Newton.</em>
 <p class="ref"><a href="cg-08-line-search.html">Page 08</a></p>
@@ -121,9 +121,9 @@ $$\rho_k = \frac{f(x_k) - f(x_k + p_k)}{m_k(0) - m_k(p_k)} = \frac{\text{actual 
 <div class="formula-box">
 <strong>Radius Update Rules (typical)</strong>
 <ul style="margin-left: 20px; font-size: 16px;">
-  <li>If $\rho_k &lt; 0.25$: shrink &mdash; $\Delta_{k+1} = 0.25\, \Delta_k$</li>
-  <li>If $\rho_k &gt; 0.75$ and $\|p_k\| = \Delta_k$ (hit boundary): expand &mdash; $\Delta_{k+1} = \min(2\Delta_k, \Delta_{\max})$</li>
-  <li>Otherwise: keep &mdash; $\Delta_{k+1} = \Delta_k$</li>
+ <li>If $\rho_k &lt; 0.25$: shrink; $\Delta_{k+1} = 0.25\, \Delta_k$</li>
+ <li>If $\rho_k &gt; 0.75$ and $\|p_k\| = \Delta_k$ (hit boundary): expand; $\Delta_{k+1} = \min(2\Delta_k, \Delta_{\max})$</li>
+ <li>Otherwise: keep; $\Delta_{k+1} = \Delta_k$</li>
 </ul>
 <em>Accept step if $\rho_k &gt; \eta$ (e.g., $\eta = 0.25$). Reject step if $\rho_k \leq \eta$ (keep $x_k$, shrink $\Delta$).</em>
 <p class="ref"><a href="cg-09-trust-region.html">Page 09</a></p>
@@ -145,12 +145,12 @@ where $\tau_k = \begin{cases} 1 & \text{if } g_k^T B_k g_k \leq 0 \\ \min\left(\
 <div class="formula-box">
 <strong>Linear CG Algorithm (for $Ax = b$ with SPD $A$)</strong>
 <ol style="margin-left: 24px; font-size: 16px; line-height: 2;">
-  <li><strong>Init:</strong> $r_0 = b - Ax_0$, $d_0 = r_0$</li>
-  <li><strong>Step size:</strong> $\alpha_k = \dfrac{r_k^T r_k}{d_k^T A d_k}$</li>
-  <li><strong>Update solution:</strong> $x_{k+1} = x_k + \alpha_k d_k$</li>
-  <li><strong>Update residual:</strong> $r_{k+1} = r_k - \alpha_k A d_k$</li>
-  <li><strong>Conjugacy param:</strong> $\beta_k = \dfrac{r_{k+1}^T r_{k+1}}{r_k^T r_k}$</li>
-  <li><strong>New direction:</strong> $d_{k+1} = r_{k+1} + \beta_k d_k$</li>
+ <li><strong>Init:</strong> $r_0 = b - Ax_0$, $d_0 = r_0$</li>
+ <li><strong>Step size:</strong> $\alpha_k = \dfrac{r_k^T r_k}{d_k^T A d_k}$</li>
+ <li><strong>Update solution:</strong> $x_{k+1} = x_k + \alpha_k d_k$</li>
+ <li><strong>Update residual:</strong> $r_{k+1} = r_k - \alpha_k A d_k$</li>
+ <li><strong>Conjugacy param:</strong> $\beta_k = \dfrac{r_{k+1}^T r_{k+1}}{r_k^T r_k}$</li>
+ <li><strong>New direction:</strong> $d_{k+1} = r_{k+1} + \beta_k d_k$</li>
 </ol>
 <em>Converges in at most $n$ steps. Residuals are orthogonal ($r_i^T r_j = 0$). Directions are $A$-conjugate ($d_i^T A d_j = 0$).</em>
 <p class="ref"><a href="cg-10-conjugate-gradient.html">Page 10</a></p>
@@ -281,10 +281,10 @@ $$\mathcal{L}(x, \lambda, \mu) = f(x) - \sum_{i} \lambda_i c_i^{eq}(x) - \sum_{j
 <div class="formula-box">
 <strong>KKT Conditions (for $\min f$ s.t. $c_i^{eq} = 0$, $c_j^{ineq} \geq 0$)</strong>
 <ol style="margin-left: 24px; font-size: 16px; line-height: 2;">
-  <li><strong>Stationarity:</strong> $\nabla f(x^*) = \sum_i \lambda_i \nabla c_i^{eq}(x^*) + \sum_j \mu_j \nabla c_j^{ineq}(x^*)$</li>
-  <li><strong>Primal feasibility:</strong> $c_i^{eq}(x^*) = 0$, $\;c_j^{ineq}(x^*) \geq 0$</li>
-  <li><strong>Dual feasibility:</strong> $\mu_j \geq 0$ for all inequality constraints</li>
-  <li><strong>Complementary slackness:</strong> $\mu_j \cdot c_j^{ineq}(x^*) = 0$ for each $j$</li>
+ <li><strong>Stationarity:</strong> $\nabla f(x^*) = \sum_i \lambda_i \nabla c_i^{eq}(x^*) + \sum_j \mu_j \nabla c_j^{ineq}(x^*)$</li>
+ <li><strong>Primal feasibility:</strong> $c_i^{eq}(x^*) = 0$, $\;c_j^{ineq}(x^*) \geq 0$</li>
+ <li><strong>Dual feasibility:</strong> $\mu_j \geq 0$ for all inequality constraints</li>
+ <li><strong>Complementary slackness:</strong> $\mu_j \cdot c_j^{ineq}(x^*) = 0$ for each $j$</li>
 </ol>
 <em>Necessary conditions at any local min (under LICQ). For convex problems, also sufficient.</em>
 <p class="ref"><a href="cg-15-constrained.html">Page 15</a></p>
@@ -331,9 +331,9 @@ $$\kappa(A) = \frac{\lambda_{\max}(A)}{\lambda_{\min}(A)}$$
 <div class="formula-box">
 <strong>Convergence Rates</strong>
 <ul style="margin-left: 20px; font-size: 16px; line-height: 2;">
-  <li><strong>Q-linear:</strong> $\|e_{k+1}\| \leq r \|e_k\|$ for some $r \in (0,1)$. Error shrinks by constant factor. (GD)</li>
-  <li><strong>Q-superlinear:</strong> $\|e_{k+1}\|/\|e_k\| \to 0$. Factor improves each step. (BFGS)</li>
-  <li><strong>Q-quadratic:</strong> $\|e_{k+1}\| \leq C \|e_k\|^2$. Error squares each step. (Newton)</li>
+ <li><strong>Q-linear:</strong> $\|e_{k+1}\| \leq r \|e_k\|$ for some $r \in (0,1)$. Error shrinks by constant factor. (GD)</li>
+ <li><strong>Q-superlinear:</strong> $\|e_{k+1}\|/\|e_k\| \to 0$. Factor improves each step. (BFGS)</li>
+ <li><strong>Q-quadratic:</strong> $\|e_{k+1}\| \leq C \|e_k\|^2$. Error squares each step. (Newton)</li>
 </ul>
 <em>where $e_k = x_k - x^*$ is the error.</em>
 <p class="ref"><a href="cg-01-math-foundations.html">Page 01</a></p>
@@ -342,9 +342,9 @@ $$\kappa(A) = \frac{\lambda_{\max}(A)}{\lambda_{\min}(A)}$$
 <div class="formula-box">
 <strong>Positive Definite Matrix</strong>
 <ul style="margin-left: 20px; font-size: 16px; line-height: 2;">
-  <li>All eigenvalues $&gt; 0$</li>
-  <li>Equivalently: $x^T A x &gt; 0$ for all $x \neq 0$</li>
-  <li>Equivalently: all leading principal minors $&gt; 0$</li>
+ <li>All eigenvalues $&gt; 0$</li>
+ <li>Equivalently: $x^T A x &gt; 0$ for all $x \neq 0$</li>
+ <li>Equivalently: all leading principal minors $&gt; 0$</li>
 </ul>
 <em>PD Hessian = strict local minimum. PD matrix = CG works. PD $H_k$ = descent direction guaranteed.</em>
 <p class="ref"><a href="cg-03-linear-algebra.html">Page 03</a></p>
@@ -391,8 +391,8 @@ $$\lambda = \frac{(a+d) \pm \sqrt{(a-d)^2 + 4bc}}{2} \qquad \text{for } A = \beg
 
 <!-- ===================== NAV ===================== -->
 <div class="nav">
-  <p><a href="cg-19-exam-theory.html">&larr; Previous: Page 19 &mdash; Exam Theory</a></p>
-  <p style="margin-top: 8px;"><a href="index.html">Back to Index</a></p>
+ <p><a href="cg-19-exam-theory.html">&larr; Previous: Page 19; Exam Theory</a></p>
+ <p style="margin-top: 8px;"><a href="index.html">Back to Index</a></p>
 </div>
 
 </div>

@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Page 11 &mdash; Nonlinear Conjugate Gradient | MATH 3850 Course Guide</title>
+<title>Page 11 : Nonlinear Conjugate Gradient | MATH 3850 Course Guide</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+ onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,13 +15,13 @@
 
 <span class="tag">PAGE 11</span>
 <h1>Nonlinear Conjugate Gradient</h1>
-<p class="subtitle">Extending the "never revisit directions" trick from linear systems to general optimization &mdash; the simplest fast method</p>
+<p class="subtitle">Extending the "never revisit directions" trick from linear systems to general optimization; the simplest fast method</p>
 
 <!-- ===================== PART A ===================== -->
 <h2>Part A: From Linear to Nonlinear CG</h2>
 
 <div class="analogy">
-<strong>Physical analogy &mdash; upgrading your hiking strategy for rougher terrain.</strong><br><br>
+<strong>Physical analogy; upgrading your hiking strategy for rougher terrain.</strong><br><br>
 On <a href="cg-10-conjugate-gradient.html" style="color:#d4956a;">Page 10</a>, we learned Linear CG: a brilliant hiking strategy for perfectly bowl-shaped valleys ($Ax = b$, which is the same as minimizing $f(x) = \frac{1}{2}x^TAx - b^Tx$). The key insight was: pick smart, "conjugate" directions so you never have to revisit a direction you already explored. In a bowl-shaped valley with $n$ dimensions, this guarantees you reach the bottom in at most $n$ steps.<br><br>
 But real optimization problems are NOT perfect bowls. The terrain is bumpy, twisted, has ridges and saddle points. <strong>Nonlinear CG</strong> takes the same "never revisit" philosophy and adapts it for this rough terrain. The result: a method that is almost as simple as gradient descent (only uses gradients, no Hessians) but converges much faster.
 </div>
@@ -31,11 +31,11 @@ But real optimization problems are NOT perfect bowls. The terrain is bumpy, twis
 <div class="formula-box">
 <strong>Change 1: Residual $\to$ Gradient</strong><br><br>
 In linear CG, we used the <em>residual</em> $r_k = b - Ax_k$ to measure "how far we are from solving $Ax = b$." For a general function $f(x)$, there is no matrix $A$ or vector $b$. Instead, we use the <strong>gradient</strong> $g_k = \nabla f(x_k)$ (recall from <a href="cg-02-multivariable-bridge.html" style="color:#d4956a;">Page 02</a>).<br><br>
-This makes sense: for the quadratic $f(x) = \frac{1}{2}x^TAx - b^Tx$, the gradient is $\nabla f(x) = Ax - b = -r_k$. So the gradient is just the negative residual &mdash; same information, opposite sign.
+This makes sense: for the quadratic $f(x) = \frac{1}{2}x^TAx - b^Tx$, the gradient is $\nabla f(x) = Ax - b = -r_k$. So the gradient is just the negative residual; same information, opposite sign.
 
 <dl class="breakdown">
-  <dt>$r_k = b - Ax_k$</dt><dd>linear CG residual &mdash; only works for $Ax = b$</dd>
-  <dt>$g_k = \nabla f(x_k)$</dt><dd>nonlinear CG gradient &mdash; works for ANY differentiable $f$</dd>
+ <dt>$r_k = b - Ax_k$</dt><dd>linear CG residual; only works for $Ax = b$</dd>
+ <dt>$g_k = \nabla f(x_k)$</dt><dd>nonlinear CG gradient; works for ANY differentiable $f$</dd>
 </dl>
 </div>
 
@@ -53,10 +53,10 @@ In linear CG, the formula for $\beta_k$ was $\beta_k = \frac{r_{k+1}^T r_{k+1}}{
 <h3>Why Nonlinear CG?</h3>
 <p>Nonlinear CG extends the "no revisiting" property of linear CG to general functions. It is popular because:</p>
 <ul style="margin-top:8px; margin-left:20px;">
-  <li><strong>Simple:</strong> only uses gradients (like gradient descent) &mdash; no Hessians, no matrix storage</li>
-  <li><strong>Memory efficient:</strong> $O(n)$ storage &mdash; just a few vectors</li>
-  <li><strong>Much faster than GD:</strong> avoids the zigzag problem of gradient descent</li>
-  <li><strong>Scales to large problems:</strong> because it doesnt store or update any $n \times n$ matrix (unlike BFGS on <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>)</li>
+ <li><strong>Simple:</strong> only uses gradients (like gradient descent); no Hessians, no matrix storage</li>
+ <li><strong>Memory efficient:</strong> $O(n)$ storage; just a few vectors</li>
+ <li><strong>Much faster than GD:</strong> avoids the zigzag problem of gradient descent</li>
+ <li><strong>Scales to large problems:</strong> because it doesnt store or update any $n \times n$ matrix (unlike BFGS on <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>)</li>
 </ul>
 </div>
 
@@ -65,8 +65,8 @@ In linear CG, the formula for $\beta_k$ was $\beta_k = \frac{r_{k+1}^T r_{k+1}}{
 <h2>Part B: Fletcher-Reeves (FR) Method</h2>
 
 <div class="analogy">
-<strong>Physical analogy &mdash; energy ratio.</strong><br><br>
-Imagine you are hiking and tracking your "gradient energy" &mdash; how steep the hill is beneath your feet. Fletcher-Reeves says: compare your current energy to your previous energy. If the terrain got steeper (current energy is larger), keep more of your old hiking direction mixed in &mdash; you are in rough territory and the old direction was helping. If the terrain got gentler (current energy is smaller), rely more on the new steepest-descent direction &mdash; you are getting close and should trust the local slope.
+<strong>Physical analogy; energy ratio.</strong><br><br>
+Imagine you are hiking and tracking your "gradient energy"; how steep the hill is beneath your feet. Fletcher-Reeves says: compare your current energy to your previous energy. If the terrain got steeper (current energy is larger), keep more of your old hiking direction mixed in; you are in rough territory and the old direction was helping. If the terrain got gentler (current energy is smaller), rely more on the new steepest-descent direction; you are getting close and should trust the local slope.
 </div>
 
 <div class="formula-box">
@@ -75,10 +75,10 @@ Imagine you are hiking and tracking your "gradient energy" &mdash; how steep the
 $$\beta_{k+1}^{FR} = \frac{\|\nabla f(x_{k+1})\|^2}{\|\nabla f(x_k)\|^2} = \frac{g_{k+1}^T g_{k+1}}{g_k^T g_k}$$
 
 <dl class="breakdown">
-  <dt>$g_k = \nabla f(x_k)$</dt><dd>gradient at the current point</dd>
-  <dt>$g_{k+1} = \nabla f(x_{k+1})$</dt><dd>gradient at the new point (after taking a step)</dd>
-  <dt>$\|g\|^2 = g^T g$</dt><dd>squared norm of the gradient &mdash; the "gradient energy" (recall norms from <a href="cg-01-math-foundations.html" style="color:#d4956a;">Page 01</a>)</dd>
-  <dt>$\beta_{k+1}^{FR}$</dt><dd>the mixing coefficient &mdash; how much of the old direction $p_k$ to blend into the new direction $p_{k+1}$</dd>
+ <dt>$g_k = \nabla f(x_k)$</dt><dd>gradient at the current point</dd>
+ <dt>$g_{k+1} = \nabla f(x_{k+1})$</dt><dd>gradient at the new point (after taking a step)</dd>
+ <dt>$\|g\|^2 = g^T g$</dt><dd>squared norm of the gradient; the "gradient energy" (recall norms from <a href="cg-01-math-foundations.html" style="color:#d4956a;">Page 01</a>)</dd>
+ <dt>$\beta_{k+1}^{FR}$</dt><dd>the mixing coefficient; how much of the old direction $p_k$ to blend into the new direction $p_{k+1}$</dd>
 </dl>
 
 <p style="margin-top:12px;">The ratio $\frac{\|g_{k+1}\|^2}{\|g_k\|^2}$ is always non-negative (both numerator and denominator are squared norms). If the gradient got bigger, $\beta &gt; 1$. If the gradient got smaller, $\beta &lt; 1$. If the gradient stayed the same size, $\beta = 1$.</p>
@@ -108,7 +108,7 @@ $$\beta_{k+1}^{FR} = \frac{\|\nabla f(x_{k+1})\|^2}{\|\nabla f(x_k)\|^2} = \frac
 <div class="algo-line" style="padding-left:24px;"><strong>Step 4:</strong> $g_{k+1} = \nabla f(x_{k+1})$</div>
 <div class="algo-comment" style="padding-left:24px;">&emsp; Compute gradient at new point.</div>
 
-<div class="algo-line" style="padding-left:24px;"><strong>Step 5:</strong> If $\|g_{k+1}\| &lt; \epsilon$: <strong>STOP</strong> &mdash; we have converged.</div>
+<div class="algo-line" style="padding-left:24px;"><strong>Step 5:</strong> If $\|g_{k+1}\| &lt; \epsilon$: <strong>STOP</strong>; we have converged.</div>
 <div class="algo-comment" style="padding-left:24px;">&emsp; Gradient is nearly zero = nearly at a stationary point.</div>
 
 <div class="algo-line" style="padding-left:24px;"><strong>Step 6:</strong> $\beta_{k+1}^{FR} = \dfrac{g_{k+1}^T g_{k+1}}{g_k^T g_k}$</div>
@@ -123,7 +123,7 @@ $$\beta_{k+1}^{FR} = \frac{\|\nabla f(x_{k+1})\|^2}{\|\nabla f(x_k)\|^2} = \frac
 
 <div class="why-box">
 <h3>Why Restart?</h3>
-<p>On a perfectly quadratic function, conjugacy is maintained automatically &mdash; the directions stay perfectly independent. But on a general nonlinear function, the conjugacy property <strong>degrades</strong> over many iterations. The directions start to lose their independence, and the method can stall or even diverge.</p>
+<p>On a perfectly quadratic function, conjugacy is maintained automatically; the directions stay perfectly independent. But on a general nonlinear function, the conjugacy property <strong>degrades</strong> over many iterations. The directions start to lose their independence, and the method can stall or even diverge.</p>
 <p style="margin-top:8px;">Restarting every $n$ steps (where $n$ is the number of variables) refreshes the conjugacy. Its like recalibrating a compass: after traveling through magnetic terrain for a while, you stop and check your bearings from scratch.</p>
 <p style="margin-top:8px;">In practice, the restart rule is: if $k$ is a multiple of $n$, set $p_k = -g_k$ (pure steepest descent) and continue building conjugate directions from there.</p>
 </div>
@@ -133,8 +133,8 @@ $$\beta_{k+1}^{FR} = \frac{\|\nabla f(x_{k+1})\|^2}{\|\nabla f(x_k)\|^2} = \frac
 <h2>Part C: Polak-Ribi&egrave;re (PR) and PR+</h2>
 
 <div class="analogy">
-<strong>Physical analogy &mdash; terrain change detector.</strong><br><br>
-Fletcher-Reeves asks: "How steep is it now vs. before?" Polak-Ribi&egrave;re asks a more refined question: "How much has the slope CHANGED?" Imagine you are hiking and you have two slope measurements &mdash; one from your current position and one from where you were. If the slope changed a lot (you crossed a ridge, entered a valley, or the terrain shifted dramatically), the old direction is probably not useful anymore &mdash; time for a fresh start. If the slope barely changed (smooth, predictable terrain), keep blending the old direction.
+<strong>Physical analogy; terrain change detector.</strong><br><br>
+Fletcher-Reeves asks: "How steep is it now vs. before?" Polak-Ribi&egrave;re asks a more refined question: "How much has the slope CHANGED?" Imagine you are hiking and you have two slope measurements; one from your current position and one from where you were. If the slope changed a lot (you crossed a ridge, entered a valley, or the terrain shifted dramatically), the old direction is probably not useful anymore; time for a fresh start. If the slope barely changed (smooth, predictable terrain), keep blending the old direction.
 </div>
 
 <div class="formula-box">
@@ -143,10 +143,10 @@ Fletcher-Reeves asks: "How steep is it now vs. before?" Polak-Ribi&egrave;re ask
 $$\beta_{k+1}^{PR} = \frac{g_{k+1}^T(g_{k+1} - g_k)}{g_k^T g_k}$$
 
 <dl class="breakdown">
-  <dt>$g_{k+1} - g_k$</dt><dd>the <strong>change</strong> in gradient from step $k$ to step $k+1$ &mdash; measures how much the terrain shifted</dd>
-  <dt>$g_{k+1}^T(g_{k+1} - g_k)$</dt><dd>dot product of the new gradient with the gradient change &mdash; projects the change onto the current slope direction</dd>
-  <dt>$g_k^T g_k$</dt><dd>squared norm of the old gradient (same denominator as FR)</dd>
-  <dt>$\beta_{k+1}^{PR}$</dt><dd>the mixing coefficient &mdash; can be positive, negative, or zero</dd>
+ <dt>$g_{k+1} - g_k$</dt><dd>the <strong>change</strong> in gradient from step $k$ to step $k+1$; measures how much the terrain shifted</dd>
+ <dt>$g_{k+1}^T(g_{k+1} - g_k)$</dt><dd>dot product of the new gradient with the gradient change; projects the change onto the current slope direction</dd>
+ <dt>$g_k^T g_k$</dt><dd>squared norm of the old gradient (same denominator as FR)</dd>
+ <dt>$\beta_{k+1}^{PR}$</dt><dd>the mixing coefficient; can be positive, negative, or zero</dd>
 </dl>
 </div>
 
@@ -163,25 +163,25 @@ $$g_{k+1}^T(g_{k+1} - g_k) = g_{k+1}^T g_{k+1} - g_{k+1}^T g_k$$
 </div>
 
 <div class="why-box">
-<h3>Why PR is Usually Better Than FR &mdash; Built-In Restart</h3>
+<h3>Why PR is Usually Better Than FR; Built-In Restart</h3>
 <p>Here is the key insight that makes PR superior in practice:</p>
-<p style="margin-top:8px;">When $g_{k+1} \approx g_k$ (the gradient barely changed &mdash; you are near a smooth, nearly-quadratic region close to the minimum), the numerator $g_{k+1}^T(g_{k+1} - g_k) \approx 0$. So $\beta^{PR} \approx 0$, and the new direction becomes:</p>
+<p style="margin-top:8px;">When $g_{k+1} \approx g_k$ (the gradient barely changed; you are near a smooth, nearly-quadratic region close to the minimum), the numerator $g_{k+1}^T(g_{k+1} - g_k) \approx 0$. So $\beta^{PR} \approx 0$, and the new direction becomes:</p>
 $$p_{k+1} = -g_{k+1} + 0 \cdot p_k = -g_{k+1}$$
-<p style="margin-top:8px;">Thats just pure steepest descent! <strong>PR automatically restarts itself</strong> when the conjugacy has degraded. FR does NOT have this property &mdash; its $\beta^{FR}$ depends only on gradient magnitudes, not gradient changes, so it can keep blending in a stale direction even when it shouldnt.</p>
+<p style="margin-top:8px;">Thats just pure steepest descent! <strong>PR automatically restarts itself</strong> when the conjugacy has degraded. FR does NOT have this property; its $\beta^{FR}$ depends only on gradient magnitudes, not gradient changes, so it can keep blending in a stale direction even when it shouldnt.</p>
 </div>
 
 <div class="formula-box">
-<strong>The PR+ Variant &mdash; Forcing Non-Negativity</strong>
+<strong>The PR+ Variant; Forcing Non-Negativity</strong>
 
 $$\beta_{k+1}^{PR+} = \max\!\left(\beta_{k+1}^{PR},\; 0\right)$$
 
-<p style="margin-top:12px;">Unlike FR (which is always $\geq 0$), the PR formula CAN produce negative values. A negative $\beta$ means the new direction $p_{k+1} = -g_{k+1} + \beta p_k$ adds a <em>negative</em> multiple of the old direction &mdash; partially reversing course. This can cause problems.</p>
+<p style="margin-top:12px;">Unlike FR (which is always $\geq 0$), the PR formula CAN produce negative values. A negative $\beta$ means the new direction $p_{k+1} = -g_{k+1} + \beta p_k$ adds a <em>negative</em> multiple of the old direction; partially reversing course. This can cause problems.</p>
 
 <p style="margin-top:8px;">PR+ clamps $\beta$ to be at least zero. When PR would give a negative value, PR+ simply restarts with pure steepest descent ($\beta = 0$). This gives us:</p>
 <ul style="margin-top:8px; margin-left:20px;">
-  <li>The automatic restart property of PR (when $\beta \approx 0$)</li>
-  <li>Protection against bad directions (when $\beta &lt; 0$)</li>
-  <li>Global convergence guarantees (which raw PR lacks)</li>
+ <li>The automatic restart property of PR (when $\beta \approx 0$)</li>
+ <li>Protection against bad directions (when $\beta &lt; 0$)</li>
+ <li>Global convergence guarantees (which raw PR lacks)</li>
 </ul>
 </div>
 
@@ -195,44 +195,44 @@ $$\beta_{k+1}^{PR+} = \max\!\left(\beta_{k+1}^{PR},\; 0\right)$$
 
 <table class="step-table">
 <tr>
-  <th>Property</th>
-  <th>Fletcher-Reeves (FR)</th>
-  <th>Polak-Ribi&egrave;re (PR)</th>
-  <th>PR+</th>
+ <th>Property</th>
+ <th>Fletcher-Reeves (FR)</th>
+ <th>Polak-Ribi&egrave;re (PR)</th>
+ <th>PR+</th>
 </tr>
 <tr>
-  <td style="text-align:left; color:#d4956a;">Formula</td>
-  <td>$\frac{\|g_{k+1}\|^2}{\|g_k\|^2}$</td>
-  <td>$\frac{g_{k+1}^T(g_{k+1}-g_k)}{g_k^Tg_k}$</td>
-  <td>$\max(\beta^{PR}, 0)$</td>
+ <td style="text-align:left; color:#d4956a;">Formula</td>
+ <td>$\frac{\|g_{k+1}\|^2}{\|g_k\|^2}$</td>
+ <td>$\frac{g_{k+1}^T(g_{k+1}-g_k)}{g_k^Tg_k}$</td>
+ <td>$\max(\beta^{PR}, 0)$</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#d4956a;">$\beta$ sign</td>
-  <td>Always $\geq 0$</td>
-  <td>Can be negative</td>
-  <td>Always $\geq 0$</td>
+ <td style="text-align:left; color:#d4956a;">$\beta$ sign</td>
+ <td>Always $\geq 0$</td>
+ <td>Can be negative</td>
+ <td>Always $\geq 0$</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#d4956a;">Auto-restart?</td>
-  <td>No &mdash; needs manual every-$n$-step restart</td>
-  <td>Yes &mdash; $\beta \to 0$ near minimum</td>
-  <td>Yes &mdash; same as PR, plus clamp</td>
+ <td style="text-align:left; color:#d4956a;">Auto-restart?</td>
+ <td>No; needs manual every-$n$-step restart</td>
+ <td>Yes; $\beta \to 0$ near minimum</td>
+ <td>Yes; same as PR, plus clamp</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#d4956a;">Global convergence</td>
-  <td>Yes (with strong Wolfe)</td>
-  <td>Not guaranteed</td>
-  <td>Yes (with strong Wolfe)</td>
+ <td style="text-align:left; color:#d4956a;">Global convergence</td>
+ <td>Yes (with strong Wolfe)</td>
+ <td>Not guaranteed</td>
+ <td>Yes (with strong Wolfe)</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#d4956a;">Practical speed</td>
-  <td>Good, but can stall</td>
-  <td>Usually faster</td>
-  <td>Best of both worlds</td>
+ <td style="text-align:left; color:#d4956a;">Practical speed</td>
+ <td>Good, but can stall</td>
+ <td>Usually faster</td>
+ <td>Best of both worlds</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#d4956a;">On quadratics</td>
-  <td colspan="3">All three are <strong>identical</strong> &mdash; they reduce to the linear CG formula from <a href="cg-10-conjugate-gradient.html" style="color:#d4956a;">Page 10</a></td>
+ <td style="text-align:left; color:#d4956a;">On quadratics</td>
+ <td colspan="3">All three are <strong>identical</strong>; they reduce to the linear CG formula from <a href="cg-10-conjugate-gradient.html" style="color:#d4956a;">Page 10</a></td>
 </tr>
 </table>
 
@@ -244,45 +244,45 @@ $$\beta_{k+1}^{PR+} = \max\!\left(\beta_{k+1}^{PR},\; 0\right)$$
 
 <!-- SVG: CG path vs GD path on elongated contours -->
 <svg viewBox="0 0 800 400" style="width:100%; margin:24px 0;">
-  <!-- Title -->
-  <text x="400" y="30" text-anchor="middle" fill="#e8e4dc" font-size="16" font-weight="bold">CG vs Gradient Descent on Elongated Contours</text>
+ <!-- Title -->
+ <text x="400" y="30" text-anchor="middle" fill="#e8e4dc" font-size="16" font-weight="bold">CG vs Gradient Descent on Elongated Contours</text>
 
-  <!-- Elongated elliptical contours -->
-  <ellipse cx="400" cy="220" rx="340" ry="80" fill="none" stroke="#2e2e38" stroke-width="1"/>
-  <ellipse cx="400" cy="220" rx="270" ry="64" fill="none" stroke="#2e2e38" stroke-width="1"/>
-  <ellipse cx="400" cy="220" rx="200" ry="48" fill="none" stroke="#2e2e38" stroke-width="1"/>
-  <ellipse cx="400" cy="220" rx="130" ry="32" fill="none" stroke="#2e2e38" stroke-width="1"/>
-  <ellipse cx="400" cy="220" rx="60" ry="16" fill="none" stroke="#3a3a46" stroke-width="1"/>
-  <ellipse cx="400" cy="220" rx="15" ry="4" fill="none" stroke="#555" stroke-width="1"/>
+ <!-- Elongated elliptical contours -->
+ <ellipse cx="400" cy="220" rx="340" ry="80" fill="none" stroke="#2e2e38" stroke-width="1"/>
+ <ellipse cx="400" cy="220" rx="270" ry="64" fill="none" stroke="#2e2e38" stroke-width="1"/>
+ <ellipse cx="400" cy="220" rx="200" ry="48" fill="none" stroke="#2e2e38" stroke-width="1"/>
+ <ellipse cx="400" cy="220" rx="130" ry="32" fill="none" stroke="#2e2e38" stroke-width="1"/>
+ <ellipse cx="400" cy="220" rx="60" ry="16" fill="none" stroke="#3a3a46" stroke-width="1"/>
+ <ellipse cx="400" cy="220" rx="15" ry="4" fill="none" stroke="#555" stroke-width="1"/>
 
-  <!-- Minimum point -->
-  <circle cx="400" cy="220" r="5" fill="#c9a84c"/>
-  <text x="415" y="215" fill="#c9a84c" font-size="12">$x^*$</text>
+ <!-- Minimum point -->
+ <circle cx="400" cy="220" r="5" fill="#c9a84c"/>
+ <text x="415" y="215" fill="#c9a84c" font-size="12">$x^*$</text>
 
-  <!-- GD path (zigzag) - red -->
-  <polyline points="100,320 220,155 250,290 310,170 330,260 360,195 375,235 390,210 398,222"
-            fill="none" stroke="#c47070" stroke-width="2.5" stroke-dasharray="6,3"/>
-  <circle cx="100" cy="320" r="5" fill="#c47070"/>
-  <text x="60" y="340" fill="#c47070" font-size="13" font-weight="bold">GD start</text>
-  <!-- GD direction arrows at a few zigzag points -->
-  <text x="220" y="148" fill="#c47070" font-size="10">zig</text>
-  <text x="250" y="305" fill="#c47070" font-size="10">zag</text>
-  <text x="310" y="163" fill="#c47070" font-size="10">zig</text>
-  <text x="330" y="275" fill="#c47070" font-size="10">zag</text>
+ <!-- GD path (zigzag) - red -->
+ <polyline points="100,320 220,155 250,290 310,170 330,260 360,195 375,235 390,210 398,222"
+ fill="none" stroke="#c47070" stroke-width="2.5" stroke-dasharray="6,3"/>
+ <circle cx="100" cy="320" r="5" fill="#c47070"/>
+ <text x="60" y="340" fill="#c47070" font-size="13" font-weight="bold">GD start</text>
+ <!-- GD direction arrows at a few zigzag points -->
+ <text x="220" y="148" fill="#c47070" font-size="10">zig</text>
+ <text x="250" y="305" fill="#c47070" font-size="10">zag</text>
+ <text x="310" y="163" fill="#c47070" font-size="10">zig</text>
+ <text x="330" y="275" fill="#c47070" font-size="10">zag</text>
 
-  <!-- CG path (nearly direct) - green -->
-  <polyline points="100,320 310,175 400,220"
-            fill="none" stroke="#d4956a" stroke-width="3"/>
-  <circle cx="100" cy="320" r="5" fill="#d4956a"/>
-  <!-- Dots at CG iterates -->
-  <circle cx="310" cy="175" r="4" fill="#d4956a"/>
-  <circle cx="400" cy="220" r="4" fill="#d4956a"/>
+ <!-- CG path (nearly direct) - green -->
+ <polyline points="100,320 310,175 400,220"
+ fill="none" stroke="#d4956a" stroke-width="3"/>
+ <circle cx="100" cy="320" r="5" fill="#d4956a"/>
+ <!-- Dots at CG iterates -->
+ <circle cx="310" cy="175" r="4" fill="#d4956a"/>
+ <circle cx="400" cy="220" r="4" fill="#d4956a"/>
 
-  <!-- Legend -->
-  <rect x="530" y="340" width="20" height="3" fill="#c47070"/>
-  <text x="558" y="345" fill="#c47070" font-size="13">Gradient Descent (many zigzag steps)</text>
-  <rect x="530" y="360" width="20" height="3" fill="#d4956a"/>
-  <text x="558" y="365" fill="#d4956a" font-size="13">Conjugate Gradient (2 steps for 2D!)</text>
+ <!-- Legend -->
+ <rect x="530" y="340" width="20" height="3" fill="#c47070"/>
+ <text x="558" y="345" fill="#c47070" font-size="13">Gradient Descent (many zigzag steps)</text>
+ <rect x="530" y="360" width="20" height="3" fill="#d4956a"/>
+ <text x="558" y="365" fill="#d4956a" font-size="13">Conjugate Gradient (2 steps for 2D!)</text>
 </svg>
 
 <div class="why-box">
@@ -292,7 +292,7 @@ $$\beta_{k+1}^{PR+} = \max\!\left(\beta_{k+1}^{PR},\; 0\right)$$
 
 
 <!-- ===================== PART E ===================== -->
-<h2>Part E: Worked Example &mdash; One Iteration of Fletcher-Reeves</h2>
+<h2>Part E: Worked Example; One Iteration of Fletcher-Reeves</h2>
 
 <div class="hand-calc">
 <h3>Fletcher-Reeves on $f(x_1, x_2) = 2x_1^2 + x_2^2$</h3>
@@ -342,7 +342,7 @@ $$\|g_0\|^2 = g_0^T g_0 = 8^2 + 2^2 = 64 + 4 = 68$$
 
 $$\beta_1^{FR} = \frac{\|g_1\|^2}{\|g_0\|^2} = \frac{1088/1089}{68} = \frac{1088}{74052} = \frac{16}{1089} \approx 0.01469$$
 
-<p class="check">The gradient shrank dramatically (from 68 to about 1.0), so $\beta$ is small &mdash; the new direction will be mostly steepest descent with just a tiny blend of the old direction. This makes sense: we made great progress on the first step.</p>
+<p class="check">The gradient shrank dramatically (from 68 to about 1.0), so $\beta$ is small; the new direction will be mostly steepest descent with just a tiny blend of the old direction. This makes sense: we made great progress on the first step.</p>
 </div>
 
 <div class="step">
@@ -351,7 +351,7 @@ $$p_1 = -g_1 + \beta_1^{FR} p_0 = \begin{bmatrix} 8/33 \\ -32/33 \end{bmatrix} +
 
 $$= \begin{bmatrix} 8/33 - 128/1089 \\ -32/33 - 32/1089 \end{bmatrix} = \begin{bmatrix} 264/1089 - 128/1089 \\ -1056/1089 - 32/1089 \end{bmatrix} = \begin{bmatrix} 136/1089 \\ -1088/1089 \end{bmatrix}$$
 
-<p class="result">The new search direction is $p_1 = \begin{bmatrix} 136/1089 \\ -1088/1089 \end{bmatrix}$. This is mostly in the $-x_2$ direction (downhill in the shallow dimension), with a small positive $x_1$ correction &mdash; exactly the kind of smart, non-zigzag direction CG produces.</p>
+<p class="result">The new search direction is $p_1 = \begin{bmatrix} 136/1089 \\ -1088/1089 \end{bmatrix}$. This is mostly in the $-x_2$ direction (downhill in the shallow dimension), with a small positive $x_1$ correction; exactly the kind of smart, non-zigzag direction CG produces.</p>
 </div>
 
 </div>
@@ -365,35 +365,35 @@ $$= \begin{bmatrix} 8/33 - 128/1089 \\ -32/33 - 32/1089 \end{bmatrix} = \begin{b
 <div class="glossary">
 <h3>Glossary</h3>
 <dl>
-  <dt>Nonlinear CG</dt>
-  <dd>Extension of the linear conjugate gradient method to general (non-quadratic) functions. Uses gradient information and line search instead of the matrix $A$.</dd>
+ <dt>Nonlinear CG</dt>
+ <dd>Extension of the linear conjugate gradient method to general (non-quadratic) functions. Uses gradient information and line search instead of the matrix $A$.</dd>
 
-  <dt>Fletcher-Reeves (FR)</dt>
-  <dd>The first nonlinear CG method (1964). Uses $\beta^{FR} = \|g_{k+1}\|^2 / \|g_k\|^2$ &mdash; the ratio of gradient magnitudes squared.</dd>
+ <dt>Fletcher-Reeves (FR)</dt>
+ <dd>The first nonlinear CG method (1964). Uses $\beta^{FR} = \|g_{k+1}\|^2 / \|g_k\|^2$; the ratio of gradient magnitudes squared.</dd>
 
-  <dt>Polak-Ribi&egrave;re (PR)</dt>
-  <dd>A nonlinear CG method (1969) that uses the gradient change: $\beta^{PR} = g_{k+1}^T(g_{k+1} - g_k) / (g_k^Tg_k)$. Has a built-in automatic restart property.</dd>
+ <dt>Polak-Ribi&egrave;re (PR)</dt>
+ <dd>A nonlinear CG method (1969) that uses the gradient change: $\beta^{PR} = g_{k+1}^T(g_{k+1} - g_k) / (g_k^Tg_k)$. Has a built-in automatic restart property.</dd>
 
-  <dt>PR+</dt>
-  <dd>The practical variant $\beta^{PR+} = \max(\beta^{PR}, 0)$. Keeps PRs automatic restart while ensuring global convergence.</dd>
+ <dt>PR+</dt>
+ <dd>The practical variant $\beta^{PR+} = \max(\beta^{PR}, 0)$. Keeps PRs automatic restart while ensuring global convergence.</dd>
 
-  <dt>Restart</dt>
-  <dd>Periodically resetting the search direction to steepest descent ($p_k = -g_k$) to refresh the conjugacy, which degrades on nonlinear functions.</dd>
+ <dt>Restart</dt>
+ <dd>Periodically resetting the search direction to steepest descent ($p_k = -g_k$) to refresh the conjugacy, which degrades on nonlinear functions.</dd>
 
-  <dt>Conjugacy degradation</dt>
-  <dd>On non-quadratic functions, the directions produced by CG gradually lose their conjugacy property, causing the method to slow down. Restarts fix this.</dd>
+ <dt>Conjugacy degradation</dt>
+ <dd>On non-quadratic functions, the directions produced by CG gradually lose their conjugacy property, causing the method to slow down. Restarts fix this.</dd>
 
-  <dt>Strong Wolfe conditions</dt>
-  <dd>Line search conditions from <a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a> that ensure the step is adequate. Required for FR convergence proofs.</dd>
+ <dt>Strong Wolfe conditions</dt>
+ <dd>Line search conditions from <a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a> that ensure the step is adequate. Required for FR convergence proofs.</dd>
 </dl>
 </div>
 
 
 <!-- ===================== NAV ===================== -->
 <div class="nav">
-  <p><a href="cg-10-conjugate-gradient.html">&larr; Previous: Page 10 &mdash; Conjugate Gradient Methods</a></p>
-  <p><a href="cg-12-bfgs.html">Next: Page 12 &mdash; BFGS Method &rarr;</a></p>
-  <p style="margin-top:8px;"><a href="index.html">Back to Index</a></p>
+ <p><a href="cg-10-conjugate-gradient.html">&larr; Previous: Page 10; Conjugate Gradient Methods</a></p>
+ <p><a href="cg-12-bfgs.html">Next: Page 12; BFGS Method &rarr;</a></p>
+ <p style="margin-top:8px;"><a href="index.html">Back to Index</a></p>
 </div>
 
 </div>

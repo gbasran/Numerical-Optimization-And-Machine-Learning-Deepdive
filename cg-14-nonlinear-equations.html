@@ -3,31 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Page 14 &mdash; Newton for Nonlinear Equations | MATH 3850 Course Guide</title>
+<title>Page 14 : Newton for Nonlinear Equations | MATH 3850 Course Guide</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+ onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
 
-<span class="tag">PAGE 14 &mdash; POST-MIDTERM</span>
+<span class="tag">PAGE 14; POST-MIDTERM</span>
 <h1>Newton's Method for Nonlinear Equations</h1>
-<p class="subtitle">From finding square roots to solving systems of equations &mdash; one tangent line (or tangent plane) at a time</p>
+<p class="subtitle">From finding square roots to solving systems of equations; one tangent line (or tangent plane) at a time</p>
 
 <!-- ===================== PART A ===================== -->
 <h2>Part A: Newton's Method for Scalar Equations</h2>
 
 <div class="analogy">
 <strong>The Tangent-Line Root-Finding Analogy</strong><br><br>
-Imagine you have a curve drawn on a piece of paper and you need to find where it crosses the horizontal axis (the <strong>root</strong>). You cant solve the equation algebraically &mdash; the curve is too complicated. So heres the trick:<br><br>
+Imagine you have a curve drawn on a piece of paper and you need to find where it crosses the horizontal axis (the <strong>root</strong>). You cant solve the equation algebraically; the curve is too complicated. So heres the trick:<br><br>
 <strong>1.</strong> Pick a starting guess $x_0$ on the horizontal axis and look up to where the curve is at that point: the height is $f(x_0)$.<br>
-<strong>2.</strong> At that point on the curve, draw a <strong>tangent line</strong> &mdash; a straight line that just touches the curve and has the same slope as the curve there. The slope of that tangent line is $f'(x_0)$.<br>
+<strong>2.</strong> At that point on the curve, draw a <strong>tangent line</strong>; a straight line that just touches the curve and has the same slope as the curve there. The slope of that tangent line is $f'(x_0)$.<br>
 <strong>3.</strong> Find where your tangent line crosses zero. Thats your next guess, $x_1$.<br>
 <strong>4.</strong> Repeat: draw a new tangent line at $x_1$, find where it crosses zero to get $x_2$, and so on.<br><br>
-Why does this work? Because a tangent line is the best local straight-line approximation to the curve. Near the root, the tangent line and the curve are almost identical, so the tangent lines zero-crossing is very close to the curves zero-crossing. Each iteration the approximation gets better, and we converge <strong>quadratically</strong> &mdash; the number of correct digits roughly doubles every step.
+Why does this work? Because a tangent line is the best local straight-line approximation to the curve. Near the root, the tangent line and the curve are almost identical, so the tangent lines zero-crossing is very close to the curves zero-crossing. Each iteration the approximation gets better, and we converge <strong>quadratically</strong>; the number of correct digits roughly doubles every step.
 </div>
 
 <p>We want to solve $f(x) = 0$ for some nonlinear function $f: \mathbb{R} \to \mathbb{R}$. The tangent line at $x_k$ is:</p>
@@ -40,11 +40,11 @@ $$f(x_k) + f'(x_k)(x - x_k) = 0$$
 <strong>Scalar Newton's Method</strong>
 $$x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}$$
 <dl class="breakdown">
-  <dt>$x_{k+1}$</dt><dd>the next (improved) guess for the root</dd>
-  <dt>$x_k$</dt><dd>the current guess</dd>
-  <dt>$f(x_k)$</dt><dd>the value of the function at the current guess (how far from zero we are)</dd>
-  <dt>$f'(x_k)$</dt><dd>the derivative (slope) of the function at the current guess</dd>
-  <dt>$\frac{f(x_k)}{f'(x_k)}$</dt><dd>the correction &mdash; how far along the tangent line we need to go to hit zero</dd>
+ <dt>$x_{k+1}$</dt><dd>the next (improved) guess for the root</dd>
+ <dt>$x_k$</dt><dd>the current guess</dd>
+ <dt>$f(x_k)$</dt><dd>the value of the function at the current guess (how far from zero we are)</dd>
+ <dt>$f'(x_k)$</dt><dd>the derivative (slope) of the function at the current guess</dd>
+ <dt>$\frac{f(x_k)}{f'(x_k)}$</dt><dd>the correction; how far along the tangent line we need to go to hit zero</dd>
 </dl>
 </div>
 
@@ -82,46 +82,46 @@ $x_3 = 1.414216... - \frac{0.000007...}{2.828432...} = 1.414213562...$
 </div>
 
 <p class="result">After just 3 iterations: $x_3 = 1.41421356...$</p>
-<p class="check">True value: $\sqrt{2} = 1.41421356237...$. We have 9 correct digits after only 3 steps! Thats quadratic convergence in action &mdash; the number of correct digits roughly doubled each iteration (1 &rarr; 3 &rarr; 6 &rarr; 9+).</p>
+<p class="check">True value: $\sqrt{2} = 1.41421356237...$. We have 9 correct digits after only 3 steps! Thats quadratic convergence in action; the number of correct digits roughly doubled each iteration (1 &rarr; 3 &rarr; 6 &rarr; 9+).</p>
 </div>
 
 <!-- SVG: tangent line convergence -->
 <svg viewBox="0 0 600 350" style="width:100%;max-width:600px;display:block;margin:30px auto;">
-  <!-- axes -->
-  <line x1="50" y1="280" x2="570" y2="280" stroke="#555" stroke-width="1"/>
-  <line x1="50" y1="20" x2="50" y2="280" stroke="#555" stroke-width="1"/>
-  <text x="580" y="285" fill="#a8a49c" font-size="13">x</text>
-  <text x="35" y="15" fill="#a8a49c" font-size="13">y</text>
+ <!-- axes -->
+ <line x1="50" y1="280" x2="570" y2="280" stroke="#555" stroke-width="1"/>
+ <line x1="50" y1="20" x2="50" y2="280" stroke="#555" stroke-width="1"/>
+ <text x="580" y="285" fill="#a8a49c" font-size="13">x</text>
+ <text x="35" y="15" fill="#a8a49c" font-size="13">y</text>
 
-  <!-- curve f(x) = x^2 - 2, mapped: x in [0.5, 2.2], y in [-2, 3] -->
-  <!-- x=0.5 -> y=-1.75, x=1 -> y=-1, x=sqrt(2) -> y=0, x=1.5 -> y=0.25, x=2 -> y=2 -->
-  <!-- mapping: px = 50 + (x-0.5)*300, py = 280 - (y+2)*52 -->
-  <path d="M 50,189 Q 100,228 200,228 Q 270,228 350,176 Q 430,124 500,20" fill="none" stroke="#d4956a" stroke-width="2.5"/>
-  <text x="510" y="15" fill="#d4956a" font-size="13">f(x) = x^2 - 2</text>
+ <!-- curve f(x) = x^2 - 2, mapped: x in [0.5, 2.2], y in [-2, 3] -->
+ <!-- x=0.5 -> y=-1.75, x=1 -> y=-1, x=sqrt(2) -> y=0, x=1.5 -> y=0.25, x=2 -> y=2 -->
+ <!-- mapping: px = 50 + (x-0.5)*300, py = 280 - (y+2)*52 -->
+ <path d="M 50,189 Q 100,228 200,228 Q 270,228 350,176 Q 430,124 500,20" fill="none" stroke="#d4956a" stroke-width="2.5"/>
+ <text x="510" y="15" fill="#d4956a" font-size="13">f(x) = x^2 - 2</text>
 
-  <!-- zero crossing at sqrt(2) ~ 1.414 -> px = 50 + (1.414-0.5)*300 = 324 -->
-  <circle cx="324" cy="280" r="5" fill="#c47070"/>
-  <text x="310" y="310" fill="#c47070" font-size="13">root: sqrt(2)</text>
+ <!-- zero crossing at sqrt(2) ~ 1.414 -> px = 50 + (1.414-0.5)*300 = 324 -->
+ <circle cx="324" cy="280" r="5" fill="#c47070"/>
+ <text x="310" y="310" fill="#c47070" font-size="13">root: sqrt(2)</text>
 
-  <!-- x0 = 1.5 -> px = 350, f(1.5)=0.25 -> py = 280 - (2.25)*52 = 163 -->
-  <circle cx="350" cy="267" r="4" fill="#c9a84c"/>
-  <text x="355" y="260" fill="#c9a84c" font-size="12">x0 = 1.5</text>
-  <!-- tangent at x0: slope = 3, passes through (1.5, 0.25) -->
-  <!-- tangent hits zero at x1 = 1.4167 -> px = 325 -->
-  <line x1="280" y1="280" x2="420" y2="210" stroke="#c9a84c" stroke-width="1.5" stroke-dasharray="6,3"/>
+ <!-- x0 = 1.5 -> px = 350, f(1.5)=0.25 -> py = 280 - (2.25)*52 = 163 -->
+ <circle cx="350" cy="267" r="4" fill="#c9a84c"/>
+ <text x="355" y="260" fill="#c9a84c" font-size="12">x0 = 1.5</text>
+ <!-- tangent at x0: slope = 3, passes through (1.5, 0.25) -->
+ <!-- tangent hits zero at x1 = 1.4167 -> px = 325 -->
+ <line x1="280" y1="280" x2="420" y2="210" stroke="#c9a84c" stroke-width="1.5" stroke-dasharray="6,3"/>
 
-  <!-- x1 = 1.4167 -> px = 325, f(1.4167)=0.00694 -> py ~ 276 -->
-  <circle cx="325" cy="276" r="4" fill="#9b89b6"/>
-  <text x="260" y="270" fill="#9b89b6" font-size="12">x1 = 1.417</text>
-  <!-- tangent at x1 hits zero at x2 ~ sqrt(2) -->
-  <line x1="310" y1="280" x2="360" y2="266" stroke="#9b89b6" stroke-width="1.5" stroke-dasharray="6,3"/>
+ <!-- x1 = 1.4167 -> px = 325, f(1.4167)=0.00694 -> py ~ 276 -->
+ <circle cx="325" cy="276" r="4" fill="#9b89b6"/>
+ <text x="260" y="270" fill="#9b89b6" font-size="12">x1 = 1.417</text>
+ <!-- tangent at x1 hits zero at x2 ~ sqrt(2) -->
+ <line x1="310" y1="280" x2="360" y2="266" stroke="#9b89b6" stroke-width="1.5" stroke-dasharray="6,3"/>
 
-  <!-- x2 essentially at root -->
-  <circle cx="324" cy="280" r="3" fill="#d4956a"/>
+ <!-- x2 essentially at root -->
+ <circle cx="324" cy="280" r="3" fill="#d4956a"/>
 
-  <!-- labels -->
-  <text x="60" y="30" fill="#a8a49c" font-size="12">Each tangent line (dashed)</text>
-  <text x="60" y="48" fill="#a8a49c" font-size="12">zeros in closer to the root</text>
+ <!-- labels -->
+ <text x="60" y="30" fill="#a8a49c" font-size="12">Each tangent line (dashed)</text>
+ <text x="60" y="48" fill="#a8a49c" font-size="12">zeros in closer to the root</text>
 </svg>
 
 <!-- ===================== PART B ===================== -->
@@ -129,9 +129,9 @@ $x_3 = 1.414216... - \frac{0.000007...}{2.828432...} = 1.414213562...$
 
 <div class="analogy">
 <strong>The Multi-Equation Intersection Analogy</strong><br><br>
-In the scalar case, we had one equation $f(x) = 0$ and one unknown $x$. Picture a single curve, and you wanted to find where it crosses the $x$-axis. Now imagine you have <strong>two</strong> equations and <strong>two</strong> unknowns &mdash; like a circle and a line. Each equation defines a curve in the plane, and you need to find the <strong>intersection point</strong> where both curves cross simultaneously.<br><br>
+In the scalar case, we had one equation $f(x) = 0$ and one unknown $x$. Picture a single curve, and you wanted to find where it crosses the $x$-axis. Now imagine you have <strong>two</strong> equations and <strong>two</strong> unknowns; like a circle and a line. Each equation defines a curve in the plane, and you need to find the <strong>intersection point</strong> where both curves cross simultaneously.<br><br>
 You cant just draw one tangent line anymore. Instead, at your current guess $(x_1, x_2)$, you approximate EACH curve by its tangent line (or tangent plane in higher dimensions). Where those two tangent lines intersect gives you the next guess. This is exactly what the vector version of Newton does.<br><br>
-For $n$ equations in $n$ unknowns, you have $n$ "surfaces" that all need to pass through zero simultaneously. The Jacobian matrix replaces the scalar derivative &mdash; it contains the slopes of ALL equations in ALL directions, so it can tell you where all the tangent planes meet.
+For $n$ equations in $n$ unknowns, you have $n$ "surfaces" that all need to pass through zero simultaneously. The Jacobian matrix replaces the scalar derivative; it contains the slopes of ALL equations in ALL directions, so it can tell you where all the tangent planes meet.
 </div>
 
 <p>We want to solve the system $\mathbf{r}(x) = \mathbf{0}$ where $\mathbf{r}: \mathbb{R}^n \to \mathbb{R}^n$ is a vector-valued function. That means:</p>
@@ -165,11 +165,11 @@ $$J(x) = \begin{bmatrix} \frac{\partial r_1}{\partial x_1} & \frac{\partial r_1}
 </div>
 
 <div class="note">
-<strong>Key point:</strong> Step 4 says "solve" the linear system, NOT "compute the inverse." We never compute $J^{-1}$ explicitly &mdash; we solve the linear system $Jp = -\mathbf{r}$ using Gaussian elimination (or LU factorization). This is cheaper and more numerically stable.
+<strong>Key point:</strong> Step 4 says "solve" the linear system, NOT "compute the inverse." We never compute $J^{-1}$ explicitly; we solve the linear system $Jp = -\mathbf{r}$ using Gaussian elimination (or LU factorization). This is cheaper and more numerically stable.
 </div>
 
 <!-- ===================== PART C ===================== -->
-<h2>Part C: Full Hand Computation &mdash; Mirrors Quiz 7</h2>
+<h2>Part C: Full Hand Computation; Mirrors Quiz 7</h2>
 
 <div class="exam-flag">
 <h4>EXAM ALERT: Quiz 7 Problem Type</h4>
@@ -198,10 +198,10 @@ $$\mathbf{r}(x) = \begin{bmatrix} x_1^2 + x_2^2 - 1 \\ x_1 - x_2 \end{bmatrix}$$
 $$J(x) = \begin{bmatrix} \frac{\partial r_1}{\partial x_1} & \frac{\partial r_1}{\partial x_2} \\[6pt] \frac{\partial r_2}{\partial x_1} & \frac{\partial r_2}{\partial x_2} \end{bmatrix} = \begin{bmatrix} 2x_1 & 2x_2 \\ 1 & -1 \end{bmatrix}$$
 <p>Lets verify each entry:</p>
 <ul style="margin-left:20px; font-size:16px; color:#b8b4ac;">
-  <li>$\frac{\partial}{\partial x_1}(x_1^2 + x_2^2 - 1) = 2x_1$ &mdash; only the $x_1^2$ term survives</li>
-  <li>$\frac{\partial}{\partial x_2}(x_1^2 + x_2^2 - 1) = 2x_2$ &mdash; only the $x_2^2$ term survives</li>
-  <li>$\frac{\partial}{\partial x_1}(x_1 - x_2) = 1$</li>
-  <li>$\frac{\partial}{\partial x_2}(x_1 - x_2) = -1$</li>
+ <li>$\frac{\partial}{\partial x_1}(x_1^2 + x_2^2 - 1) = 2x_1$; only the $x_1^2$ term survives</li>
+ <li>$\frac{\partial}{\partial x_2}(x_1^2 + x_2^2 - 1) = 2x_2$; only the $x_2^2$ term survives</li>
+ <li>$\frac{\partial}{\partial x_1}(x_1 - x_2) = 1$</li>
+ <li>$\frac{\partial}{\partial x_2}(x_1 - x_2) = -1$</li>
 </ul>
 </div>
 
@@ -244,7 +244,7 @@ $$x^{(1)} = \begin{bmatrix} 0.8 \\ 0.5 \end{bmatrix} + \begin{bmatrix} -0.07308 
 </div>
 
 <p class="result">After 1 iteration: $x^{(1)} = [0.72692,\; 0.72692]^T$</p>
-<p class="check">True solution: $[0.70711, 0.70711]^T$. We went from errors of $[0.093, -0.207]$ to errors of $[0.020, 0.020]$. Notice $x_1 = x_2$ already &mdash; Newton nailed the constraint $x_1 = x_2$ in one step because that equation is already linear!</p>
+<p class="check">True solution: $[0.70711, 0.70711]^T$. We went from errors of $[0.093, -0.207]$ to errors of $[0.020, 0.020]$. Notice $x_1 = x_2$ already; Newton nailed the constraint $x_1 = x_2$ in one step because that equation is already linear!</p>
 </div>
 
 <!-- Second Newton iteration -->
@@ -278,67 +278,67 @@ $$x^{(2)} = \begin{bmatrix} 0.72692 \\ 0.72692 \end{bmatrix} + \begin{bmatrix} -
 </div>
 
 <p class="result">After 2 iterations: $x^{(2)} = [0.70738,\; 0.70738]^T$</p>
-<p class="check">True solution: $[0.70711, 0.70711]^T$. Error dropped from $0.020$ to $0.00027$ &mdash; thats quadratic convergence! The error squared from one step to the next.</p>
+<p class="check">True solution: $[0.70711, 0.70711]^T$. Error dropped from $0.020$ to $0.00027$; thats quadratic convergence! The error squared from one step to the next.</p>
 </div>
 
 <!-- Summary table -->
 <table class="step-table">
-  <tr><th>Iteration $k$</th><th>$x_1^{(k)}$</th><th>$x_2^{(k)}$</th><th>$\|\mathbf{r}(x^{(k)})\|$</th><th>Error from true</th></tr>
-  <tr><td>0</td><td>0.80000</td><td>0.50000</td><td>0.3195</td><td>0.226</td></tr>
-  <tr><td>1</td><td>0.72692</td><td>0.72692</td><td>0.0568</td><td>0.028</td></tr>
-  <tr><td>2</td><td>0.70738</td><td>0.70738</td><td>0.0004</td><td>0.0004</td></tr>
+ <tr><th>Iteration $k$</th><th>$x_1^{(k)}$</th><th>$x_2^{(k)}$</th><th>$\|\mathbf{r}(x^{(k)})\|$</th><th>Error from true</th></tr>
+ <tr><td>0</td><td>0.80000</td><td>0.50000</td><td>0.3195</td><td>0.226</td></tr>
+ <tr><td>1</td><td>0.72692</td><td>0.72692</td><td>0.0568</td><td>0.028</td></tr>
+ <tr><td>2</td><td>0.70738</td><td>0.70738</td><td>0.0004</td><td>0.0004</td></tr>
 </table>
 
 <!-- SVG: circle and line intersection -->
 <svg viewBox="0 0 400 400" style="width:100%;max-width:400px;display:block;margin:30px auto;">
-  <!-- axes -->
-  <line x1="30" y1="370" x2="380" y2="370" stroke="#555" stroke-width="1"/>
-  <line x1="30" y1="370" x2="30" y2="20" stroke="#555" stroke-width="1"/>
-  <text x="385" y="375" fill="#a8a49c" font-size="12">x1</text>
-  <text x="15" y="15" fill="#a8a49c" font-size="12">x2</text>
+ <!-- axes -->
+ <line x1="30" y1="370" x2="380" y2="370" stroke="#555" stroke-width="1"/>
+ <line x1="30" y1="370" x2="30" y2="20" stroke="#555" stroke-width="1"/>
+ <text x="385" y="375" fill="#a8a49c" font-size="12">x1</text>
+ <text x="15" y="15" fill="#a8a49c" font-size="12">x2</text>
 
-  <!-- unit circle: center (30,370), radius 300 (but we only draw first quadrant) -->
-  <!-- scale: 1 unit = 300px, so circle has r=300px centered at (30,370) -->
-  <path d="M 330,370 A 300,300 0 0,0 30,70" fill="none" stroke="#d4956a" stroke-width="2"/>
-  <text x="250" y="120" fill="#d4956a" font-size="13">x1^2 + x2^2 = 1</text>
+ <!-- unit circle: center (30,370), radius 300 (but we only draw first quadrant) -->
+ <!-- scale: 1 unit = 300px, so circle has r=300px centered at (30,370) -->
+ <path d="M 330,370 A 300,300 0 0,0 30,70" fill="none" stroke="#d4956a" stroke-width="2"/>
+ <text x="250" y="120" fill="#d4956a" font-size="13">x1^2 + x2^2 = 1</text>
 
-  <!-- line y=x: from (30,370) to (330,70) -->
-  <line x1="30" y1="370" x2="330" y2="70" stroke="#9b89b6" stroke-width="2"/>
-  <text x="290" y="60" fill="#9b89b6" font-size="13">x1 = x2</text>
+ <!-- line y=x: from (30,370) to (330,70) -->
+ <line x1="30" y1="370" x2="330" y2="70" stroke="#9b89b6" stroke-width="2"/>
+ <text x="290" y="60" fill="#9b89b6" font-size="13">x1 = x2</text>
 
-  <!-- true solution: (0.707, 0.707) -> (30+212, 370-212) = (242, 158) -->
-  <circle cx="242" cy="158" r="6" fill="#c47070"/>
-  <text x="250" y="150" fill="#c47070" font-size="12">true: (0.707, 0.707)</text>
+ <!-- true solution: (0.707, 0.707) -> (30+212, 370-212) = (242, 158) -->
+ <circle cx="242" cy="158" r="6" fill="#c47070"/>
+ <text x="250" y="150" fill="#c47070" font-size="12">true: (0.707, 0.707)</text>
 
-  <!-- x0 = (0.8, 0.5) -> (30+240, 370-150) = (270, 220) -->
-  <circle cx="270" cy="220" r="5" fill="#c9a84c"/>
-  <text x="278" y="215" fill="#c9a84c" font-size="11">x0 = (0.8, 0.5)</text>
+ <!-- x0 = (0.8, 0.5) -> (30+240, 370-150) = (270, 220) -->
+ <circle cx="270" cy="220" r="5" fill="#c9a84c"/>
+ <text x="278" y="215" fill="#c9a84c" font-size="11">x0 = (0.8, 0.5)</text>
 
-  <!-- x1 = (0.727, 0.727) -> (30+218, 370-218) = (248, 152) -->
-  <circle cx="248" cy="152" r="4" fill="#c9a84c"/>
-  <text x="170" y="145" fill="#c9a84c" font-size="11">x1 = (0.727, 0.727)</text>
+ <!-- x1 = (0.727, 0.727) -> (30+218, 370-218) = (248, 152) -->
+ <circle cx="248" cy="152" r="4" fill="#c9a84c"/>
+ <text x="170" y="145" fill="#c9a84c" font-size="11">x1 = (0.727, 0.727)</text>
 
-  <!-- arrow from x0 to x1 -->
-  <line x1="270" y1="220" x2="250" y2="155" stroke="#c9a84c" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrowY)"/>
+ <!-- arrow from x0 to x1 -->
+ <line x1="270" y1="220" x2="250" y2="155" stroke="#c9a84c" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrowY)"/>
 
-  <!-- x2 essentially at true solution -->
-  <circle cx="243" cy="157" r="3" fill="#d4956a"/>
+ <!-- x2 essentially at true solution -->
+ <circle cx="243" cy="157" r="3" fill="#d4956a"/>
 
-  <defs>
-    <marker id="arrowY" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L8,3 L0,6" fill="#c9a84c"/>
-    </marker>
-  </defs>
+ <defs>
+ <marker id="arrowY" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+ <path d="M0,0 L8,3 L0,6" fill="#c9a84c"/>
+ </marker>
+ </defs>
 
-  <!-- tick marks -->
-  <text x="175" y="387" fill="#a8a49c" font-size="11">0.5</text>
-  <line x1="180" y1="367" x2="180" y2="373" stroke="#a8a49c" stroke-width="1"/>
-  <text x="325" y="387" fill="#a8a49c" font-size="11">1.0</text>
-  <line x1="330" y1="367" x2="330" y2="373" stroke="#a8a49c" stroke-width="1"/>
-  <text x="10" y="225" fill="#a8a49c" font-size="11">0.5</text>
-  <line x1="27" y1="220" x2="33" y2="220" stroke="#a8a49c" stroke-width="1"/>
-  <text x="10" y="75" fill="#a8a49c" font-size="11">1.0</text>
-  <line x1="27" y1="70" x2="33" y2="70" stroke="#a8a49c" stroke-width="1"/>
+ <!-- tick marks -->
+ <text x="175" y="387" fill="#a8a49c" font-size="11">0.5</text>
+ <line x1="180" y1="367" x2="180" y2="373" stroke="#a8a49c" stroke-width="1"/>
+ <text x="325" y="387" fill="#a8a49c" font-size="11">1.0</text>
+ <line x1="330" y1="367" x2="330" y2="373" stroke="#a8a49c" stroke-width="1"/>
+ <text x="10" y="225" fill="#a8a49c" font-size="11">0.5</text>
+ <line x1="27" y1="220" x2="33" y2="220" stroke="#a8a49c" stroke-width="1"/>
+ <text x="10" y="75" fill="#a8a49c" font-size="11">1.0</text>
+ <line x1="27" y1="70" x2="33" y2="70" stroke="#a8a49c" stroke-width="1"/>
 </svg>
 
 <!-- ===================== PART D ===================== -->
@@ -357,9 +357,9 @@ Inexact Newton says: "Dont bother solving perfectly. Get an <em>approximately</e
 <p>Instead of solving $J_k p_k = -\mathbf{r}_k$ exactly, find $p_k$ such that:</p>
 $$\|J_k p_k + \mathbf{r}_k\| \leq \eta_k \|\mathbf{r}_k\|$$
 <dl class="breakdown">
-  <dt>$\eta_k$</dt><dd>the "forcing term" &mdash; controls how accurately we solve the linear system. $\eta_k \in (0, 1)$.</dd>
-  <dt>$\eta_k$ small</dt><dd>solve more accurately &mdash; closer to exact Newton, faster convergence but more work per step</dd>
-  <dt>$\eta_k$ large</dt><dd>solve less accurately &mdash; cheaper per step but slower convergence</dd>
+ <dt>$\eta_k$</dt><dd>the "forcing term"; controls how accurately we solve the linear system. $\eta_k \in (0, 1)$.</dd>
+ <dt>$\eta_k$ small</dt><dd>solve more accurately; closer to exact Newton, faster convergence but more work per step</dd>
+ <dt>$\eta_k$ large</dt><dd>solve less accurately; cheaper per step but slower convergence</dd>
 </dl>
 <p style="margin-top:12px;">Common strategy: start with large $\eta_k$ (cheap steps) and decrease it as you approach the solution (more accurate steps when they matter most).</p>
 </div>
@@ -368,7 +368,7 @@ $$\|J_k p_k + \mathbf{r}_k\| \leq \eta_k \|\mathbf{r}_k\|$$
 
 <div class="analogy">
 <strong>The "Learning the Jacobian" Analogy</strong><br><br>
-Computing the full Jacobian at every step is expensive &mdash; you need to evaluate all $n^2$ partial derivatives. Broyden says: "Start with the true Jacobian (or an approximation), then UPDATE it cheaply at each step based on what you learn from the function values."<br><br>
+Computing the full Jacobian at every step is expensive; you need to evaluate all $n^2$ partial derivatives. Broyden says: "Start with the true Jacobian (or an approximation), then UPDATE it cheaply at each step based on what you learn from the function values."<br><br>
 This is the exact same philosophy as <a href="cg-12-bfgs.html">BFGS (Page 12)</a>: BFGS approximates the Hessian for optimization; Broyden approximates the Jacobian for nonlinear equations. Both learn from the history of steps and function/gradient changes.
 </div>
 
@@ -376,12 +376,12 @@ This is the exact same philosophy as <a href="cg-12-bfgs.html">BFGS (Page 12)</a
 <strong>Broyden's Update Formula</strong>
 $$J_{k+1} = J_k + \frac{(\mathbf{r}_{k+1} - \mathbf{r}_k - J_k s_k)\,s_k^T}{s_k^T s_k}$$
 <dl class="breakdown">
-  <dt>$J_k$</dt><dd>current approximate Jacobian (an $n \times n$ matrix)</dd>
-  <dt>$J_{k+1}$</dt><dd>updated approximate Jacobian</dd>
-  <dt>$s_k = x_{k+1} - x_k$</dt><dd>the step we just took</dd>
-  <dt>$\mathbf{r}_{k+1} - \mathbf{r}_k$</dt><dd>how the residual changed (the "observed change")</dd>
-  <dt>$J_k s_k$</dt><dd>how the current approximation PREDICTED the residual would change</dd>
-  <dt>$\mathbf{r}_{k+1} - \mathbf{r}_k - J_k s_k$</dt><dd>the "prediction error" &mdash; the difference between observed and predicted</dd>
+ <dt>$J_k$</dt><dd>current approximate Jacobian (an $n \times n$ matrix)</dd>
+ <dt>$J_{k+1}$</dt><dd>updated approximate Jacobian</dd>
+ <dt>$s_k = x_{k+1} - x_k$</dt><dd>the step we just took</dd>
+ <dt>$\mathbf{r}_{k+1} - \mathbf{r}_k$</dt><dd>how the residual changed (the "observed change")</dd>
+ <dt>$J_k s_k$</dt><dd>how the current approximation PREDICTED the residual would change</dd>
+ <dt>$\mathbf{r}_{k+1} - \mathbf{r}_k - J_k s_k$</dt><dd>the "prediction error"; the difference between observed and predicted</dd>
 </dl>
 <p style="margin-top:12px;">The update adds a correction term that fixes the prediction error in the direction $s_k$. This is a rank-1 update (compare with <a href="cg-13-sr1-dfp.html">SR1 on Page 13</a>).</p>
 </div>
@@ -390,12 +390,12 @@ $$J_{k+1} = J_k + \frac{(\mathbf{r}_{k+1} - \mathbf{r}_k - J_k s_k)\,s_k^T}{s_k^
 <h3>Broyden is to Nonlinear Equations What BFGS is to Optimization</h3>
 <p>Both methods share the same core idea: avoid computing expensive second-order information (the Hessian in optimization, the Jacobian in root-finding) by learning it incrementally from the history of steps and function evaluations.</p>
 <table style="width:100%; font-size:15px; margin-top:12px;">
-  <tr><th style="color:#d4956a; text-align:left; padding:6px;">Aspect</th><th style="color:#d4956a; text-align:left; padding:6px;">BFGS (Optimization)</th><th style="color:#d4956a; text-align:left; padding:6px;">Broyden (Equations)</th></tr>
-  <tr><td style="padding:6px; border-top:1px solid #2e2e38;">Goal</td><td style="padding:6px; border-top:1px solid #2e2e38;">Minimize $f(x)$</td><td style="padding:6px; border-top:1px solid #2e2e38;">Solve $\mathbf{r}(x) = \mathbf{0}$</td></tr>
-  <tr><td style="padding:6px; border-top:1px solid #2e2e38;">Approximates</td><td style="padding:6px; border-top:1px solid #2e2e38;">Hessian $\nabla^2 f$</td><td style="padding:6px; border-top:1px solid #2e2e38;">Jacobian $J$</td></tr>
-  <tr><td style="padding:6px; border-top:1px solid #2e2e38;">Update type</td><td style="padding:6px; border-top:1px solid #2e2e38;">Rank-2</td><td style="padding:6px; border-top:1px solid #2e2e38;">Rank-1</td></tr>
-  <tr><td style="padding:6px; border-top:1px solid #2e2e38;">Cost per step</td><td style="padding:6px; border-top:1px solid #2e2e38;">$O(n^2)$</td><td style="padding:6px; border-top:1px solid #2e2e38;">$O(n^2)$</td></tr>
-  <tr><td style="padding:6px; border-top:1px solid #2e2e38;">Convergence</td><td style="padding:6px; border-top:1px solid #2e2e38;">Superlinear</td><td style="padding:6px; border-top:1px solid #2e2e38;">Superlinear</td></tr>
+ <tr><th style="color:#d4956a; text-align:left; padding:6px;">Aspect</th><th style="color:#d4956a; text-align:left; padding:6px;">BFGS (Optimization)</th><th style="color:#d4956a; text-align:left; padding:6px;">Broyden (Equations)</th></tr>
+ <tr><td style="padding:6px; border-top:1px solid #2e2e38;">Goal</td><td style="padding:6px; border-top:1px solid #2e2e38;">Minimize $f(x)$</td><td style="padding:6px; border-top:1px solid #2e2e38;">Solve $\mathbf{r}(x) = \mathbf{0}$</td></tr>
+ <tr><td style="padding:6px; border-top:1px solid #2e2e38;">Approximates</td><td style="padding:6px; border-top:1px solid #2e2e38;">Hessian $\nabla^2 f$</td><td style="padding:6px; border-top:1px solid #2e2e38;">Jacobian $J$</td></tr>
+ <tr><td style="padding:6px; border-top:1px solid #2e2e38;">Update type</td><td style="padding:6px; border-top:1px solid #2e2e38;">Rank-2</td><td style="padding:6px; border-top:1px solid #2e2e38;">Rank-1</td></tr>
+ <tr><td style="padding:6px; border-top:1px solid #2e2e38;">Cost per step</td><td style="padding:6px; border-top:1px solid #2e2e38;">$O(n^2)$</td><td style="padding:6px; border-top:1px solid #2e2e38;">$O(n^2)$</td></tr>
+ <tr><td style="padding:6px; border-top:1px solid #2e2e38;">Convergence</td><td style="padding:6px; border-top:1px solid #2e2e38;">Superlinear</td><td style="padding:6px; border-top:1px solid #2e2e38;">Superlinear</td></tr>
 </table>
 </div>
 
@@ -410,18 +410,18 @@ Here is one of the deepest connections in this entire course. When we do optimiz
 <div class="formula-box">
 <strong>The Dictionary Between the Two Worlds</strong>
 <table style="width:100%; font-size:16px; margin-top:12px;">
-  <tr><th style="color:#d4956a; text-align:left; padding:8px;">Nonlinear Equations</th><th style="color:#d4956a; text-align:left; padding:8px;">Optimization</th></tr>
-  <tr><td style="padding:8px; border-top:1px solid #2e2e38;">Residual $\mathbf{r}(x)$</td><td style="padding:8px; border-top:1px solid #2e2e38;">Gradient $\nabla f(x)$</td></tr>
-  <tr><td style="padding:8px; border-top:1px solid #2e2e38;">Jacobian $J(x)$</td><td style="padding:8px; border-top:1px solid #2e2e38;">Hessian $\nabla^2 f(x)$</td></tr>
-  <tr><td style="padding:8px; border-top:1px solid #2e2e38;">Newton step: solve $Jp = -\mathbf{r}$</td><td style="padding:8px; border-top:1px solid #2e2e38;">Newton step: solve $\nabla^2 f \cdot p = -\nabla f$ (from <a href="cg-07-newton-method.html">Page 07</a>)</td></tr>
-  <tr><td style="padding:8px; border-top:1px solid #2e2e38;">Broyden approximates $J$</td><td style="padding:8px; border-top:1px solid #2e2e38;">BFGS approximates $\nabla^2 f$ (from <a href="cg-12-bfgs.html">Page 12</a>)</td></tr>
-  <tr><td style="padding:8px; border-top:1px solid #2e2e38;">Inexact Newton (CG on $Jp = -\mathbf{r}$)</td><td style="padding:8px; border-top:1px solid #2e2e38;">Newton-CG (CG on Hessian system, from <a href="cg-10-conjugate-gradient.html">Page 10</a>)</td></tr>
+ <tr><th style="color:#d4956a; text-align:left; padding:8px;">Nonlinear Equations</th><th style="color:#d4956a; text-align:left; padding:8px;">Optimization</th></tr>
+ <tr><td style="padding:8px; border-top:1px solid #2e2e38;">Residual $\mathbf{r}(x)$</td><td style="padding:8px; border-top:1px solid #2e2e38;">Gradient $\nabla f(x)$</td></tr>
+ <tr><td style="padding:8px; border-top:1px solid #2e2e38;">Jacobian $J(x)$</td><td style="padding:8px; border-top:1px solid #2e2e38;">Hessian $\nabla^2 f(x)$</td></tr>
+ <tr><td style="padding:8px; border-top:1px solid #2e2e38;">Newton step: solve $Jp = -\mathbf{r}$</td><td style="padding:8px; border-top:1px solid #2e2e38;">Newton step: solve $\nabla^2 f \cdot p = -\nabla f$ (from <a href="cg-07-newton-method.html">Page 07</a>)</td></tr>
+ <tr><td style="padding:8px; border-top:1px solid #2e2e38;">Broyden approximates $J$</td><td style="padding:8px; border-top:1px solid #2e2e38;">BFGS approximates $\nabla^2 f$ (from <a href="cg-12-bfgs.html">Page 12</a>)</td></tr>
+ <tr><td style="padding:8px; border-top:1px solid #2e2e38;">Inexact Newton (CG on $Jp = -\mathbf{r}$)</td><td style="padding:8px; border-top:1px solid #2e2e38;">Newton-CG (CG on Hessian system, from <a href="cg-10-conjugate-gradient.html">Page 10</a>)</td></tr>
 </table>
 </div>
 
 <div class="why-box">
 <h3>Why This Matters</h3>
-<p>Newton's method for optimization (which you learned on <a href="cg-07-newton-method.html">Page 07</a>) is literally Newton's method for nonlinear equations applied to the system $\nabla f(x) = 0$. The Hessian IS the Jacobian of the gradient. Every idea from this page &mdash; inexact solves, quasi-Newton updates &mdash; has a direct counterpart in optimization. Understanding one gives you the other for free.</p>
+<p>Newton's method for optimization (which you learned on <a href="cg-07-newton-method.html">Page 07</a>) is literally Newton's method for nonlinear equations applied to the system $\nabla f(x) = 0$. The Hessian IS the Jacobian of the gradient. Every idea from this page; inexact solves, quasi-Newton updates; has a direct counterpart in optimization. Understanding one gives you the other for free.</p>
 </div>
 
 <div class="note">
@@ -432,43 +432,43 @@ Here is one of the deepest connections in this entire course. When we do optimiz
 <div class="glossary">
 <h3>Glossary</h3>
 <dl>
-  <dt>Nonlinear System</dt>
-  <dd>A set of $n$ equations in $n$ unknowns where at least one equation is nonlinear: $\mathbf{r}(x) = \mathbf{0}$ with $\mathbf{r}: \mathbb{R}^n \to \mathbb{R}^n$.</dd>
+ <dt>Nonlinear System</dt>
+ <dd>A set of $n$ equations in $n$ unknowns where at least one equation is nonlinear: $\mathbf{r}(x) = \mathbf{0}$ with $\mathbf{r}: \mathbb{R}^n \to \mathbb{R}^n$.</dd>
 
-  <dt>Root / Zero</dt>
-  <dd>A point $x^*$ where $\mathbf{r}(x^*) = \mathbf{0}$. For a scalar equation, its where the curve crosses the $x$-axis.</dd>
+ <dt>Root / Zero</dt>
+ <dd>A point $x^*$ where $\mathbf{r}(x^*) = \mathbf{0}$. For a scalar equation, its where the curve crosses the $x$-axis.</dd>
 
-  <dt>Residual $\mathbf{r}(x)$</dt>
-  <dd>The vector of function values at $x$. We want to drive all components to zero simultaneously.</dd>
+ <dt>Residual $\mathbf{r}(x)$</dt>
+ <dd>The vector of function values at $x$. We want to drive all components to zero simultaneously.</dd>
 
-  <dt>Jacobian $J(x)$</dt>
-  <dd>The $n \times n$ matrix of all first partial derivatives of $\mathbf{r}$. Entry $(i,j)$ is $\frac{\partial r_i}{\partial x_j}$. Generalizes the scalar derivative $f'(x)$. See <a href="cg-02-multivariable-bridge.html">Page 02</a>.</dd>
+ <dt>Jacobian $J(x)$</dt>
+ <dd>The $n \times n$ matrix of all first partial derivatives of $\mathbf{r}$. Entry $(i,j)$ is $\frac{\partial r_i}{\partial x_j}$. Generalizes the scalar derivative $f'(x)$. See <a href="cg-02-multivariable-bridge.html">Page 02</a>.</dd>
 
-  <dt>Newton Step $p_k$</dt>
-  <dd>The solution to $J(x_k)\,p_k = -\mathbf{r}(x_k)$. Tells you how to update: $x_{k+1} = x_k + p_k$.</dd>
+ <dt>Newton Step $p_k$</dt>
+ <dd>The solution to $J(x_k)\,p_k = -\mathbf{r}(x_k)$. Tells you how to update: $x_{k+1} = x_k + p_k$.</dd>
 
-  <dt>Quadratic Convergence</dt>
-  <dd>Near a solution, the error at step $k+1$ is proportional to the error at step $k$ squared: $\|e_{k+1}\| \leq C\|e_k\|^2$. The number of correct digits roughly doubles each step.</dd>
+ <dt>Quadratic Convergence</dt>
+ <dd>Near a solution, the error at step $k+1$ is proportional to the error at step $k$ squared: $\|e_{k+1}\| \leq C\|e_k\|^2$. The number of correct digits roughly doubles each step.</dd>
 
-  <dt>Inexact Newton</dt>
-  <dd>Solving $J_k p_k = -\mathbf{r}_k$ approximately (e.g., using CG) instead of exactly. Controlled by the forcing term $\eta_k$.</dd>
+ <dt>Inexact Newton</dt>
+ <dd>Solving $J_k p_k = -\mathbf{r}_k$ approximately (e.g., using CG) instead of exactly. Controlled by the forcing term $\eta_k$.</dd>
 
-  <dt>Broyden's Method</dt>
-  <dd>A quasi-Newton method for nonlinear equations that approximates the Jacobian using rank-1 updates from step history, analogous to how BFGS approximates the Hessian.</dd>
+ <dt>Broyden's Method</dt>
+ <dd>A quasi-Newton method for nonlinear equations that approximates the Jacobian using rank-1 updates from step history, analogous to how BFGS approximates the Hessian.</dd>
 
-  <dt>Forcing Term $\eta_k$</dt>
-  <dd>Controls the accuracy of the inexact Newton solve: $\|J_k p_k + \mathbf{r}_k\| \leq \eta_k \|\mathbf{r}_k\|$. Smaller $\eta_k$ means more accurate (and more expensive) solves.</dd>
+ <dt>Forcing Term $\eta_k$</dt>
+ <dd>Controls the accuracy of the inexact Newton solve: $\|J_k p_k + \mathbf{r}_k\| \leq \eta_k \|\mathbf{r}_k\|$. Smaller $\eta_k$ means more accurate (and more expensive) solves.</dd>
 
-  <dt>Superlinear Convergence</dt>
-  <dd>Faster than linear but not quite quadratic: the ratio $\|e_{k+1}\|/\|e_k\| \to 0$ as $k \to \infty$. Broyden achieves this.</dd>
+ <dt>Superlinear Convergence</dt>
+ <dd>Faster than linear but not quite quadratic: the ratio $\|e_{k+1}\|/\|e_k\| \to 0$ as $k \to \infty$. Broyden achieves this.</dd>
 </dl>
 </div>
 
 <!-- ===================== NAV ===================== -->
 <div class="nav">
-  <p><a href="cg-13-sr1-dfp.html">&larr; Previous: Page 13 &mdash; SR1 and DFP Methods</a></p>
-  <p><a href="cg-15-constrained.html">Next: Page 15 &mdash; Constrained Optimization &amp; KKT Conditions &rarr;</a></p>
-  <p><a href="index.html">Back to Index</a></p>
+ <p><a href="cg-13-sr1-dfp.html">&larr; Previous: Page 13; SR1 and DFP Methods</a></p>
+ <p><a href="cg-15-constrained.html">Next: Page 15; Constrained Optimization &amp; KKT Conditions &rarr;</a></p>
+ <p><a href="index.html">Back to Index</a></p>
 </div>
 
 </div>

@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Page 05 &mdash; Convexity: What Makes Problems Nice | MATH 3850 Course Guide</title>
+<title>Page 05 : Convexity: What Makes Problems Nice | MATH 3850 Course Guide</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+ onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,14 +15,14 @@
 
 <span class="tag">PAGE 05</span>
 <h1>Convexity: What Makes Problems Nice</h1>
-<p class="subtitle">Convexity is the single most important structural property in optimization &mdash; it guarantees local = global</p>
+<p class="subtitle">Convexity is the single most important structural property in optimization; it guarantees local = global</p>
 
 <!-- ===================== PART A ===================== -->
 <h2>Part A: Convex Sets</h2>
 
 <div class="analogy">
-<strong>Physical analogy &mdash; A fenced yard with no holes or indentations.</strong><br><br>
-Picture a fenced yard. Pick any two points inside the yard. Now walk in a perfectly straight line from one point to the other. If you NEVER leave the yard &mdash; no matter which two points you pick &mdash; the yard is a <strong>convex set</strong>.<br><br>
+<strong>Physical analogy; A fenced yard with no holes or indentations.</strong><br><br>
+Picture a fenced yard. Pick any two points inside the yard. Now walk in a perfectly straight line from one point to the other. If you NEVER leave the yard; no matter which two points you pick; the yard is a <strong>convex set</strong>.<br><br>
 <strong>Convex examples:</strong> A circular yard. A rectangular yard. A triangular yard. Any regular shape without dents.<br><br>
 <strong>Non-convex examples:</strong> An L-shaped yard. A star-shaped yard. A crescent shape. In each of these, you can find two interior points where the straight line between them passes OUTSIDE the yard.<br><br>
 The key mental image: convex = "no indentations." If you push the boundary inward anywhere, you break convexity.
@@ -34,11 +34,11 @@ The key mental image: convex = "no indentations." If you push the boundary inwar
 $$\text{A set } C \text{ is convex if } \alpha x + (1 - \alpha)y \in C \text{ for all } x, y \in C \text{ and all } \alpha \in [0, 1]$$
 
 <dl class="breakdown">
-  <dt>$C$</dt><dd>the set (the "yard")</dd>
-  <dt>$x, y$</dt><dd>any two points inside $C$ (any two spots in the yard)</dd>
-  <dt>$\alpha$</dt><dd>a number between 0 and 1 &mdash; it parameterizes the straight line from $y$ (when $\alpha = 0$) to $x$ (when $\alpha = 1$)</dd>
-  <dt>$\alpha x + (1 - \alpha)y$</dt><dd>a point on the straight line segment between $x$ and $y$ &mdash; this is called a <strong>convex combination</strong></dd>
-  <dt>$\in C$</dt><dd>the point must remain inside the set</dd>
+ <dt>$C$</dt><dd>the set (the "yard")</dd>
+ <dt>$x, y$</dt><dd>any two points inside $C$ (any two spots in the yard)</dd>
+ <dt>$\alpha$</dt><dd>a number between 0 and 1; it parameterizes the straight line from $y$ (when $\alpha = 0$) to $x$ (when $\alpha = 1$)</dd>
+ <dt>$\alpha x + (1 - \alpha)y$</dt><dd>a point on the straight line segment between $x$ and $y$; this is called a <strong>convex combination</strong></dd>
+ <dt>$\in C$</dt><dd>the point must remain inside the set</dd>
 </dl>
 
 <p style="margin-top:12px;">When $\alpha = 0$: you get $y$. When $\alpha = 1$: you get $x$. When $\alpha = 0.5$: you get the midpoint. As $\alpha$ varies from 0 to 1, you trace the entire line segment from $y$ to $x$.</p>
@@ -46,110 +46,110 @@ $$\text{A set } C \text{ is convex if } \alpha x + (1 - \alpha)y \in C \text{ fo
 
 <!-- SVG: Convex vs Non-Convex sets -->
 <svg viewBox="0 0 800 300" style="width:100%; margin:24px 0;">
-  <!-- Convex: Circle -->
-  <g transform="translate(0,0)">
-    <text x="100" y="25" text-anchor="middle" fill="#d4956a" font-size="15" font-weight="bold">Convex: Circle</text>
-    <circle cx="100" cy="160" r="90" fill="none" stroke="#d4956a" stroke-width="2.5"/>
-    <!-- Line inside -->
-    <circle cx="55" cy="130" r="4" fill="#c9a84c"/>
-    <circle cx="150" cy="180" r="4" fill="#c9a84c"/>
-    <line x1="55" y1="130" x2="150" y2="180" stroke="#c9a84c" stroke-width="2" stroke-dasharray="5,3"/>
-    <text x="100" y="280" text-anchor="middle" fill="#b8b4ac" font-size="12">Line stays inside &#10003;</text>
-  </g>
+ <!-- Convex: Circle -->
+ <g transform="translate(0,0)">
+ <text x="100" y="25" text-anchor="middle" fill="#d4956a" font-size="15" font-weight="bold">Convex: Circle</text>
+ <circle cx="100" cy="160" r="90" fill="none" stroke="#d4956a" stroke-width="2.5"/>
+ <!-- Line inside -->
+ <circle cx="55" cy="130" r="4" fill="#c9a84c"/>
+ <circle cx="150" cy="180" r="4" fill="#c9a84c"/>
+ <line x1="55" y1="130" x2="150" y2="180" stroke="#c9a84c" stroke-width="2" stroke-dasharray="5,3"/>
+ <text x="100" y="280" text-anchor="middle" fill="#b8b4ac" font-size="12">Line stays inside &#10003;</text>
+ </g>
 
-  <!-- Convex: Rectangle -->
-  <g transform="translate(220,0)">
-    <text x="100" y="25" text-anchor="middle" fill="#d4956a" font-size="15" font-weight="bold">Convex: Rectangle</text>
-    <rect x="20" y="80" width="160" height="160" rx="4" fill="none" stroke="#d4956a" stroke-width="2.5"/>
-    <circle cx="50" cy="110" r="4" fill="#c9a84c"/>
-    <circle cx="150" cy="210" r="4" fill="#c9a84c"/>
-    <line x1="50" y1="110" x2="150" y2="210" stroke="#c9a84c" stroke-width="2" stroke-dasharray="5,3"/>
-    <text x="100" y="280" text-anchor="middle" fill="#b8b4ac" font-size="12">Line stays inside &#10003;</text>
-  </g>
+ <!-- Convex: Rectangle -->
+ <g transform="translate(220,0)">
+ <text x="100" y="25" text-anchor="middle" fill="#d4956a" font-size="15" font-weight="bold">Convex: Rectangle</text>
+ <rect x="20" y="80" width="160" height="160" rx="4" fill="none" stroke="#d4956a" stroke-width="2.5"/>
+ <circle cx="50" cy="110" r="4" fill="#c9a84c"/>
+ <circle cx="150" cy="210" r="4" fill="#c9a84c"/>
+ <line x1="50" y1="110" x2="150" y2="210" stroke="#c9a84c" stroke-width="2" stroke-dasharray="5,3"/>
+ <text x="100" y="280" text-anchor="middle" fill="#b8b4ac" font-size="12">Line stays inside &#10003;</text>
+ </g>
 
-  <!-- Non-Convex: L-shape -->
-  <g transform="translate(440,0)">
-    <text x="100" y="25" text-anchor="middle" fill="#c47070" font-size="15" font-weight="bold">Non-Convex: L-shape</text>
-    <path d="M20,80 L120,80 L120,160 L200,160 L200,240 L20,240 Z" fill="none" stroke="#c47070" stroke-width="2.5"/>
-    <!-- Two points with line going outside -->
-    <circle cx="70" cy="100" r="4" fill="#c9a84c"/>
-    <circle cx="170" cy="200" r="4" fill="#c9a84c"/>
-    <line x1="70" y1="100" x2="170" y2="200" stroke="#c9a84c" stroke-width="2" stroke-dasharray="5,3"/>
-    <!-- Outside marker -->
-    <text x="135" y="145" fill="#c47070" font-size="18" font-weight="bold">X</text>
-    <text x="100" y="280" text-anchor="middle" fill="#b8b4ac" font-size="12">Line goes outside &#10007;</text>
-  </g>
+ <!-- Non-Convex: L-shape -->
+ <g transform="translate(440,0)">
+ <text x="100" y="25" text-anchor="middle" fill="#c47070" font-size="15" font-weight="bold">Non-Convex: L-shape</text>
+ <path d="M20,80 L120,80 L120,160 L200,160 L200,240 L20,240 Z" fill="none" stroke="#c47070" stroke-width="2.5"/>
+ <!-- Two points with line going outside -->
+ <circle cx="70" cy="100" r="4" fill="#c9a84c"/>
+ <circle cx="170" cy="200" r="4" fill="#c9a84c"/>
+ <line x1="70" y1="100" x2="170" y2="200" stroke="#c9a84c" stroke-width="2" stroke-dasharray="5,3"/>
+ <!-- Outside marker -->
+ <text x="135" y="145" fill="#c47070" font-size="18" font-weight="bold">X</text>
+ <text x="100" y="280" text-anchor="middle" fill="#b8b4ac" font-size="12">Line goes outside &#10007;</text>
+ </g>
 
-  <!-- Non-Convex: Star -->
-  <g transform="translate(640,0)">
-    <text x="80" y="25" text-anchor="middle" fill="#c47070" font-size="15" font-weight="bold">Non-Convex: Star</text>
-    <polygon points="80,60 95,130 160,130 105,170 125,240 80,195 35,240 55,170 0,130 65,130"
-             fill="none" stroke="#c47070" stroke-width="2.5"/>
-    <circle cx="40" cy="130" r="4" fill="#c9a84c"/>
-    <circle cx="130" cy="130" r="4" fill="#c9a84c"/>
-    <line x1="40" y1="130" x2="130" y2="130" stroke="#c9a84c" stroke-width="2" stroke-dasharray="5,3"/>
-    <text x="85" y="118" fill="#c47070" font-size="18" font-weight="bold">X</text>
-    <text x="80" y="280" text-anchor="middle" fill="#b8b4ac" font-size="12">Line goes outside &#10007;</text>
-  </g>
+ <!-- Non-Convex: Star -->
+ <g transform="translate(640,0)">
+ <text x="80" y="25" text-anchor="middle" fill="#c47070" font-size="15" font-weight="bold">Non-Convex: Star</text>
+ <polygon points="80,60 95,130 160,130 105,170 125,240 80,195 35,240 55,170 0,130 65,130"
+ fill="none" stroke="#c47070" stroke-width="2.5"/>
+ <circle cx="40" cy="130" r="4" fill="#c9a84c"/>
+ <circle cx="130" cy="130" r="4" fill="#c9a84c"/>
+ <line x1="40" y1="130" x2="130" y2="130" stroke="#c9a84c" stroke-width="2" stroke-dasharray="5,3"/>
+ <text x="85" y="118" fill="#c47070" font-size="18" font-weight="bold">X</text>
+ <text x="80" y="280" text-anchor="middle" fill="#b8b4ac" font-size="12">Line goes outside &#10007;</text>
+ </g>
 </svg>
 
 <div class="note">
 <strong>Why do we care about convex sets?</strong><br>
-In constrained optimization (<a href="cg-15-constrained.html">Page 15</a>), the set of feasible points is often a convex set. If the feasible region is convex AND the objective function is convex, then the problem is a "convex optimization problem" &mdash; and finding the optimum is dramatically easier.
+In constrained optimization (<a href="cg-15-constrained.html">Page 15</a>), the set of feasible points is often a convex set. If the feasible region is convex AND the objective function is convex, then the problem is a "convex optimization problem"; and finding the optimum is dramatically easier.
 </div>
 
 
 <!-- ===================== PART B ===================== -->
-<h2>Part B: Convex Functions &mdash; Properties and Tests</h2>
+<h2>Part B: Convex Functions; Properties and Tests</h2>
 
 <div class="analogy">
-<strong>Physical analogy &mdash; The rubber band test.</strong><br><br>
+<strong>Physical analogy; The rubber band test.</strong><br><br>
 Take a convex function and plot its graph. Now pick any two points on the curve and stretch a rubber band between them. The rubber band forms a straight line above those two points.<br><br>
-If the rubber band ALWAYS stays above (or touches) the curve between the two points &mdash; no matter which two points you choose &mdash; the function is <strong>convex</strong>.<br><br>
+If the rubber band ALWAYS stays above (or touches) the curve between the two points; no matter which two points you choose; the function is <strong>convex</strong>.<br><br>
 If the curve ever pokes ABOVE the rubber band, even at a single spot, the function is <strong>not convex</strong>.<br><br>
 Visually: a convex function "sags" between any two points. A non-convex function has bumps or valleys that poke above the rubber band.
 </div>
 
 <!-- SVG: Convex vs non-convex function -->
 <svg viewBox="0 0 800 280" style="width:100%; margin:24px 0;">
-  <!-- Convex function -->
-  <g transform="translate(0,0)">
-    <text x="200" y="20" text-anchor="middle" fill="#d4956a" font-size="15" font-weight="bold">Convex Function</text>
-    <text x="200" y="38" text-anchor="middle" fill="#a8a49c" font-size="12">Rubber band always stays above the curve</text>
-    <!-- Axes -->
-    <line x1="30" y1="230" x2="380" y2="230" stroke="#3a3a46" stroke-width="1"/>
-    <line x1="30" y1="230" x2="30" y2="50" stroke="#3a3a46" stroke-width="1"/>
-    <!-- Convex curve (parabola-like) -->
-    <path d="M50,210 Q120,220 200,100 Q280,220 350,210" fill="none" stroke="#d4956a" stroke-width="2.5"/>
-    <!-- Two points on curve -->
-    <circle cx="90" cy="210" r="5" fill="#c9a84c"/>
-    <circle cx="310" cy="210" r="5" fill="#c9a84c"/>
-    <!-- Rubber band (straight line) -->
-    <line x1="90" y1="210" x2="310" y2="210" stroke="#c9a84c" stroke-width="2" stroke-dasharray="6,3"/>
-    <!-- Label -->
-    <text x="200" y="200" text-anchor="middle" fill="#c9a84c" font-size="11">rubber band</text>
-    <text x="200" y="128" text-anchor="middle" fill="#d4956a" font-size="11">curve below &#10003;</text>
-    <text x="200" y="265" text-anchor="middle" fill="#b8b4ac" font-size="12">Curve sags below the line</text>
-  </g>
+ <!-- Convex function -->
+ <g transform="translate(0,0)">
+ <text x="200" y="20" text-anchor="middle" fill="#d4956a" font-size="15" font-weight="bold">Convex Function</text>
+ <text x="200" y="38" text-anchor="middle" fill="#a8a49c" font-size="12">Rubber band always stays above the curve</text>
+ <!-- Axes -->
+ <line x1="30" y1="230" x2="380" y2="230" stroke="#3a3a46" stroke-width="1"/>
+ <line x1="30" y1="230" x2="30" y2="50" stroke="#3a3a46" stroke-width="1"/>
+ <!-- Convex curve (parabola-like) -->
+ <path d="M50,210 Q120,220 200,100 Q280,220 350,210" fill="none" stroke="#d4956a" stroke-width="2.5"/>
+ <!-- Two points on curve -->
+ <circle cx="90" cy="210" r="5" fill="#c9a84c"/>
+ <circle cx="310" cy="210" r="5" fill="#c9a84c"/>
+ <!-- Rubber band (straight line) -->
+ <line x1="90" y1="210" x2="310" y2="210" stroke="#c9a84c" stroke-width="2" stroke-dasharray="6,3"/>
+ <!-- Label -->
+ <text x="200" y="200" text-anchor="middle" fill="#c9a84c" font-size="11">rubber band</text>
+ <text x="200" y="128" text-anchor="middle" fill="#d4956a" font-size="11">curve below &#10003;</text>
+ <text x="200" y="265" text-anchor="middle" fill="#b8b4ac" font-size="12">Curve sags below the line</text>
+ </g>
 
-  <!-- Non-convex function -->
-  <g transform="translate(400,0)">
-    <text x="200" y="20" text-anchor="middle" fill="#c47070" font-size="15" font-weight="bold">Non-Convex Function</text>
-    <text x="200" y="38" text-anchor="middle" fill="#a8a49c" font-size="12">Curve pokes above the rubber band</text>
-    <!-- Axes -->
-    <line x1="30" y1="230" x2="380" y2="230" stroke="#3a3a46" stroke-width="1"/>
-    <line x1="30" y1="230" x2="30" y2="50" stroke="#3a3a46" stroke-width="1"/>
-    <!-- Non-convex curve (wavy) -->
-    <path d="M50,180 Q100,220 150,100 Q200,60 250,160 Q300,220 350,120" fill="none" stroke="#c47070" stroke-width="2.5"/>
-    <!-- Two points on curve -->
-    <circle cx="80" cy="195" r="5" fill="#c9a84c"/>
-    <circle cx="330" cy="140" r="5" fill="#c9a84c"/>
-    <!-- Rubber band -->
-    <line x1="80" y1="195" x2="330" y2="140" stroke="#c9a84c" stroke-width="2" stroke-dasharray="6,3"/>
-    <!-- Poke above -->
-    <text x="195" y="80" fill="#c47070" font-size="15" font-weight="bold">&#8593; pokes above!</text>
-    <text x="200" y="265" text-anchor="middle" fill="#b8b4ac" font-size="12">Curve rises above the line</text>
-  </g>
+ <!-- Non-convex function -->
+ <g transform="translate(400,0)">
+ <text x="200" y="20" text-anchor="middle" fill="#c47070" font-size="15" font-weight="bold">Non-Convex Function</text>
+ <text x="200" y="38" text-anchor="middle" fill="#a8a49c" font-size="12">Curve pokes above the rubber band</text>
+ <!-- Axes -->
+ <line x1="30" y1="230" x2="380" y2="230" stroke="#3a3a46" stroke-width="1"/>
+ <line x1="30" y1="230" x2="30" y2="50" stroke="#3a3a46" stroke-width="1"/>
+ <!-- Non-convex curve (wavy) -->
+ <path d="M50,180 Q100,220 150,100 Q200,60 250,160 Q300,220 350,120" fill="none" stroke="#c47070" stroke-width="2.5"/>
+ <!-- Two points on curve -->
+ <circle cx="80" cy="195" r="5" fill="#c9a84c"/>
+ <circle cx="330" cy="140" r="5" fill="#c9a84c"/>
+ <!-- Rubber band -->
+ <line x1="80" y1="195" x2="330" y2="140" stroke="#c9a84c" stroke-width="2" stroke-dasharray="6,3"/>
+ <!-- Poke above -->
+ <text x="195" y="80" fill="#c47070" font-size="15" font-weight="bold">&#8593; pokes above!</text>
+ <text x="200" y="265" text-anchor="middle" fill="#b8b4ac" font-size="12">Curve rises above the line</text>
+ </g>
 </svg>
 
 <div class="formula-box">
@@ -158,9 +158,9 @@ Visually: a convex function "sags" between any two points. A non-convex function
 $$f(\alpha x + (1-\alpha)y) \leq \alpha f(x) + (1-\alpha) f(y) \quad \text{for all } x, y \text{ and } \alpha \in [0,1]$$
 
 <dl class="breakdown">
-  <dt>Left side</dt><dd>$f$ evaluated at a point on the line segment between $x$ and $y$ &mdash; the <strong>function value on the curve</strong></dd>
-  <dt>Right side</dt><dd>the corresponding point on the straight line (rubber band) between $f(x)$ and $f(y)$</dd>
-  <dt>$\leq$</dt><dd>the curve is below (or touching) the rubber band</dd>
+ <dt>Left side</dt><dd>$f$ evaluated at a point on the line segment between $x$ and $y$; the <strong>function value on the curve</strong></dd>
+ <dt>Right side</dt><dd>the corresponding point on the straight line (rubber band) between $f(x)$ and $f(y)$</dd>
+ <dt>$\leq$</dt><dd>the curve is below (or touching) the rubber band</dd>
 </dl>
 
 <p style="margin-top:12px;">This is the most fundamental definition, but it is hard to check in practice because you would need to verify it for ALL pairs $x, y$. That is why we have equivalent tests that are easier to use.</p>
@@ -174,8 +174,8 @@ $$f(\alpha x + (1-\alpha)y) \leq \alpha f(x) + (1-\alpha) f(y) \quad \text{for a
 $$f(y) \geq f(x) + \nabla f(x)^T (y - x) \quad \text{for all } x, y$$
 
 <dl class="breakdown">
-  <dt>$f(x) + \nabla f(x)^T(y-x)$</dt><dd>the first-order Taylor approximation of $f$ at $x$ &mdash; the tangent line (or tangent plane in multiple dimensions)</dd>
-  <dt>$f(y) \geq \ldots$</dt><dd>the actual function value at $y$ is ALWAYS at or above the tangent approximation</dd>
+ <dt>$f(x) + \nabla f(x)^T(y-x)$</dt><dd>the first-order Taylor approximation of $f$ at $x$; the tangent line (or tangent plane in multiple dimensions)</dd>
+ <dt>$f(y) \geq \ldots$</dt><dd>the actual function value at $y$ is ALWAYS at or above the tangent approximation</dd>
 </dl>
 
 <p style="margin-top:12px;"><strong>In words:</strong> "A convex function always lies above all of its tangent lines." If you draw the tangent line at any point, the function never dips below it. This is the "supported from below" property.</p>
@@ -191,22 +191,22 @@ $$f(y) \geq f(x) + \nabla f(x)^T (y - x) \quad \text{for all } x, y$$
 $$\nabla^2 f(x) \text{ is positive semidefinite (PSD) for ALL } x$$
 
 <dl class="breakdown">
-  <dt>$\nabla^2 f(x)$</dt><dd>the Hessian matrix (from <a href="cg-02-multivariable-bridge.html">Page 02</a>) evaluated at point $x$</dd>
-  <dt>PSD for ALL $x$</dt><dd>no matter WHERE you evaluate the Hessian, all eigenvalues are $\geq 0$ (from <a href="cg-03-linear-algebra.html">Page 03</a>)</dd>
+ <dt>$\nabla^2 f(x)$</dt><dd>the Hessian matrix (from <a href="cg-02-multivariable-bridge.html">Page 02</a>) evaluated at point $x$</dd>
+ <dt>PSD for ALL $x$</dt><dd>no matter WHERE you evaluate the Hessian, all eigenvalues are $\geq 0$ (from <a href="cg-03-linear-algebra.html">Page 03</a>)</dd>
 </dl>
 
 <p style="margin-top:12px;"><strong>In words:</strong> "The curvature is non-negative in every direction, at every point." The function never curves downward anywhere. This is the easiest test to apply in practice.</p>
 
-<p style="margin-top:8px;"><strong>Strictly convex:</strong> If $\nabla^2 f(x)$ is PD (not just PSD) for all $x$, then $f$ is <em>strictly</em> convex. This means the bowl has no flat directions &mdash; it curves strictly upward everywhere.</p>
+<p style="margin-top:8px;"><strong>Strictly convex:</strong> If $\nabla^2 f(x)$ is PD (not just PSD) for all $x$, then $f$ is <em>strictly</em> convex. This means the bowl has no flat directions; it curves strictly upward everywhere.</p>
 </div>
 
 <div class="note">
-<strong>Summary of the three tests &mdash; all equivalent:</strong><br><br>
+<strong>Summary of the three tests; all equivalent:</strong><br><br>
 <table class="step-table">
 <tr><th>Test</th><th>What It Checks</th><th>When to Use</th></tr>
 <tr><td>Definition (rubber band)</td><td>$f(\alpha x + (1-\alpha)y) \leq \alpha f(x) + (1-\alpha)f(y)$</td><td>Theoretical proofs</td></tr>
 <tr><td>First-order (tangent)</td><td>$f(y) \geq f(x) + \nabla f(x)^T(y-x)$</td><td>When you only have gradients</td></tr>
-<tr><td>Second-order (Hessian)</td><td>$\nabla^2 f(x) \succeq 0$ for all $x$</td><td>Most practical &mdash; check Hessian PSD</td></tr>
+<tr><td>Second-order (Hessian)</td><td>$\nabla^2 f(x) \succeq 0$ for all $x$</td><td>Most practical; check Hessian PSD</td></tr>
 </table>
 <p style="margin-top:8px;">The $\succeq 0$ notation means "positive semidefinite" (all eigenvalues $\geq 0$).</p>
 </div>
@@ -216,11 +216,11 @@ $$\nabla^2 f(x) \text{ is positive semidefinite (PSD) for ALL } x$$
 <h2>Part C: Why Convexity Is THE Big Deal</h2>
 
 <div class="analogy">
-<strong>Physical analogy &mdash; A landscape with exactly one valley.</strong><br><br>
+<strong>Physical analogy; A landscape with exactly one valley.</strong><br><br>
 Imagine a landscape that is one giant bowl. No hidden valleys, no plateaus, no secondary dips. Just one big bowl going down to a single lowest point.<br><br>
 If you are a hiker trying to find the lowest elevation, life is easy: just keep walking downhill. No matter where you start, no matter which downhill path you take, you will eventually reach THE bottom. There are no tricks, no trap doors, no false bottoms.<br><br>
 Now imagine a real mountain range with thousands of valleys, ridges, and plateaus. You walk downhill and find a low point. But is it THE lowest point, or just A low point? You have no way to know without exploring the entire landscape.<br><br>
-Convex functions are the first landscape. Non-convex functions are the second. This is why convexity is such a powerful property &mdash; it turns an impossibly hard search problem into a straightforward one.
+Convex functions are the first landscape. Non-convex functions are the second. This is why convexity is such a powerful property; it turns an impossibly hard search problem into a straightforward one.
 </div>
 
 <div class="formula-box">
@@ -230,9 +230,9 @@ $$\text{If } f \text{ is convex and } \nabla f(x^*) = \mathbf{0}, \text{ then } 
 
 <p style="margin-top:12px;"><strong>What this means:</strong></p>
 <ul style="margin-left:20px;">
-  <li>You do not need to search further. There are no other, lower points anywhere.</li>
-  <li>Any local minimum is automatically the global minimum.</li>
-  <li>If $f$ is strictly convex, the global minimizer is UNIQUE &mdash; there is exactly one lowest point.</li>
+ <li>You do not need to search further. There are no other, lower points anywhere.</li>
+ <li>Any local minimum is automatically the global minimum.</li>
+ <li>If $f$ is strictly convex, the global minimizer is UNIQUE; there is exactly one lowest point.</li>
 </ul>
 
 <p style="margin-top:12px;"><strong>Why this is powerful for algorithms:</strong> If gradient descent (<a href="cg-06-gradient-descent.html">Page 06</a>) finds a stationary point of a convex function, it has found THE answer, not just A answer. No need to restart from different initial points.</p>
@@ -244,12 +244,12 @@ $$\text{If } f \text{ is convex and } \nabla f(x^*) = \mathbf{0}, \text{ then } 
 <p>The quadratic function $f(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T Q \mathbf{x} + \mathbf{b}^T \mathbf{x} + c$ is convex if and only if $Q$ is positive semidefinite (PSD).</p>
 
 <dl class="breakdown">
-  <dt>$Q$</dt><dd>a symmetric matrix that determines the curvature (the "shape of the bowl")</dd>
-  <dt>$\mathbf{b}$</dt><dd>a vector that shifts the bowl's center</dd>
-  <dt>$c$</dt><dd>a scalar that shifts the function value up or down</dd>
+ <dt>$Q$</dt><dd>a symmetric matrix that determines the curvature (the "shape of the bowl")</dd>
+ <dt>$\mathbf{b}$</dt><dd>a vector that shifts the bowl's center</dd>
+ <dt>$c$</dt><dd>a scalar that shifts the function value up or down</dd>
 </dl>
 
-<p style="margin-top:12px;"><strong>Why?</strong> The Hessian of this function is $\nabla^2 f = Q$ (constant &mdash; does not depend on $\mathbf{x}$). So convexity requires $Q$ to be PSD. If $Q$ is PD (strictly positive definite), the function is strictly convex &mdash; a perfect bowl with a unique minimum.</p>
+<p style="margin-top:12px;"><strong>Why?</strong> The Hessian of this function is $\nabla^2 f = Q$ (constant , does not depend on $\mathbf{x}$). So convexity requires $Q$ to be PSD. If $Q$ is PD (strictly positive definite), the function is strictly convex; a perfect bowl with a unique minimum.</p>
 
 <p style="margin-top:8px;">This is exactly why every quiz problem uses quadratics with PD matrices: they give us clean, well-behaved test cases.</p>
 </div>
@@ -259,29 +259,29 @@ $$\text{If } f \text{ is convex and } \nabla f(x^*) = \mathbf{0}, \text{ then } 
 <p>Let $Q = \begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}$ and $f(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T Q \mathbf{x}$.</p>
 
 <div class="step">
-  <div class="step-label">Step 1: Compute the Hessian</div>
-  For a quadratic $f(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T Q \mathbf{x}$, the gradient is:
-  $$\nabla f(\mathbf{x}) = Q\mathbf{x}$$
-  and the Hessian is:
-  $$\nabla^2 f(\mathbf{x}) = Q = \begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}$$
-  The Hessian is constant (it does not depend on $\mathbf{x}$).
+ <div class="step-label">Step 1: Compute the Hessian</div>
+ For a quadratic $f(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T Q \mathbf{x}$, the gradient is:
+ $$\nabla f(\mathbf{x}) = Q\mathbf{x}$$
+ and the Hessian is:
+ $$\nabla^2 f(\mathbf{x}) = Q = \begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}$$
+ The Hessian is constant (it does not depend on $\mathbf{x}$).
 </div>
 
 <div class="step">
-  <div class="step-label">Step 2: Check PSD</div>
-  We need all eigenvalues of $Q$ to be $\geq 0$.
-  <br><br>
-  Since $Q$ is diagonal, the eigenvalues are the diagonal entries (recall from <a href="cg-03-linear-algebra.html">Page 03, Hand Computation 1</a>):
-  $$\lambda_1 = 2 &gt; 0, \quad \lambda_2 = 3 &gt; 0$$
+ <div class="step-label">Step 2: Check PSD</div>
+ We need all eigenvalues of $Q$ to be $\geq 0$.
+ <br><br>
+ Since $Q$ is diagonal, the eigenvalues are the diagonal entries (recall from <a href="cg-03-linear-algebra.html">Page 03, Hand Computation 1</a>):
+ $$\lambda_1 = 2 &gt; 0, \quad \lambda_2 = 3 &gt; 0$$
 </div>
 
 <div class="step">
-  <div class="step-label">Step 3: Conclude</div>
-  Both eigenvalues are strictly positive, so $Q$ is positive definite (which is stronger than PSD).
+ <div class="step-label">Step 3: Conclude</div>
+ Both eigenvalues are strictly positive, so $Q$ is positive definite (which is stronger than PSD).
 </div>
 
 <div class="step">
-  <div class="result">Result: $\nabla^2 f = Q$ is PD for all $\mathbf{x}$, so $f$ is strictly convex. Any stationary point is the unique global minimizer.</div>
+ <div class="result">Result: $\nabla^2 f = Q$ is PD for all $\mathbf{x}$, so $f$ is strictly convex. Any stationary point is the unique global minimizer.</div>
 </div>
 
 <div class="check">
@@ -293,10 +293,10 @@ What is that minimizer? Set $\nabla f = Q\mathbf{x} = \mathbf{0}$. Since $Q$ is 
 <h3>Why Every Quiz Uses Convex Quadratics</h3>
 <p>Every test problem in Quizzes 4, 5, and 6 uses convex quadratics. This is not a coincidence. Here is why:</p>
 <ul style="margin-left:20px; margin-top:8px;">
-  <li><strong>Clean test cases:</strong> Convex quadratics have a unique minimum we can compute exactly, so we can verify whether an algorithm gives the right answer.</li>
-  <li><strong>Exact arithmetic:</strong> On quadratics, some algorithms converge in a finite number of steps (e.g., conjugate gradient converges in exactly $n$ steps &mdash; see <a href="cg-10-conjugate-gradient.html">Page 10</a>).</li>
-  <li><strong>No globalization needed:</strong> Since local = global, we do not need line search or trust regions to guarantee convergence &mdash; the quadratic model IS the true function.</li>
-  <li><strong>Foundation for theory:</strong> Newton's method (<a href="cg-07-newton-method.html">Page 07</a>) works by approximating any function with a quadratic. Understanding quadratics = understanding Newton.</li>
+ <li><strong>Clean test cases:</strong> Convex quadratics have a unique minimum we can compute exactly, so we can verify whether an algorithm gives the right answer.</li>
+ <li><strong>Exact arithmetic:</strong> On quadratics, some algorithms converge in a finite number of steps (e.g., conjugate gradient converges in exactly $n$ steps → see <a href="cg-10-conjugate-gradient.html">Page 10</a>).</li>
+ <li><strong>No globalization needed:</strong> Since local = global, we do not need line search or trust regions to guarantee convergence; the quadratic model IS the true function.</li>
+ <li><strong>Foundation for theory:</strong> Newton's method (<a href="cg-07-newton-method.html">Page 07</a>) works by approximating any function with a quadratic. Understanding quadratics = understanding Newton.</li>
 </ul>
 </div>
 
@@ -306,7 +306,7 @@ What is that minimizer? Set $\nabla f = Q\mathbf{x} = \mathbf{0}$. Since $Q$ is 
 
 <div class="analogy">
 <strong>The real world is not convex.</strong><br><br>
-The nice, clean, single-bowl quadratics on quizzes are training wheels. Real optimization problems are almost never convex. They have multiple valleys, ridges, saddle points, and plateaus. But the theory and algorithms we learn on convex problems carry over &mdash; they just need extra safeguards.
+The nice, clean, single-bowl quadratics on quizzes are training wheels. Real optimization problems are almost never convex. They have multiple valleys, ridges, saddle points, and plateaus. But the theory and algorithms we learn on convex problems carry over; they just need extra safeguards.
 </div>
 
 <div class="formula-box">
@@ -316,9 +316,9 @@ $$f(x_1, x_2) = 100(x_2 - x_1^2)^2 + (1 - x_1)^2$$
 
 <p style="margin-top:12px;">This is a famous test function. Its minimum is at $(1, 1)$ with $f = 0$, but it is notoriously hard to minimize because:</p>
 <ul style="margin-left:20px; margin-top:8px;">
-  <li>It has a narrow, curved valley (the "banana valley")</li>
-  <li>The valley floor is nearly flat, so algorithms stall</li>
-  <li>Gradient descent takes thousands of steps to converge</li>
+ <li>It has a narrow, curved valley (the "banana valley")</li>
+ <li>The valley floor is nearly flat, so algorithms stall</li>
+ <li>Gradient descent takes thousands of steps to converge</li>
 </ul>
 
 <p style="margin-top:12px;"><strong>Is it convex?</strong> Let us check. The Hessian is:</p>
@@ -331,7 +331,7 @@ $$\nabla^2 f = \begin{bmatrix} 1200x_1^2 - 400x_2 + 2 & -400x_1 \\ -400x_1 & 200
 
 <div class="note">
 <strong>Neural networks are extremely non-convex.</strong><br>
-If you have heard of deep learning, here is a connection: the loss function of a neural network has millions of parameters and is wildly non-convex. It has countless local minima, saddle points, and plateaus. Yet optimization algorithms (essentially fancy versions of gradient descent) still find good solutions. This is an active area of research &mdash; why does gradient descent work so well on non-convex problems?
+If you have heard of deep learning, here is a connection: the loss function of a neural network has millions of parameters and is wildly non-convex. It has countless local minima, saddle points, and plateaus. Yet optimization algorithms (essentially fancy versions of gradient descent) still find good solutions. This is an active area of research; why does gradient descent work so well on non-convex problems?
 </div>
 
 <div class="formula-box">
@@ -347,17 +347,17 @@ If you have heard of deep learning, here is a connection: the loss function of a
 <tr><td>PD enforcement</td><td>BFGS maintains a PD Hessian approximation, avoiding saddle directions</td><td><a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a></td></tr>
 </table>
 
-<p style="margin-top:12px;">These are called <strong>globalization strategies</strong> &mdash; they help algorithms navigate non-convex landscapes safely. Line search and trust regions are not about finding the global minimum; they are about ensuring the algorithm does not blow up or get stuck.</p>
+<p style="margin-top:12px;">These are called <strong>globalization strategies</strong>; they help algorithms navigate non-convex landscapes safely. Line search and trust regions are not about finding the global minimum; they are about ensuring the algorithm does not blow up or get stuck.</p>
 </div>
 
 <div class="why-box">
-<h3>The Convexity Hierarchy &mdash; From Nicest to Hardest</h3>
+<h3>The Convexity Hierarchy; From Nicest to Hardest</h3>
 <table class="step-table" style="margin-top:12px;">
 <tr><th>Problem Type</th><th>Property</th><th>Difficulty</th></tr>
-<tr><td style="color:#d4956a;">Strongly convex quadratic</td><td>PD Hessian, constant curvature</td><td>Easiest &mdash; CG solves exactly in $n$ steps</td></tr>
-<tr><td style="color:#d4956a;">Strongly convex (general)</td><td>PD Hessian everywhere, but not quadratic</td><td>Easy &mdash; local = global, fast convergence</td></tr>
-<tr><td style="color:#c9a84c;">Convex (not strongly)</td><td>PSD Hessian everywhere</td><td>Medium &mdash; local = global but may have flat directions</td></tr>
-<tr><td style="color:#c47070;">Non-convex</td><td>Hessian can be indefinite</td><td>Hard &mdash; multiple local minima, saddle points</td></tr>
+<tr><td style="color:#d4956a;">Strongly convex quadratic</td><td>PD Hessian, constant curvature</td><td>Easiest; CG solves exactly in $n$ steps</td></tr>
+<tr><td style="color:#d4956a;">Strongly convex (general)</td><td>PD Hessian everywhere, but not quadratic</td><td>Easy; local = global, fast convergence</td></tr>
+<tr><td style="color:#c9a84c;">Convex (not strongly)</td><td>PSD Hessian everywhere</td><td>Medium; local = global but may have flat directions</td></tr>
+<tr><td style="color:#c47070;">Non-convex</td><td>Hessian can be indefinite</td><td>Hard; multiple local minima, saddle points</td></tr>
 </table>
 <p style="margin-top:12px;">The course quizzes work at the top (strongly convex quadratics). The assignments (Rosenbrock) work at the bottom (non-convex). The theory in between explains why the algorithms bridge these worlds.</p>
 </div>
@@ -379,28 +379,28 @@ If you have heard of deep learning, here is a connection: the loss function of a
 <tr><td>Restriction to a line</td><td>$g(t) = f(x + t\mathbf{d})$ is convex in $t$ if $f$ is convex</td><td>Line search on a convex function</td></tr>
 </table>
 
-<p style="margin-top:16px;"><strong>Why this matters:</strong> In <a href="cg-08-line-search.html">Page 08 (Line Search)</a>, we minimize along a line: $\phi(\alpha) = f(x_k + \alpha d_k)$. If $f$ is convex, then $\phi$ is convex in $\alpha$, so the line search has a unique minimum &mdash; the Wolfe conditions are easier to satisfy.</p>
+<p style="margin-top:16px;"><strong>Why this matters:</strong> In <a href="cg-08-line-search.html">Page 08 (Line Search)</a>, we minimize along a line: $\phi(\alpha) = f(x_k + \alpha d_k)$. If $f$ is convex, then $\phi$ is convex in $\alpha$, so the line search has a unique minimum; the Wolfe conditions are easier to satisfy.</p>
 </div>
 
 <div class="hand-calc">
 <h3>Hand Computation: Is $f(x_1, x_2) = x_1^2 + 4x_2^2 + 2x_1 x_2$ Convex?</h3>
 
 <div class="step">
-  <div class="step-label">Step 1: Write as a quadratic</div>
-  $$f(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T Q \mathbf{x} \quad \text{where } Q = \begin{bmatrix} 2 & 2 \\ 2 & 8 \end{bmatrix}$$
-  (Note: we need $Q$ symmetric, so the off-diagonal is $2 \cdot 1 = 2$ from the cross term $2x_1 x_2$, and diagonal entries doubled from the $x_1^2$ and $4x_2^2$ terms.)
+ <div class="step-label">Step 1: Write as a quadratic</div>
+ $$f(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T Q \mathbf{x} \quad \text{where } Q = \begin{bmatrix} 2 & 2 \\ 2 & 8 \end{bmatrix}$$
+ (Note: we need $Q$ symmetric, so the off-diagonal is $2 \cdot 1 = 2$ from the cross term $2x_1 x_2$, and diagonal entries doubled from the $x_1^2$ and $4x_2^2$ terms.)
 </div>
 
 <div class="step">
-  <div class="step-label">Step 2: Check eigenvalues of $Q$</div>
-  Trace $= 2 + 8 = 10$, $\det = 16 - 4 = 12$.
-  $$\lambda^2 - 10\lambda + 12 = 0$$
-  $$\lambda = \frac{10 \pm \sqrt{100 - 48}}{2} = \frac{10 \pm \sqrt{52}}{2} = \frac{10 \pm 2\sqrt{13}}{2} = 5 \pm \sqrt{13}$$
-  $\sqrt{13} \approx 3.61$, so $\lambda_1 \approx 8.61 &gt; 0$ and $\lambda_2 \approx 1.39 &gt; 0$.
+ <div class="step-label">Step 2: Check eigenvalues of $Q$</div>
+ Trace $= 2 + 8 = 10$, $\det = 16 - 4 = 12$.
+ $$\lambda^2 - 10\lambda + 12 = 0$$
+ $$\lambda = \frac{10 \pm \sqrt{100 - 48}}{2} = \frac{10 \pm \sqrt{52}}{2} = \frac{10 \pm 2\sqrt{13}}{2} = 5 \pm \sqrt{13}$$
+ $\sqrt{13} \approx 3.61$, so $\lambda_1 \approx 8.61 &gt; 0$ and $\lambda_2 \approx 1.39 &gt; 0$.
 </div>
 
 <div class="step">
-  <div class="result">Result: Both eigenvalues are positive, so $Q$ is PD, so $f$ is strictly convex. Any local minimum is the unique global minimum.</div>
+ <div class="result">Result: Both eigenvalues are positive, so $Q$ is PD, so $f$ is strictly convex. Any local minimum is the unique global minimum.</div>
 </div>
 
 <div class="check">
@@ -410,27 +410,27 @@ Quick check with 2&times;2 shortcut: $a_{11} = 2 &gt; 0$ and $\det = 12 &gt; 0$.
 
 <div class="note">
 <strong>Common convex functions you should recognize on sight:</strong><br>
-&bull; $f(x) = x^2$ &mdash; convex (parabola opens upward)<br>
-&bull; $f(x) = |x|$ &mdash; convex (V-shape)<br>
-&bull; $f(x) = e^x$ &mdash; convex (exponential curves upward)<br>
-&bull; $f(x) = -\ln(x)$ for $x &gt; 0$ &mdash; convex (negative log curves upward)<br>
-&bull; $f(\mathbf{x}) = \|\mathbf{x}\|^2$ &mdash; convex (sum of squares is always a bowl)<br>
-&bull; $f(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T Q \mathbf{x}$ with $Q$ PSD &mdash; convex<br><br>
+&bull; $f(x) = x^2$; convex (parabola opens upward)<br>
+&bull; $f(x) = |x|$; convex (V-shape)<br>
+&bull; $f(x) = e^x$; convex (exponential curves upward)<br>
+&bull; $f(x) = -\ln(x)$ for $x &gt; 0$; convex (negative log curves upward)<br>
+&bull; $f(\mathbf{x}) = \|\mathbf{x}\|^2$; convex (sum of squares is always a bowl)<br>
+&bull; $f(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T Q \mathbf{x}$ with $Q$ PSD; convex<br><br>
 <strong>Common non-convex functions:</strong><br>
-&bull; $f(x) = \sin(x)$ &mdash; not convex (oscillates)<br>
-&bull; $f(x) = x^3$ &mdash; not convex (inflection point at 0)<br>
-&bull; Rosenbrock function &mdash; not convex (see Part D above)<br>
-&bull; Any function with multiple local minima &mdash; not convex
+&bull; $f(x) = \sin(x)$; not convex (oscillates)<br>
+&bull; $f(x) = x^3$; not convex (inflection point at 0)<br>
+&bull; Rosenbrock function; not convex (see Part D above)<br>
+&bull; Any function with multiple local minima; not convex
 </div>
 
 <div class="why-box">
 <h3>Exam Strategy for Convexity Questions</h3>
 <p>When an exam question asks "Is this function convex?", here is your game plan:</p>
 <ol style="margin-left:20px; margin-top:8px;">
-  <li><strong>If it is a quadratic</strong> $f(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T Q \mathbf{x} + \mathbf{b}^T \mathbf{x} + c$: check if $Q$ is PSD. If yes, convex. If $Q$ is PD, strictly convex.</li>
-  <li><strong>If it is a general function</strong>: compute the Hessian $\nabla^2 f$. Check if it is PSD for ALL $\mathbf{x}$ (not just at one point).</li>
-  <li><strong>Shortcut for 2&times;2</strong>: the Hessian is PSD everywhere if $a_{11}(\mathbf{x}) \geq 0$ and $\det(\nabla^2 f(\mathbf{x})) \geq 0$ for all $\mathbf{x}$.</li>
-  <li><strong>If you can decompose it</strong>: use the preservation rules above (sum of convex functions is convex, etc.).</li>
+ <li><strong>If it is a quadratic</strong> $f(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T Q \mathbf{x} + \mathbf{b}^T \mathbf{x} + c$: check if $Q$ is PSD. If yes, convex. If $Q$ is PD, strictly convex.</li>
+ <li><strong>If it is a general function</strong>: compute the Hessian $\nabla^2 f$. Check if it is PSD for ALL $\mathbf{x}$ (not just at one point).</li>
+ <li><strong>Shortcut for 2&times;2</strong>: the Hessian is PSD everywhere if $a_{11}(\mathbf{x}) \geq 0$ and $\det(\nabla^2 f(\mathbf{x})) \geq 0$ for all $\mathbf{x}$.</li>
+ <li><strong>If you can decompose it</strong>: use the preservation rules above (sum of convex functions is convex, etc.).</li>
 </ol>
 </div>
 
@@ -439,41 +439,41 @@ Quick check with 2&times;2 shortcut: $a_{11} = 2 &gt; 0$ and $\det = 12 &gt; 0$.
 <div class="glossary">
 <h3>Glossary</h3>
 <dl>
-  <dt>Convex Set</dt>
-  <dd>A set where the line segment between any two points stays inside the set. No indentations. $\alpha x + (1-\alpha)y \in C$ for all $x, y \in C$ and $\alpha \in [0,1]$.</dd>
+ <dt>Convex Set</dt>
+ <dd>A set where the line segment between any two points stays inside the set. No indentations. $\alpha x + (1-\alpha)y \in C$ for all $x, y \in C$ and $\alpha \in [0,1]$.</dd>
 
-  <dt>Convex Function</dt>
-  <dd>A function where the rubber band always stays above (or touches) the curve: $f(\alpha x + (1-\alpha)y) \leq \alpha f(x) + (1-\alpha)f(y)$. Equivalently: Hessian is PSD everywhere.</dd>
+ <dt>Convex Function</dt>
+ <dd>A function where the rubber band always stays above (or touches) the curve: $f(\alpha x + (1-\alpha)y) \leq \alpha f(x) + (1-\alpha)f(y)$. Equivalently: Hessian is PSD everywhere.</dd>
 
-  <dt>Strictly Convex</dt>
-  <dd>A convex function with strict inequality (the rubber band is strictly above the curve, never touching except at the endpoints). Hessian is PD everywhere. Has at most one minimizer.</dd>
+ <dt>Strictly Convex</dt>
+ <dd>A convex function with strict inequality (the rubber band is strictly above the curve, never touching except at the endpoints). Hessian is PD everywhere. Has at most one minimizer.</dd>
 
-  <dt>Strongly Convex</dt>
-  <dd>A function whose Hessian eigenvalues are bounded away from zero: $\nabla^2 f(x) \succeq mI$ for some $m &gt; 0$. The "bowl" has a minimum curvature. Guarantees fast convergence rates.</dd>
+ <dt>Strongly Convex</dt>
+ <dd>A function whose Hessian eigenvalues are bounded away from zero: $\nabla^2 f(x) \succeq mI$ for some $m &gt; 0$. The "bowl" has a minimum curvature. Guarantees fast convergence rates.</dd>
 
-  <dt>Convex Combination</dt>
-  <dd>$\alpha x + (1-\alpha)y$ for $\alpha \in [0,1]$. A weighted average of two points that always lies on the line segment between them.</dd>
+ <dt>Convex Combination</dt>
+ <dd>$\alpha x + (1-\alpha)y$ for $\alpha \in [0,1]$. A weighted average of two points that always lies on the line segment between them.</dd>
 
-  <dt>Global Minimizer</dt>
-  <dd>The point with the smallest function value over the entire domain. For convex functions, any local minimizer is automatically global.</dd>
+ <dt>Global Minimizer</dt>
+ <dd>The point with the smallest function value over the entire domain. For convex functions, any local minimizer is automatically global.</dd>
 
-  <dt>First-Order Characterization</dt>
-  <dd>$f$ is convex iff $f(y) \geq f(x) + \nabla f(x)^T(y-x)$. The function always lies above its tangent lines.</dd>
+ <dt>First-Order Characterization</dt>
+ <dd>$f$ is convex iff $f(y) \geq f(x) + \nabla f(x)^T(y-x)$. The function always lies above its tangent lines.</dd>
 
-  <dt>Second-Order Characterization</dt>
-  <dd>$f$ is convex iff $\nabla^2 f(x) \succeq 0$ (PSD) for all $x$. No negative curvature anywhere.</dd>
+ <dt>Second-Order Characterization</dt>
+ <dd>$f$ is convex iff $\nabla^2 f(x) \succeq 0$ (PSD) for all $x$. No negative curvature anywhere.</dd>
 
-  <dt>Non-Convex</dt>
-  <dd>A function that is not convex. May have multiple local minima, saddle points, and regions of negative curvature. Most real-world problems are non-convex.</dd>
+ <dt>Non-Convex</dt>
+ <dd>A function that is not convex. May have multiple local minima, saddle points, and regions of negative curvature. Most real-world problems are non-convex.</dd>
 </dl>
 </div>
 
 
 <!-- ===================== NAV ===================== -->
 <div class="nav">
-  <p><a href="cg-04-optimality.html">&larr; Previous: Page 04 &mdash; Optimality Conditions</a></p>
-  <p><a href="cg-06-gradient-descent.html">Next: Page 06 &mdash; Gradient Descent Deep Dive &rarr;</a></p>
-  <p style="margin-top:12px;"><a href="index.html">Back to Index</a></p>
+ <p><a href="cg-04-optimality.html">&larr; Previous: Page 04; Optimality Conditions</a></p>
+ <p><a href="cg-06-gradient-descent.html">Next: Page 06; Gradient Descent Deep Dive &rarr;</a></p>
+ <p style="margin-top:12px;"><a href="index.html">Back to Index</a></p>
 </div>
 
 </div>

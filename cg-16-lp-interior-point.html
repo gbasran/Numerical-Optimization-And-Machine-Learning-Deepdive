@@ -3,27 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Page 16 &mdash; Linear Programming &amp; Interior Point Methods | MATH 3850 Course Guide</title>
+<title>Page 16 : Linear Programming &amp; Interior Point Methods | MATH 3850 Course Guide</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+ onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
 
-<span class="tag">PAGE 16 &mdash; POST-MIDTERM</span>
+<span class="tag">PAGE 16; POST-MIDTERM</span>
 <h1>Linear Programming &amp; Interior Point Methods</h1>
-<p class="subtitle">When everything is linear &mdash; the simplest constrained problems and the elegant barrier approach to solving them</p>
+<p class="subtitle">When everything is linear; the simplest constrained problems and the elegant barrier approach to solving them</p>
 
 <!-- ==================== PART A ==================== -->
 <span class="tag">PART A</span>
-<h2>Linear Programming &mdash; The Simplest Constrained Problem</h2>
+<h2>Linear Programming; The Simplest Constrained Problem</h2>
 
 <div class="analogy">
-<p><strong>Analogy: A tilted table inside a box.</strong> Imagine you have a flat, tilted tabletop (that is your objective function &mdash; it is linear, so it is just a flat plane that slopes in one direction). Now imagine this table is sitting inside a box with flat walls (those are your constraints &mdash; also all linear, forming a shape with flat sides called a <em>polyhedron</em>).</p>
-<p style="margin-top:12px;">Where on this table, <em>inside the box</em>, is the surface lowest? Since the table is perfectly flat (no curves, no bumps), the lowest point cannot be in the middle of the box &mdash; the tilt always pushes you toward one edge. In fact, the lowest point is always at a <strong>corner</strong> (vertex) of the box. This is the fundamental property of linear programming: the optimal solution is always at a vertex of the feasible region.</p>
+<p><strong>Analogy: A tilted table inside a box.</strong> Imagine you have a flat, tilted tabletop (that is your objective function; it is linear, so it is just a flat plane that slopes in one direction). Now imagine this table is sitting inside a box with flat walls (those are your constraints; also all linear, forming a shape with flat sides called a <em>polyhedron</em>).</p>
+<p style="margin-top:12px;">Where on this table, <em>inside the box</em>, is the surface lowest? Since the table is perfectly flat (no curves, no bumps), the lowest point cannot be in the middle of the box; the tilt always pushes you toward one edge. In fact, the lowest point is always at a <strong>corner</strong> (vertex) of the box. This is the fundamental property of linear programming: the optimal solution is always at a vertex of the feasible region.</p>
 <p style="margin-top:12px;">Why? Because if you are anywhere in the interior, you can always slide along the tilt direction and decrease the objective further, until you hit a wall. Then you can slide along that wall until you hit a corner. Only at corners can you not improve further in any feasible direction.</p>
 </div>
 
@@ -31,16 +31,16 @@
 <p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Standard Form of a Linear Program (LP)</p>
 $$\min \; c^T x \quad \text{subject to} \quad Ax \leq b, \quad x \geq 0$$
 <dl class="breakdown">
-  <dt>$c \in \mathbb{R}^n$</dt>
-  <dd>The <strong>cost vector</strong> &mdash; tells you how much each variable contributes to the objective. It defines the "tilt" of the table.</dd>
-  <dt>$x \in \mathbb{R}^n$</dt>
-  <dd>The <strong>decision variables</strong> &mdash; what we are choosing. Must be non-negative ($x \geq 0$).</dd>
-  <dt>$A \in \mathbb{R}^{m \times n}$</dt>
-  <dd>The <strong>constraint matrix</strong> &mdash; each row is one constraint. Together with $b$, they define the walls of the box.</dd>
-  <dt>$b \in \mathbb{R}^m$</dt>
-  <dd>The <strong>right-hand side</strong> &mdash; the limits for each constraint.</dd>
-  <dt>$c^T x$</dt>
-  <dd>The <strong>objective function</strong> &mdash; a simple dot product (recall from <a href="cg-03-linear-algebra.html">Page 03</a>). This is linear: no squares, no products of variables, just a weighted sum.</dd>
+ <dt>$c \in \mathbb{R}^n$</dt>
+ <dd>The <strong>cost vector</strong>; tells you how much each variable contributes to the objective. It defines the "tilt" of the table.</dd>
+ <dt>$x \in \mathbb{R}^n$</dt>
+ <dd>The <strong>decision variables</strong>; what we are choosing. Must be non-negative ($x \geq 0$).</dd>
+ <dt>$A \in \mathbb{R}^{m \times n}$</dt>
+ <dd>The <strong>constraint matrix</strong>; each row is one constraint. Together with $b$, they define the walls of the box.</dd>
+ <dt>$b \in \mathbb{R}^m$</dt>
+ <dd>The <strong>right-hand side</strong>; the limits for each constraint.</dd>
+ <dt>$c^T x$</dt>
+ <dd>The <strong>objective function</strong>; a simple dot product (recall from <a href="cg-03-linear-algebra.html">Page 03</a>). This is linear: no squares, no products of variables, just a weighted sum.</dd>
 </dl>
 </div>
 
@@ -50,41 +50,41 @@ $$\min \; c^T x \quad \text{subject to} \quad Ax \leq b, \quad x \geq 0$$
 
 <div class="why-box">
 <h3>Why LP matters for this course</h3>
-<p>LP is not just a toy example &mdash; it is one of the most practically important optimization problems in the world. Airlines use LP to schedule crews. Companies use LP to plan supply chains. Finance uses LP for portfolio optimization. The KKT conditions you learned on <a href="cg-15-constrained.html">Page 15</a> simplify beautifully for LP because everything is linear. And the interior point methods we will learn here connect back to the barrier idea, which is one of the great achievements in optimization theory.</p>
+<p>LP is not just a toy example; it is one of the most practically important optimization problems in the world. Airlines use LP to schedule crews. Companies use LP to plan supply chains. Finance uses LP for portfolio optimization. The KKT conditions you learned on <a href="cg-15-constrained.html">Page 15</a> simplify beautifully for LP because everything is linear. And the interior point methods we will learn here connect back to the barrier idea, which is one of the great achievements in optimization theory.</p>
 </div>
 
 <!-- SVG: feasible region -->
 <div style="text-align: center; margin: 30px 0;">
 <svg viewBox="0 0 400 320" width="400" style="max-width: 100%;">
-  <!-- axes -->
-  <line x1="50" y1="270" x2="380" y2="270" stroke="#555" stroke-width="1"/>
-  <line x1="50" y1="270" x2="50" y2="20" stroke="#555" stroke-width="1"/>
-  <text x="385" y="275" fill="#a8a49c" font-size="14">$x_1$</text>
-  <text x="40" y="15" fill="#a8a49c" font-size="14">$x_2$</text>
+ <!-- axes -->
+ <line x1="50" y1="270" x2="380" y2="270" stroke="#555" stroke-width="1"/>
+ <line x1="50" y1="270" x2="50" y2="20" stroke="#555" stroke-width="1"/>
+ <text x="385" y="275" fill="#a8a49c" font-size="14">$x_1$</text>
+ <text x="40" y="15" fill="#a8a49c" font-size="14">$x_2$</text>
 
-  <!-- feasible region (polygon) -->
-  <polygon points="50,270 290,270 290,170 170,70 50,170" fill="#25252e" fill-opacity="0.6" stroke="#d4956a" stroke-width="2"/>
+ <!-- feasible region (polygon) -->
+ <polygon points="50,270 290,270 290,170 170,70 50,170" fill="#25252e" fill-opacity="0.6" stroke="#d4956a" stroke-width="2"/>
 
-  <!-- vertices -->
-  <circle cx="50" cy="270" r="5" fill="#c9a84c"/>
-  <circle cx="290" cy="270" r="5" fill="#c9a84c"/>
-  <circle cx="290" cy="170" r="5" fill="#c9a84c"/>
-  <circle cx="170" cy="70" r="5" fill="#c9a84c"/>
-  <circle cx="50" cy="170" r="5" fill="#c9a84c"/>
+ <!-- vertices -->
+ <circle cx="50" cy="270" r="5" fill="#c9a84c"/>
+ <circle cx="290" cy="270" r="5" fill="#c9a84c"/>
+ <circle cx="290" cy="170" r="5" fill="#c9a84c"/>
+ <circle cx="170" cy="70" r="5" fill="#c9a84c"/>
+ <circle cx="50" cy="170" r="5" fill="#c9a84c"/>
 
-  <!-- optimal vertex (highlighted) -->
-  <circle cx="170" cy="70" r="9" fill="none" stroke="#c47070" stroke-width="2"/>
-  <text x="180" y="60" fill="#c47070" font-size="13" font-weight="bold">Optimal!</text>
+ <!-- optimal vertex (highlighted) -->
+ <circle cx="170" cy="70" r="9" fill="none" stroke="#c47070" stroke-width="2"/>
+ <text x="180" y="60" fill="#c47070" font-size="13" font-weight="bold">Optimal!</text>
 
-  <!-- objective gradient arrow -->
-  <defs><marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#9b89b6"/></marker></defs>
-  <line x1="200" y1="220" x2="150" y2="170" stroke="#9b89b6" stroke-width="2" marker-end="url(#ah)"/>
-  <text x="155" y="240" fill="#9b89b6" font-size="12">$-c$ (objective</text>
-  <text x="155" y="255" fill="#9b89b6" font-size="12">gradient)</text>
+ <!-- objective gradient arrow -->
+ <defs><marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#9b89b6"/></marker></defs>
+ <line x1="200" y1="220" x2="150" y2="170" stroke="#9b89b6" stroke-width="2" marker-end="url(#ah)"/>
+ <text x="155" y="240" fill="#9b89b6" font-size="12">$-c$ (objective</text>
+ <text x="155" y="255" fill="#9b89b6" font-size="12">gradient)</text>
 
-  <!-- labels -->
-  <text x="150" y="200" fill="#d4956a" font-size="14" text-anchor="middle">Feasible Region</text>
-  <text x="60" y="290" fill="#c9a84c" font-size="11">Vertices (corners)</text>
+ <!-- labels -->
+ <text x="150" y="200" fill="#d4956a" font-size="14" text-anchor="middle">Feasible Region</text>
+ <text x="60" y="290" fill="#c9a84c" font-size="11">Vertices (corners)</text>
 </svg>
 </div>
 
@@ -94,10 +94,10 @@ $$\min \; c^T x \quad \text{subject to} \quad Ax \leq b, \quad x \geq 0$$
 
 <!-- ==================== PART B ==================== -->
 <span class="tag">PART B</span>
-<h2>KKT Conditions for LP &mdash; Everything Simplifies</h2>
+<h2>KKT Conditions for LP; Everything Simplifies</h2>
 
 <div class="analogy">
-<p><strong>Connecting back to Page 15:</strong> On <a href="cg-15-constrained.html">Page 15</a>, we learned the four KKT conditions for general constrained optimization: stationarity, primal feasibility, dual feasibility, and complementary slackness. For LP, these conditions simplify dramatically because everything is linear &mdash; there are no Hessians, no curvature, just straight lines and flat planes.</p>
+<p><strong>Connecting back to Page 15:</strong> On <a href="cg-15-constrained.html">Page 15</a>, we learned the four KKT conditions for general constrained optimization: stationarity, primal feasibility, dual feasibility, and complementary slackness. For LP, these conditions simplify dramatically because everything is linear; there are no Hessians, no curvature, just straight lines and flat planes.</p>
 </div>
 
 <p>Consider the LP in standard equality form (we convert inequalities to equalities by adding <strong>slack variables</strong> $s \geq 0$):</p>
@@ -113,10 +113,10 @@ $$\min \; c^T x \quad \text{subject to} \quad Ax = b, \quad x \geq 0$$
 <div class="formula-box">
 $$\mathcal{L}(x, \lambda, \mu) = c^T x - \lambda^T(Ax - b) - \mu^T x$$
 <dl class="breakdown">
-  <dt>$\lambda \in \mathbb{R}^m$</dt>
-  <dd>Multipliers for the equality constraints $Ax = b$ (no sign restriction)</dd>
-  <dt>$\mu \in \mathbb{R}^n$</dt>
-  <dd>Multipliers for $x \geq 0$ (must have $\mu \geq 0$ by dual feasibility)</dd>
+ <dt>$\lambda \in \mathbb{R}^m$</dt>
+ <dd>Multipliers for the equality constraints $Ax = b$ (no sign restriction)</dd>
+ <dt>$\mu \in \mathbb{R}^n$</dt>
+ <dd>Multipliers for $x \geq 0$ (must have $\mu \geq 0$ by dual feasibility)</dd>
 </dl>
 </div>
 
@@ -140,7 +140,7 @@ $$\mathcal{L}(x, \lambda, \mu) = c^T x - \lambda^T(Ax - b) - \mu^T x$$
 
 <div class="why-box">
 <h3>Why does this simplify?</h3>
-<p>In general nonlinear optimization (Page 15), the stationarity condition involves gradients of nonlinear functions, which require computing partial derivatives and possibly Hessians. For LP, $\nabla_x (c^T x) = c$ is just a constant vector &mdash; no computation needed. The constraint gradients $\nabla_x (a_i^T x) = a_i$ are also constants. So the KKT system reduces to a simple linear system, not a nonlinear one. This is why LP is so much easier to solve than general nonlinear constrained optimization.</p>
+<p>In general nonlinear optimization (Page 15), the stationarity condition involves gradients of nonlinear functions, which require computing partial derivatives and possibly Hessians. For LP, $\nabla_x (c^T x) = c$ is just a constant vector; no computation needed. The constraint gradients $\nabla_x (a_i^T x) = a_i$ are also constants. So the KKT system reduces to a simple linear system, not a nonlinear one. This is why LP is so much easier to solve than general nonlinear constrained optimization.</p>
 </div>
 
 <div class="exam-flag">
@@ -151,7 +151,7 @@ $$\mathcal{L}(x, \lambda, \mu) = c^T x - \lambda^T(Ax - b) - \mu^T x$$
 
 <!-- ==================== PART C ==================== -->
 <span class="tag">PART C</span>
-<h2>Interior Point Methods &mdash; Going Through the Middle</h2>
+<h2>Interior Point Methods; Going Through the Middle</h2>
 
 <div class="analogy">
 <p><strong>Analogy: Repulsive force fields near the walls.</strong> There are two fundamentally different strategies for solving LP:</p>
@@ -165,14 +165,14 @@ $$\mathcal{L}(x, \lambda, \mu) = c^T x - \lambda^T(Ax - b) - \mu^T x$$
 <p>Instead of solving the LP directly, we solve a sequence of <strong>barrier problems</strong>:</p>
 $$\min_x \; c^T x \;-\; \mu \sum_{i=1}^{n} \ln(x_i) \quad \text{subject to} \quad Ax = b$$
 <dl class="breakdown">
-  <dt>$c^T x$</dt>
-  <dd>The original LP objective (the tilt pulling you toward the optimum)</dd>
-  <dt>$-\mu \sum \ln(x_i)$</dt>
-  <dd>The <strong>log barrier</strong> &mdash; the repulsive force field. Each $\ln(x_i)$ term goes to $-\infty$ as $x_i \to 0^+$, so the negative sign creates a penalty that pushes $x_i$ away from zero.</dd>
-  <dt>$\mu &gt; 0$</dt>
-  <dd>The <strong>barrier parameter</strong> &mdash; controls force field strength. Large $\mu$ = strong repulsion (stay far from walls). Small $\mu$ = weak repulsion (can approach walls closely).</dd>
-  <dt>$Ax = b$</dt>
-  <dd>The equality constraints remain unchanged.</dd>
+ <dt>$c^T x$</dt>
+ <dd>The original LP objective (the tilt pulling you toward the optimum)</dd>
+ <dt>$-\mu \sum \ln(x_i)$</dt>
+ <dd>The <strong>log barrier</strong>; the repulsive force field. Each $\ln(x_i)$ term goes to $-\infty$ as $x_i \to 0^+$, so the negative sign creates a penalty that pushes $x_i$ away from zero.</dd>
+ <dt>$\mu &gt; 0$</dt>
+ <dd>The <strong>barrier parameter</strong>; controls force field strength. Large $\mu$ = strong repulsion (stay far from walls). Small $\mu$ = weak repulsion (can approach walls closely).</dd>
+ <dt>$Ax = b$</dt>
+ <dd>The equality constraints remain unchanged.</dd>
 </dl>
 <p style="margin-top: 12px; color: #b8b4ac; font-size: 16px;"><strong>Key insight:</strong> This barrier problem has NO inequality constraints ($x \geq 0$). The log barrier automatically enforces $x &gt; 0$ because $\ln(x_i)$ is only defined for $x_i &gt; 0$. We have traded the hard constraint $x \geq 0$ for a smooth penalty term.</p>
 </div>
@@ -184,10 +184,10 @@ $$\min_x \; c^T x \;-\; \mu \sum_{i=1}^{n} \ln(x_i) \quad \text{subject to} \qua
 
 <!-- ==================== PART D ==================== -->
 <span class="tag">PART D</span>
-<h2>The Central Path &mdash; A Highway to the Optimum</h2>
+<h2>The Central Path; A Highway to the Optimum</h2>
 
 <div class="analogy">
-<p><strong>Analogy: Adjusting a thermostat.</strong> Imagine you are trying to find the coldest spot in a room (the optimum), but there are heaters near every wall (the barriers). With the heaters on full blast ($\mu$ large), the coldest spot is right in the center of the room &mdash; far from all heaters. As you slowly turn down the heaters ($\mu$ decreasing), the coldest spot drifts toward the naturally coldest corner of the room (the LP optimum). The path traced by the coldest spot as you dial down the heaters is the <strong>central path</strong>.</p>
+<p><strong>Analogy: Adjusting a thermostat.</strong> Imagine you are trying to find the coldest spot in a room (the optimum), but there are heaters near every wall (the barriers). With the heaters on full blast ($\mu$ large), the coldest spot is right in the center of the room; far from all heaters. As you slowly turn down the heaters ($\mu$ decreasing), the coldest spot drifts toward the naturally coldest corner of the room (the LP optimum). The path traced by the coldest spot as you dial down the heaters is the <strong>central path</strong>.</p>
 </div>
 
 <div class="formula-box">
@@ -200,30 +200,30 @@ $$\{x(\mu) : \mu &gt; 0\}$$
 <!-- SVG: Central path illustration -->
 <div style="text-align: center; margin: 30px 0;">
 <svg viewBox="0 0 400 300" width="400" style="max-width: 100%;">
-  <!-- feasible region -->
-  <polygon points="60,260 340,260 340,120 200,40 60,120" fill="#25252e" fill-opacity="0.5" stroke="#d4956a" stroke-width="2"/>
+ <!-- feasible region -->
+ <polygon points="60,260 340,260 340,120 200,40 60,120" fill="#25252e" fill-opacity="0.5" stroke="#d4956a" stroke-width="2"/>
 
-  <!-- central path (curved line from center to optimal corner) -->
-  <path d="M 190,155 Q 195,120 200,90 Q 202,70 200,45" fill="none" stroke="#c9a84c" stroke-width="3" stroke-dasharray="8,4"/>
+ <!-- central path (curved line from center to optimal corner) -->
+ <path d="M 190,155 Q 195,120 200,90 Q 202,70 200,45" fill="none" stroke="#c9a84c" stroke-width="3" stroke-dasharray="8,4"/>
 
-  <!-- points along path -->
-  <circle cx="190" cy="155" r="5" fill="#c9a84c"/>
-  <text x="200" y="160" fill="#c9a84c" font-size="11">$\mu$ large</text>
+ <!-- points along path -->
+ <circle cx="190" cy="155" r="5" fill="#c9a84c"/>
+ <text x="200" y="160" fill="#c9a84c" font-size="11">$\mu$ large</text>
 
-  <circle cx="197" cy="110" r="5" fill="#c9a84c"/>
-  <text x="207" y="115" fill="#c9a84c" font-size="11">$\mu$ medium</text>
+ <circle cx="197" cy="110" r="5" fill="#c9a84c"/>
+ <text x="207" y="115" fill="#c9a84c" font-size="11">$\mu$ medium</text>
 
-  <circle cx="200" cy="70" r="5" fill="#c9a84c"/>
-  <text x="210" y="75" fill="#c9a84c" font-size="11">$\mu$ small</text>
+ <circle cx="200" cy="70" r="5" fill="#c9a84c"/>
+ <text x="210" y="75" fill="#c9a84c" font-size="11">$\mu$ small</text>
 
-  <!-- optimal vertex -->
-  <circle cx="200" cy="40" r="7" fill="none" stroke="#c47070" stroke-width="2"/>
-  <circle cx="200" cy="40" r="3" fill="#c47070"/>
-  <text x="210" y="35" fill="#c47070" font-size="12" font-weight="bold">$x^*$ (LP optimal)</text>
+ <!-- optimal vertex -->
+ <circle cx="200" cy="40" r="7" fill="none" stroke="#c47070" stroke-width="2"/>
+ <circle cx="200" cy="40" r="3" fill="#c47070"/>
+ <text x="210" y="35" fill="#c47070" font-size="12" font-weight="bold">$x^*$ (LP optimal)</text>
 
-  <!-- label -->
-  <text x="120" y="140" fill="#c9a84c" font-size="13" font-weight="bold">Central Path</text>
-  <text x="150" y="230" fill="#d4956a" font-size="14">Feasible Region</text>
+ <!-- label -->
+ <text x="120" y="140" fill="#c9a84c" font-size="13" font-weight="bold">Central Path</text>
+ <text x="150" y="230" fill="#d4956a" font-size="14">Feasible Region</text>
 </svg>
 </div>
 
@@ -243,7 +243,7 @@ $$\{x(\mu) : \mu &gt; 0\}$$
 
 <p style="margin: 8px 0;"><span style="color: #d4956a; font-weight: bold;">1. Stationarity:</span> $c - A^T \lambda - \mu_{\text{mult}} = 0$</p>
 
-<p style="margin: 8px 0;"><span style="color: #d4956a; font-weight: bold;">2. Primal feasibility:</span> $Ax = b$, $x &gt; 0$ (strictly positive &mdash; we stay in the interior)</p>
+<p style="margin: 8px 0;"><span style="color: #d4956a; font-weight: bold;">2. Primal feasibility:</span> $Ax = b$, $x &gt; 0$ (strictly positive; we stay in the interior)</p>
 
 <p style="margin: 8px 0;"><span style="color: #d4956a; font-weight: bold;">3. Relaxed complementarity:</span> $\mu_{\text{mult},i} \cdot x_i = \sigma$ for each $i$</p>
 <p style="font-size: 15px; color: #b8b4ac; margin-left: 20px;">Instead of $\mu_i x_i = 0$ (exact complementarity), we have $\mu_i x_i = \sigma &gt; 0$. As $\sigma \to 0$, this approaches exact complementarity.</p>
@@ -274,7 +274,7 @@ $$\{x(\mu) : \mu &gt; 0\}$$
 </div>
 
 <div class="note">
-<p><strong>Convergence speed:</strong> Interior point methods converge in $O(\sqrt{n})$ iterations, where each iteration solves a linear system of size $n$. Total cost: roughly $O(n^{3.5})$ operations. This is polynomial time &mdash; guaranteed to be fast regardless of the problem structure. The simplex method, by contrast, can take exponential time in the worst case (though it is usually fast in practice).</p>
+<p><strong>Convergence speed:</strong> Interior point methods converge in $O(\sqrt{n})$ iterations, where each iteration solves a linear system of size $n$. Total cost: roughly $O(n^{3.5})$ operations. This is polynomial time; guaranteed to be fast regardless of the problem structure. The simplex method, by contrast, can take exponential time in the worst case (though it is usually fast in practice).</p>
 </div>
 
 <div class="hand-calc">
@@ -299,61 +299,61 @@ $$\{x(\mu) : \mu &gt; 0\}$$
 
 <div class="step">
 <p class="step-label">As $\mu \to 0$:</p>
-<p class="result">$x^* = (0.5, 0.5)$ &mdash; the point on the optimal edge closest to the center of the central path.</p>
+<p class="result">$x^* = (0.5, 0.5)$; the point on the optimal edge closest to the center of the central path.</p>
 </div>
 </div>
 
 
 <!-- ==================== PART G ==================== -->
 <span class="tag">PART G</span>
-<h2>Simplex vs Interior Point &mdash; Two Philosophies</h2>
+<h2>Simplex vs Interior Point; Two Philosophies</h2>
 
 <table class="step-table">
 <tr>
-  <th>Property</th>
-  <th>Simplex Method</th>
-  <th>Interior Point Method</th>
+ <th>Property</th>
+ <th>Simplex Method</th>
+ <th>Interior Point Method</th>
 </tr>
 <tr>
-  <td style="text-align: left; color: #d4956a;">Strategy</td>
-  <td>Walk along edges, corner to corner</td>
-  <td>Move through the interior, approaching optimal corner</td>
+ <td style="text-align: left; color: #d4956a;">Strategy</td>
+ <td>Walk along edges, corner to corner</td>
+ <td>Move through the interior, approaching optimal corner</td>
 </tr>
 <tr>
-  <td style="text-align: left; color: #d4956a;">Path</td>
-  <td>On the boundary (vertices and edges)</td>
-  <td>Strictly in the interior (central path)</td>
+ <td style="text-align: left; color: #d4956a;">Path</td>
+ <td>On the boundary (vertices and edges)</td>
+ <td>Strictly in the interior (central path)</td>
 </tr>
 <tr>
-  <td style="text-align: left; color: #d4956a;">Worst-case iterations</td>
-  <td>Exponential ($2^n$ possible vertices)</td>
-  <td>Polynomial ($O(\sqrt{n})$ iterations)</td>
+ <td style="text-align: left; color: #d4956a;">Worst-case iterations</td>
+ <td>Exponential ($2^n$ possible vertices)</td>
+ <td>Polynomial ($O(\sqrt{n})$ iterations)</td>
 </tr>
 <tr>
-  <td style="text-align: left; color: #d4956a;">Typical iterations</td>
-  <td>$2m$ to $3m$ (often fast in practice)</td>
-  <td>$20$ to $50$ (nearly constant!)</td>
+ <td style="text-align: left; color: #d4956a;">Typical iterations</td>
+ <td>$2m$ to $3m$ (often fast in practice)</td>
+ <td>$20$ to $50$ (nearly constant!)</td>
 </tr>
 <tr>
-  <td style="text-align: left; color: #d4956a;">Cost per iteration</td>
-  <td>Cheap (pivot operation)</td>
-  <td>Expensive (solve Newton system)</td>
+ <td style="text-align: left; color: #d4956a;">Cost per iteration</td>
+ <td>Cheap (pivot operation)</td>
+ <td>Expensive (solve Newton system)</td>
 </tr>
 <tr>
-  <td style="text-align: left; color: #d4956a;">Best for</td>
-  <td>Small-medium LPs, warm starts</td>
-  <td>Large sparse LPs</td>
+ <td style="text-align: left; color: #d4956a;">Best for</td>
+ <td>Small-medium LPs, warm starts</td>
+ <td>Large sparse LPs</td>
 </tr>
 <tr>
-  <td style="text-align: left; color: #d4956a;">Historical</td>
-  <td>Dantzig, 1947</td>
-  <td>Karmarkar, 1984</td>
+ <td style="text-align: left; color: #d4956a;">Historical</td>
+ <td>Dantzig, 1947</td>
+ <td>Karmarkar, 1984</td>
 </tr>
 </table>
 
 <div class="why-box">
 <h3>Why interior point methods matter beyond LP</h3>
-<p>The barrier/interior point idea generalizes far beyond linear programming. It applies to <strong>quadratic programming</strong> (QP), <strong>semidefinite programming</strong> (SDP), and general <strong>nonlinear constrained optimization</strong>. The core insight &mdash; replace hard constraints with smooth penalties and gradually tighten &mdash; is one of the most powerful ideas in optimization. Penalty methods and augmented Lagrangian methods (Nocedal &amp; Wright Chapters 17-18, not covered in our course) are extensions of this same philosophy.</p>
+<p>The barrier/interior point idea generalizes far beyond linear programming. It applies to <strong>quadratic programming</strong> (QP), <strong>semidefinite programming</strong> (SDP), and general <strong>nonlinear constrained optimization</strong>. The core insight; replace hard constraints with smooth penalties and gradually tighten; is one of the most powerful ideas in optimization. Penalty methods and augmented Lagrangian methods (Nocedal &amp; Wright Chapters 17-18, not covered in our course) are extensions of this same philosophy.</p>
 </div>
 
 
@@ -364,12 +364,12 @@ $$\{x(\mu) : \mu &gt; 0\}$$
 <div class="analogy">
 <p>Let us step back and see how LP and interior point methods connect to everything else we have learned:</p>
 <ul style="margin-top: 12px; margin-left: 20px;">
-  <li><strong>KKT conditions</strong> (<a href="cg-15-constrained.html">Page 15</a>) are the optimality conditions for constrained problems. For LP, they simplify to a linear system.</li>
-  <li><strong>Newton's method</strong> (<a href="cg-07-newton-method.html">Page 07</a>) is used at every step of the interior point method to solve the barrier subproblem.</li>
-  <li><strong>Positive definiteness</strong> (<a href="cg-03-linear-algebra.html">Page 03</a>) of the barrier Hessian ensures Newton's method works well.</li>
-  <li><strong>Complementary slackness</strong> (Page 15) is what the relaxation parameter $\sigma$ gradually enforces.</li>
-  <li><strong>Convexity</strong> (<a href="cg-05-convexity.html">Page 05</a>) &mdash; LP is a convex problem, so any local optimum is global. The central path always leads to THE answer.</li>
-  <li><strong>Convergence rates</strong> (<a href="cg-01-math-foundations.html">Page 01</a>) &mdash; interior point methods achieve polynomial-time convergence, a theoretically stronger guarantee than simplex.</li>
+ <li><strong>KKT conditions</strong> (<a href="cg-15-constrained.html">Page 15</a>) are the optimality conditions for constrained problems. For LP, they simplify to a linear system.</li>
+ <li><strong>Newton's method</strong> (<a href="cg-07-newton-method.html">Page 07</a>) is used at every step of the interior point method to solve the barrier subproblem.</li>
+ <li><strong>Positive definiteness</strong> (<a href="cg-03-linear-algebra.html">Page 03</a>) of the barrier Hessian ensures Newton's method works well.</li>
+ <li><strong>Complementary slackness</strong> (Page 15) is what the relaxation parameter $\sigma$ gradually enforces.</li>
+ <li><strong>Convexity</strong> (<a href="cg-05-convexity.html">Page 05</a>); LP is a convex problem, so any local optimum is global. The central path always leads to THE answer.</li>
+ <li><strong>Convergence rates</strong> (<a href="cg-01-math-foundations.html">Page 01</a>); interior point methods achieve polynomial-time convergence, a theoretically stronger guarantee than simplex.</li>
 </ul>
 </div>
 
@@ -377,49 +377,49 @@ $$\{x(\mu) : \mu &gt; 0\}$$
 <div class="glossary">
 <h3>Glossary</h3>
 <dl>
-  <dt>Linear Program (LP)</dt>
-  <dd>An optimization problem where both the objective function and all constraints are linear. The simplest form of constrained optimization. Standard form: $\min c^T x$ subject to $Ax \leq b$, $x \geq 0$.</dd>
+ <dt>Linear Program (LP)</dt>
+ <dd>An optimization problem where both the objective function and all constraints are linear. The simplest form of constrained optimization. Standard form: $\min c^T x$ subject to $Ax \leq b$, $x \geq 0$.</dd>
 
-  <dt>Feasible Region</dt>
-  <dd>The set of all points $x$ that satisfy all constraints. For an LP, this is a polyhedron (a shape with flat faces formed by the intersection of half-spaces).</dd>
+ <dt>Feasible Region</dt>
+ <dd>The set of all points $x$ that satisfy all constraints. For an LP, this is a polyhedron (a shape with flat faces formed by the intersection of half-spaces).</dd>
 
-  <dt>Vertex (Corner Point)</dt>
-  <dd>A corner of the feasible region where constraint boundaries intersect. LP optimal solutions always occur at vertices (or along an edge connecting two equally-optimal vertices).</dd>
+ <dt>Vertex (Corner Point)</dt>
+ <dd>A corner of the feasible region where constraint boundaries intersect. LP optimal solutions always occur at vertices (or along an edge connecting two equally-optimal vertices).</dd>
 
-  <dt>Simplex Method</dt>
-  <dd>An algorithm that moves along edges of the feasible polyhedron from vertex to vertex, improving the objective at each step. Invented by George Dantzig in 1947. Fast in practice but exponential worst-case.</dd>
+ <dt>Simplex Method</dt>
+ <dd>An algorithm that moves along edges of the feasible polyhedron from vertex to vertex, improving the objective at each step. Invented by George Dantzig in 1947. Fast in practice but exponential worst-case.</dd>
 
-  <dt>Interior Point Method</dt>
-  <dd>An algorithm that moves through the interior of the feasible region, using a barrier function to stay away from boundaries. Polynomial-time guarantee. Invented by Narendra Karmarkar in 1984.</dd>
+ <dt>Interior Point Method</dt>
+ <dd>An algorithm that moves through the interior of the feasible region, using a barrier function to stay away from boundaries. Polynomial-time guarantee. Invented by Narendra Karmarkar in 1984.</dd>
 
-  <dt>Log Barrier Function</dt>
-  <dd>The term $-\mu \sum \ln(x_i)$ added to the objective. It creates a "repulsive force" near the boundaries $x_i = 0$, preventing the iterates from leaving the feasible region. The parameter $\mu$ controls the barrier strength.</dd>
+ <dt>Log Barrier Function</dt>
+ <dd>The term $-\mu \sum \ln(x_i)$ added to the objective. It creates a "repulsive force" near the boundaries $x_i = 0$, preventing the iterates from leaving the feasible region. The parameter $\mu$ controls the barrier strength.</dd>
 
-  <dt>Barrier Parameter ($\mu$)</dt>
-  <dd>A positive scalar that controls the strength of the log barrier. Large $\mu$ keeps iterates far from boundaries; as $\mu \to 0$, the barrier weakens and the solution approaches the true LP optimum.</dd>
+ <dt>Barrier Parameter ($\mu$)</dt>
+ <dd>A positive scalar that controls the strength of the log barrier. Large $\mu$ keeps iterates far from boundaries; as $\mu \to 0$, the barrier weakens and the solution approaches the true LP optimum.</dd>
 
-  <dt>Central Path</dt>
-  <dd>The curve traced by the barrier problem solutions $x(\mu)$ as $\mu$ varies from $+\infty$ to $0$. It starts in the "center" of the feasible region and converges to the LP optimal vertex.</dd>
+ <dt>Central Path</dt>
+ <dd>The curve traced by the barrier problem solutions $x(\mu)$ as $\mu$ varies from $+\infty$ to $0$. It starts in the "center" of the feasible region and converges to the LP optimal vertex.</dd>
 
-  <dt>Relaxed Complementarity</dt>
-  <dd>The condition $\mu_i x_i = \sigma$ (for $\sigma &gt; 0$) instead of exact complementary slackness $\mu_i x_i = 0$. This turns the combinatorial KKT conditions into a smooth system solvable by Newton's method.</dd>
+ <dt>Relaxed Complementarity</dt>
+ <dd>The condition $\mu_i x_i = \sigma$ (for $\sigma &gt; 0$) instead of exact complementary slackness $\mu_i x_i = 0$. This turns the combinatorial KKT conditions into a smooth system solvable by Newton's method.</dd>
 
-  <dt>Slack Variable</dt>
-  <dd>A non-negative variable $s$ added to convert inequality $a^T x \leq b$ into equality $a^T x + s = b$ with $s \geq 0$. This is a standard technique for putting LPs into equality form.</dd>
+ <dt>Slack Variable</dt>
+ <dd>A non-negative variable $s$ added to convert inequality $a^T x \leq b$ into equality $a^T x + s = b$ with $s \geq 0$. This is a standard technique for putting LPs into equality form.</dd>
 
-  <dt>Polynomial Time</dt>
-  <dd>An algorithm whose running time grows as a polynomial function of the problem size $n$ (e.g., $O(n^{3.5})$). Interior point methods are polynomial; simplex is not (in the worst case). In practice, both are fast for typical problems.</dd>
+ <dt>Polynomial Time</dt>
+ <dd>An algorithm whose running time grows as a polynomial function of the problem size $n$ (e.g., $O(n^{3.5})$). Interior point methods are polynomial; simplex is not (in the worst case). In practice, both are fast for typical problems.</dd>
 
-  <dt>Polyhedron</dt>
-  <dd>A shape formed by the intersection of finitely many half-spaces (linear inequalities). The feasible region of an LP is always a polyhedron. In 2D, polyhedra are polygons. In 3D, they are shapes like cubes and tetrahedra.</dd>
+ <dt>Polyhedron</dt>
+ <dd>A shape formed by the intersection of finitely many half-spaces (linear inequalities). The feasible region of an LP is always a polyhedron. In 2D, polyhedra are polygons. In 3D, they are shapes like cubes and tetrahedra.</dd>
 </dl>
 </div>
 
 <!-- ==================== NAV ==================== -->
 <div class="nav">
-  <p><a href="cg-15-constrained.html">&larr; Previous: Page 15 &mdash; Constrained Optimization &amp; KKT</a></p>
-  <p><a href="cg-17-method-map.html">Next: Page 17 &mdash; How All Methods Connect &rarr;</a></p>
-  <p style="margin-top: 8px;"><a href="index.html" style="color: #9b89b6;">Back to Index</a></p>
+ <p><a href="cg-15-constrained.html">&larr; Previous: Page 15; Constrained Optimization &amp; KKT</a></p>
+ <p><a href="cg-17-method-map.html">Next: Page 17; How All Methods Connect &rarr;</a></p>
+ <p style="margin-top: 8px;"><a href="index.html" style="color: #9b89b6;">Back to Index</a></p>
 </div>
 
 </div>
