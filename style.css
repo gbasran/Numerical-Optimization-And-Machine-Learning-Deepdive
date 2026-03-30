@@ -474,23 +474,28 @@ a:hover { text-decoration-color: var(--accent-blue); }
   letter-spacing: 0.02em;
 }
 .algo-box .algo-line {
-  padding: 4px 0;
+  display: block;
+  padding: 5px 0;
+  font-size: 0.9rem;
+  line-height: 1.8;
 }
+.algo-box .algo-line:nth-child(even) { background: none; }
 .algo-box .algo-comment {
   color: var(--text-muted);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-family: 'Inter', sans-serif;
+  font-style: italic;
 }
 
-/* --- Algorithm sections (init/loop from Adam guide pattern) --- */
+/* --- Algorithm sections (init/loop from Adam guide pattern, numbered lines) --- */
 .algo-section { border-left: 3px solid; padding-left: 14px; margin: 20px 0; }
 .algo-section.init { border-color: var(--accent-gold); }
 .algo-section.loop { border-color: var(--accent-sage); }
-.algo-line { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: start; padding: 10px 14px; margin: 3px 0; border-radius: var(--radius-sm); font-size: 0.92rem; }
-.algo-line:nth-child(even) { background: var(--bg-raised); }
-.algo-line .num { color: var(--text-muted); font-size: 0.82rem; min-width: 24px; font-family: 'JetBrains Mono', monospace; }
-.algo-line .formula { font-family: 'Inter', sans-serif; }
-.algo-line .explain { color: var(--text-muted); font-size: 0.82rem; text-align: right; font-style: italic; }
+.algo-section .algo-line { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: start; padding: 10px 14px; margin: 3px 0; border-radius: var(--radius-sm); font-size: 0.92rem; }
+.algo-section .algo-line:nth-child(even) { background: var(--bg-raised); }
+.algo-section .algo-line .num { color: var(--text-muted); font-size: 0.82rem; min-width: 24px; font-family: 'JetBrains Mono', monospace; }
+.algo-section .algo-line .formula { font-family: 'Inter', sans-serif; }
+.algo-section .algo-line .explain { color: var(--text-muted); font-size: 0.82rem; text-align: right; font-style: italic; }
 
 /* --- Breakdown grids (symbol explanations) --- */
 .breakdown {
