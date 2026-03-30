@@ -272,7 +272,7 @@ $$\text{If } f \text{ is convex and } \nabla f(x^*) = \mathbf{0}, \text{ then } 
   We need all eigenvalues of $Q$ to be $\geq 0$.
   <br><br>
   Since $Q$ is diagonal, the eigenvalues are the diagonal entries (recall from <a href="cg-03-linear-algebra.html">Page 03, Hand Computation 1</a>):
-  $$\lambda_1 = 2 > 0, \quad \lambda_2 = 3 > 0$$
+  $$\lambda_1 = 2 &gt; 0, \quad \lambda_2 = 3 &gt; 0$$
 </div>
 
 <div class="step">
@@ -396,7 +396,7 @@ If you have heard of deep learning, here is a connection: the loss function of a
   Trace $= 2 + 8 = 10$, $\det = 16 - 4 = 12$.
   $$\lambda^2 - 10\lambda + 12 = 0$$
   $$\lambda = \frac{10 \pm \sqrt{100 - 48}}{2} = \frac{10 \pm \sqrt{52}}{2} = \frac{10 \pm 2\sqrt{13}}{2} = 5 \pm \sqrt{13}$$
-  $\sqrt{13} \approx 3.61$, so $\lambda_1 \approx 8.61 > 0$ and $\lambda_2 \approx 1.39 > 0$.
+  $\sqrt{13} \approx 3.61$, so $\lambda_1 \approx 8.61 &gt; 0$ and $\lambda_2 \approx 1.39 &gt; 0$.
 </div>
 
 <div class="step">
@@ -404,7 +404,7 @@ If you have heard of deep learning, here is a connection: the loss function of a
 </div>
 
 <div class="check">
-Quick check with 2&times;2 shortcut: $a_{11} = 2 > 0$ and $\det = 12 > 0$. PD confirmed without computing eigenvalues.
+Quick check with 2&times;2 shortcut: $a_{11} = 2 &gt; 0$ and $\det = 12 &gt; 0$. PD confirmed without computing eigenvalues.
 </div>
 </div>
 
@@ -413,7 +413,7 @@ Quick check with 2&times;2 shortcut: $a_{11} = 2 > 0$ and $\det = 12 > 0$. PD co
 &bull; $f(x) = x^2$ &mdash; convex (parabola opens upward)<br>
 &bull; $f(x) = |x|$ &mdash; convex (V-shape)<br>
 &bull; $f(x) = e^x$ &mdash; convex (exponential curves upward)<br>
-&bull; $f(x) = -\ln(x)$ for $x > 0$ &mdash; convex (negative log curves upward)<br>
+&bull; $f(x) = -\ln(x)$ for $x &gt; 0$ &mdash; convex (negative log curves upward)<br>
 &bull; $f(\mathbf{x}) = \|\mathbf{x}\|^2$ &mdash; convex (sum of squares is always a bowl)<br>
 &bull; $f(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T Q \mathbf{x}$ with $Q$ PSD &mdash; convex<br><br>
 <strong>Common non-convex functions:</strong><br>
@@ -449,7 +449,7 @@ Quick check with 2&times;2 shortcut: $a_{11} = 2 > 0$ and $\det = 12 > 0$. PD co
   <dd>A convex function with strict inequality (the rubber band is strictly above the curve, never touching except at the endpoints). Hessian is PD everywhere. Has at most one minimizer.</dd>
 
   <dt>Strongly Convex</dt>
-  <dd>A function whose Hessian eigenvalues are bounded away from zero: $\nabla^2 f(x) \succeq mI$ for some $m > 0$. The "bowl" has a minimum curvature. Guarantees fast convergence rates.</dd>
+  <dd>A function whose Hessian eigenvalues are bounded away from zero: $\nabla^2 f(x) \succeq mI$ for some $m &gt; 0$. The "bowl" has a minimum curvature. Guarantees fast convergence rates.</dd>
 
   <dt>Convex Combination</dt>
   <dd>$\alpha x + (1-\alpha)y$ for $\alpha \in [0,1]$. A weighted average of two points that always lies on the line segment between them.</dd>

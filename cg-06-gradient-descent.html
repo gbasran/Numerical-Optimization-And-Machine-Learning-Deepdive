@@ -31,12 +31,12 @@ Despite this weakness, gradient descent is the foundation. Understanding it deep
 
 <div class="algo-box">
 <div class="algo-title">Algorithm: Steepest Descent (Gradient Descent)</div>
-<div class="algo-line"><strong style="color:#d4956a;">Input:</strong> starting point $x_0$, tolerance $\epsilon > 0$</div>
+<div class="algo-line"><strong style="color:#d4956a;">Input:</strong> starting point $x_0$, tolerance $\epsilon &gt; 0$</div>
 <div class="algo-line"><strong style="color:#d4956a;">Step 0:</strong> Set $k = 0$</div>
 <div class="algo-line"><strong style="color:#d4956a;">Step 1:</strong> Compute the gradient $g_k = \nabla f(x_k)$ <span class="algo-comment">&larr; feel the slope (recall gradient from <a href="cg-02-multivariable-bridge.html" style="color:#d4956a;">Page 02</a>)</span></div>
-<div class="algo-line"><strong style="color:#d4956a;">Step 2:</strong> If $\|g_k\| < \epsilon$, STOP &mdash; declare $x_k$ as the solution <span class="algo-comment">&larr; ground is flat enough (recall norms from <a href="cg-01-math-foundations.html" style="color:#d4956a;">Page 01</a>)</span></div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 2:</strong> If $\|g_k\| &lt; \epsilon$, STOP &mdash; declare $x_k$ as the solution <span class="algo-comment">&larr; ground is flat enough (recall norms from <a href="cg-01-math-foundations.html" style="color:#d4956a;">Page 01</a>)</span></div>
 <div class="algo-line"><strong style="color:#d4956a;">Step 3:</strong> Set the search direction $d_k = -g_k$ <span class="algo-comment">&larr; the steepest downhill direction</span></div>
-<div class="algo-line"><strong style="color:#d4956a;">Step 4:</strong> Choose step size $\alpha_k > 0$ <span class="algo-comment">&larr; how far to walk (see <a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a> for how)</span></div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 4:</strong> Choose step size $\alpha_k &gt; 0$ <span class="algo-comment">&larr; how far to walk (see <a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a> for how)</span></div>
 <div class="algo-line"><strong style="color:#d4956a;">Step 5:</strong> Update: $x_{k+1} = x_k + \alpha_k d_k = x_k - \alpha_k g_k$ <span class="algo-comment">&larr; take the step</span></div>
 <div class="algo-line"><strong style="color:#d4956a;">Step 6:</strong> Set $k = k + 1$, go to Step 1</div>
 </div>
@@ -235,7 +235,7 @@ $$\|x_{k+1} - x^*\|_A \leq \left(\frac{\kappa - 1}{\kappa + 1}\right) \|x_k - x^
 
 <div class="exam-flag">
 <h4>Exam Pattern</h4>
-<p>You may be asked: "Given a matrix $A$ with eigenvalues $\lambda_1$ and $\lambda_2$, estimate how many iterations GD needs." Compute $\kappa = \lambda_{\max}/\lambda_{\min}$, then the convergence factor, then use $\left(\frac{\kappa-1}{\kappa+1}\right)^{2k} < 10^{-6}$ and solve for $k$.</p>
+<p>You may be asked: "Given a matrix $A$ with eigenvalues $\lambda_1$ and $\lambda_2$, estimate how many iterations GD needs." Compute $\kappa = \lambda_{\max}/\lambda_{\min}$, then the convergence factor, then use $\left(\frac{\kappa-1}{\kappa+1}\right)^{2k} &lt; 10^{-6}$ and solve for $k$.</p>
 </div>
 
 <p>Here is a visual comparison showing gradient descent paths on round vs elongated contours:</p>
@@ -312,24 +312,24 @@ $$\left(\frac{\kappa - 1}{\kappa + 1}\right)^2 = 0.04$$
 
 <div class="formula-box">
 <strong>Stopping Criterion 1: Gradient Norm</strong>
-$$\|\nabla f(x_k)\| < \epsilon$$
+$$\|\nabla f(x_k)\| &lt; \epsilon$$
 <p style="margin-top:8px;">Stop when the gradient is small enough. This is the most common criterion. Recall from <a href="cg-04-optimality.html">Page 04</a> that a necessary condition for a minimum is $\nabla f(x^*) = 0$. So a small gradient means we are close to a stationary point.</p>
 <dl class="breakdown">
   <dt>$\epsilon$</dt><dd>the tolerance &mdash; a small positive number chosen by the user (e.g., $10^{-6}$)</dd>
   <dt>$\|\cdot\|$</dt><dd>typically the Euclidean (L2) norm</dd>
 </dl>
-<p style="margin-top:8px; color:#c9a84c;"><strong>Caveat:</strong> The gradient norm depends on the scale of $f$. If you multiply $f$ by 1000, the gradient gets 1000 times bigger. A relative version $\|\nabla f(x_k)\| / \|\nabla f(x_0)\| < \epsilon$ is more robust.</p>
+<p style="margin-top:8px; color:#c9a84c;"><strong>Caveat:</strong> The gradient norm depends on the scale of $f$. If you multiply $f$ by 1000, the gradient gets 1000 times bigger. A relative version $\|\nabla f(x_k)\| / \|\nabla f(x_0)\| &lt; \epsilon$ is more robust.</p>
 </div>
 
 <div class="formula-box">
 <strong>Stopping Criterion 2: Relative Change in $x$</strong>
-$$\frac{\|x_{k+1} - x_k\|}{\max(1, \|x_k\|)} < \epsilon$$
+$$\frac{\|x_{k+1} - x_k\|}{\max(1, \|x_k\|)} &lt; \epsilon$$
 <p style="margin-top:8px;">Stop when the iterates stop moving. The denominator $\max(1, \|x_k\|)$ makes it relative when $\|x_k\|$ is large but avoids division-by-near-zero when $\|x_k\|$ is small.</p>
 </div>
 
 <div class="formula-box">
 <strong>Stopping Criterion 3: Relative Change in $f$</strong>
-$$\frac{|f(x_{k+1}) - f(x_k)|}{\max(1, |f(x_k)|)} < \epsilon$$
+$$\frac{|f(x_{k+1}) - f(x_k)|}{\max(1, |f(x_k)|)} &lt; \epsilon$$
 <p style="margin-top:8px;">Stop when the function value stops changing. Same idea as Criterion 2 but measured in function value instead of position.</p>
 </div>
 
@@ -389,7 +389,7 @@ $$\frac{|f(x_{k+1}) - f(x_k)|}{\max(1, |f(x_k)|)} < \epsilon$$
   <dd>$(\kappa - 1)/(\kappa + 1)$. The fraction of the error (in A-norm) that survives each GD iteration. Closer to 0 is better; closer to 1 is worse.</dd>
 
   <dt>Linear Convergence</dt>
-  <dd>Error decreases by a constant factor each step: $e_{k+1} \leq c \cdot e_k$ for some $c < 1$. GD achieves linear convergence on quadratics.</dd>
+  <dd>Error decreases by a constant factor each step: $e_{k+1} \leq c \cdot e_k$ for some $c &lt; 1$. GD achieves linear convergence on quadratics.</dd>
 
   <dt>Stopping Criterion</dt>
   <dd>A condition that triggers the algorithm to stop. Common choices: gradient norm, relative change in $x$, relative change in $f(x)$.</dd>

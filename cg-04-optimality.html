@@ -50,7 +50,7 @@ $$\nabla f(x^*) = \mathbf{0}$$
 <div class="why-box">
 <h3>Why This Matters for Algorithms</h3>
 <p>This is the reason EVERY optimization algorithm looks for points where $\nabla f = \mathbf{0}$. The standard stopping criterion is:</p>
-$$\|\nabla f(x_k)\| < \epsilon$$
+$$\|\nabla f(x_k)\| &lt; \epsilon$$
 <p style="margin-top:8px;">where $\epsilon$ is a small tolerance (like $10^{-6}$). This checks: "is the gradient close enough to zero that we are probably near a stationary point?" Every algorithm on pages <a href="cg-06-gradient-descent.html">06</a> through <a href="cg-14-nonlinear-equations.html">14</a> uses this stopping rule.</p>
 </div>
 
@@ -94,8 +94,8 @@ $$\nabla f(x^*) = \mathbf{0} \quad \text{AND} \quad \nabla^2 f(x^*) \text{ is po
 <p>then $x^*$ is a <strong>strict local minimizer</strong>.</p>
 
 <dl class="breakdown">
-  <dt>PD</dt><dd>all eigenvalues strictly $> 0$ (curvature is strictly positive in EVERY direction)</dd>
-  <dt>strict local minimizer</dt><dd>$f(x^*) < f(x)$ for all $x \neq x^*$ nearby (it is strictly the lowest point in a neighborhood)</dd>
+  <dt>PD</dt><dd>all eigenvalues strictly $&gt; 0$ (curvature is strictly positive in EVERY direction)</dd>
+  <dt>strict local minimizer</dt><dd>$f(x^*) &lt; f(x)$ for all $x \neq x^*$ nearby (it is strictly the lowest point in a neighborhood)</dd>
 </dl>
 
 <p style="margin-top:12px;"><strong>"Sufficient" means:</strong> If these conditions are satisfied, then $x^*$ IS guaranteed to be a local minimum. This is the PROOF that you are at a minimum.</p>
@@ -127,10 +127,10 @@ $$\nabla f(x^*) = \mathbf{0} \quad \text{AND} \quad \nabla^2 f(x^*) \text{ is ne
 <table class="step-table">
 <tr><th>Gradient</th><th>Hessian</th><th>Conclusion</th></tr>
 <tr><td>$\nabla f \neq 0$</td><td>N/A</td><td>Not a stationary point. Move on.</td></tr>
-<tr><td>$\nabla f = 0$</td><td>PD (all $\lambda_i > 0$)</td><td style="color:#d4956a;">Strict local minimum (SOSC)</td></tr>
-<tr><td>$\nabla f = 0$</td><td>ND (all $\lambda_i < 0$)</td><td style="color:#9b89b6;">Strict local maximum</td></tr>
+<tr><td>$\nabla f = 0$</td><td>PD (all $\lambda_i &gt; 0$)</td><td style="color:#d4956a;">Strict local minimum (SOSC)</td></tr>
+<tr><td>$\nabla f = 0$</td><td>ND (all $\lambda_i &lt; 0$)</td><td style="color:#9b89b6;">Strict local maximum</td></tr>
 <tr><td>$\nabla f = 0$</td><td>Indefinite (mixed signs)</td><td style="color:#c47070;">Saddle point</td></tr>
-<tr><td>$\nabla f = 0$</td><td>PSD (some $\lambda_i = 0$, rest $> 0$)</td><td style="color:#c9a84c;">Inconclusive &mdash; need more info</td></tr>
+<tr><td>$\nabla f = 0$</td><td>PSD (some $\lambda_i = 0$, rest $&gt; 0$)</td><td style="color:#c9a84c;">Inconclusive &mdash; need more info</td></tr>
 </table>
 </div>
 
@@ -195,19 +195,19 @@ $$\nabla f(x^*) = \mathbf{0} \quad \text{AND} \quad \nabla^2 f(x^*) \text{ is ne
 
   <strong>Point $(0, 0)$:</strong>
   $$H = \begin{bmatrix} -6 & 6 \\ 6 & 0 \end{bmatrix}$$
-  $\det = (-6)(0) - (6)(6) = -36 < 0$ $\Rightarrow$ <span style="color:#c47070;">Indefinite = Saddle Point</span>
+  $\det = (-6)(0) - (6)(6) = -36 &lt; 0$ $\Rightarrow$ <span style="color:#c47070;">Indefinite = Saddle Point</span>
 
   <br><br><strong>Point $(0, -1)$:</strong>
   $$H = \begin{bmatrix} -6 + 12 & 0 - 12 + 6 \end{bmatrix} = \begin{bmatrix} 6 & -6 \\ -6 & 0 \end{bmatrix}$$
-  $\det = (6)(0) - (-6)(-6) = -36 < 0$ $\Rightarrow$ <span style="color:#c47070;">Indefinite = Saddle Point</span>
+  $\det = (6)(0) - (-6)(-6) = -36 &lt; 0$ $\Rightarrow$ <span style="color:#c47070;">Indefinite = Saddle Point</span>
 
   <br><br><strong>Point $(1, 0)$:</strong>
   $$H = \begin{bmatrix} 12 - 6 & -12 + 6 \\ -12 + 6 & 12 \end{bmatrix} = \begin{bmatrix} 6 & -6 \\ -6 & 12 \end{bmatrix}$$
-  $\det = (6)(12) - (-6)(-6) = 72 - 36 = 36 > 0$ and $a_{11} = 6 > 0$ $\Rightarrow$ <span style="color:#d4956a;">PD = Local Minimum</span>
+  $\det = (6)(12) - (-6)(-6) = 72 - 36 = 36 &gt; 0$ and $a_{11} = 6 &gt; 0$ $\Rightarrow$ <span style="color:#d4956a;">PD = Local Minimum</span>
 
   <br><br><strong>Point $(-1, -1)$:</strong>
   $$H = \begin{bmatrix} -12 - 6 + 12 & 12 - 12 + 6 \\ 12 - 12 + 6 & -12 \end{bmatrix} = \begin{bmatrix} -6 & 6 \\ 6 & -12 \end{bmatrix}$$
-  $\det = (-6)(-12) - (6)(6) = 72 - 36 = 36 > 0$ and $a_{11} = -6 < 0$ $\Rightarrow$ <span style="color:#9b89b6;">ND = Local Maximum</span>
+  $\det = (-6)(-12) - (6)(6) = 72 - 36 = 36 &gt; 0$ and $a_{11} = -6 &lt; 0$ $\Rightarrow$ <span style="color:#9b89b6;">ND = Local Maximum</span>
 </div>
 </div>
 
@@ -382,17 +382,17 @@ It turns out this point IS a saddle (because of the $x_1^5$ term), but you canno
 
 <div class="step">
   <div class="step-label">(a) $H = \begin{bmatrix} 4 & 1 \\ 1 & 3 \end{bmatrix}$</div>
-  $a_{11} = 4 > 0$, $\det = 12 - 1 = 11 > 0$ $\Rightarrow$ <span style="color:#d4956a;">PD = local minimum</span>
+  $a_{11} = 4 &gt; 0$, $\det = 12 - 1 = 11 &gt; 0$ $\Rightarrow$ <span style="color:#d4956a;">PD = local minimum</span>
 </div>
 
 <div class="step">
   <div class="step-label">(b) $H = \begin{bmatrix} -2 & 1 \\ 1 & -5 \end{bmatrix}$</div>
-  $a_{11} = -2 < 0$, $\det = 10 - 1 = 9 > 0$ $\Rightarrow$ <span style="color:#9b89b6;">ND = local maximum</span>
+  $a_{11} = -2 &lt; 0$, $\det = 10 - 1 = 9 &gt; 0$ $\Rightarrow$ <span style="color:#9b89b6;">ND = local maximum</span>
 </div>
 
 <div class="step">
   <div class="step-label">(c) $H = \begin{bmatrix} 3 & 4 \\ 4 & 2 \end{bmatrix}$</div>
-  $\det = 6 - 16 = -10 < 0$ $\Rightarrow$ <span style="color:#c47070;">Indefinite = saddle point</span>
+  $\det = 6 - 16 = -10 &lt; 0$ $\Rightarrow$ <span style="color:#c47070;">Indefinite = saddle point</span>
 </div>
 
 <div class="step">
@@ -406,7 +406,7 @@ Practice tip: on an exam, the 2&times;2 shortcut ($a_{11}$ sign and $\det$ sign)
 </div>
 
 <div class="note">
-<strong>Common exam mistake:</strong> Checking only the diagonal entries of the Hessian. The matrix $\begin{bmatrix} 3 & 4 \\ 4 & 2 \end{bmatrix}$ has positive diagonals (3 and 2) but is INDEFINITE because the off-diagonal entries are large enough to make $\det < 0$. Always check the determinant, not just the diagonal!
+<strong>Common exam mistake:</strong> Checking only the diagonal entries of the Hessian. The matrix $\begin{bmatrix} 3 & 4 \\ 4 & 2 \end{bmatrix}$ has positive diagonals (3 and 2) but is INDEFINITE because the off-diagonal entries are large enough to make $\det &lt; 0$. Always check the determinant, not just the diagonal!
 </div>
 
 <div class="why-box">

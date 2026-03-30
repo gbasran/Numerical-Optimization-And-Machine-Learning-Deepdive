@@ -49,7 +49,7 @@ $$x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}$$
 </div>
 
 <div class="note">
-The formula says: "Take your current guess, then subtract the ratio of the function value to the derivative." If $f(x_k) > 0$ and the slope is positive, we move left. If $f(x_k) > 0$ and the slope is negative, we move right. The formula automatically figures out the correct direction.
+The formula says: "Take your current guess, then subtract the ratio of the function value to the derivative." If $f(x_k) &gt; 0$ and the slope is positive, we move left. If $f(x_k) &gt; 0$ and the slope is negative, we move right. The formula automatically figures out the correct direction.
 </div>
 
 <!-- Hand calc: sqrt(2) -->
@@ -158,7 +158,7 @@ $$J(x) = \begin{bmatrix} \frac{\partial r_1}{\partial x_1} & \frac{\partial r_1}
 <div class="algo-line"><strong>Given:</strong> starting point $x^{(0)}$, tolerance $\epsilon$</div>
 <div class="algo-line"><strong>For</strong> $k = 0, 1, 2, \ldots$</div>
 <div class="algo-line" style="padding-left:24px;">1. Evaluate $\mathbf{r}(x^{(k)})$ <span class="algo-comment">&larr; how far are we from solving the system?</span></div>
-<div class="algo-line" style="padding-left:24px;">2. <strong>If</strong> $\|\mathbf{r}(x^{(k)})\| < \epsilon$, <strong>STOP</strong>. Solution found. <span class="algo-comment">&larr; close enough to zero</span></div>
+<div class="algo-line" style="padding-left:24px;">2. <strong>If</strong> $\|\mathbf{r}(x^{(k)})\| &lt; \epsilon$, <strong>STOP</strong>. Solution found. <span class="algo-comment">&larr; close enough to zero</span></div>
 <div class="algo-line" style="padding-left:24px;">3. Evaluate $J(x^{(k)})$ <span class="algo-comment">&larr; build the Jacobian at current point</span></div>
 <div class="algo-line" style="padding-left:24px;">4. Solve $J(x^{(k)}) \, p^{(k)} = -\mathbf{r}(x^{(k)})$ for $p^{(k)}$ <span class="algo-comment">&larr; find the Newton step</span></div>
 <div class="algo-line" style="padding-left:24px;">5. Update: $x^{(k+1)} = x^{(k)} + p^{(k)}$ <span class="algo-comment">&larr; take the step</span></div>

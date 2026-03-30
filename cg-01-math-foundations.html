@@ -259,7 +259,7 @@ $$\|x\|_\infty = \max(|x_1|, |x_2|, \ldots, |x_n|)$$
 </div>
 
 <div class="note">
-<strong>Where norms appear in this course:</strong> Stopping criteria use $\|\nabla f(x_k)\| < \epsilon$ (we stop when the gradient is "small enough"). Convergence rates measure $\|x_k - x^*\|$ (distance from the current guess to the true answer). Trust regions limit $\|p\| \leq \Delta$ (the step must stay within a ball of radius $\Delta$).
+<strong>Where norms appear in this course:</strong> Stopping criteria use $\|\nabla f(x_k)\| &lt; \epsilon$ (we stop when the gradient is "small enough"). Convergence rates measure $\|x_k - x^*\|$ (distance from the current guess to the true answer). Trust regions limit $\|p\| \leq \Delta$ (the step must stay within a ball of radius $\Delta$).
 </div>
 
 
@@ -274,7 +274,7 @@ $$\|x\|_\infty = \max(|x_1|, |x_2|, \ldots, |x_n|)$$
 <div class="analogy">
 <strong>Analogy &mdash; Paying off debt.</strong>
 <br><br>
-<strong>Q-linear convergence</strong> is like paying a fixed percentage of your debt each month. If your debt is $1000 and you pay 50% each month, it goes: $1000, $500, $250, $125, $62.50, ... Every month you cut the debt in half, but you never wipe it out in one fell swoop. The ratio of consecutive debts is always 0.5 (or whatever fixed rate $r$). This is decent, but predictable.
+<strong>Q-linear convergence</strong> is like paying a fixed percentage of your debt each month. If your debt is &#36;1000 and you pay 50% each month, it goes: &#36;1000, &#36;500, &#36;250, &#36;125, &#36;62.50, ... Every month you cut the debt in half, but you never wipe it out in one fell swoop. The ratio of consecutive debts is always 0.5 (or whatever fixed rate $r$). This is decent, but predictable.
 <br><br>
 <strong>Q-superlinear convergence</strong> is like your monthly payment rate accelerating over time. First month you pay 50%, next month 60%, then 75%, then 90%, then 99%... The ratio of consecutive errors shrinks toward zero. Each step is proportionally bigger than the last. Quasi-Newton methods (like BFGS) achieve this.
 <br><br>
@@ -330,7 +330,7 @@ $$\|x_{k+1} - x^*\| \leq M\, \|x_k - x^*\|^2$$
 
 <div class="step">
   <span class="step-label">Step 3: Check for Q-linear.</span><br>
-  For Q-linear convergence we need $e_{k+1}/e_k \leq r$ for some fixed $r < 1$.
+  For Q-linear convergence we need $e_{k+1}/e_k \leq r$ for some fixed $r &lt; 1$.
   <br>Since $1/(k+1)$ changes with $k$ (it is not a fixed constant), this is <em>not</em> merely Q-linear &mdash; it is <strong>at least</strong> superlinear.
   <br>(Technically we could pick $r$ to be the largest ratio, which is $1/2$ at $k=1$, so it <em>is</em> Q-linear too. But the important point is it does better than linear.)
 </div>

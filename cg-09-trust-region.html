@@ -198,19 +198,19 @@ $$\rho_k = \frac{f(x_k) - f(x_k + p_k)}{m_k(0) - m_k(p_k)} = \frac{\text{actual 
   <th>Update $\Delta$</th>
 </tr>
 <tr>
-  <td style="text-align:left; color:#c47070; font-weight:bold;">$\rho_k < 0$</td>
+  <td style="text-align:left; color:#c47070; font-weight:bold;">$\rho_k &lt; 0$</td>
   <td>Model predicted improvement, but $f$ <em>increased</em></td>
   <td style="color:#c47070;">Reject</td>
   <td>Shrink: $\Delta_{k+1} = \tfrac{1}{4}\Delta_k$</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#c47070; font-weight:bold;">$0 < \rho_k < 0.25$</td>
+  <td style="text-align:left; color:#c47070; font-weight:bold;">$0 &lt; \rho_k &lt; 0.25$</td>
   <td>Model is a poor predictor &mdash; actual reduction much less than predicted</td>
   <td style="color:#c47070;">Reject</td>
   <td>Shrink: $\Delta_{k+1} = \tfrac{1}{4}\Delta_k$</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#c9a84c; font-weight:bold;">$0.25 \leq \rho_k < 0.75$</td>
+  <td style="text-align:left; color:#c9a84c; font-weight:bold;">$0.25 \leq \rho_k &lt; 0.75$</td>
   <td>Model is reasonably accurate</td>
   <td style="color:#d4956a;">Accept</td>
   <td>Keep: $\Delta_{k+1} = \Delta_k$</td>
@@ -222,7 +222,7 @@ $$\rho_k = \frac{f(x_k) - f(x_k + p_k)}{m_k(0) - m_k(p_k)} = \frac{\text{actual 
   <td>Expand: $\Delta_{k+1} = \min(2\Delta_k, \hat{\Delta})$</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#d4956a; font-weight:bold;">$\rho_k \geq 0.75$ AND $\|p_k\| < \Delta_k$</td>
+  <td style="text-align:left; color:#d4956a; font-weight:bold;">$\rho_k \geq 0.75$ AND $\|p_k\| &lt; \Delta_k$</td>
   <td>Model is excellent, but step is interior (radius was already big enough)</td>
   <td style="color:#d4956a;">Accept</td>
   <td>Keep: $\Delta_{k+1} = \Delta_k$</td>
@@ -246,7 +246,7 @@ $$\rho_k = \frac{f(x_k) - f(x_k + p_k)}{m_k(0) - m_k(p_k)} = \frac{\text{actual 
 <div class="algo-box">
 <div class="algo-title">Algorithm 4.1: Trust-Region Method</div>
 
-<div class="algo-line"><span style="color:#d4956a; font-weight:bold;">Given:</span> starting point $x_0$, initial radius $\Delta_0 > 0$, maximum radius $\hat{\Delta} > 0$, threshold $\eta \in [0, \tfrac{1}{4})$</div>
+<div class="algo-line"><span style="color:#d4956a; font-weight:bold;">Given:</span> starting point $x_0$, initial radius $\Delta_0 &gt; 0$, maximum radius $\hat{\Delta} &gt; 0$, threshold $\eta \in [0, \tfrac{1}{4})$</div>
 <div class="algo-line" style="padding-left: 24px;"><span class="algo-comment">// $\hat{\Delta}$ = the largest the radius is ever allowed to grow. $\eta$ = acceptance threshold (typically $\eta = 0$ or small).</span></div>
 <br>
 <div class="algo-line"><span style="color:#c9a84c; font-weight:bold;">for</span> $k = 0, 1, 2, \ldots$</div>
@@ -261,12 +261,12 @@ $$\rho_k = \frac{f(x_k) - f(x_k + p_k)}{m_k(0) - m_k(p_k)} = \frac{\text{actual 
 <div class="algo-line" style="padding-left: 48px;"><span class="algo-comment">// Compare actual vs predicted reduction</span></div>
 <br>
 <div class="algo-line" style="padding-left: 24px;"><span style="color:#9b89b6; font-weight:bold;">Step 4:</span> Update the radius:</div>
-<div class="algo-line" style="padding-left: 48px;"><span style="color:#c47070;">if</span> $\rho_k < \tfrac{1}{4}$: &nbsp; $\Delta_{k+1} = \tfrac{1}{4}\,\Delta_k$ <span class="algo-comment">// model was bad &rarr; shrink</span></div>
-<div class="algo-line" style="padding-left: 48px;"><span style="color:#d4956a;">else if</span> $\rho_k > \tfrac{3}{4}$ and $\|p_k\| = \Delta_k$: &nbsp; $\Delta_{k+1} = \min(2\Delta_k,\, \hat{\Delta})$ <span class="algo-comment">// model great + hit boundary &rarr; expand</span></div>
+<div class="algo-line" style="padding-left: 48px;"><span style="color:#c47070;">if</span> $\rho_k &lt; \tfrac{1}{4}$: &nbsp; $\Delta_{k+1} = \tfrac{1}{4}\,\Delta_k$ <span class="algo-comment">// model was bad &rarr; shrink</span></div>
+<div class="algo-line" style="padding-left: 48px;"><span style="color:#d4956a;">else if</span> $\rho_k &gt; \tfrac{3}{4}$ and $\|p_k\| = \Delta_k$: &nbsp; $\Delta_{k+1} = \min(2\Delta_k,\, \hat{\Delta})$ <span class="algo-comment">// model great + hit boundary &rarr; expand</span></div>
 <div class="algo-line" style="padding-left: 48px;"><span style="color:#c9a84c;">else:</span> &nbsp; $\Delta_{k+1} = \Delta_k$ <span class="algo-comment">// keep radius the same</span></div>
 <br>
 <div class="algo-line" style="padding-left: 24px;"><span style="color:#9b89b6; font-weight:bold;">Step 5:</span> Update the iterate:</div>
-<div class="algo-line" style="padding-left: 48px;"><span style="color:#d4956a;">if</span> $\rho_k > \eta$: &nbsp; $x_{k+1} = x_k + p_k$ <span class="algo-comment">// accept the step</span></div>
+<div class="algo-line" style="padding-left: 48px;"><span style="color:#d4956a;">if</span> $\rho_k &gt; \eta$: &nbsp; $x_{k+1} = x_k + p_k$ <span class="algo-comment">// accept the step</span></div>
 <div class="algo-line" style="padding-left: 48px;"><span style="color:#c47070;">else:</span> &nbsp; $x_{k+1} = x_k$ <span class="algo-comment">// reject the step, stay put</span></div>
 <br>
 <div class="algo-line"><span style="color:#c9a84c; font-weight:bold;">end for</span></div>
@@ -274,7 +274,7 @@ $$\rho_k = \frac{f(x_k) - f(x_k + p_k)}{m_k(0) - m_k(p_k)} = \frac{\text{actual 
 
 <div class="why-box">
 <h3>Key observations about Algorithm 4.1</h3>
-<p><strong>1. Steps 4 and 5 are independent:</strong> The radius update (Step 4) and the iterate update (Step 5) use different thresholds. A step can be accepted ($\rho_k > \eta$) even while the radius is shrunk ($\rho_k < 0.25$). In fact, with $\eta = 0$, any step that does not make things worse is accepted.</p>
+<p><strong>1. Steps 4 and 5 are independent:</strong> The radius update (Step 4) and the iterate update (Step 5) use different thresholds. A step can be accepted ($\rho_k &gt; \eta$) even while the radius is shrunk ($\rho_k &lt; 0.25$). In fact, with $\eta = 0$, any step that does not make things worse is accepted.</p>
 <p style="margin-top: 8px;"><strong>2. We always evaluate $f(x_k + p_k)$:</strong> Even if we might reject the step, we need the true function value to compute $\rho_k$. This costs one extra function evaluation per iteration.</p>
 <p style="margin-top: 8px;"><strong>3. The maximum radius $\hat{\Delta}$:</strong> This prevents the radius from growing without bound. In practice, $\hat{\Delta}$ is set large enough that it rarely matters.</p>
 </div>
@@ -299,7 +299,7 @@ $$p_k^C = -\tau_k \frac{\Delta_k}{\|g_k\|}\, g_k$$
 <dl class="breakdown">
   <dt>$g_k$</dt><dd>the gradient at $x_k$ &mdash; points uphill, so $-g_k$ points steepest downhill</dd>
   <dt>$\frac{\Delta_k}{\|g_k\|}\,g_k$</dt><dd>this is the gradient <strong>scaled</strong> so its length equals $\Delta_k$ (the trust-region radius). It points from the center to the trust-region boundary along the gradient direction.</dd>
-  <dt>$\tau_k \in (0, 1]$</dt><dd>a scalar that controls how far along the steepest descent direction we go. $\tau_k = 1$ means go all the way to the boundary. $\tau_k < 1$ means stop before the boundary (because the model's minimum along this line is closer).</dd>
+  <dt>$\tau_k \in (0, 1]$</dt><dd>a scalar that controls how far along the steepest descent direction we go. $\tau_k = 1$ means go all the way to the boundary. $\tau_k &lt; 1$ means stop before the boundary (because the model's minimum along this line is closer).</dd>
 </dl>
 </div>
 
@@ -312,9 +312,9 @@ $$p_k^C = -\tau_k \frac{\Delta_k}{\|g_k\|}\, g_k$$
 $$\tau_k = 1$$
 <p>The model is flat or curving downward along $-g_k$, so it never has a minimum along this line within the trust region. Go all the way to the boundary.</p>
 
-<p style="margin-top: 16px;"><strong>Case 2:</strong> $g_k^T B_k g_k > 0$ (the model has positive curvature &mdash; a bowl shape along this direction)</p>
+<p style="margin-top: 16px;"><strong>Case 2:</strong> $g_k^T B_k g_k &gt; 0$ (the model has positive curvature &mdash; a bowl shape along this direction)</p>
 $$\tau_k = \min\!\left(1,\; \frac{\|g_k\|^3}{\Delta_k \cdot g_k^T B_k g_k}\right)$$
-<p>The model has a minimum along $-g_k$ at distance $\frac{\|g_k\|^2}{g_k^T B_k g_k}$ from $x_k$. If this minimum is inside the trust region, $\tau_k < 1$ (stop at the minimum). If it is outside, $\tau_k = 1$ (go to the boundary).</p>
+<p>The model has a minimum along $-g_k$ at distance $\frac{\|g_k\|^2}{g_k^T B_k g_k}$ from $x_k$. If this minimum is inside the trust region, $\tau_k &lt; 1$ (stop at the minimum). If it is outside, $\tau_k = 1$ (go to the boundary).</p>
 </div>
 
 <div class="why-box">
@@ -444,7 +444,7 @@ $$\|p_0\| = \frac{6\sqrt{2}}{13} \approx \frac{6 \times 1.4142}{13} \approx \fra
 $$\|p_0\| \approx 0.653 \leq 1 = \Delta_0 \quad \checkmark$$
 
 <p class="result">The Newton step is INSIDE the trust region. We use it directly: $p_0 = p_N$.</p>
-<p class="check">Note: since $\|p_0\| < \Delta_0$, we did NOT hit the trust-region boundary. This matters for the radius update later.</p>
+<p class="check">Note: since $\|p_0\| &lt; \Delta_0$, we did NOT hit the trust-region boundary. This matters for the radius update later.</p>
 </div>
 </div>
 
@@ -539,7 +539,7 @@ $$\rho_0 = \frac{94644/28561}{36/13} = \frac{94644}{28561} \cdot \frac{13}{36} =
 $$\rho_0 = \frac{94644}{13^3 \cdot 36} = \frac{94644}{79092} \approx 1.197$$
 
 <p class="result">$$\rho_0 \approx 1.20$$</p>
-<p class="check">$\rho_0 > 1$ means the model actually UNDERESTIMATED the reduction. The real function decreased even more than the model predicted. This is great!</p>
+<p class="check">$\rho_0 &gt; 1$ means the model actually UNDERESTIMATED the reduction. The real function decreased even more than the model predicted. This is great!</p>
 </div>
 </div>
 
@@ -548,11 +548,11 @@ $$\rho_0 = \frac{94644}{13^3 \cdot 36} = \frac{94644}{79092} \approx 1.197$$
 <div class="step">
 <p class="step-label">Apply the decision rules from Algorithm 4.1:</p>
 
-<p><strong>Check:</strong> $\rho_0 \approx 1.20 > 0.75$? <span style="color:#d4956a;">YES</span> &mdash; the model was excellent.</p>
+<p><strong>Check:</strong> $\rho_0 \approx 1.20 &gt; 0.75$? <span style="color:#d4956a;">YES</span> &mdash; the model was excellent.</p>
 
-<p><strong>Check:</strong> Did we hit the boundary? $\|p_0\| \approx 0.653$ vs. $\Delta_0 = 1$. Since $0.653 < 1$, we did <strong>NOT</strong> hit the boundary.</p>
+<p><strong>Check:</strong> Did we hit the boundary? $\|p_0\| \approx 0.653$ vs. $\Delta_0 = 1$. Since $0.653 &lt; 1$, we did <strong>NOT</strong> hit the boundary.</p>
 
-<p>According to the rules: $\rho_k \geq 0.75$ AND $\|p_k\| < \Delta_k$ &rarr; <strong>accept the step, keep $\Delta$ unchanged</strong>.</p>
+<p>According to the rules: $\rho_k \geq 0.75$ AND $\|p_k\| &lt; \Delta_k$ &rarr; <strong>accept the step, keep $\Delta$ unchanged</strong>.</p>
 
 $$\Delta_1 = \Delta_0 = 1$$
 
@@ -582,7 +582,7 @@ $$\Delta_1 = \Delta_0 = 1$$
 <tr><td style="text-align:left;">$m_0(p_0)$</td><td>$16/13 \approx 1.231$</td></tr>
 <tr><td style="text-align:left;">Predicted reduction</td><td>$36/13 \approx 2.769$</td></tr>
 <tr><td style="text-align:left;">$\rho_0$</td><td>$\approx 1.20$</td></tr>
-<tr><td style="text-align:left;">Step accepted?</td><td style="color:#d4956a;">Yes ($\rho_0 > \eta$)</td></tr>
+<tr><td style="text-align:left;">Step accepted?</td><td style="color:#d4956a;">Yes ($\rho_0 &gt; \eta$)</td></tr>
 <tr><td style="text-align:left;">$\Delta_1$</td><td>$1$ (kept, did not hit boundary)</td></tr>
 </table>
 </div>
@@ -681,10 +681,10 @@ $$\Delta_1 = \Delta_0 = 1$$
   <dd>An upper bound on $\Delta_k$. Prevents the trust region from growing unboundedly.</dd>
 
   <dt>Acceptance threshold ($\eta$)</dt>
-  <dd>A small non-negative number (often 0). Steps with $\rho_k > \eta$ are accepted; otherwise rejected. Typically $\eta \in [0, 1/4)$.</dd>
+  <dd>A small non-negative number (often 0). Steps with $\rho_k &gt; \eta$ are accepted; otherwise rejected. Typically $\eta \in [0, 1/4)$.</dd>
 
   <dt>Interior step</dt>
-  <dd>A step where $\|p_k\| < \Delta_k$ &mdash; the trust-region constraint is NOT active. The Newton step fits inside the circle.</dd>
+  <dd>A step where $\|p_k\| &lt; \Delta_k$ &mdash; the trust-region constraint is NOT active. The Newton step fits inside the circle.</dd>
 
   <dt>Boundary step</dt>
   <dd>A step where $\|p_k\| = \Delta_k$ &mdash; the trust-region constraint IS active. The optimal model step would go farther, but the boundary stops it.</dd>

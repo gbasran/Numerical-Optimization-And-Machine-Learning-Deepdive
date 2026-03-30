@@ -54,7 +54,7 @@ If $\nabla f(x^*) = 0$ and $\nabla^2 f(x^*)$ is positive definite, then $x^*$ is
 <dl class="breakdown">
 <dt>"$\nabla f(x^*) = 0$"</dt><dd>Must pass the first-order test first.</dd>
 <dt>"$\nabla^2 f(x^*)$ is PD"</dt><dd>All eigenvalues of the Hessian are strictly positive (<a href="cg-03-linear-algebra.html" style="color:#d4956a;">Page 03</a>). The function curves upward in every direction.</dd>
-<dt>"strict local min"</dt><dd>There is a neighborhood where $f(x) > f(x^*)$ for all $x \neq x^*$.</dd>
+<dt>"strict local min"</dt><dd>There is a neighborhood where $f(x) &gt; f(x^*)$ for all $x \neq x^*$.</dd>
 </dl>
 
 <!-- Theorem 3: Newton convergence -->
@@ -62,7 +62,7 @@ If $\nabla f(x^*) = 0$ and $\nabla^2 f(x^*)$ is positive definite, then $x^*$ is
 <strong>Theorem 3.5 (Nocedal &amp; Wright): Newton's Local Quadratic Convergence</strong><br><br>
 Suppose $f$ is twice continuously differentiable, $\nabla^2 f$ is Lipschitz continuous near $x^*$, $\nabla f(x^*) = 0$, and $\nabla^2 f(x^*)$ is nonsingular. Then if $x_0$ is sufficiently close to $x^*$, Newton's method with unit step size converges quadratically:
 $$\|x_{k+1} - x^*\| \leq C \|x_k - x^*\|^2$$
-for some constant $C > 0$.
+for some constant $C &gt; 0$.
 </div>
 
 <div class="analogy">
@@ -125,7 +125,7 @@ Full explanation on <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>
 </div>
 
 <dl class="breakdown">
-<dt>"Wolfe line search"</dt><dd>BFGS requires Wolfe conditions (not just Armijo) to guarantee $s_k^T y_k > 0$, which keeps $H_k$ positive definite.</dd>
+<dt>"Wolfe line search"</dt><dd>BFGS requires Wolfe conditions (not just Armijo) to guarantee $s_k^T y_k &gt; 0$, which keeps $H_k$ positive definite.</dd>
 <dt>"superlinear"</dt><dd>Faster than linear ($\|e_{k+1}\|/\|e_k\| \to 0$) but not as fast as quadratic ($\|e_{k+1}\|/\|e_k\|^2 \leq C$).</dd>
 </dl>
 
@@ -142,7 +142,7 @@ If $x^*$ is a local minimizer of $\min f(x)$ subject to $c_i(x) = 0$ (equality) 
 </div>
 
 <div class="analogy">
-<strong>Plain English:</strong> At a constrained optimum, the "pull" of the objective function must be exactly balanced by the "push" of the active constraints. The multipliers $\mu_j$ tell you how much each constraint is "pushing." An inactive constraint ($c_j > 0$, slack) has zero push ($\mu_j = 0$). An active constraint ($c_j = 0$, tight) can push ($\mu_j > 0$) but only inward.<br><br>
+<strong>Plain English:</strong> At a constrained optimum, the "pull" of the objective function must be exactly balanced by the "push" of the active constraints. The multipliers $\mu_j$ tell you how much each constraint is "pushing." An inactive constraint ($c_j &gt; 0$, slack) has zero push ($\mu_j = 0$). An active constraint ($c_j = 0$, tight) can push ($\mu_j &gt; 0$) but only inward.<br><br>
 Full explanation on <a href="cg-15-constrained.html" style="color:#d4956a;">Page 15</a>.
 </div>
 
@@ -172,9 +172,9 @@ Full explanation on <a href="cg-15-constrained.html" style="color:#d4956a;">Page
 </div>
 
 <div class="why-box">
-<h3>Why does BFGS need the curvature condition $s^T y > 0$?</h3>
-<p>The BFGS update is designed to maintain positive definiteness of the inverse Hessian approximation $H_k$. If $H_k$ is PD and $s_k^T y_k > 0$, then $H_{k+1}$ is guaranteed to be PD. This means the search direction $d_k = -H_k g_k$ is always a descent direction (you always go downhill).</p>
-<p style="margin-top: 8px;">If $s_k^T y_k \leq 0$, the update could produce an indefinite or negative definite $H_{k+1}$, which would give you an ascent direction instead of a descent direction. The Wolfe conditions (<a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a>) guarantee $s_k^T y_k > 0$, which is why BFGS requires Wolfe (not just Armijo).</p>
+<h3>Why does BFGS need the curvature condition $s^T y &gt; 0$?</h3>
+<p>The BFGS update is designed to maintain positive definiteness of the inverse Hessian approximation $H_k$. If $H_k$ is PD and $s_k^T y_k &gt; 0$, then $H_{k+1}$ is guaranteed to be PD. This means the search direction $d_k = -H_k g_k$ is always a descent direction (you always go downhill).</p>
+<p style="margin-top: 8px;">If $s_k^T y_k \leq 0$, the update could produce an indefinite or negative definite $H_{k+1}$, which would give you an ascent direction instead of a descent direction. The Wolfe conditions (<a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a>) guarantee $s_k^T y_k &gt; 0$, which is why BFGS requires Wolfe (not just Armijo).</p>
 <p style="margin-top: 8px;">Full explanation: <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>.</p>
 </div>
 
@@ -184,7 +184,7 @@ Full explanation on <a href="cg-15-constrained.html" style="color:#d4956a;">Page
 <ul style="margin: 12px 0 0 20px; line-height: 2;">
   <li>$\rho_k \approx 1$: Model is accurate. Trust the model more &mdash; expand the radius.</li>
   <li>$\rho_k$ small or negative: Model is inaccurate. Trust the model less &mdash; shrink the radius.</li>
-  <li>$\rho_k > \eta$ (e.g., $\eta = 0.25$): Good enough to accept the step.</li>
+  <li>$\rho_k &gt; \eta$ (e.g., $\eta = 0.25$): Good enough to accept the step.</li>
 </ul>
 <p style="margin-top: 8px;">Near $x^*$, the quadratic model becomes very accurate (since $f$ looks quadratic locally), so $\rho_k \to 1$ and the radius grows, recovering Newton's full step and quadratic convergence.</p>
 <p style="margin-top: 8px;">Full explanation: <a href="cg-09-trust-region.html" style="color:#d4956a;">Page 09</a>.</p>
@@ -230,7 +230,7 @@ $$\alpha g_k^T A g_k = g_k^T g_k$$
 
 <div class="result">$$\alpha_k = \frac{g_k^T g_k}{g_k^T A g_k}$$</div>
 
-<p class="check">This is the exact step size. Note: $g_k^T A g_k > 0$ since $A$ is PD and $g_k \neq 0$, so $\alpha_k > 0$. This formula only works for quadratics &mdash; for general $f$ we need line search conditions (<a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a>).</p>
+<p class="check">This is the exact step size. Note: $g_k^T A g_k &gt; 0$ since $A$ is PD and $g_k \neq 0$, so $\alpha_k &gt; 0$. This formula only works for quadratics &mdash; for general $f$ we need line search conditions (<a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a>).</p>
 </div>
 </div>
 
@@ -328,8 +328,8 @@ $$= H_k y_k + s_k - H_k y_k = s_k$$
 
 <div class="exam-flag">
 <h4>Pitfall 3: Forgetting the curvature condition before BFGS update</h4>
-<p><strong>Wrong:</strong> Applying the BFGS update without checking $s_k^T y_k > 0$.<br>
-<strong>Right:</strong> Always verify $s_k^T y_k > 0$ before updating $H_k$. If this fails, the update could destroy positive definiteness. The Wolfe line search guarantees this automatically, but on exam problems with given data, you must check.</p>
+<p><strong>Wrong:</strong> Applying the BFGS update without checking $s_k^T y_k &gt; 0$.<br>
+<strong>Right:</strong> Always verify $s_k^T y_k &gt; 0$ before updating $H_k$. If this fails, the update could destroy positive definiteness. The Wolfe line search guarantees this automatically, but on exam problems with given data, you must check.</p>
 </div>
 
 <div class="exam-flag">
@@ -348,7 +348,7 @@ $$= H_k y_k + s_k - H_k y_k = s_k$$
 <div class="exam-flag">
 <h4>Pitfall 6: Not checking if Newton step is inside the trust region</h4>
 <p><strong>Wrong:</strong> Computing the Newton step and immediately accepting it in a trust-region problem.<br>
-<strong>Right:</strong> First compute $\|p^N\|$. If $\|p^N\| \leq \Delta_k$, accept the Newton step. If $\|p^N\| > \Delta_k$, you need the Cauchy point or a dogleg step restricted to the trust region. The whole point of trust region is that you might NOT take the Newton step.</p>
+<strong>Right:</strong> First compute $\|p^N\|$. If $\|p^N\| \leq \Delta_k$, accept the Newton step. If $\|p^N\| &gt; \Delta_k$, you need the Cauchy point or a dogleg step restricted to the trust region. The whole point of trust region is that you might NOT take the Newton step.</p>
 </div>
 
 <div class="exam-flag">
