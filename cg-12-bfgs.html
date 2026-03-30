@@ -8,49 +8,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
-.container { max-width: 900px; margin: 0 auto; }
-h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
-.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
-h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
-.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
-.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
-.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
-.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
-.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
-.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
-.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
-.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
-.hand-calc .result { color: #64ffda; font-weight: bold; }
-.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
-.exam-flag { background: #2a1a1a; border: 2px solid #ff6b6b; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
-.exam-flag h4 { color: #ff6b6b; margin-bottom: 8px; }
-.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
-.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
-.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
-.step-table tr:nth-child(even) { background: #16213e; }
-.algo-box { border-left: 4px solid #64ffda; padding: 16px 20px; margin: 20px 0; background: #0f3460; border-radius: 0 12px 12px 0; }
-.algo-box .algo-title { color: #ffd93d; font-weight: bold; font-size: 18px; margin-bottom: 12px; }
-.algo-box .algo-line { padding: 6px 0; font-size: 16px; }
-.algo-box .algo-comment { color: #888; font-size: 14px; }
-.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
-.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
-.glossary dl { font-size: 15px; }
-.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
-.glossary dd { margin-left: 20px; color: #ccc; }
-.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
-.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
-.nav a:hover { text-decoration: underline; }
-.nav p { margin: 4px 0; }
-svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
-.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
-.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
-.breakdown dd { color: #ccc; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
@@ -66,8 +24,8 @@ svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
 <strong>Physical analogy &mdash; the self-learning mountain map.</strong><br><br>
 Imagine you are hiking down a mountain in thick fog. You have three options:
 <ul style="margin: 12px 0 12px 20px;">
-  <li><strong>Gradient descent</strong> (<a href="cg-06-gradient-descent.html" style="color:#64ffda;">Page 06</a>): Just feel the slope under your feet and walk downhill. Simple but slow &mdash; you zigzag a lot because you have no idea about the overall shape of the mountain.</li>
-  <li><strong>Newton's method</strong> (<a href="cg-07-newton-method.html" style="color:#64ffda;">Page 07</a>): Before each step, you pull out fancy surveying equipment and measure the complete curvature of the mountain in every direction. Then you compute the ideal step. Extremely effective, but the survey takes forever (computing the full Hessian is $O(n^3)$).</li>
+  <li><strong>Gradient descent</strong> (<a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>): Just feel the slope under your feet and walk downhill. Simple but slow &mdash; you zigzag a lot because you have no idea about the overall shape of the mountain.</li>
+  <li><strong>Newton's method</strong> (<a href="cg-07-newton-method.html" style="color:#d4956a;">Page 07</a>): Before each step, you pull out fancy surveying equipment and measure the complete curvature of the mountain in every direction. Then you compute the ideal step. Extremely effective, but the survey takes forever (computing the full Hessian is $O(n^3)$).</li>
   <li><strong>BFGS</strong>: You start with a rough map (the identity matrix &mdash; "assume the mountain is a uniform bowl"). Each time you take a step, you measure how the slope changed from your old position to your new position. From that one measurement, you update your map to be a little more accurate. After enough steps, your map becomes a very good approximation of the true mountain shape, and you get Newton-like convergence without ever doing a full survey.</li>
 </ul>
 <p style="margin-top:8px;">The genius of BFGS is that <strong>every step teaches you something about the curvature</strong>. The gradient tells you the slope. The <em>change</em> in gradient tells you how the slope varies &mdash; which IS curvature. BFGS systematically accumulates this curvature information into a matrix $H_k$ that gets better and better over time.</p>
@@ -107,12 +65,12 @@ $$s_k^T y_k > 0$$
 
 <div class="why-box">
 <h3>Why Must $s_k^T y_k > 0$?</h3>
-<p>We need $B_{k+1}$ to be <strong>positive definite</strong> (bowl-shaped &mdash; recall from <a href="cg-03-linear-algebra.html" style="color:#64ffda;">Page 03</a>). A positive definite matrix $B$ has the property that $v^T B v > 0$ for any nonzero vector $v$. The BFGS update formula is designed to preserve positive definiteness, but it can only do so if $s_k^T y_k > 0$.</p>
+<p>We need $B_{k+1}$ to be <strong>positive definite</strong> (bowl-shaped &mdash; recall from <a href="cg-03-linear-algebra.html" style="color:#d4956a;">Page 03</a>). A positive definite matrix $B$ has the property that $v^T B v > 0$ for any nonzero vector $v$. The BFGS update formula is designed to preserve positive definiteness, but it can only do so if $s_k^T y_k > 0$.</p>
 <p style="margin-top:8px;">Think of it this way: $s_k^T y_k > 0$ means the gradient changed in a way consistent with "bowl-shaped curvature." If you walk in direction $s_k$ and the gradient change $y_k$ has a positive component along $s_k$, the terrain is curving upward &mdash; like the bottom of a bowl. If $s_k^T y_k \leq 0$, the terrain is flat or curving the wrong way, and the update would break the bowl-shape assumption.</p>
 </div>
 
 <div class="note">
-<strong>The beautiful connection to line search:</strong> If you use the <strong>Wolfe conditions</strong> from <a href="cg-08-line-search.html" style="color:#64ffda;">Page 08</a> to choose $\alpha_k$, the curvature condition $s_k^T y_k > 0$ is <strong>automatically guaranteed</strong>. Specifically, the second Wolfe condition (curvature condition) says $\nabla f(x_{k+1})^T p_k \geq c_2 \nabla f(x_k)^T p_k$, and since $s_k = \alpha_k p_k$ with $\alpha_k > 0$, this implies $s_k^T y_k > 0$. So as long as you do a proper Wolfe line search, you never have to explicitly check the curvature condition &mdash; it holds for free.
+<strong>The beautiful connection to line search:</strong> If you use the <strong>Wolfe conditions</strong> from <a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a> to choose $\alpha_k$, the curvature condition $s_k^T y_k > 0$ is <strong>automatically guaranteed</strong>. Specifically, the second Wolfe condition (curvature condition) says $\nabla f(x_{k+1})^T p_k \geq c_2 \nabla f(x_k)^T p_k$, and since $s_k = \alpha_k p_k$ with $\alpha_k > 0$, this implies $s_k^T y_k > 0$. So as long as you do a proper Wolfe line search, you never have to explicitly check the curvature condition &mdash; it holds for free.
 </div>
 
 
@@ -129,7 +87,7 @@ $$B_{k+1} = B_k - \frac{B_k s_k s_k^T B_k}{s_k^T B_k s_k} + \frac{y_k y_k^T}{y_k
 <dl class="breakdown">
   <dt>$B_k$</dt><dd>current Hessian approximation (an $n \times n$ matrix)</dd>
   <dt>$B_{k+1}$</dt><dd>updated Hessian approximation (also $n \times n$)</dd>
-  <dt>$s_k s_k^T$</dt><dd><strong>outer product</strong> of the step with itself &mdash; an $n \times n$ matrix of rank 1 (recall outer products from <a href="cg-03-linear-algebra.html" style="color:#64ffda;">Page 03</a>)</dd>
+  <dt>$s_k s_k^T$</dt><dd><strong>outer product</strong> of the step with itself &mdash; an $n \times n$ matrix of rank 1 (recall outer products from <a href="cg-03-linear-algebra.html" style="color:#d4956a;">Page 03</a>)</dd>
   <dt>$y_k y_k^T$</dt><dd>outer product of the gradient change with itself &mdash; also rank 1</dd>
   <dt>$B_k s_k$</dt><dd>matrix-vector product: $B_k$ times the step vector</dd>
   <dt>$s_k^T B_k s_k$</dt><dd>a scalar: the step vector's "energy" under the Hessian approximation</dd>
@@ -181,23 +139,23 @@ $$\rho_k = \frac{1}{y_k^T s_k}$$
 
 <div class="algo-line" style="margin-top:12px;"><strong>For $k = 0, 1, 2, \ldots$ repeat:</strong></div>
 
-<div class="algo-line" style="padding-left:24px;"><strong>Step 1:</strong> $p_k = -H_k g_k$ <span style="color:#888;">&emsp;// search direction</span></div>
+<div class="algo-line" style="padding-left:24px;"><strong>Step 1:</strong> $p_k = -H_k g_k$ <span style="color:#a8a49c;">&emsp;// search direction</span></div>
 <div class="algo-comment" style="padding-left:24px;">&emsp; Multiply inverse Hessian approx by negative gradient. This is the "quasi-Newton direction."</div>
 
-<div class="algo-line" style="padding-left:24px;"><strong>Step 2:</strong> Find $\alpha_k$ via line search satisfying <strong>Wolfe conditions</strong> (<a href="cg-08-line-search.html" style="color:#64ffda;">Page 08</a>)</div>
+<div class="algo-line" style="padding-left:24px;"><strong>Step 2:</strong> Find $\alpha_k$ via line search satisfying <strong>Wolfe conditions</strong> (<a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a>)</div>
 <div class="algo-comment" style="padding-left:24px;">&emsp; How far to walk. Wolfe conditions guarantee $s_k^Ty_k > 0$ automatically.</div>
 
-<div class="algo-line" style="padding-left:24px;"><strong>Step 3:</strong> $x_{k+1} = x_k + \alpha_k p_k$ <span style="color:#888;">&emsp;// take the step</span></div>
+<div class="algo-line" style="padding-left:24px;"><strong>Step 3:</strong> $x_{k+1} = x_k + \alpha_k p_k$ <span style="color:#a8a49c;">&emsp;// take the step</span></div>
 
-<div class="algo-line" style="padding-left:24px;"><strong>Step 4:</strong> $g_{k+1} = \nabla f(x_{k+1})$ <span style="color:#888;">&emsp;// gradient at new point</span></div>
+<div class="algo-line" style="padding-left:24px;"><strong>Step 4:</strong> $g_{k+1} = \nabla f(x_{k+1})$ <span style="color:#a8a49c;">&emsp;// gradient at new point</span></div>
 
 <div class="algo-line" style="padding-left:24px;"><strong>Step 5:</strong> If $\|g_{k+1}\| < \epsilon$: <strong>STOP</strong> &mdash; converged.</div>
 
-<div class="algo-line" style="padding-left:24px;"><strong>Step 6:</strong> $s_k = x_{k+1} - x_k = \alpha_k p_k$ <span style="color:#888;">&emsp;// step taken</span></div>
+<div class="algo-line" style="padding-left:24px;"><strong>Step 6:</strong> $s_k = x_{k+1} - x_k = \alpha_k p_k$ <span style="color:#a8a49c;">&emsp;// step taken</span></div>
 
-<div class="algo-line" style="padding-left:24px;"><strong>Step 7:</strong> $y_k = g_{k+1} - g_k$ <span style="color:#888;">&emsp;// gradient change</span></div>
+<div class="algo-line" style="padding-left:24px;"><strong>Step 7:</strong> $y_k = g_{k+1} - g_k$ <span style="color:#a8a49c;">&emsp;// gradient change</span></div>
 
-<div class="algo-line" style="padding-left:24px;"><strong>Step 8:</strong> $\rho_k = \dfrac{1}{y_k^T s_k}$ <span style="color:#888;">&emsp;// curvature scaling factor</span></div>
+<div class="algo-line" style="padding-left:24px;"><strong>Step 8:</strong> $\rho_k = \dfrac{1}{y_k^T s_k}$ <span style="color:#a8a49c;">&emsp;// curvature scaling factor</span></div>
 <div class="algo-comment" style="padding-left:24px;">&emsp; Since Wolfe guarantees $y_k^Ts_k > 0$, this is safe to compute.</div>
 
 <div class="algo-line" style="padding-left:24px;"><strong>Step 9:</strong> $H_{k+1} = (I - \rho_k s_k y_k^T)\,H_k\,(I - \rho_k y_k s_k^T) + \rho_k s_k s_k^T$</div>
@@ -353,7 +311,7 @@ $$= \frac{1}{1225}\begin{bmatrix} 1053 + 140 & -468 + 210 \\ -468 + 210 & 208 + 
 </div>
 
 <div class="note">
-<strong>What happens next:</strong> Using $H_1$ and $g_1$, the next search direction $p_1 = -H_1 g_1$ will be much better than steepest descent. For a 2D quadratic, BFGS typically converges in 2-3 iterations. After $n$ iterations on an $n$-dimensional quadratic with exact line search, BFGS recovers $H_n = Q^{-1}$ exactly &mdash; similar to how SR1 can recover $Q^{-1}$ (see <a href="cg-13-sr1-dfp.html" style="color:#64ffda;">Page 13</a>).
+<strong>What happens next:</strong> Using $H_1$ and $g_1$, the next search direction $p_1 = -H_1 g_1$ will be much better than steepest descent. For a 2D quadratic, BFGS typically converges in 2-3 iterations. After $n$ iterations on an $n$-dimensional quadratic with exact line search, BFGS recovers $H_n = Q^{-1}$ exactly &mdash; similar to how SR1 can recover $Q^{-1}$ (see <a href="cg-13-sr1-dfp.html" style="color:#d4956a;">Page 13</a>).
 </div>
 
 
@@ -363,7 +321,7 @@ $$= \frac{1}{1225}\begin{bmatrix} 1053 + 140 & -468 + 210 \\ -468 + 210 & 208 + 
 <div class="formula-box">
 <strong>BFGS convergence rate:</strong> Q-superlinear<br><br>
 <p>This means: faster than gradient descent (which is Q-linear), but not quite as fast as Newton (which is Q-quadratic). More precisely, the error ratio $\frac{\|x_{k+1} - x^*\|}{\|x_k - x^*\|}$ goes to zero as $k \to \infty$ &mdash; each step becomes proportionally better than the last.</p>
-<p style="margin-top:8px;">Recall convergence rates from <a href="cg-01-math-foundations.html" style="color:#64ffda;">Page 01</a>:</p>
+<p style="margin-top:8px;">Recall convergence rates from <a href="cg-01-math-foundations.html" style="color:#d4956a;">Page 01</a>:</p>
 <ul style="margin-top:8px; margin-left:20px;">
   <li><strong>Q-linear</strong> (GD): error shrinks by a constant factor each step</li>
   <li><strong>Q-superlinear</strong> (BFGS): the factor itself shrinks &mdash; acceleration</li>
@@ -380,42 +338,42 @@ $$= \frac{1}{1225}\begin{bmatrix} 1053 + 140 & -468 + 210 \\ -468 + 210 & 208 + 
   <th>Newton</th>
 </tr>
 <tr>
-  <td style="text-align:left; color:#64ffda;">Cost per step</td>
+  <td style="text-align:left; color:#d4956a;">Cost per step</td>
   <td>$O(n)$</td>
   <td>$O(n)$</td>
   <td>$O(n^2)$</td>
   <td>$O(n^3)$</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#64ffda;">Storage</td>
+  <td style="text-align:left; color:#d4956a;">Storage</td>
   <td>$O(n)$</td>
   <td>$O(n)$</td>
   <td>$O(n^2)$</td>
   <td>$O(n^2)$</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#64ffda;">Convergence rate</td>
+  <td style="text-align:left; color:#d4956a;">Convergence rate</td>
   <td>Q-linear</td>
   <td>Q-linear (on quadratics: $n$ steps)</td>
   <td>Q-superlinear</td>
   <td>Q-quadratic</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#64ffda;">Needs Hessian?</td>
+  <td style="text-align:left; color:#d4956a;">Needs Hessian?</td>
   <td>No</td>
   <td>No</td>
   <td>No (builds approximation)</td>
   <td>Yes</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#64ffda;">Best for</td>
+  <td style="text-align:left; color:#d4956a;">Best for</td>
   <td>Very large $n$, simple problems</td>
   <td>Large $n$, memory limited</td>
   <td>Medium $n$ (up to ~thousands)</td>
   <td>Small $n$, fast convergence needed</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#64ffda;">Robustness</td>
+  <td style="text-align:left; color:#d4956a;">Robustness</td>
   <td>Very robust (always descends)</td>
   <td>Good (with restarts)</td>
   <td>Very good (with Wolfe line search)</td>
@@ -425,7 +383,7 @@ $$= \frac{1}{1225}\begin{bmatrix} 1053 + 140 & -468 + 210 \\ -468 + 210 & 208 + 
 
 <div class="why-box">
 <h3>When to Use BFGS</h3>
-<p><strong>BFGS is the default choice</strong> for medium-sized smooth optimization problems (up to a few thousand variables). It gives you Newton-like speed without computing the Hessian. The $O(n^2)$ cost per iteration and $O(n^2)$ storage for the matrix $H_k$ are the limiting factors &mdash; for very large problems ($n > 10{,}000$), use CG (<a href="cg-11-nonlinear-cg.html" style="color:#64ffda;">Page 11</a>) or L-BFGS (a limited-memory version that only stores a few vectors instead of the full matrix).</p>
+<p><strong>BFGS is the default choice</strong> for medium-sized smooth optimization problems (up to a few thousand variables). It gives you Newton-like speed without computing the Hessian. The $O(n^2)$ cost per iteration and $O(n^2)$ storage for the matrix $H_k$ are the limiting factors &mdash; for very large problems ($n > 10{,}000$), use CG (<a href="cg-11-nonlinear-cg.html" style="color:#d4956a;">Page 11</a>) or L-BFGS (a limited-memory version that only stores a few vectors instead of the full matrix).</p>
 </div>
 
 

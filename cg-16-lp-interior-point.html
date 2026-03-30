@@ -8,49 +8,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
-.container { max-width: 900px; margin: 0 auto; }
-h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
-.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
-h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
-.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
-.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
-.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
-.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
-.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
-.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
-.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
-.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
-.hand-calc .result { color: #64ffda; font-weight: bold; }
-.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
-.exam-flag { background: #2a1a1a; border: 2px solid #ff6b6b; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
-.exam-flag h4 { color: #ff6b6b; margin-bottom: 8px; }
-.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
-.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
-.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
-.step-table tr:nth-child(even) { background: #16213e; }
-.algo-box { border-left: 4px solid #64ffda; padding: 16px 20px; margin: 20px 0; background: #0f3460; border-radius: 0 12px 12px 0; }
-.algo-box .algo-title { color: #ffd93d; font-weight: bold; font-size: 18px; margin-bottom: 12px; }
-.algo-box .algo-line { padding: 6px 0; font-size: 16px; }
-.algo-box .algo-comment { color: #888; font-size: 14px; }
-.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
-.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
-.glossary dl { font-size: 15px; }
-.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
-.glossary dd { margin-left: 20px; color: #ccc; }
-.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
-.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
-.nav a:hover { text-decoration: underline; }
-.nav p { margin: 4px 0; }
-svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
-.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
-.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
-.breakdown dd { color: #ccc; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
@@ -70,7 +28,7 @@ svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
 </div>
 
 <div class="formula-box">
-<p style="color: #ffd93d; font-weight: bold; margin-bottom: 12px;">Standard Form of a Linear Program (LP)</p>
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Standard Form of a Linear Program (LP)</p>
 $$\min \; c^T x \quad \text{subject to} \quad Ax \leq b, \quad x \geq 0$$
 <dl class="breakdown">
   <dt>$c \in \mathbb{R}^n$</dt>
@@ -101,32 +59,32 @@ $$\min \; c^T x \quad \text{subject to} \quad Ax \leq b, \quad x \geq 0$$
   <!-- axes -->
   <line x1="50" y1="270" x2="380" y2="270" stroke="#555" stroke-width="1"/>
   <line x1="50" y1="270" x2="50" y2="20" stroke="#555" stroke-width="1"/>
-  <text x="385" y="275" fill="#888" font-size="14">$x_1$</text>
-  <text x="40" y="15" fill="#888" font-size="14">$x_2$</text>
+  <text x="385" y="275" fill="#a8a49c" font-size="14">$x_1$</text>
+  <text x="40" y="15" fill="#a8a49c" font-size="14">$x_2$</text>
 
   <!-- feasible region (polygon) -->
-  <polygon points="50,270 290,270 290,170 170,70 50,170" fill="#0f3460" fill-opacity="0.6" stroke="#64ffda" stroke-width="2"/>
+  <polygon points="50,270 290,270 290,170 170,70 50,170" fill="#25252e" fill-opacity="0.6" stroke="#d4956a" stroke-width="2"/>
 
   <!-- vertices -->
-  <circle cx="50" cy="270" r="5" fill="#ffd93d"/>
-  <circle cx="290" cy="270" r="5" fill="#ffd93d"/>
-  <circle cx="290" cy="170" r="5" fill="#ffd93d"/>
-  <circle cx="170" cy="70" r="5" fill="#ffd93d"/>
-  <circle cx="50" cy="170" r="5" fill="#ffd93d"/>
+  <circle cx="50" cy="270" r="5" fill="#c9a84c"/>
+  <circle cx="290" cy="270" r="5" fill="#c9a84c"/>
+  <circle cx="290" cy="170" r="5" fill="#c9a84c"/>
+  <circle cx="170" cy="70" r="5" fill="#c9a84c"/>
+  <circle cx="50" cy="170" r="5" fill="#c9a84c"/>
 
   <!-- optimal vertex (highlighted) -->
-  <circle cx="170" cy="70" r="9" fill="none" stroke="#ff6b6b" stroke-width="2"/>
-  <text x="180" y="60" fill="#ff6b6b" font-size="13" font-weight="bold">Optimal!</text>
+  <circle cx="170" cy="70" r="9" fill="none" stroke="#c47070" stroke-width="2"/>
+  <text x="180" y="60" fill="#c47070" font-size="13" font-weight="bold">Optimal!</text>
 
   <!-- objective gradient arrow -->
-  <defs><marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bb86fc"/></marker></defs>
-  <line x1="200" y1="220" x2="150" y2="170" stroke="#bb86fc" stroke-width="2" marker-end="url(#ah)"/>
-  <text x="155" y="240" fill="#bb86fc" font-size="12">$-c$ (objective</text>
-  <text x="155" y="255" fill="#bb86fc" font-size="12">gradient)</text>
+  <defs><marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#9b89b6"/></marker></defs>
+  <line x1="200" y1="220" x2="150" y2="170" stroke="#9b89b6" stroke-width="2" marker-end="url(#ah)"/>
+  <text x="155" y="240" fill="#9b89b6" font-size="12">$-c$ (objective</text>
+  <text x="155" y="255" fill="#9b89b6" font-size="12">gradient)</text>
 
   <!-- labels -->
-  <text x="150" y="200" fill="#64ffda" font-size="14" text-anchor="middle">Feasible Region</text>
-  <text x="60" y="290" fill="#ffd93d" font-size="11">Vertices (corners)</text>
+  <text x="150" y="200" fill="#d4956a" font-size="14" text-anchor="middle">Feasible Region</text>
+  <text x="60" y="290" fill="#c9a84c" font-size="11">Vertices (corners)</text>
 </svg>
 </div>
 
@@ -145,9 +103,9 @@ $$\min \; c^T x \quad \text{subject to} \quad Ax \leq b, \quad x \geq 0$$
 <p>Consider the LP in standard equality form (we convert inequalities to equalities by adding <strong>slack variables</strong> $s \geq 0$):</p>
 
 <div class="formula-box">
-<p style="color: #ffd93d; font-weight: bold; margin-bottom: 12px;">LP in Equality Form</p>
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">LP in Equality Form</p>
 $$\min \; c^T x \quad \text{subject to} \quad Ax = b, \quad x \geq 0$$
-<p style="margin-top: 12px; font-size: 16px; color: #ccc;">The inequality $Ax \leq b$ becomes $Ax + s = b$ with $s \geq 0$, then we absorb $s$ into $x$.</p>
+<p style="margin-top: 12px; font-size: 16px; color: #b8b4ac;">The inequality $Ax \leq b$ becomes $Ax + s = b$ with $s \geq 0$, then we absorb $s$ into $x$.</p>
 </div>
 
 <p>The <strong>Lagrangian</strong> (recall from <a href="cg-15-constrained.html">Page 15</a>) for this LP is:</p>
@@ -165,19 +123,19 @@ $$\mathcal{L}(x, \lambda, \mu) = c^T x - \lambda^T(Ax - b) - \mu^T x$$
 <p>The <strong>KKT conditions</strong> for LP become:</p>
 
 <div class="formula-box">
-<p style="color: #ffd93d; font-weight: bold; margin-bottom: 16px;">KKT Conditions for LP</p>
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 16px;">KKT Conditions for LP</p>
 
-<p style="margin: 8px 0;"><span style="color: #64ffda; font-weight: bold;">1. Stationarity:</span> $\nabla_x \mathcal{L} = c - A^T \lambda - \mu = 0$, so <strong>$\mu = c - A^T \lambda$</strong></p>
-<p style="font-size: 15px; color: #ccc; margin-left: 20px;">The gradient of the Lagrangian with respect to $x$ is zero. Since everything is linear, this just gives us $\mu$ in terms of $\lambda$.</p>
+<p style="margin: 8px 0;"><span style="color: #d4956a; font-weight: bold;">1. Stationarity:</span> $\nabla_x \mathcal{L} = c - A^T \lambda - \mu = 0$, so <strong>$\mu = c - A^T \lambda$</strong></p>
+<p style="font-size: 15px; color: #b8b4ac; margin-left: 20px;">The gradient of the Lagrangian with respect to $x$ is zero. Since everything is linear, this just gives us $\mu$ in terms of $\lambda$.</p>
 
-<p style="margin: 12px 0;"><span style="color: #64ffda; font-weight: bold;">2. Primal feasibility:</span> $Ax = b$ and $x \geq 0$</p>
-<p style="font-size: 15px; color: #ccc; margin-left: 20px;">The point must satisfy all constraints.</p>
+<p style="margin: 12px 0;"><span style="color: #d4956a; font-weight: bold;">2. Primal feasibility:</span> $Ax = b$ and $x \geq 0$</p>
+<p style="font-size: 15px; color: #b8b4ac; margin-left: 20px;">The point must satisfy all constraints.</p>
 
-<p style="margin: 12px 0;"><span style="color: #64ffda; font-weight: bold;">3. Dual feasibility:</span> $\mu \geq 0$, which means $c - A^T \lambda \geq 0$</p>
-<p style="font-size: 15px; color: #ccc; margin-left: 20px;">The multipliers for the bound constraints must be non-negative.</p>
+<p style="margin: 12px 0;"><span style="color: #d4956a; font-weight: bold;">3. Dual feasibility:</span> $\mu \geq 0$, which means $c - A^T \lambda \geq 0$</p>
+<p style="font-size: 15px; color: #b8b4ac; margin-left: 20px;">The multipliers for the bound constraints must be non-negative.</p>
 
-<p style="margin: 12px 0;"><span style="color: #64ffda; font-weight: bold;">4. Complementary slackness:</span> $\mu_i x_i = 0$ for each $i$</p>
-<p style="font-size: 15px; color: #ccc; margin-left: 20px;">For each variable: either $x_i = 0$ (variable is at its bound) or $\mu_i = 0$ (the bound is not "active"). This means at the optimum, most variables are either zero or have zero multiplier.</p>
+<p style="margin: 12px 0;"><span style="color: #d4956a; font-weight: bold;">4. Complementary slackness:</span> $\mu_i x_i = 0$ for each $i$</p>
+<p style="font-size: 15px; color: #b8b4ac; margin-left: 20px;">For each variable: either $x_i = 0$ (variable is at its bound) or $\mu_i = 0$ (the bound is not "active"). This means at the optimum, most variables are either zero or have zero multiplier.</p>
 </div>
 
 <div class="why-box">
@@ -203,7 +161,7 @@ $$\mathcal{L}(x, \lambda, \mu) = c^T x - \lambda^T(Ax - b) - \mu^T x$$
 </div>
 
 <div class="formula-box">
-<p style="color: #ffd93d; font-weight: bold; margin-bottom: 12px;">The Barrier Problem</p>
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">The Barrier Problem</p>
 <p>Instead of solving the LP directly, we solve a sequence of <strong>barrier problems</strong>:</p>
 $$\min_x \; c^T x \;-\; \mu \sum_{i=1}^{n} \ln(x_i) \quad \text{subject to} \quad Ax = b$$
 <dl class="breakdown">
@@ -216,7 +174,7 @@ $$\min_x \; c^T x \;-\; \mu \sum_{i=1}^{n} \ln(x_i) \quad \text{subject to} \qua
   <dt>$Ax = b$</dt>
   <dd>The equality constraints remain unchanged.</dd>
 </dl>
-<p style="margin-top: 12px; color: #ccc; font-size: 16px;"><strong>Key insight:</strong> This barrier problem has NO inequality constraints ($x \geq 0$). The log barrier automatically enforces $x > 0$ because $\ln(x_i)$ is only defined for $x_i > 0$. We have traded the hard constraint $x \geq 0$ for a smooth penalty term.</p>
+<p style="margin-top: 12px; color: #b8b4ac; font-size: 16px;"><strong>Key insight:</strong> This barrier problem has NO inequality constraints ($x \geq 0$). The log barrier automatically enforces $x > 0$ because $\ln(x_i)$ is only defined for $x_i > 0$. We have traded the hard constraint $x \geq 0$ for a smooth penalty term.</p>
 </div>
 
 <div class="why-box">
@@ -233,7 +191,7 @@ $$\min_x \; c^T x \;-\; \mu \sum_{i=1}^{n} \ln(x_i) \quad \text{subject to} \qua
 </div>
 
 <div class="formula-box">
-<p style="color: #ffd93d; font-weight: bold; margin-bottom: 12px;">The Central Path</p>
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">The Central Path</p>
 <p>For each value of $\mu > 0$, the barrier problem has a unique solution $x(\mu)$. As $\mu$ varies from large to small, these solutions trace out a curve called the <strong>central path</strong>:</p>
 $$\{x(\mu) : \mu > 0\}$$
 <p style="margin-top: 12px;">As $\mu \to 0$, the central path converges to the optimal solution $x^*$ of the original LP.</p>
@@ -243,29 +201,29 @@ $$\{x(\mu) : \mu > 0\}$$
 <div style="text-align: center; margin: 30px 0;">
 <svg viewBox="0 0 400 300" width="400" style="max-width: 100%;">
   <!-- feasible region -->
-  <polygon points="60,260 340,260 340,120 200,40 60,120" fill="#0f3460" fill-opacity="0.5" stroke="#64ffda" stroke-width="2"/>
+  <polygon points="60,260 340,260 340,120 200,40 60,120" fill="#25252e" fill-opacity="0.5" stroke="#d4956a" stroke-width="2"/>
 
   <!-- central path (curved line from center to optimal corner) -->
-  <path d="M 190,155 Q 195,120 200,90 Q 202,70 200,45" fill="none" stroke="#ffd93d" stroke-width="3" stroke-dasharray="8,4"/>
+  <path d="M 190,155 Q 195,120 200,90 Q 202,70 200,45" fill="none" stroke="#c9a84c" stroke-width="3" stroke-dasharray="8,4"/>
 
   <!-- points along path -->
-  <circle cx="190" cy="155" r="5" fill="#ffd93d"/>
-  <text x="200" y="160" fill="#ffd93d" font-size="11">$\mu$ large</text>
+  <circle cx="190" cy="155" r="5" fill="#c9a84c"/>
+  <text x="200" y="160" fill="#c9a84c" font-size="11">$\mu$ large</text>
 
-  <circle cx="197" cy="110" r="5" fill="#ffd93d"/>
-  <text x="207" y="115" fill="#ffd93d" font-size="11">$\mu$ medium</text>
+  <circle cx="197" cy="110" r="5" fill="#c9a84c"/>
+  <text x="207" y="115" fill="#c9a84c" font-size="11">$\mu$ medium</text>
 
-  <circle cx="200" cy="70" r="5" fill="#ffd93d"/>
-  <text x="210" y="75" fill="#ffd93d" font-size="11">$\mu$ small</text>
+  <circle cx="200" cy="70" r="5" fill="#c9a84c"/>
+  <text x="210" y="75" fill="#c9a84c" font-size="11">$\mu$ small</text>
 
   <!-- optimal vertex -->
-  <circle cx="200" cy="40" r="7" fill="none" stroke="#ff6b6b" stroke-width="2"/>
-  <circle cx="200" cy="40" r="3" fill="#ff6b6b"/>
-  <text x="210" y="35" fill="#ff6b6b" font-size="12" font-weight="bold">$x^*$ (LP optimal)</text>
+  <circle cx="200" cy="40" r="7" fill="none" stroke="#c47070" stroke-width="2"/>
+  <circle cx="200" cy="40" r="3" fill="#c47070"/>
+  <text x="210" y="35" fill="#c47070" font-size="12" font-weight="bold">$x^*$ (LP optimal)</text>
 
   <!-- label -->
-  <text x="120" y="140" fill="#ffd93d" font-size="13" font-weight="bold">Central Path</text>
-  <text x="150" y="230" fill="#64ffda" font-size="14">Feasible Region</text>
+  <text x="120" y="140" fill="#c9a84c" font-size="13" font-weight="bold">Central Path</text>
+  <text x="150" y="230" fill="#d4956a" font-size="14">Feasible Region</text>
 </svg>
 </div>
 
@@ -280,17 +238,17 @@ $$\{x(\mu) : \mu > 0\}$$
 </div>
 
 <div class="formula-box">
-<p style="color: #ffd93d; font-weight: bold; margin-bottom: 12px;">KKT for the Barrier Problem</p>
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">KKT for the Barrier Problem</p>
 <p>The optimality conditions for the barrier subproblem are:</p>
 
-<p style="margin: 8px 0;"><span style="color: #64ffda; font-weight: bold;">1. Stationarity:</span> $c - A^T \lambda - \mu_{\text{mult}} = 0$</p>
+<p style="margin: 8px 0;"><span style="color: #d4956a; font-weight: bold;">1. Stationarity:</span> $c - A^T \lambda - \mu_{\text{mult}} = 0$</p>
 
-<p style="margin: 8px 0;"><span style="color: #64ffda; font-weight: bold;">2. Primal feasibility:</span> $Ax = b$, $x > 0$ (strictly positive &mdash; we stay in the interior)</p>
+<p style="margin: 8px 0;"><span style="color: #d4956a; font-weight: bold;">2. Primal feasibility:</span> $Ax = b$, $x > 0$ (strictly positive &mdash; we stay in the interior)</p>
 
-<p style="margin: 8px 0;"><span style="color: #64ffda; font-weight: bold;">3. Relaxed complementarity:</span> $\mu_{\text{mult},i} \cdot x_i = \sigma$ for each $i$</p>
-<p style="font-size: 15px; color: #ccc; margin-left: 20px;">Instead of $\mu_i x_i = 0$ (exact complementarity), we have $\mu_i x_i = \sigma > 0$. As $\sigma \to 0$, this approaches exact complementarity.</p>
+<p style="margin: 8px 0;"><span style="color: #d4956a; font-weight: bold;">3. Relaxed complementarity:</span> $\mu_{\text{mult},i} \cdot x_i = \sigma$ for each $i$</p>
+<p style="font-size: 15px; color: #b8b4ac; margin-left: 20px;">Instead of $\mu_i x_i = 0$ (exact complementarity), we have $\mu_i x_i = \sigma > 0$. As $\sigma \to 0$, this approaches exact complementarity.</p>
 
-<p style="margin: 8px 0;"><span style="color: #64ffda; font-weight: bold;">4. Dual feasibility:</span> $\mu_{\text{mult}} > 0$ (strictly positive in the interior)</p>
+<p style="margin: 8px 0;"><span style="color: #d4956a; font-weight: bold;">4. Dual feasibility:</span> $\mu_{\text{mult}} > 0$ (strictly positive in the interior)</p>
 </div>
 
 <div class="why-box">
@@ -357,37 +315,37 @@ $$\{x(\mu) : \mu > 0\}$$
   <th>Interior Point Method</th>
 </tr>
 <tr>
-  <td style="text-align: left; color: #64ffda;">Strategy</td>
+  <td style="text-align: left; color: #d4956a;">Strategy</td>
   <td>Walk along edges, corner to corner</td>
   <td>Move through the interior, approaching optimal corner</td>
 </tr>
 <tr>
-  <td style="text-align: left; color: #64ffda;">Path</td>
+  <td style="text-align: left; color: #d4956a;">Path</td>
   <td>On the boundary (vertices and edges)</td>
   <td>Strictly in the interior (central path)</td>
 </tr>
 <tr>
-  <td style="text-align: left; color: #64ffda;">Worst-case iterations</td>
+  <td style="text-align: left; color: #d4956a;">Worst-case iterations</td>
   <td>Exponential ($2^n$ possible vertices)</td>
   <td>Polynomial ($O(\sqrt{n})$ iterations)</td>
 </tr>
 <tr>
-  <td style="text-align: left; color: #64ffda;">Typical iterations</td>
+  <td style="text-align: left; color: #d4956a;">Typical iterations</td>
   <td>$2m$ to $3m$ (often fast in practice)</td>
   <td>$20$ to $50$ (nearly constant!)</td>
 </tr>
 <tr>
-  <td style="text-align: left; color: #64ffda;">Cost per iteration</td>
+  <td style="text-align: left; color: #d4956a;">Cost per iteration</td>
   <td>Cheap (pivot operation)</td>
   <td>Expensive (solve Newton system)</td>
 </tr>
 <tr>
-  <td style="text-align: left; color: #64ffda;">Best for</td>
+  <td style="text-align: left; color: #d4956a;">Best for</td>
   <td>Small-medium LPs, warm starts</td>
   <td>Large sparse LPs</td>
 </tr>
 <tr>
-  <td style="text-align: left; color: #64ffda;">Historical</td>
+  <td style="text-align: left; color: #d4956a;">Historical</td>
   <td>Dantzig, 1947</td>
   <td>Karmarkar, 1984</td>
 </tr>
@@ -461,7 +419,7 @@ $$\{x(\mu) : \mu > 0\}$$
 <div class="nav">
   <p><a href="cg-15-constrained.html">&larr; Previous: Page 15 &mdash; Constrained Optimization &amp; KKT</a></p>
   <p><a href="cg-17-method-map.html">Next: Page 17 &mdash; How All Methods Connect &rarr;</a></p>
-  <p style="margin-top: 8px;"><a href="index.html" style="color: #bb86fc;">Back to Index</a></p>
+  <p style="margin-top: 8px;"><a href="index.html" style="color: #9b89b6;">Back to Index</a></p>
 </div>
 
 </div>

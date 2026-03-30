@@ -8,49 +8,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
-.container { max-width: 900px; margin: 0 auto; }
-h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
-.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
-h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
-.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
-.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
-.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
-.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
-.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
-.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
-.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
-.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
-.hand-calc .result { color: #64ffda; font-weight: bold; }
-.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
-.exam-flag { background: #2a1a1a; border: 2px solid #ff6b6b; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
-.exam-flag h4 { color: #ff6b6b; margin-bottom: 8px; }
-.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
-.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
-.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
-.step-table tr:nth-child(even) { background: #16213e; }
-.algo-box { border-left: 4px solid #64ffda; padding: 16px 20px; margin: 20px 0; background: #0f3460; border-radius: 0 12px 12px 0; }
-.algo-box .algo-title { color: #ffd93d; font-weight: bold; font-size: 18px; margin-bottom: 12px; }
-.algo-box .algo-line { padding: 6px 0; font-size: 16px; }
-.algo-box .algo-comment { color: #888; font-size: 14px; }
-.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
-.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
-.glossary dl { font-size: 15px; }
-.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
-.glossary dd { margin-left: 20px; color: #ccc; }
-.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
-.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
-.nav a:hover { text-decoration: underline; }
-.nav p { margin: 4px 0; }
-svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
-.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
-.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
-.breakdown dd { color: #ccc; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
@@ -93,37 +51,37 @@ $$\phi(\alpha) = f(x_k + \alpha p_k)$$
   <!-- axes -->
   <line x1="80" y1="270" x2="700" y2="270" stroke="#555" stroke-width="1.5"/>
   <line x1="80" y1="270" x2="80" y2="30" stroke="#555" stroke-width="1.5"/>
-  <text x="700" y="290" fill="#888" font-size="14" text-anchor="end">alpha</text>
-  <text x="60" y="40" fill="#888" font-size="14" text-anchor="end">phi(alpha)</text>
+  <text x="700" y="290" fill="#a8a49c" font-size="14" text-anchor="end">alpha</text>
+  <text x="60" y="40" fill="#a8a49c" font-size="14" text-anchor="end">phi(alpha)</text>
 
   <!-- phi curve: starts high, dips, comes back up -->
-  <path d="M80,80 Q200,260 350,200 Q500,130 680,100" fill="none" stroke="#64ffda" stroke-width="2.5"/>
-  <text x="690" y="95" fill="#64ffda" font-size="13">phi(alpha)</text>
+  <path d="M80,80 Q200,260 350,200 Q500,130 680,100" fill="none" stroke="#d4956a" stroke-width="2.5"/>
+  <text x="690" y="95" fill="#d4956a" font-size="13">phi(alpha)</text>
 
   <!-- phi(0) marker -->
-  <circle cx="80" cy="80" r="5" fill="#ffd93d"/>
-  <text x="88" y="75" fill="#ffd93d" font-size="13">phi(0) = f(x_k)</text>
+  <circle cx="80" cy="80" r="5" fill="#c9a84c"/>
+  <text x="88" y="75" fill="#c9a84c" font-size="13">phi(0) = f(x_k)</text>
 
   <!-- tangent line at alpha=0 (negative slope) -->
-  <line x1="80" y1="80" x2="300" y2="210" stroke="#888" stroke-width="1" stroke-dasharray="6,4"/>
-  <text x="250" y="235" fill="#888" font-size="12">tangent at alpha=0</text>
-  <text x="250" y="250" fill="#888" font-size="12">slope = phi'(0) &lt; 0</text>
+  <line x1="80" y1="80" x2="300" y2="210" stroke="#a8a49c" stroke-width="1" stroke-dasharray="6,4"/>
+  <text x="250" y="235" fill="#a8a49c" font-size="12">tangent at alpha=0</text>
+  <text x="250" y="250" fill="#a8a49c" font-size="12">slope = phi'(0) &lt; 0</text>
 
   <!-- optimal alpha marker -->
-  <circle cx="335" cy="204" r="5" fill="#bb86fc"/>
-  <line x1="335" y1="204" x2="335" y2="270" stroke="#bb86fc" stroke-width="1" stroke-dasharray="4,3"/>
-  <text x="335" y="288" fill="#bb86fc" font-size="13" text-anchor="middle">alpha*</text>
-  <text x="380" y="220" fill="#bb86fc" font-size="12">exact minimum</text>
+  <circle cx="335" cy="204" r="5" fill="#9b89b6"/>
+  <line x1="335" y1="204" x2="335" y2="270" stroke="#9b89b6" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="335" y="288" fill="#9b89b6" font-size="13" text-anchor="middle">alpha*</text>
+  <text x="380" y="220" fill="#9b89b6" font-size="12">exact minimum</text>
 
   <!-- too small alpha -->
-  <circle cx="150" cy="153" r="4" fill="#ff6b6b"/>
-  <line x1="150" y1="153" x2="150" y2="270" stroke="#ff6b6b" stroke-width="1" stroke-dasharray="4,3"/>
-  <text x="150" y="288" fill="#ff6b6b" font-size="12" text-anchor="middle">too small</text>
+  <circle cx="150" cy="153" r="4" fill="#c47070"/>
+  <line x1="150" y1="153" x2="150" y2="270" stroke="#c47070" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="150" y="288" fill="#c47070" font-size="12" text-anchor="middle">too small</text>
 
   <!-- too big alpha -->
-  <circle cx="580" cy="118" r="4" fill="#ff6b6b"/>
-  <line x1="580" y1="118" x2="580" y2="270" stroke="#ff6b6b" stroke-width="1" stroke-dasharray="4,3"/>
-  <text x="580" y="288" fill="#ff6b6b" font-size="12" text-anchor="middle">too big</text>
+  <circle cx="580" cy="118" r="4" fill="#c47070"/>
+  <line x1="580" y1="118" x2="580" y2="270" stroke="#c47070" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="580" y="288" fill="#c47070" font-size="12" text-anchor="middle">too big</text>
 </svg>
 
 <div class="note">
@@ -162,36 +120,36 @@ $$\phi(\alpha) \leq \phi(0) + c_1 \alpha \phi'(0)$$
   <!-- axes -->
   <line x1="80" y1="270" x2="700" y2="270" stroke="#555" stroke-width="1.5"/>
   <line x1="80" y1="270" x2="80" y2="30" stroke="#555" stroke-width="1.5"/>
-  <text x="700" y="290" fill="#888" font-size="14" text-anchor="end">alpha</text>
-  <text x="60" y="40" fill="#888" font-size="14" text-anchor="end">phi(alpha)</text>
+  <text x="700" y="290" fill="#a8a49c" font-size="14" text-anchor="end">alpha</text>
+  <text x="60" y="40" fill="#a8a49c" font-size="14" text-anchor="end">phi(alpha)</text>
 
   <!-- phi curve -->
-  <path d="M80,90 Q180,230 300,200 Q430,160 650,140" fill="none" stroke="#64ffda" stroke-width="2.5"/>
-  <text x="660" y="135" fill="#64ffda" font-size="13">phi(alpha)</text>
+  <path d="M80,90 Q180,230 300,200 Q430,160 650,140" fill="none" stroke="#d4956a" stroke-width="2.5"/>
+  <text x="660" y="135" fill="#d4956a" font-size="13">phi(alpha)</text>
 
   <!-- Armijo line: phi(0) + c1*alpha*phi'(0), which slopes down but not as steeply -->
-  <line x1="80" y1="90" x2="650" y2="180" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="8,4"/>
-  <text x="560" y="175" fill="#ff6b6b" font-size="13">Armijo line</text>
-  <text x="560" y="192" fill="#ff6b6b" font-size="11">l(alpha) = phi(0) + c1*alpha*phi'(0)</text>
+  <line x1="80" y1="90" x2="650" y2="180" stroke="#c47070" stroke-width="2" stroke-dasharray="8,4"/>
+  <text x="560" y="175" fill="#c47070" font-size="13">Armijo line</text>
+  <text x="560" y="192" fill="#c47070" font-size="11">l(alpha) = phi(0) + c1*alpha*phi'(0)</text>
 
   <!-- acceptable region label -->
-  <rect x="85" y="42" width="160" height="24" rx="8" fill="#0a2e1a" stroke="#64ffda" stroke-width="1"/>
-  <text x="165" y="59" fill="#64ffda" font-size="13" text-anchor="middle">Acceptable region</text>
+  <rect x="85" y="42" width="160" height="24" rx="8" fill="rgba(106, 171, 142, 0.07)" stroke="#d4956a" stroke-width="1"/>
+  <text x="165" y="59" fill="#d4956a" font-size="13" text-anchor="middle">Acceptable region</text>
 
   <!-- phi(0) marker -->
-  <circle cx="80" cy="90" r="5" fill="#ffd93d"/>
-  <text x="90" y="83" fill="#ffd93d" font-size="13">phi(0)</text>
+  <circle cx="80" cy="90" r="5" fill="#c9a84c"/>
+  <text x="90" y="83" fill="#c9a84c" font-size="13">phi(0)</text>
 
   <!-- point that passes Armijo (phi curve below Armijo line) -->
-  <circle cx="220" cy="213" r="6" fill="#64ffda"/>
-  <text x="230" y="237" fill="#64ffda" font-size="12">PASS: phi below line</text>
+  <circle cx="220" cy="213" r="6" fill="#d4956a"/>
+  <text x="230" y="237" fill="#d4956a" font-size="12">PASS: phi below line</text>
 
   <!-- point that fails Armijo (phi curve above Armijo line) -->
-  <circle cx="530" cy="155" r="6" fill="#ff6b6b"/>
-  <text x="445" y="148" fill="#ff6b6b" font-size="12">FAIL: phi above line</text>
+  <circle cx="530" cy="155" r="6" fill="#c47070"/>
+  <text x="445" y="148" fill="#c47070" font-size="12">FAIL: phi above line</text>
 
   <!-- shade the acceptable region between alpha axis -->
-  <path d="M80,90 Q180,230 300,200 L300,178 L80,90 Z" fill="#0a2e1a" opacity="0.3"/>
+  <path d="M80,90 Q180,230 300,200 L300,178 L80,90 Z" fill="rgba(106, 171, 142, 0.07)" opacity="0.3"/>
 </svg>
 
 <div class="why-box">
@@ -294,11 +252,11 @@ Why start with $\alpha = 1$? Because for Newton's method and quasi-Newton method
 
 <div class="algo-box">
 <div class="algo-title">Algorithm: Backtracking Line Search</div>
-<div class="algo-line"><strong style="color:#64ffda;">Input:</strong> initial step size $\bar{\alpha} > 0$ (typically $\bar{\alpha} = 1$), shrink factor $\rho \in (0, 1)$ (typically $\rho = 0.5$ or $0.8$), Armijo parameter $c_1 \in (0, 1)$ (typically $c_1 = 10^{-4}$)</div>
-<div class="algo-line"><strong style="color:#64ffda;">Step 1:</strong> Set $\alpha \leftarrow \bar{\alpha}$</div>
-<div class="algo-line"><strong style="color:#64ffda;">Step 2:</strong> <strong>While</strong> $f(x_k + \alpha p_k) > f(x_k) + c_1 \alpha \nabla f(x_k)^T p_k$: <span class="algo-comment">&larr; Armijo fails?</span></div>
+<div class="algo-line"><strong style="color:#d4956a;">Input:</strong> initial step size $\bar{\alpha} > 0$ (typically $\bar{\alpha} = 1$), shrink factor $\rho \in (0, 1)$ (typically $\rho = 0.5$ or $0.8$), Armijo parameter $c_1 \in (0, 1)$ (typically $c_1 = 10^{-4}$)</div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 1:</strong> Set $\alpha \leftarrow \bar{\alpha}$</div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 2:</strong> <strong>While</strong> $f(x_k + \alpha p_k) > f(x_k) + c_1 \alpha \nabla f(x_k)^T p_k$: <span class="algo-comment">&larr; Armijo fails?</span></div>
 <div class="algo-line" style="padding-left:40px;">$\alpha \leftarrow \rho \, \alpha$ <span class="algo-comment">&larr; shrink the step size</span></div>
-<div class="algo-line"><strong style="color:#64ffda;">Step 3:</strong> Return $\alpha_k = \alpha$</div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 3:</strong> Return $\alpha_k = \alpha$</div>
 </div>
 
 <div class="note">
@@ -315,21 +273,21 @@ Why start with $\alpha = 1$? Because for Newton's method and quasi-Newton method
 <span class="step-label">Trial 1: $\alpha = 1$</span><br>
 <p>Suppose $f(x_k + 1 \cdot p_k) = 12$. (The function went UP &mdash; we overshot.)</p>
 <p>Armijo threshold: $10 - 0.005(1) = 9.995$</p>
-<p style="color:#ff6b6b;">$12 > 9.995$? YES &rarr; FAIL. Shrink: $\alpha \leftarrow 0.8 \times 1 = 0.8$</p>
+<p style="color:#c47070;">$12 > 9.995$? YES &rarr; FAIL. Shrink: $\alpha \leftarrow 0.8 \times 1 = 0.8$</p>
 </div>
 
 <div class="step">
 <span class="step-label">Trial 2: $\alpha = 0.8$</span><br>
 <p>Suppose $f(x_k + 0.8 \cdot p_k) = 10.5$. (Still went up, but less.)</p>
 <p>Armijo threshold: $10 - 0.005(0.8) = 9.996$</p>
-<p style="color:#ff6b6b;">$10.5 > 9.996$? YES &rarr; FAIL. Shrink: $\alpha \leftarrow 0.8 \times 0.8 = 0.64$</p>
+<p style="color:#c47070;">$10.5 > 9.996$? YES &rarr; FAIL. Shrink: $\alpha \leftarrow 0.8 \times 0.8 = 0.64$</p>
 </div>
 
 <div class="step">
 <span class="step-label">Trial 3: $\alpha = 0.64$</span><br>
 <p>Suppose $f(x_k + 0.64 \cdot p_k) = 9.2$. (Now the function decreased.)</p>
 <p>Armijo threshold: $10 - 0.005(0.64) = 9.9968$</p>
-<p style="color:#64ffda;">$9.2 \leq 9.9968$? YES &rarr; PASS!</p>
+<p style="color:#d4956a;">$9.2 \leq 9.9968$? YES &rarr; PASS!</p>
 <p class="result">Accept $\alpha_k = 0.64$</p>
 </div>
 
@@ -356,14 +314,14 @@ $$f'(3) = 4(27) - 8(3) = 108 - 24 = 84$$
 <p>$x_0 + 1 \cdot p_0 = 3 + 1(-84) = -81$. That is way too far!</p>
 <p>$f(-81) = (-81)^4 - 4(-81)^2 + 4 = 43{,}046{,}721 - 26{,}244 + 4 = 43{,}020{,}481$</p>
 <p>Armijo threshold: $49 - 0.7056 = 48.29$</p>
-<p style="color:#ff6b6b;">$43{,}020{,}481 > 48.29$ &rarr; FAIL. $\alpha \leftarrow 0.5$</p>
+<p style="color:#c47070;">$43{,}020{,}481 > 48.29$ &rarr; FAIL. $\alpha \leftarrow 0.5$</p>
 </div>
 
 <div class="step">
 <span class="step-label">Trial 2: $\alpha = 0.5$</span><br>
 <p>$x_0 + 0.5(-84) = 3 - 42 = -39$. Still too far.</p>
 <p>$f(-39) = 2{,}313{,}441 - 6{,}084 + 4 = 2{,}307{,}361$</p>
-<p style="color:#ff6b6b;">FAIL. $\alpha \leftarrow 0.25$</p>
+<p style="color:#c47070;">FAIL. $\alpha \leftarrow 0.25$</p>
 </div>
 
 <div class="step">
@@ -372,11 +330,11 @@ $$f'(3) = 4(27) - 8(3) = 108 - 24 = 84$$
 <p>At $\alpha = 0.5^k$, the new point is $3 - 84 \cdot 0.5^k$:</p>
 <table class="step-table" style="margin-top:8px;">
 <tr><th>$k$</th><th>$\alpha$</th><th>New $x$</th><th>$f$(new $x$)</th><th>Threshold</th><th>Pass?</th></tr>
-<tr><td>1</td><td>1</td><td>$-81$</td><td>huge</td><td>48.29</td><td style="color:#ff6b6b;">No</td></tr>
-<tr><td>2</td><td>0.5</td><td>$-39$</td><td>huge</td><td>48.65</td><td style="color:#ff6b6b;">No</td></tr>
-<tr><td>3</td><td>0.25</td><td>$-18$</td><td>$104{,}980$</td><td>48.82</td><td style="color:#ff6b6b;">No</td></tr>
-<tr><td>4</td><td>0.125</td><td>$-7.5$</td><td>$3{,}142$</td><td>48.91</td><td style="color:#ff6b6b;">No</td></tr>
-<tr><td>5</td><td>0.0625</td><td>$-2.25$</td><td>$5.63$</td><td>48.96</td><td style="color:#64ffda;">Yes</td></tr>
+<tr><td>1</td><td>1</td><td>$-81$</td><td>huge</td><td>48.29</td><td style="color:#c47070;">No</td></tr>
+<tr><td>2</td><td>0.5</td><td>$-39$</td><td>huge</td><td>48.65</td><td style="color:#c47070;">No</td></tr>
+<tr><td>3</td><td>0.25</td><td>$-18$</td><td>$104{,}980$</td><td>48.82</td><td style="color:#c47070;">No</td></tr>
+<tr><td>4</td><td>0.125</td><td>$-7.5$</td><td>$3{,}142$</td><td>48.91</td><td style="color:#c47070;">No</td></tr>
+<tr><td>5</td><td>0.0625</td><td>$-2.25$</td><td>$5.63$</td><td>48.96</td><td style="color:#d4956a;">Yes</td></tr>
 </table>
 <p class="result">Accept $\alpha_k = 0.0625$. New point: $x_1 = -2.25$, $f(x_1) = 5.63$.</p>
 </div>
@@ -410,13 +368,13 @@ $$f'(3) = 4(27) - 8(3) = 108 - 24 = 84$$
   <td style="text-align:left;"><strong>Wolfe</strong></td>
   <td>Sufficient decrease + slope flattening</td>
   <td>BFGS, L-BFGS, quasi-Newton methods</td>
-  <td style="color:#64ffda;">Yes</td>
+  <td style="color:#d4956a;">Yes</td>
 </tr>
 <tr>
   <td style="text-align:left;"><strong>Strong Wolfe</strong></td>
   <td>Wolfe + controlled uphill slope</td>
   <td>BFGS (preferred), nonlinear CG</td>
-  <td style="color:#64ffda;">Yes</td>
+  <td style="color:#d4956a;">Yes</td>
 </tr>
 </table>
 
@@ -447,22 +405,22 @@ $$f'(3) = 4(27) - 8(3) = 108 - 24 = 84$$
 <table class="step-table" style="margin-top:12px;">
 <tr><th>Method</th><th>Search Direction $p_k$</th><th>Typical Line Search</th></tr>
 <tr>
-  <td style="text-align:left;">Steepest Descent (<a href="cg-06-gradient-descent.html" style="color:#64ffda;">Page 06</a>)</td>
+  <td style="text-align:left;">Steepest Descent (<a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>)</td>
   <td>$-\nabla f(x_k)$</td>
   <td>Backtracking (Armijo) or exact</td>
 </tr>
 <tr>
-  <td style="text-align:left;">Newton (<a href="cg-07-newton-method.html" style="color:#64ffda;">Page 07</a>)</td>
+  <td style="text-align:left;">Newton (<a href="cg-07-newton-method.html" style="color:#d4956a;">Page 07</a>)</td>
   <td>$-[\nabla^2 f]^{-1}\nabla f$</td>
   <td>Backtracking, start $\alpha = 1$</td>
 </tr>
 <tr>
-  <td style="text-align:left;">CG (<a href="cg-10-conjugate-gradient.html" style="color:#64ffda;">Page 10</a>)</td>
+  <td style="text-align:left;">CG (<a href="cg-10-conjugate-gradient.html" style="color:#d4956a;">Page 10</a>)</td>
   <td>Conjugate direction</td>
   <td>Strong Wolfe, $c_2 = 0.1$</td>
 </tr>
 <tr>
-  <td style="text-align:left;">BFGS (<a href="cg-12-bfgs.html" style="color:#64ffda;">Page 12</a>)</td>
+  <td style="text-align:left;">BFGS (<a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>)</td>
   <td>$-B_k^{-1}\nabla f$</td>
   <td>Strong Wolfe, $c_2 = 0.9$, start $\alpha = 1$</td>
 </tr>

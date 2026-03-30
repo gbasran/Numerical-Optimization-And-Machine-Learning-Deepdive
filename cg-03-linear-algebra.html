@@ -8,43 +8,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
-.container { max-width: 900px; margin: 0 auto; }
-h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
-.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
-h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
-.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
-.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
-.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
-.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
-.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
-.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
-.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
-.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
-.hand-calc .result { color: #64ffda; font-weight: bold; }
-.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
-.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
-.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
-.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
-.step-table tr:nth-child(even) { background: #16213e; }
-.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
-.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
-.glossary dl { font-size: 15px; }
-.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
-.glossary dd { margin-left: 20px; color: #ccc; }
-.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
-.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
-.nav a:hover { text-decoration: underline; }
-.nav p { margin: 4px 0; }
-svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
-.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
-.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
-.breakdown dd { color: #ccc; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
@@ -196,37 +160,37 @@ The eigenvalues of a matrix tell you which of these shapes you have. All positiv
 <svg viewBox="0 0 900 260" style="width:100%; margin:24px 0;">
   <!-- Bowl (PD) -->
   <g transform="translate(0,0)">
-    <text x="150" y="20" text-anchor="middle" fill="#64ffda" font-size="15" font-weight="bold">Bowl (Positive Definite)</text>
-    <text x="150" y="38" text-anchor="middle" fill="#888" font-size="12">All eigenvalues &gt; 0</text>
-    <ellipse cx="150" cy="200" rx="120" ry="30" fill="none" stroke="#444" stroke-width="1.5"/>
-    <path d="M30,200 Q90,80 150,120 Q210,80 270,200" fill="none" stroke="#64ffda" stroke-width="2.5"/>
-    <path d="M70,200 Q110,110 150,135 Q190,110 230,200" fill="none" stroke="#64ffda" stroke-width="1.5" opacity="0.5"/>
-    <circle cx="150" cy="138" r="5" fill="#ffd93d"/>
-    <text x="150" y="170" text-anchor="middle" fill="#ffd93d" font-size="12">minimum</text>
-    <text x="150" y="248" text-anchor="middle" fill="#ccc" font-size="12">Marble rolls to bottom</text>
+    <text x="150" y="20" text-anchor="middle" fill="#d4956a" font-size="15" font-weight="bold">Bowl (Positive Definite)</text>
+    <text x="150" y="38" text-anchor="middle" fill="#a8a49c" font-size="12">All eigenvalues &gt; 0</text>
+    <ellipse cx="150" cy="200" rx="120" ry="30" fill="none" stroke="#3a3a46" stroke-width="1.5"/>
+    <path d="M30,200 Q90,80 150,120 Q210,80 270,200" fill="none" stroke="#d4956a" stroke-width="2.5"/>
+    <path d="M70,200 Q110,110 150,135 Q190,110 230,200" fill="none" stroke="#d4956a" stroke-width="1.5" opacity="0.5"/>
+    <circle cx="150" cy="138" r="5" fill="#c9a84c"/>
+    <text x="150" y="170" text-anchor="middle" fill="#c9a84c" font-size="12">minimum</text>
+    <text x="150" y="248" text-anchor="middle" fill="#b8b4ac" font-size="12">Marble rolls to bottom</text>
   </g>
   <!-- Saddle (Indefinite) -->
   <g transform="translate(300,0)">
-    <text x="150" y="20" text-anchor="middle" fill="#ff6b6b" font-size="15" font-weight="bold">Saddle (Indefinite)</text>
-    <text x="150" y="38" text-anchor="middle" fill="#888" font-size="12">Mixed-sign eigenvalues</text>
-    <path d="M30,160 Q90,220 150,140 Q210,60 270,120" fill="none" stroke="#ff6b6b" stroke-width="2.5"/>
-    <path d="M80,80 Q120,120 150,140 Q180,160 220,200" fill="none" stroke="#ff6b6b" stroke-width="2.5"/>
-    <circle cx="150" cy="140" r="5" fill="#ffd93d"/>
-    <text x="150" y="170" text-anchor="middle" fill="#ffd93d" font-size="12">saddle point</text>
-    <text x="80" y="200" text-anchor="middle" fill="#888" font-size="11">up in one dir</text>
-    <text x="230" y="90" text-anchor="middle" fill="#888" font-size="11">down in other</text>
-    <text x="150" y="248" text-anchor="middle" fill="#ccc" font-size="12">Marble unstable</text>
+    <text x="150" y="20" text-anchor="middle" fill="#c47070" font-size="15" font-weight="bold">Saddle (Indefinite)</text>
+    <text x="150" y="38" text-anchor="middle" fill="#a8a49c" font-size="12">Mixed-sign eigenvalues</text>
+    <path d="M30,160 Q90,220 150,140 Q210,60 270,120" fill="none" stroke="#c47070" stroke-width="2.5"/>
+    <path d="M80,80 Q120,120 150,140 Q180,160 220,200" fill="none" stroke="#c47070" stroke-width="2.5"/>
+    <circle cx="150" cy="140" r="5" fill="#c9a84c"/>
+    <text x="150" y="170" text-anchor="middle" fill="#c9a84c" font-size="12">saddle point</text>
+    <text x="80" y="200" text-anchor="middle" fill="#a8a49c" font-size="11">up in one dir</text>
+    <text x="230" y="90" text-anchor="middle" fill="#a8a49c" font-size="11">down in other</text>
+    <text x="150" y="248" text-anchor="middle" fill="#b8b4ac" font-size="12">Marble unstable</text>
   </g>
   <!-- Dome (ND) -->
   <g transform="translate(600,0)">
-    <text x="150" y="20" text-anchor="middle" fill="#bb86fc" font-size="15" font-weight="bold">Dome (Negative Definite)</text>
-    <text x="150" y="38" text-anchor="middle" fill="#888" font-size="12">All eigenvalues &lt; 0</text>
-    <ellipse cx="150" cy="200" rx="120" ry="30" fill="none" stroke="#444" stroke-width="1.5"/>
-    <path d="M30,200 Q90,160 150,90 Q210,160 270,200" fill="none" stroke="#bb86fc" stroke-width="2.5"/>
-    <path d="M70,200 Q110,170 150,105 Q190,170 230,200" fill="none" stroke="#bb86fc" stroke-width="1.5" opacity="0.5"/>
-    <circle cx="150" cy="90" r="5" fill="#ffd93d"/>
-    <text x="150" y="78" text-anchor="middle" fill="#ffd93d" font-size="12">maximum</text>
-    <text x="150" y="248" text-anchor="middle" fill="#ccc" font-size="12">Marble rolls off</text>
+    <text x="150" y="20" text-anchor="middle" fill="#9b89b6" font-size="15" font-weight="bold">Dome (Negative Definite)</text>
+    <text x="150" y="38" text-anchor="middle" fill="#a8a49c" font-size="12">All eigenvalues &lt; 0</text>
+    <ellipse cx="150" cy="200" rx="120" ry="30" fill="none" stroke="#3a3a46" stroke-width="1.5"/>
+    <path d="M30,200 Q90,160 150,90 Q210,160 270,200" fill="none" stroke="#9b89b6" stroke-width="2.5"/>
+    <path d="M70,200 Q110,170 150,105 Q190,170 230,200" fill="none" stroke="#9b89b6" stroke-width="1.5" opacity="0.5"/>
+    <circle cx="150" cy="90" r="5" fill="#c9a84c"/>
+    <text x="150" y="78" text-anchor="middle" fill="#c9a84c" font-size="12">maximum</text>
+    <text x="150" y="248" text-anchor="middle" fill="#b8b4ac" font-size="12">Marble rolls off</text>
   </g>
 </svg>
 
@@ -254,11 +218,11 @@ $$\text{A symmetric matrix } A \text{ is positive definite (PD) if } \mathbf{x}^
 
 <table class="step-table" style="margin-top:12px;">
 <tr><th>Classification</th><th>Eigenvalue Condition</th><th>Surface Shape</th><th>Optimization Meaning</th></tr>
-<tr><td style="color:#64ffda;">Positive Definite (PD)</td><td>All $\lambda_i > 0$</td><td>Bowl</td><td>Local minimum</td></tr>
-<tr><td style="color:#bb86fc;">Negative Definite (ND)</td><td>All $\lambda_i < 0$</td><td>Dome</td><td>Local maximum</td></tr>
-<tr><td style="color:#ff6b6b;">Indefinite</td><td>Mixed signs</td><td>Saddle</td><td>Saddle point</td></tr>
-<tr><td style="color:#64ffda;">Positive Semidefinite (PSD)</td><td>All $\lambda_i \geq 0$</td><td>Bowl (possibly flat)</td><td>Could be min (need more info)</td></tr>
-<tr><td style="color:#bb86fc;">Negative Semidefinite (NSD)</td><td>All $\lambda_i \leq 0$</td><td>Dome (possibly flat)</td><td>Could be max (need more info)</td></tr>
+<tr><td style="color:#d4956a;">Positive Definite (PD)</td><td>All $\lambda_i > 0$</td><td>Bowl</td><td>Local minimum</td></tr>
+<tr><td style="color:#9b89b6;">Negative Definite (ND)</td><td>All $\lambda_i < 0$</td><td>Dome</td><td>Local maximum</td></tr>
+<tr><td style="color:#c47070;">Indefinite</td><td>Mixed signs</td><td>Saddle</td><td>Saddle point</td></tr>
+<tr><td style="color:#d4956a;">Positive Semidefinite (PSD)</td><td>All $\lambda_i \geq 0$</td><td>Bowl (possibly flat)</td><td>Could be min (need more info)</td></tr>
+<tr><td style="color:#9b89b6;">Negative Semidefinite (NSD)</td><td>All $\lambda_i \leq 0$</td><td>Dome (possibly flat)</td><td>Could be max (need more info)</td></tr>
 </table>
 </div>
 

@@ -8,43 +8,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
-.container { max-width: 900px; margin: 0 auto; }
-h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
-.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
-h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
-.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
-.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
-.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
-.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
-.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
-.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
-.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
-.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
-.hand-calc .result { color: #64ffda; font-weight: bold; }
-.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
-.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
-.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
-.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
-.step-table tr:nth-child(even) { background: #16213e; }
-.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
-.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
-.glossary dl { font-size: 15px; }
-.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
-.glossary dd { margin-left: 20px; color: #ccc; }
-.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
-.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
-.nav a:hover { text-decoration: underline; }
-.nav p { margin: 4px 0; }
-svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
-.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
-.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
-.breakdown dd { color: #ccc; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
@@ -80,7 +44,7 @@ $$f(x + p) \approx f(x) + \nabla f(x)^T p$$
   <dt>$p$</dt>
   <dd>The step we are about to take &mdash; a direction and distance from $x$.</dd>
   <dt>$\nabla f(x)$</dt>
-  <dd>The gradient (vector of partial derivatives) at $x$ &mdash; this is the "velocity" of the function. It tells us the slope in every direction. See <a href="cg-02-multivariable-bridge.html" style="color:#64ffda;">Page 02</a> for a full explanation of the gradient.</dd>
+  <dd>The gradient (vector of partial derivatives) at $x$ &mdash; this is the "velocity" of the function. It tells us the slope in every direction. See <a href="cg-02-multivariable-bridge.html" style="color:#d4956a;">Page 02</a> for a full explanation of the gradient.</dd>
   <dt>$\nabla f(x)^T p$</dt>
   <dd>The dot product of the gradient with the step. This gives a single number: the predicted change in $f$ when we move by $p$. Positive means $f$ goes up; negative means $f$ goes down.</dd>
 </dl>
@@ -93,7 +57,7 @@ $$f(x + p) \approx f(x) + \nabla f(x)^T p + \frac{1}{2} p^T \nabla^2 f(x)\, p$$
 
 <dl class="breakdown">
   <dt>$\nabla^2 f(x)$</dt>
-  <dd>The Hessian matrix &mdash; a square matrix of second derivatives. This is the "acceleration" of the function. It captures curvature: how fast the slope itself is changing. See <a href="cg-02-multivariable-bridge.html" style="color:#64ffda;">Page 02, Part C</a> for the full treatment.</dd>
+  <dd>The Hessian matrix &mdash; a square matrix of second derivatives. This is the "acceleration" of the function. It captures curvature: how fast the slope itself is changing. See <a href="cg-02-multivariable-bridge.html" style="color:#d4956a;">Page 02, Part C</a> for the full treatment.</dd>
   <dt>$\frac{1}{2} p^T \nabla^2 f(x)\, p$</dt>
   <dd>A quadratic form &mdash; it bends the linear approximation into a parabola (or bowl in multiple dimensions). This correction accounts for curvature, making the approximation much more accurate.</dd>
 </dl>
@@ -117,37 +81,37 @@ $$f(x + p) \approx f(x) + \nabla f(x)^T p + \frac{1}{2} p^T \nabla^2 f(x)\, p$$
   <!-- Axes -->
   <line x1="40" y1="260" x2="480" y2="260" stroke="#555" stroke-width="1"/>
   <line x1="40" y1="20" x2="40" y2="260" stroke="#555" stroke-width="1"/>
-  <text x="490" y="265" fill="#888" font-size="13">x</text>
-  <text x="25" y="15" fill="#888" font-size="13">f</text>
+  <text x="490" y="265" fill="#a8a49c" font-size="13">x</text>
+  <text x="25" y="15" fill="#a8a49c" font-size="13">f</text>
 
   <!-- True function (a nice curve) -->
   <path d="M60,200 Q120,230 180,160 Q220,110 260,100 Q300,90 340,120 Q380,150 420,80 Q440,50 460,60"
-        fill="none" stroke="#e0e0e0" stroke-width="2.5"/>
-  <text x="462" y="55" fill="#e0e0e0" font-size="12">f(x) actual</text>
+        fill="none" stroke="#e8e4dc" stroke-width="2.5"/>
+  <text x="462" y="55" fill="#e8e4dc" font-size="12">f(x) actual</text>
 
   <!-- Point of expansion -->
-  <circle cx="260" cy="100" r="5" fill="#64ffda"/>
-  <text x="265" y="92" fill="#64ffda" font-size="12" font-weight="bold">x₀</text>
+  <circle cx="260" cy="100" r="5" fill="#d4956a"/>
+  <text x="265" y="92" fill="#d4956a" font-size="12" font-weight="bold">x₀</text>
 
   <!-- Linear (first-order) tangent line -->
-  <line x1="140" y1="164" x2="400" y2="22" stroke="#bb86fc" stroke-width="2" stroke-dasharray="6,4"/>
-  <text x="395" y="18" fill="#bb86fc" font-size="12">1st-order (linear)</text>
+  <line x1="140" y1="164" x2="400" y2="22" stroke="#9b89b6" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="395" y="18" fill="#9b89b6" font-size="12">1st-order (linear)</text>
 
   <!-- Quadratic (second-order) approximation -->
   <path d="M140,220 Q200,80 260,100 Q320,120 400,250"
-        fill="none" stroke="#ffd93d" stroke-width="2" stroke-dasharray="3,3"/>
-  <text x="340" y="255" fill="#ffd93d" font-size="12">2nd-order (quadratic)</text>
+        fill="none" stroke="#c9a84c" stroke-width="2" stroke-dasharray="3,3"/>
+  <text x="340" y="255" fill="#c9a84c" font-size="12">2nd-order (quadratic)</text>
 
   <!-- Legend box -->
-  <rect x="55" y="25" width="175" height="70" rx="6" fill="#0f3460" opacity="0.9"/>
-  <line x1="65" y1="45" x2="90" y2="45" stroke="#e0e0e0" stroke-width="2.5"/>
-  <text x="95" y="49" fill="#e0e0e0" font-size="11">True function</text>
-  <line x1="65" y1="62" x2="90" y2="62" stroke="#bb86fc" stroke-width="2" stroke-dasharray="6,4"/>
-  <text x="95" y="66" fill="#bb86fc" font-size="11">Linear approximation</text>
-  <line x1="65" y1="79" x2="90" y2="79" stroke="#ffd93d" stroke-width="2" stroke-dasharray="3,3"/>
-  <text x="95" y="83" fill="#ffd93d" font-size="11">Quadratic approximation</text>
+  <rect x="55" y="25" width="175" height="70" rx="6" fill="#25252e" opacity="0.9"/>
+  <line x1="65" y1="45" x2="90" y2="45" stroke="#e8e4dc" stroke-width="2.5"/>
+  <text x="95" y="49" fill="#e8e4dc" font-size="11">True function</text>
+  <line x1="65" y1="62" x2="90" y2="62" stroke="#9b89b6" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="95" y="66" fill="#9b89b6" font-size="11">Linear approximation</text>
+  <line x1="65" y1="79" x2="90" y2="79" stroke="#c9a84c" stroke-width="2" stroke-dasharray="3,3"/>
+  <text x="95" y="83" fill="#c9a84c" font-size="11">Quadratic approximation</text>
 </svg>
-<p style="font-size:14px; color:#888;">The quadratic (2nd-order) hugs the true curve much more closely near $x_0$.</p>
+<p style="font-size:14px; color:#a8a49c;">The quadratic (2nd-order) hugs the true curve much more closely near $x_0$.</p>
 </div>
 
 <div class="note">
@@ -196,7 +160,7 @@ $$f(x + p) \approx f(x) + \nabla f(x)^T p + \frac{1}{2} p^T \nabla^2 f(x)\, p$$
 </div>
 
 <div class="note">
-<strong>Connecting to multiple dimensions:</strong> In this course, $x$ is usually a vector (like $[x_1, x_2]^T$) and $p$ is a step direction. The first-order term $\nabla f(x)^T p$ replaces $f'(x_0) \cdot p$, and the second-order term $\frac{1}{2}p^T \nabla^2 f(x) \, p$ replaces $\frac{1}{2}f''(x_0) \cdot p^2$. Same idea, more dimensions. See <a href="cg-02-multivariable-bridge.html" style="color:#64ffda;">Page 02</a> for the full multivariable treatment.
+<strong>Connecting to multiple dimensions:</strong> In this course, $x$ is usually a vector (like $[x_1, x_2]^T$) and $p$ is a step direction. The first-order term $\nabla f(x)^T p$ replaces $f'(x_0) \cdot p$, and the second-order term $\frac{1}{2}p^T \nabla^2 f(x) \, p$ replaces $\frac{1}{2}f''(x_0) \cdot p^2$. Same idea, more dimensions. See <a href="cg-02-multivariable-bridge.html" style="color:#d4956a;">Page 02</a> for the full multivariable treatment.
 </div>
 
 
@@ -222,26 +186,26 @@ Suppose you need to get from point A to point B in a city. There are different w
 <div class="formula-box">
 <p><strong>L1 norm (Manhattan):</strong></p>
 $$\|x\|_1 = |x_1| + |x_2| + \cdots + |x_n|$$
-<p style="color:#ccc; font-size:15px; margin-top:8px;">Sum of absolute values of all components.</p>
+<p style="color:#b8b4ac; font-size:15px; margin-top:8px;">Sum of absolute values of all components.</p>
 
 <p style="margin-top:20px;"><strong>L2 norm (Euclidean):</strong></p>
 $$\|x\|_2 = \sqrt{x_1^2 + x_2^2 + \cdots + x_n^2}$$
-<p style="color:#ccc; font-size:15px; margin-top:8px;">Square root of sum of squared components. This is the "default" norm and the one used most often in this course.</p>
+<p style="color:#b8b4ac; font-size:15px; margin-top:8px;">Square root of sum of squared components. This is the "default" norm and the one used most often in this course.</p>
 
 <p style="margin-top:20px;"><strong>L-infinity norm (Max):</strong></p>
 $$\|x\|_\infty = \max(|x_1|, |x_2|, \ldots, |x_n|)$$
-<p style="color:#ccc; font-size:15px; margin-top:8px;">The single largest absolute component.</p>
+<p style="color:#b8b4ac; font-size:15px; margin-top:8px;">The single largest absolute component.</p>
 </div>
 
 <!-- SVG: Unit balls -->
 <div style="text-align:center; margin: 30px 0;">
 <svg viewBox="0 0 400 400" width="400" height="400" xmlns="http://www.w3.org/2000/svg">
   <!-- Grid -->
-  <line x1="200" y1="20" x2="200" y2="380" stroke="#333" stroke-width="1"/>
-  <line x1="20" y1="200" x2="380" y2="200" stroke="#333" stroke-width="1"/>
+  <line x1="200" y1="20" x2="200" y2="380" stroke="#2e2e38" stroke-width="1"/>
+  <line x1="20" y1="200" x2="380" y2="200" stroke="#2e2e38" stroke-width="1"/>
   <!-- Axis labels -->
-  <text x="385" y="195" fill="#888" font-size="14">x₁</text>
-  <text x="205" y="18" fill="#888" font-size="14">x₂</text>
+  <text x="385" y="195" fill="#a8a49c" font-size="14">x₁</text>
+  <text x="205" y="18" fill="#a8a49c" font-size="14">x₂</text>
   <!-- Tick marks -->
   <line x1="320" y1="195" x2="320" y2="205" stroke="#555" stroke-width="1"/>
   <text x="315" y="220" fill="#666" font-size="11">1</text>
@@ -253,24 +217,24 @@ $$\|x\|_\infty = \max(|x_1|, |x_2|, \ldots, |x_n|)$$
   <text x="210" y="325" fill="#666" font-size="11">-1</text>
 
   <!-- L-infinity unit ball (square) -->
-  <rect x="80" y="80" width="240" height="240" fill="none" stroke="#ffd93d" stroke-width="2" opacity="0.7"/>
+  <rect x="80" y="80" width="240" height="240" fill="none" stroke="#c9a84c" stroke-width="2" opacity="0.7"/>
 
   <!-- L2 unit ball (circle) -->
-  <circle cx="200" cy="200" r="120" fill="none" stroke="#bb86fc" stroke-width="2.5"/>
+  <circle cx="200" cy="200" r="120" fill="none" stroke="#9b89b6" stroke-width="2.5"/>
 
   <!-- L1 unit ball (diamond) -->
-  <polygon points="200,80 320,200 200,320 80,200" fill="none" stroke="#64ffda" stroke-width="2"/>
+  <polygon points="200,80 320,200 200,320 80,200" fill="none" stroke="#d4956a" stroke-width="2"/>
 
   <!-- Legend -->
-  <rect x="240" y="30" width="150" height="70" rx="6" fill="#0f3460" opacity="0.9"/>
-  <line x1="250" y1="48" x2="275" y2="48" stroke="#64ffda" stroke-width="2"/>
-  <text x="280" y="52" fill="#64ffda" font-size="12">L1 (diamond)</text>
-  <line x1="250" y1="65" x2="275" y2="65" stroke="#bb86fc" stroke-width="2.5"/>
-  <text x="280" y="69" fill="#bb86fc" font-size="12">L2 (circle)</text>
-  <line x1="250" y1="82" x2="275" y2="82" stroke="#ffd93d" stroke-width="2"/>
-  <text x="280" y="86" fill="#ffd93d" font-size="12">L&#8734; (square)</text>
+  <rect x="240" y="30" width="150" height="70" rx="6" fill="#25252e" opacity="0.9"/>
+  <line x1="250" y1="48" x2="275" y2="48" stroke="#d4956a" stroke-width="2"/>
+  <text x="280" y="52" fill="#d4956a" font-size="12">L1 (diamond)</text>
+  <line x1="250" y1="65" x2="275" y2="65" stroke="#9b89b6" stroke-width="2.5"/>
+  <text x="280" y="69" fill="#9b89b6" font-size="12">L2 (circle)</text>
+  <line x1="250" y1="82" x2="275" y2="82" stroke="#c9a84c" stroke-width="2"/>
+  <text x="280" y="86" fill="#c9a84c" font-size="12">L&#8734; (square)</text>
 </svg>
-<p style="font-size:14px; color:#888;">Unit balls: all points where $\|x\| = 1$ for each norm. <br>The diamond (L1) has corners on the axes. The circle (L2) is round. The square (L-infinity) has flat sides.</p>
+<p style="font-size:14px; color:#a8a49c;">Unit balls: all points where $\|x\| = 1$ for each norm. <br>The diamond (L1) has corners on the axes. The circle (L2) is round. The square (L-infinity) has flat sides.</p>
 </div>
 
 <div class="hand-calc">
@@ -326,7 +290,7 @@ $$\|x_{k+1} - x^*\| \leq r\, \|x_k - x^*\| \quad \text{for some } r \in (0, 1)$$
   <dt>$\|x_k - x^*\|$</dt><dd>The error at step $k$ &mdash; how far we are from the answer.</dd>
   <dt>$r$</dt><dd>The convergence ratio &mdash; a fixed number strictly between 0 and 1. Smaller $r$ means faster convergence.</dd>
 </dl>
-<p style="color:#ccc; font-size:15px; margin-top:8px;">The error shrinks by at least a constant factor each step. Steepest descent achieves Q-linear convergence.</p>
+<p style="color:#b8b4ac; font-size:15px; margin-top:8px;">The error shrinks by at least a constant factor each step. Steepest descent achieves Q-linear convergence.</p>
 </div>
 
 <div class="formula-box">
@@ -335,7 +299,7 @@ $$\lim_{k \to \infty} \frac{\|x_{k+1} - x^*\|}{\|x_k - x^*\|} = 0$$
 <dl class="breakdown">
   <dt>Ratio $\to 0$</dt><dd>The ratio of consecutive errors is not stuck at a fixed $r$ &mdash; it shrinks toward zero. Each step is proportionally more effective than the last.</dd>
 </dl>
-<p style="color:#ccc; font-size:15px; margin-top:8px;">Faster than linear, but the ratio decays rather than the error squaring. BFGS achieves this.</p>
+<p style="color:#b8b4ac; font-size:15px; margin-top:8px;">Faster than linear, but the ratio decays rather than the error squaring. BFGS achieves this.</p>
 </div>
 
 <div class="formula-box">
@@ -345,7 +309,7 @@ $$\|x_{k+1} - x^*\| \leq M\, \|x_k - x^*\|^2$$
   <dt>$M$</dt><dd>A positive constant (does not depend on $k$).</dd>
   <dt>$\|x_k - x^*\|^2$</dt><dd>The error <em>squared</em>. If the error is 0.01, the next error is at most $M \cdot 0.0001$. The number of correct digits roughly doubles each step.</dd>
 </dl>
-<p style="color:#ccc; font-size:15px; margin-top:8px;">Newton's method achieves Q-quadratic convergence near the solution (when the Hessian is nonsingular).</p>
+<p style="color:#b8b4ac; font-size:15px; margin-top:8px;">Newton's method achieves Q-quadratic convergence near the solution (when the Hessian is nonsingular).</p>
 </div>
 
 
@@ -402,7 +366,7 @@ $$\|x_{k+1} - x^*\| \leq M\, \|x_k - x^*\|^2$$
 <tr><td>6</td><td>0.001389</td><td>0.001389</td><td>$\to 0$</td></tr>
 </table>
 
-<p style="font-size:15px; color:#888; margin-top:8px;">The ratio column keeps shrinking toward 0 &mdash; the hallmark of superlinear convergence. Compare this to a Q-linear sequence where the ratio would stay constant (like 0.5 every row).</p>
+<p style="font-size:15px; color:#a8a49c; margin-top:8px;">The ratio column keeps shrinking toward 0 &mdash; the hallmark of superlinear convergence. Compare this to a Q-linear sequence where the ratio would stay constant (like 0.5 every row).</p>
 
 
 <!-- ═══════════════════════════════════════════════════════════════════ -->
@@ -457,10 +421,10 @@ $$r = \frac{\kappa - 1}{\kappa + 1}$$
 <tr><td>1000</td><td>0.998</td><td>~6907</td><td>Extreme hot-dog valley</td></tr>
 </table>
 
-<p style="font-size:15px; color:#888; margin-top:8px;">Iterations estimated as $\lceil \log(10^{-6}) / \log(r) \rceil$ &mdash; the number of steps for the error to shrink by a factor of $10^{-6}$.</p>
+<p style="font-size:15px; color:#a8a49c; margin-top:8px;">Iterations estimated as $\lceil \log(10^{-6}) / \log(r) \rceil$ &mdash; the number of steps for the error to shrink by a factor of $10^{-6}$.</p>
 
 <div class="note">
-<strong>Cross-reference:</strong> On <a href="cg-04-line-search.html" style="color:#64ffda;">Page 04</a> you will see gradient descent zigzagging on an ill-conditioned Rosenbrock function. On <a href="cg-07-newton.html" style="color:#64ffda;">Page 07</a> you will see Newton's method solving the same problem in far fewer steps because it accounts for curvature via the Hessian.
+<strong>Cross-reference:</strong> On <a href="cg-04-line-search.html" style="color:#d4956a;">Page 04</a> you will see gradient descent zigzagging on an ill-conditioned Rosenbrock function. On <a href="cg-07-newton.html" style="color:#d4956a;">Page 07</a> you will see Newton's method solving the same problem in far fewer steps because it accounts for curvature via the Hessian.
 </div>
 
 

@@ -8,49 +8,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
-.container { max-width: 900px; margin: 0 auto; }
-h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
-.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
-h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
-.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
-.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
-.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
-.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
-.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
-.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
-.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
-.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
-.hand-calc .result { color: #64ffda; font-weight: bold; }
-.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
-.exam-flag { background: #2a1a1a; border: 2px solid #ff6b6b; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
-.exam-flag h4 { color: #ff6b6b; margin-bottom: 8px; }
-.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
-.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
-.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
-.step-table tr:nth-child(even) { background: #16213e; }
-.algo-box { border-left: 4px solid #64ffda; padding: 16px 20px; margin: 20px 0; background: #0f3460; border-radius: 0 12px 12px 0; }
-.algo-box .algo-title { color: #ffd93d; font-weight: bold; font-size: 18px; margin-bottom: 12px; }
-.algo-box .algo-line { padding: 6px 0; font-size: 16px; }
-.algo-box .algo-comment { color: #888; font-size: 14px; }
-.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
-.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
-.glossary dl { font-size: 15px; }
-.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
-.glossary dd { margin-left: 20px; color: #ccc; }
-.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
-.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
-.nav a:hover { text-decoration: underline; }
-.nav p { margin: 4px 0; }
-svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
-.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
-.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
-.breakdown dd { color: #ccc; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
@@ -64,7 +22,7 @@ svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
 
 <div class="analogy">
 <strong>Physical analogy &mdash; tuning one string at a time.</strong><br><br>
-On <a href="cg-12-bfgs.html" style="color:#64ffda;">Page 12</a>, we saw that BFGS updates the Hessian approximation with a <strong>rank-2 correction</strong> &mdash; it adjusts two "dimensions" of the curvature map each step. Think of it like tuning a piano: BFGS adjusts two strings at once to bring them into harmony.<br><br>
+On <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>, we saw that BFGS updates the Hessian approximation with a <strong>rank-2 correction</strong> &mdash; it adjusts two "dimensions" of the curvature map each step. Think of it like tuning a piano: BFGS adjusts two strings at once to bring them into harmony.<br><br>
 SR1 (Symmetric Rank-One) is simpler: it only adjusts <strong>one string per step</strong>. The correction matrix has rank 1 instead of rank 2. This makes the formula shorter and easier to compute, but there is a trade-off: SR1 does NOT guarantee the curvature map stays bowl-shaped (positive definite). Sometimes the map can develop "saddle" directions, which means the search direction might not point downhill.<br><br>
 Despite this, SR1 has a remarkable property: it can learn the exact curvature map ($H_k = Q^{-1}$) in fewer steps than BFGS on some problems. In the worked example below, SR1 recovers $Q^{-1}$ in just ONE iteration.
 </div>
@@ -75,7 +33,7 @@ Despite this, SR1 has a remarkable property: it can learn the exact curvature ma
 $$H_{k+1} = H_k + \frac{(s_k - H_k y_k)(s_k - H_k y_k)^T}{(s_k - H_k y_k)^T y_k}$$
 
 <dl class="breakdown">
-  <dt>$H_k$</dt><dd>current inverse Hessian approximation (recall from <a href="cg-12-bfgs.html" style="color:#64ffda;">Page 12</a>)</dd>
+  <dt>$H_k$</dt><dd>current inverse Hessian approximation (recall from <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>)</dd>
   <dt>$s_k = x_{k+1} - x_k$</dt><dd>step taken (same as in BFGS)</dd>
   <dt>$y_k = g_{k+1} - g_k$</dt><dd>gradient change (same as in BFGS)</dd>
   <dt>$H_k y_k$</dt><dd>what our current map <em>predicts</em> the step should have been, given the observed gradient change. If $H_k$ were perfect ($H_k = \nabla^2 f^{-1}$), then $H_k y_k$ would equal $s_k$ exactly (by the secant condition).</dd>
@@ -127,7 +85,7 @@ $$\text{Skip the SR1 update if } \quad |(s_k - H_k y_k)^T y_k| < r \, \|s_k - H_
 <div class="why-box">
 <h3>SR1 Does NOT Preserve Positive Definiteness</h3>
 <p>Unlike BFGS, the SR1 update can produce a matrix $H_{k+1}$ that is NOT positive definite, even if $H_k$ was. This means the search direction $p_k = -H_k g_k$ might not be a descent direction.</p>
-<p style="margin-top:8px;"><strong>When is this OK?</strong> SR1 is most commonly used inside a <strong>trust-region framework</strong> (recall from <a href="cg-09-trust-region.html" style="color:#64ffda;">Page 09</a>). In a trust region, the step is bounded by the trust radius $\Delta_k$, so even if $H_k$ produces a bad direction, the step is kept small enough to be safe. The trust region acts as a safety net.</p>
+<p style="margin-top:8px;"><strong>When is this OK?</strong> SR1 is most commonly used inside a <strong>trust-region framework</strong> (recall from <a href="cg-09-trust-region.html" style="color:#d4956a;">Page 09</a>). In a trust region, the step is bounded by the trust radius $\Delta_k$, so even if $H_k$ produces a bad direction, the step is kept small enough to be safe. The trust region acts as a safety net.</p>
 <p style="margin-top:8px;"><strong>When is this a problem?</strong> If you use SR1 with a line search (instead of a trust region), you need to check that $p_k$ is a descent direction ($g_k^T p_k < 0$). If not, you fall back to steepest descent.</p>
 </div>
 
@@ -156,7 +114,7 @@ $$\text{Skip the SR1 update if } \quad |(s_k - H_k y_k)^T y_k| < r \, \|s_k - H_
 
 <p>Note: $\nabla f(x) = Qx$. Minimum at $x^* = [0, 0]^T$. True inverse Hessian: $Q^{-1} = \begin{bmatrix} 1/2 & 0 \\ 0 & 1 \end{bmatrix}$.</p>
 
-<p style="margin-top:16px; color:#bb86fc; font-weight:bold; font-size:20px;">ITERATION 0 ($k = 0$)</p>
+<p style="margin-top:16px; color:#9b89b6; font-weight:bold; font-size:20px;">ITERATION 0 ($k = 0$)</p>
 
 <div class="step">
 <p class="step-label">Step 1: Gradient at $x_0$</p>
@@ -241,7 +199,7 @@ $$= \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} + \begin{bmatrix} -1/2 & 0 \\ 0
 </div>
 </div>
 
-<p style="margin-top:24px; color:#bb86fc; font-weight:bold; font-size:20px;">ITERATION 1 ($k = 1$) &mdash; Confirmation</p>
+<p style="margin-top:24px; color:#9b89b6; font-weight:bold; font-size:20px;">ITERATION 1 ($k = 1$) &mdash; Confirmation</p>
 
 <div class="hand-calc">
 <h3>Since $H_1 = Q^{-1}$, the next step is a Newton step and converges exactly.</h3>
@@ -344,55 +302,55 @@ $$H_{k+1} = H_k - \frac{H_k y_k y_k^T H_k}{y_k^T H_k y_k} + \frac{s_k s_k^T}{s_k
   <th>DFP</th>
 </tr>
 <tr>
-  <td style="text-align:left; color:#64ffda;">Update rank</td>
+  <td style="text-align:left; color:#d4956a;">Update rank</td>
   <td>Rank 2</td>
   <td>Rank 1</td>
   <td>Rank 2</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#64ffda;">Preserves PD?</td>
+  <td style="text-align:left; color:#d4956a;">Preserves PD?</td>
   <td>Yes (with $s_k^Ty_k > 0$)</td>
   <td><strong>No</strong> &mdash; can lose PD</td>
   <td>Yes (with $s_k^Ty_k > 0$)</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#64ffda;">Needs safeguard?</td>
+  <td style="text-align:left; color:#d4956a;">Needs safeguard?</td>
   <td>No (Wolfe guarantees $s_k^Ty_k > 0$)</td>
   <td>Yes &mdash; skip rule for small denominator</td>
   <td>No (Wolfe guarantees $s_k^Ty_k > 0$)</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#64ffda;">Best framework</td>
+  <td style="text-align:left; color:#d4956a;">Best framework</td>
   <td>Line search</td>
   <td>Trust region</td>
   <td>Line search</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#64ffda;">Self-correcting?</td>
+  <td style="text-align:left; color:#d4956a;">Self-correcting?</td>
   <td>Very good</td>
   <td>Moderate</td>
   <td>Weaker</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#64ffda;">Cost per iteration</td>
+  <td style="text-align:left; color:#d4956a;">Cost per iteration</td>
   <td>$O(n^2)$</td>
   <td>$O(n^2)$</td>
   <td>$O(n^2)$</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#64ffda;">Practical ranking</td>
+  <td style="text-align:left; color:#d4956a;">Practical ranking</td>
   <td><strong>1st</strong> (default choice)</td>
   <td>2nd (with trust region)</td>
   <td>3rd (historical interest)</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#64ffda;">Convergence rate</td>
+  <td style="text-align:left; color:#d4956a;">Convergence rate</td>
   <td>Q-superlinear</td>
   <td>Q-superlinear (if updates arent skipped)</td>
   <td>Q-superlinear</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#64ffda;">On quadratics</td>
+  <td style="text-align:left; color:#d4956a;">On quadratics</td>
   <td colspan="3">All three recover $Q^{-1}$ in at most $n$ iterations with exact line search</td>
 </tr>
 </table>
@@ -400,7 +358,7 @@ $$H_{k+1} = H_k - \frac{H_k y_k y_k^T H_k}{y_k^T H_k y_k} + \frac{s_k s_k^T}{s_k
 <div class="note">
 <strong>Exam takeaway:</strong> You should know all three formulas and their key properties. On a computation problem, the most likely questions are:
 <ul style="margin-top:8px; margin-left:20px;">
-  <li>BFGS inverse update with full matrix computation (Quiz 6 style, see <a href="cg-12-bfgs.html" style="color:#64ffda;">Page 12</a>)</li>
+  <li>BFGS inverse update with full matrix computation (Quiz 6 style, see <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>)</li>
   <li>SR1 update showing recovery of $Q^{-1}$ (Assignment 2 Q2 style, done above)</li>
   <li>"Compare and contrast" theoretical question about PD preservation, rank, and when to use each</li>
 </ul>
@@ -427,16 +385,16 @@ $$H_{k+1} = H_k - \frac{H_k y_k y_k^T H_k}{y_k^T H_k y_k} + \frac{s_k s_k^T}{s_k
   <dd>A check that prevents the SR1 update when the denominator is too small. Skips the update and keeps $H_{k+1} = H_k$.</dd>
 
   <dt>Positive definiteness (PD)</dt>
-  <dd>A matrix property meaning "bowl-shaped" (all eigenvalues positive). BFGS and DFP preserve this; SR1 does not. See <a href="cg-03-linear-algebra.html" style="color:#64ffda;">Page 03</a> for full explanation.</dd>
+  <dd>A matrix property meaning "bowl-shaped" (all eigenvalues positive). BFGS and DFP preserve this; SR1 does not. See <a href="cg-03-linear-algebra.html" style="color:#d4956a;">Page 03</a> for full explanation.</dd>
 
   <dt>Trust region</dt>
-  <dd>A framework that bounds the step size by a radius $\Delta_k$, making it safe to use non-PD Hessian approximations. See <a href="cg-09-trust-region.html" style="color:#64ffda;">Page 09</a>.</dd>
+  <dd>A framework that bounds the step size by a radius $\Delta_k$, making it safe to use non-PD Hessian approximations. See <a href="cg-09-trust-region.html" style="color:#d4956a;">Page 09</a>.</dd>
 
   <dt>Dual methods</dt>
   <dd>BFGS and DFP are duals: swap the roles of $s_k$ and $y_k$ (and $B_k$ and $H_k$) in one to get the other.</dd>
 
   <dt>Secant condition</dt>
-  <dd>$H_{k+1} y_k = s_k$ (inverse form) or $B_{k+1} s_k = y_k$ (direct form). All quasi-Newton methods satisfy this. See <a href="cg-12-bfgs.html" style="color:#64ffda;">Page 12</a>.</dd>
+  <dd>$H_{k+1} y_k = s_k$ (inverse form) or $B_{k+1} s_k = y_k$ (direct form). All quasi-Newton methods satisfy this. See <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>.</dd>
 </dl>
 </div>
 

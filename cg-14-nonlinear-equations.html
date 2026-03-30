@@ -8,49 +8,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
-.container { max-width: 900px; margin: 0 auto; }
-h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
-.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
-h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
-.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
-.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
-.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
-.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
-.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
-.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
-.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
-.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
-.hand-calc .result { color: #64ffda; font-weight: bold; }
-.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
-.exam-flag { background: #2a1a1a; border: 2px solid #ff6b6b; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
-.exam-flag h4 { color: #ff6b6b; margin-bottom: 8px; }
-.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
-.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
-.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
-.step-table tr:nth-child(even) { background: #16213e; }
-.algo-box { border-left: 4px solid #64ffda; padding: 16px 20px; margin: 20px 0; background: #0f3460; border-radius: 0 12px 12px 0; }
-.algo-box .algo-title { color: #ffd93d; font-weight: bold; font-size: 18px; margin-bottom: 12px; }
-.algo-box .algo-line { padding: 6px 0; font-size: 16px; }
-.algo-box .algo-comment { color: #888; font-size: 14px; }
-.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
-.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
-.glossary dl { font-size: 15px; }
-.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
-.glossary dd { margin-left: 20px; color: #ccc; }
-.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
-.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
-.nav a:hover { text-decoration: underline; }
-.nav p { margin: 4px 0; }
-svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
-.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
-.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
-.breakdown dd { color: #ccc; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
@@ -132,38 +90,38 @@ $x_3 = 1.414216... - \frac{0.000007...}{2.828432...} = 1.414213562...$
   <!-- axes -->
   <line x1="50" y1="280" x2="570" y2="280" stroke="#555" stroke-width="1"/>
   <line x1="50" y1="20" x2="50" y2="280" stroke="#555" stroke-width="1"/>
-  <text x="580" y="285" fill="#888" font-size="13">x</text>
-  <text x="35" y="15" fill="#888" font-size="13">y</text>
+  <text x="580" y="285" fill="#a8a49c" font-size="13">x</text>
+  <text x="35" y="15" fill="#a8a49c" font-size="13">y</text>
 
   <!-- curve f(x) = x^2 - 2, mapped: x in [0.5, 2.2], y in [-2, 3] -->
   <!-- x=0.5 -> y=-1.75, x=1 -> y=-1, x=sqrt(2) -> y=0, x=1.5 -> y=0.25, x=2 -> y=2 -->
   <!-- mapping: px = 50 + (x-0.5)*300, py = 280 - (y+2)*52 -->
-  <path d="M 50,189 Q 100,228 200,228 Q 270,228 350,176 Q 430,124 500,20" fill="none" stroke="#64ffda" stroke-width="2.5"/>
-  <text x="510" y="15" fill="#64ffda" font-size="13">f(x) = x^2 - 2</text>
+  <path d="M 50,189 Q 100,228 200,228 Q 270,228 350,176 Q 430,124 500,20" fill="none" stroke="#d4956a" stroke-width="2.5"/>
+  <text x="510" y="15" fill="#d4956a" font-size="13">f(x) = x^2 - 2</text>
 
   <!-- zero crossing at sqrt(2) ~ 1.414 -> px = 50 + (1.414-0.5)*300 = 324 -->
-  <circle cx="324" cy="280" r="5" fill="#ff6b6b"/>
-  <text x="310" y="310" fill="#ff6b6b" font-size="13">root: sqrt(2)</text>
+  <circle cx="324" cy="280" r="5" fill="#c47070"/>
+  <text x="310" y="310" fill="#c47070" font-size="13">root: sqrt(2)</text>
 
   <!-- x0 = 1.5 -> px = 350, f(1.5)=0.25 -> py = 280 - (2.25)*52 = 163 -->
-  <circle cx="350" cy="267" r="4" fill="#ffd93d"/>
-  <text x="355" y="260" fill="#ffd93d" font-size="12">x0 = 1.5</text>
+  <circle cx="350" cy="267" r="4" fill="#c9a84c"/>
+  <text x="355" y="260" fill="#c9a84c" font-size="12">x0 = 1.5</text>
   <!-- tangent at x0: slope = 3, passes through (1.5, 0.25) -->
   <!-- tangent hits zero at x1 = 1.4167 -> px = 325 -->
-  <line x1="280" y1="280" x2="420" y2="210" stroke="#ffd93d" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <line x1="280" y1="280" x2="420" y2="210" stroke="#c9a84c" stroke-width="1.5" stroke-dasharray="6,3"/>
 
   <!-- x1 = 1.4167 -> px = 325, f(1.4167)=0.00694 -> py ~ 276 -->
-  <circle cx="325" cy="276" r="4" fill="#bb86fc"/>
-  <text x="260" y="270" fill="#bb86fc" font-size="12">x1 = 1.417</text>
+  <circle cx="325" cy="276" r="4" fill="#9b89b6"/>
+  <text x="260" y="270" fill="#9b89b6" font-size="12">x1 = 1.417</text>
   <!-- tangent at x1 hits zero at x2 ~ sqrt(2) -->
-  <line x1="310" y1="280" x2="360" y2="266" stroke="#bb86fc" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <line x1="310" y1="280" x2="360" y2="266" stroke="#9b89b6" stroke-width="1.5" stroke-dasharray="6,3"/>
 
   <!-- x2 essentially at root -->
-  <circle cx="324" cy="280" r="3" fill="#64ffda"/>
+  <circle cx="324" cy="280" r="3" fill="#d4956a"/>
 
   <!-- labels -->
-  <text x="60" y="30" fill="#888" font-size="12">Each tangent line (dashed)</text>
-  <text x="60" y="48" fill="#888" font-size="12">zeros in closer to the root</text>
+  <text x="60" y="30" fill="#a8a49c" font-size="12">Each tangent line (dashed)</text>
+  <text x="60" y="48" fill="#a8a49c" font-size="12">zeros in closer to the root</text>
 </svg>
 
 <!-- ===================== PART B ===================== -->
@@ -239,7 +197,7 @@ $$\mathbf{r}(x) = \begin{bmatrix} x_1^2 + x_2^2 - 1 \\ x_1 - x_2 \end{bmatrix}$$
 <span class="step-label">Step 2: Compute the Jacobian (partial derivatives)</span><br>
 $$J(x) = \begin{bmatrix} \frac{\partial r_1}{\partial x_1} & \frac{\partial r_1}{\partial x_2} \\[6pt] \frac{\partial r_2}{\partial x_1} & \frac{\partial r_2}{\partial x_2} \end{bmatrix} = \begin{bmatrix} 2x_1 & 2x_2 \\ 1 & -1 \end{bmatrix}$$
 <p>Lets verify each entry:</p>
-<ul style="margin-left:20px; font-size:16px; color:#ccc;">
+<ul style="margin-left:20px; font-size:16px; color:#b8b4ac;">
   <li>$\frac{\partial}{\partial x_1}(x_1^2 + x_2^2 - 1) = 2x_1$ &mdash; only the $x_1^2$ term survives</li>
   <li>$\frac{\partial}{\partial x_2}(x_1^2 + x_2^2 - 1) = 2x_2$ &mdash; only the $x_2^2$ term survives</li>
   <li>$\frac{\partial}{\partial x_1}(x_1 - x_2) = 1$</li>
@@ -336,51 +294,51 @@ $$x^{(2)} = \begin{bmatrix} 0.72692 \\ 0.72692 \end{bmatrix} + \begin{bmatrix} -
   <!-- axes -->
   <line x1="30" y1="370" x2="380" y2="370" stroke="#555" stroke-width="1"/>
   <line x1="30" y1="370" x2="30" y2="20" stroke="#555" stroke-width="1"/>
-  <text x="385" y="375" fill="#888" font-size="12">x1</text>
-  <text x="15" y="15" fill="#888" font-size="12">x2</text>
+  <text x="385" y="375" fill="#a8a49c" font-size="12">x1</text>
+  <text x="15" y="15" fill="#a8a49c" font-size="12">x2</text>
 
   <!-- unit circle: center (30,370), radius 300 (but we only draw first quadrant) -->
   <!-- scale: 1 unit = 300px, so circle has r=300px centered at (30,370) -->
-  <path d="M 330,370 A 300,300 0 0,0 30,70" fill="none" stroke="#64ffda" stroke-width="2"/>
-  <text x="250" y="120" fill="#64ffda" font-size="13">x1^2 + x2^2 = 1</text>
+  <path d="M 330,370 A 300,300 0 0,0 30,70" fill="none" stroke="#d4956a" stroke-width="2"/>
+  <text x="250" y="120" fill="#d4956a" font-size="13">x1^2 + x2^2 = 1</text>
 
   <!-- line y=x: from (30,370) to (330,70) -->
-  <line x1="30" y1="370" x2="330" y2="70" stroke="#bb86fc" stroke-width="2"/>
-  <text x="290" y="60" fill="#bb86fc" font-size="13">x1 = x2</text>
+  <line x1="30" y1="370" x2="330" y2="70" stroke="#9b89b6" stroke-width="2"/>
+  <text x="290" y="60" fill="#9b89b6" font-size="13">x1 = x2</text>
 
   <!-- true solution: (0.707, 0.707) -> (30+212, 370-212) = (242, 158) -->
-  <circle cx="242" cy="158" r="6" fill="#ff6b6b"/>
-  <text x="250" y="150" fill="#ff6b6b" font-size="12">true: (0.707, 0.707)</text>
+  <circle cx="242" cy="158" r="6" fill="#c47070"/>
+  <text x="250" y="150" fill="#c47070" font-size="12">true: (0.707, 0.707)</text>
 
   <!-- x0 = (0.8, 0.5) -> (30+240, 370-150) = (270, 220) -->
-  <circle cx="270" cy="220" r="5" fill="#ffd93d"/>
-  <text x="278" y="215" fill="#ffd93d" font-size="11">x0 = (0.8, 0.5)</text>
+  <circle cx="270" cy="220" r="5" fill="#c9a84c"/>
+  <text x="278" y="215" fill="#c9a84c" font-size="11">x0 = (0.8, 0.5)</text>
 
   <!-- x1 = (0.727, 0.727) -> (30+218, 370-218) = (248, 152) -->
-  <circle cx="248" cy="152" r="4" fill="#ffd93d"/>
-  <text x="170" y="145" fill="#ffd93d" font-size="11">x1 = (0.727, 0.727)</text>
+  <circle cx="248" cy="152" r="4" fill="#c9a84c"/>
+  <text x="170" y="145" fill="#c9a84c" font-size="11">x1 = (0.727, 0.727)</text>
 
   <!-- arrow from x0 to x1 -->
-  <line x1="270" y1="220" x2="250" y2="155" stroke="#ffd93d" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrowY)"/>
+  <line x1="270" y1="220" x2="250" y2="155" stroke="#c9a84c" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrowY)"/>
 
   <!-- x2 essentially at true solution -->
-  <circle cx="243" cy="157" r="3" fill="#64ffda"/>
+  <circle cx="243" cy="157" r="3" fill="#d4956a"/>
 
   <defs>
     <marker id="arrowY" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L8,3 L0,6" fill="#ffd93d"/>
+      <path d="M0,0 L8,3 L0,6" fill="#c9a84c"/>
     </marker>
   </defs>
 
   <!-- tick marks -->
-  <text x="175" y="387" fill="#888" font-size="11">0.5</text>
-  <line x1="180" y1="367" x2="180" y2="373" stroke="#888" stroke-width="1"/>
-  <text x="325" y="387" fill="#888" font-size="11">1.0</text>
-  <line x1="330" y1="367" x2="330" y2="373" stroke="#888" stroke-width="1"/>
-  <text x="10" y="225" fill="#888" font-size="11">0.5</text>
-  <line x1="27" y1="220" x2="33" y2="220" stroke="#888" stroke-width="1"/>
-  <text x="10" y="75" fill="#888" font-size="11">1.0</text>
-  <line x1="27" y1="70" x2="33" y2="70" stroke="#888" stroke-width="1"/>
+  <text x="175" y="387" fill="#a8a49c" font-size="11">0.5</text>
+  <line x1="180" y1="367" x2="180" y2="373" stroke="#a8a49c" stroke-width="1"/>
+  <text x="325" y="387" fill="#a8a49c" font-size="11">1.0</text>
+  <line x1="330" y1="367" x2="330" y2="373" stroke="#a8a49c" stroke-width="1"/>
+  <text x="10" y="225" fill="#a8a49c" font-size="11">0.5</text>
+  <line x1="27" y1="220" x2="33" y2="220" stroke="#a8a49c" stroke-width="1"/>
+  <text x="10" y="75" fill="#a8a49c" font-size="11">1.0</text>
+  <line x1="27" y1="70" x2="33" y2="70" stroke="#a8a49c" stroke-width="1"/>
 </svg>
 
 <!-- ===================== PART D ===================== -->
@@ -432,12 +390,12 @@ $$J_{k+1} = J_k + \frac{(\mathbf{r}_{k+1} - \mathbf{r}_k - J_k s_k)\,s_k^T}{s_k^
 <h3>Broyden is to Nonlinear Equations What BFGS is to Optimization</h3>
 <p>Both methods share the same core idea: avoid computing expensive second-order information (the Hessian in optimization, the Jacobian in root-finding) by learning it incrementally from the history of steps and function evaluations.</p>
 <table style="width:100%; font-size:15px; margin-top:12px;">
-  <tr><th style="color:#64ffda; text-align:left; padding:6px;">Aspect</th><th style="color:#64ffda; text-align:left; padding:6px;">BFGS (Optimization)</th><th style="color:#64ffda; text-align:left; padding:6px;">Broyden (Equations)</th></tr>
-  <tr><td style="padding:6px; border-top:1px solid #333;">Goal</td><td style="padding:6px; border-top:1px solid #333;">Minimize $f(x)$</td><td style="padding:6px; border-top:1px solid #333;">Solve $\mathbf{r}(x) = \mathbf{0}$</td></tr>
-  <tr><td style="padding:6px; border-top:1px solid #333;">Approximates</td><td style="padding:6px; border-top:1px solid #333;">Hessian $\nabla^2 f$</td><td style="padding:6px; border-top:1px solid #333;">Jacobian $J$</td></tr>
-  <tr><td style="padding:6px; border-top:1px solid #333;">Update type</td><td style="padding:6px; border-top:1px solid #333;">Rank-2</td><td style="padding:6px; border-top:1px solid #333;">Rank-1</td></tr>
-  <tr><td style="padding:6px; border-top:1px solid #333;">Cost per step</td><td style="padding:6px; border-top:1px solid #333;">$O(n^2)$</td><td style="padding:6px; border-top:1px solid #333;">$O(n^2)$</td></tr>
-  <tr><td style="padding:6px; border-top:1px solid #333;">Convergence</td><td style="padding:6px; border-top:1px solid #333;">Superlinear</td><td style="padding:6px; border-top:1px solid #333;">Superlinear</td></tr>
+  <tr><th style="color:#d4956a; text-align:left; padding:6px;">Aspect</th><th style="color:#d4956a; text-align:left; padding:6px;">BFGS (Optimization)</th><th style="color:#d4956a; text-align:left; padding:6px;">Broyden (Equations)</th></tr>
+  <tr><td style="padding:6px; border-top:1px solid #2e2e38;">Goal</td><td style="padding:6px; border-top:1px solid #2e2e38;">Minimize $f(x)$</td><td style="padding:6px; border-top:1px solid #2e2e38;">Solve $\mathbf{r}(x) = \mathbf{0}$</td></tr>
+  <tr><td style="padding:6px; border-top:1px solid #2e2e38;">Approximates</td><td style="padding:6px; border-top:1px solid #2e2e38;">Hessian $\nabla^2 f$</td><td style="padding:6px; border-top:1px solid #2e2e38;">Jacobian $J$</td></tr>
+  <tr><td style="padding:6px; border-top:1px solid #2e2e38;">Update type</td><td style="padding:6px; border-top:1px solid #2e2e38;">Rank-2</td><td style="padding:6px; border-top:1px solid #2e2e38;">Rank-1</td></tr>
+  <tr><td style="padding:6px; border-top:1px solid #2e2e38;">Cost per step</td><td style="padding:6px; border-top:1px solid #2e2e38;">$O(n^2)$</td><td style="padding:6px; border-top:1px solid #2e2e38;">$O(n^2)$</td></tr>
+  <tr><td style="padding:6px; border-top:1px solid #2e2e38;">Convergence</td><td style="padding:6px; border-top:1px solid #2e2e38;">Superlinear</td><td style="padding:6px; border-top:1px solid #2e2e38;">Superlinear</td></tr>
 </table>
 </div>
 
@@ -452,12 +410,12 @@ Here is one of the deepest connections in this entire course. When we do optimiz
 <div class="formula-box">
 <strong>The Dictionary Between the Two Worlds</strong>
 <table style="width:100%; font-size:16px; margin-top:12px;">
-  <tr><th style="color:#64ffda; text-align:left; padding:8px;">Nonlinear Equations</th><th style="color:#64ffda; text-align:left; padding:8px;">Optimization</th></tr>
-  <tr><td style="padding:8px; border-top:1px solid #333;">Residual $\mathbf{r}(x)$</td><td style="padding:8px; border-top:1px solid #333;">Gradient $\nabla f(x)$</td></tr>
-  <tr><td style="padding:8px; border-top:1px solid #333;">Jacobian $J(x)$</td><td style="padding:8px; border-top:1px solid #333;">Hessian $\nabla^2 f(x)$</td></tr>
-  <tr><td style="padding:8px; border-top:1px solid #333;">Newton step: solve $Jp = -\mathbf{r}$</td><td style="padding:8px; border-top:1px solid #333;">Newton step: solve $\nabla^2 f \cdot p = -\nabla f$ (from <a href="cg-07-newton-method.html">Page 07</a>)</td></tr>
-  <tr><td style="padding:8px; border-top:1px solid #333;">Broyden approximates $J$</td><td style="padding:8px; border-top:1px solid #333;">BFGS approximates $\nabla^2 f$ (from <a href="cg-12-bfgs.html">Page 12</a>)</td></tr>
-  <tr><td style="padding:8px; border-top:1px solid #333;">Inexact Newton (CG on $Jp = -\mathbf{r}$)</td><td style="padding:8px; border-top:1px solid #333;">Newton-CG (CG on Hessian system, from <a href="cg-10-conjugate-gradient.html">Page 10</a>)</td></tr>
+  <tr><th style="color:#d4956a; text-align:left; padding:8px;">Nonlinear Equations</th><th style="color:#d4956a; text-align:left; padding:8px;">Optimization</th></tr>
+  <tr><td style="padding:8px; border-top:1px solid #2e2e38;">Residual $\mathbf{r}(x)$</td><td style="padding:8px; border-top:1px solid #2e2e38;">Gradient $\nabla f(x)$</td></tr>
+  <tr><td style="padding:8px; border-top:1px solid #2e2e38;">Jacobian $J(x)$</td><td style="padding:8px; border-top:1px solid #2e2e38;">Hessian $\nabla^2 f(x)$</td></tr>
+  <tr><td style="padding:8px; border-top:1px solid #2e2e38;">Newton step: solve $Jp = -\mathbf{r}$</td><td style="padding:8px; border-top:1px solid #2e2e38;">Newton step: solve $\nabla^2 f \cdot p = -\nabla f$ (from <a href="cg-07-newton-method.html">Page 07</a>)</td></tr>
+  <tr><td style="padding:8px; border-top:1px solid #2e2e38;">Broyden approximates $J$</td><td style="padding:8px; border-top:1px solid #2e2e38;">BFGS approximates $\nabla^2 f$ (from <a href="cg-12-bfgs.html">Page 12</a>)</td></tr>
+  <tr><td style="padding:8px; border-top:1px solid #2e2e38;">Inexact Newton (CG on $Jp = -\mathbf{r}$)</td><td style="padding:8px; border-top:1px solid #2e2e38;">Newton-CG (CG on Hessian system, from <a href="cg-10-conjugate-gradient.html">Page 10</a>)</td></tr>
 </table>
 </div>
 

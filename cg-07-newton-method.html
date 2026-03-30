@@ -8,49 +8,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
-.container { max-width: 900px; margin: 0 auto; }
-h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
-.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
-h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
-.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
-.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
-.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
-.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
-.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
-.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
-.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
-.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
-.hand-calc .result { color: #64ffda; font-weight: bold; }
-.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
-.exam-flag { background: #2a1a1a; border: 2px solid #ff6b6b; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
-.exam-flag h4 { color: #ff6b6b; margin-bottom: 8px; }
-.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
-.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
-.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
-.step-table tr:nth-child(even) { background: #16213e; }
-.algo-box { border-left: 4px solid #64ffda; padding: 16px 20px; margin: 20px 0; background: #0f3460; border-radius: 0 12px 12px 0; }
-.algo-box .algo-title { color: #ffd93d; font-weight: bold; font-size: 18px; margin-bottom: 12px; }
-.algo-box .algo-line { padding: 6px 0; font-size: 16px; }
-.algo-box .algo-comment { color: #888; font-size: 14px; }
-.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
-.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
-.glossary dl { font-size: 15px; }
-.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
-.glossary dd { margin-left: 20px; color: #ccc; }
-.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
-.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
-.nav a:hover { text-decoration: underline; }
-.nav p { margin: 4px 0; }
-svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
-.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
-.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
-.breakdown dd { color: #ccc; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
@@ -141,14 +99,14 @@ $$x_{k+1} = x_k + p_k$$
 
 <div class="algo-box">
 <div class="algo-title">Algorithm: Newton's Method (Pure / Local)</div>
-<div class="algo-line"><strong style="color:#64ffda;">Input:</strong> starting point $x_0$, tolerance $\epsilon > 0$</div>
-<div class="algo-line"><strong style="color:#64ffda;">Step 0:</strong> Set $k = 0$</div>
-<div class="algo-line"><strong style="color:#64ffda;">Step 1:</strong> Compute the gradient $g_k = \nabla f(x_k)$ <span class="algo-comment">&larr; the slope</span></div>
-<div class="algo-line"><strong style="color:#64ffda;">Step 2:</strong> If $\|g_k\| < \epsilon$, STOP</div>
-<div class="algo-line"><strong style="color:#64ffda;">Step 3:</strong> Compute the Hessian $H_k = \nabla^2 f(x_k)$ <span class="algo-comment">&larr; the curvature</span></div>
-<div class="algo-line"><strong style="color:#64ffda;">Step 4:</strong> Solve $H_k p_k = -g_k$ for $p_k$ <span class="algo-comment">&larr; find the bottom of the local bowl</span></div>
-<div class="algo-line"><strong style="color:#64ffda;">Step 5:</strong> Update: $x_{k+1} = x_k + p_k$ <span class="algo-comment">&larr; jump to the bottom</span></div>
-<div class="algo-line"><strong style="color:#64ffda;">Step 6:</strong> Set $k = k + 1$, go to Step 1</div>
+<div class="algo-line"><strong style="color:#d4956a;">Input:</strong> starting point $x_0$, tolerance $\epsilon > 0$</div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 0:</strong> Set $k = 0$</div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 1:</strong> Compute the gradient $g_k = \nabla f(x_k)$ <span class="algo-comment">&larr; the slope</span></div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 2:</strong> If $\|g_k\| < \epsilon$, STOP</div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 3:</strong> Compute the Hessian $H_k = \nabla^2 f(x_k)$ <span class="algo-comment">&larr; the curvature</span></div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 4:</strong> Solve $H_k p_k = -g_k$ for $p_k$ <span class="algo-comment">&larr; find the bottom of the local bowl</span></div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 5:</strong> Update: $x_{k+1} = x_k + p_k$ <span class="algo-comment">&larr; jump to the bottom</span></div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 6:</strong> Set $k = k + 1$, go to Step 1</div>
 </div>
 
 <!-- ===================== PART B ===================== -->
@@ -173,7 +131,7 @@ $$x_1 = x_0 + p_0 = x_0 - x_0 - Q^{-1}b = -Q^{-1}b$$
 
 <p>But the minimum of $f$ is at $x^* = -Q^{-1}b$ (set $\nabla f = Qx + b = 0$, solve for $x$).</p>
 
-<p style="margin-top:12px; color:#64ffda; font-weight:bold;">Therefore $x_1 = x^*$ exactly. One step. Done.</p>
+<p style="margin-top:12px; color:#d4956a; font-weight:bold;">Therefore $x_1 = x^*$ exactly. One step. Done.</p>
 </div>
 
 <div class="why-box">
@@ -411,7 +369,7 @@ $$x_4 \approx 0.6931$$
   <th>Global?</th>
 </tr>
 <tr>
-  <td style="text-align:left;">GD (<a href="cg-06-gradient-descent.html" style="color:#64ffda;">Page 06</a>)</td>
+  <td style="text-align:left;">GD (<a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>)</td>
   <td>Gradient</td>
   <td>$O(n)$</td>
   <td>Linear</td>
@@ -425,14 +383,14 @@ $$x_4 \approx 0.6931$$
   <td>No (local only)</td>
 </tr>
 <tr>
-  <td style="text-align:left;">CG (<a href="cg-10-conjugate-gradient.html" style="color:#64ffda;">Page 10</a>)</td>
+  <td style="text-align:left;">CG (<a href="cg-10-conjugate-gradient.html" style="color:#d4956a;">Page 10</a>)</td>
   <td>Gradient</td>
   <td>$O(n)$</td>
   <td>$\leq n$ steps</td>
   <td>With line search</td>
 </tr>
 <tr>
-  <td style="text-align:left;">BFGS (<a href="cg-12-bfgs.html" style="color:#64ffda;">Page 12</a>)</td>
+  <td style="text-align:left;">BFGS (<a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>)</td>
   <td>Gradient (approx Hessian)</td>
   <td>$O(n^2)$</td>
   <td>Superlinear</td>

@@ -8,43 +8,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
-.container { max-width: 900px; margin: 0 auto; }
-h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
-.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
-h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
-.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
-.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
-.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
-.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
-.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
-.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
-.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
-.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
-.hand-calc .result { color: #64ffda; font-weight: bold; }
-.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
-.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
-.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
-.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
-.step-table tr:nth-child(even) { background: #16213e; }
-.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
-.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
-.glossary dl { font-size: 15px; }
-.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
-.glossary dd { margin-left: 20px; color: #ccc; }
-.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
-.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
-.nav a:hover { text-decoration: underline; }
-.nav p { margin: 4px 0; }
-svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
-.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
-.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
-.breakdown dd { color: #ccc; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
@@ -80,7 +44,7 @@ That is literally it. A partial derivative is <strong>a regular derivative where
 <div class="formula-box">
 <p><strong>Notation:</strong></p>
 $$\frac{\partial f}{\partial x_1}$$
-<p style="color:#ccc; font-size:16px; margin-top:10px;">means: "take the derivative of $f$ with respect to $x_1$, treating every other variable ($x_2, x_3, \ldots$) as if they were just numbers (constants)."</p>
+<p style="color:#b8b4ac; font-size:16px; margin-top:10px;">means: "take the derivative of $f$ with respect to $x_1$, treating every other variable ($x_2, x_3, \ldots$) as if they were just numbers (constants)."</p>
 <dl class="breakdown">
   <dt>$\partial$</dt><dd>The "partial" symbol &mdash; signals that there are other variables being held fixed.</dd>
   <dt>$f$</dt><dd>The function of multiple variables.</dd>
@@ -196,7 +160,7 @@ $$\nabla f(x) = \begin{bmatrix} \dfrac{\partial f}{\partial x_1} \\[12pt] \dfrac
   <dt>$\nabla$</dt><dd>"Nabla" or "del" &mdash; the gradient operator. It collects all partial derivatives into one vector.</dd>
   <dt>$\nabla f(x)$</dt><dd>A vector with the same dimension as $x$. Each component is the partial derivative of $f$ with respect to that variable.</dd>
 </dl>
-<p style="color:#ccc; font-size:15px; margin-top:12px;">For a function of $n$ variables: $\nabla f(x) = \left[\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \ldots, \frac{\partial f}{\partial x_n}\right]^T$</p>
+<p style="color:#b8b4ac; font-size:15px; margin-top:12px;">For a function of $n$ variables: $\nabla f(x) = \left[\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \ldots, \frac{\partial f}{\partial x_n}\right]^T$</p>
 </div>
 
 
@@ -270,54 +234,54 @@ $$\nabla f(x) = \begin{bmatrix} \dfrac{\partial f}{\partial x_1} \\[12pt] \dfrac
 <svg viewBox="0 0 440 400" width="440" height="400" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <marker id="arrow-up" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-      <polygon points="0,0 8,3 0,6" fill="#ff6b6b"/>
+      <polygon points="0,0 8,3 0,6" fill="#c47070"/>
     </marker>
     <marker id="arrow-down" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-      <polygon points="0,0 8,3 0,6" fill="#64ffda"/>
+      <polygon points="0,0 8,3 0,6" fill="#d4956a"/>
     </marker>
   </defs>
 
   <!-- Background -->
-  <rect x="0" y="0" width="440" height="400" fill="#1a1a2e"/>
+  <rect x="0" y="0" width="440" height="400" fill="#17171c"/>
 
   <!-- Contour ellipses (function "bowl") -->
-  <ellipse cx="220" cy="200" rx="20" ry="15" fill="none" stroke="#333" stroke-width="1.5"/>
+  <ellipse cx="220" cy="200" rx="20" ry="15" fill="none" stroke="#2e2e38" stroke-width="1.5"/>
   <ellipse cx="220" cy="200" rx="50" ry="37" fill="none" stroke="#3a3a5e" stroke-width="1.5"/>
   <ellipse cx="220" cy="200" rx="85" ry="63" fill="none" stroke="#3a3a5e" stroke-width="1.5"/>
   <ellipse cx="220" cy="200" rx="125" ry="93" fill="none" stroke="#3a3a5e" stroke-width="1.5"/>
-  <ellipse cx="220" cy="200" rx="170" ry="126" fill="none" stroke="#444" stroke-width="1.5"/>
+  <ellipse cx="220" cy="200" rx="170" ry="126" fill="none" stroke="#3a3a46" stroke-width="1.5"/>
 
   <!-- Minimum point -->
-  <circle cx="220" cy="200" r="5" fill="#ffd93d"/>
-  <text x="228" y="196" fill="#ffd93d" font-size="13" font-weight="bold">x* (min)</text>
+  <circle cx="220" cy="200" r="5" fill="#c9a84c"/>
+  <text x="228" y="196" fill="#c9a84c" font-size="13" font-weight="bold">x* (min)</text>
 
   <!-- Gradient arrows (pointing outward = uphill, red) -->
-  <line x1="340" y1="130" x2="370" y2="110" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#arrow-up)"/>
-  <line x1="310" y1="200" x2="348" y2="200" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#arrow-up)"/>
-  <line x1="340" y1="270" x2="370" y2="290" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#arrow-up)"/>
-  <line x1="100" y1="130" x2="70" y2="110" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#arrow-up)"/>
-  <line x1="130" y1="200" x2="92" y2="200" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#arrow-up)"/>
-  <line x1="100" y1="270" x2="70" y2="290" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#arrow-up)"/>
-  <line x1="220" y1="100" x2="220" y2="65" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#arrow-up)"/>
-  <line x1="220" y1="300" x2="220" y2="335" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#arrow-up)"/>
+  <line x1="340" y1="130" x2="370" y2="110" stroke="#c47070" stroke-width="2.5" marker-end="url(#arrow-up)"/>
+  <line x1="310" y1="200" x2="348" y2="200" stroke="#c47070" stroke-width="2.5" marker-end="url(#arrow-up)"/>
+  <line x1="340" y1="270" x2="370" y2="290" stroke="#c47070" stroke-width="2.5" marker-end="url(#arrow-up)"/>
+  <line x1="100" y1="130" x2="70" y2="110" stroke="#c47070" stroke-width="2.5" marker-end="url(#arrow-up)"/>
+  <line x1="130" y1="200" x2="92" y2="200" stroke="#c47070" stroke-width="2.5" marker-end="url(#arrow-up)"/>
+  <line x1="100" y1="270" x2="70" y2="290" stroke="#c47070" stroke-width="2.5" marker-end="url(#arrow-up)"/>
+  <line x1="220" y1="100" x2="220" y2="65" stroke="#c47070" stroke-width="2.5" marker-end="url(#arrow-up)"/>
+  <line x1="220" y1="300" x2="220" y2="335" stroke="#c47070" stroke-width="2.5" marker-end="url(#arrow-up)"/>
 
   <!-- Negative gradient arrows (pointing inward = downhill, teal) -->
-  <line x1="355" y1="118" x2="332" y2="133" stroke="#64ffda" stroke-width="2" marker-end="url(#arrow-down)" stroke-dasharray="4,3"/>
-  <line x1="335" y1="200" x2="305" y2="200" stroke="#64ffda" stroke-width="2" marker-end="url(#arrow-down)" stroke-dasharray="4,3"/>
-  <line x1="355" y1="282" x2="332" y2="267" stroke="#64ffda" stroke-width="2" marker-end="url(#arrow-down)" stroke-dasharray="4,3"/>
-  <line x1="85" y1="118" x2="108" y2="133" stroke="#64ffda" stroke-width="2" marker-end="url(#arrow-down)" stroke-dasharray="4,3"/>
-  <line x1="105" y1="200" x2="135" y2="200" stroke="#64ffda" stroke-width="2" marker-end="url(#arrow-down)" stroke-dasharray="4,3"/>
-  <line x1="85" y1="282" x2="108" y2="267" stroke="#64ffda" stroke-width="2" marker-end="url(#arrow-down)" stroke-dasharray="4,3"/>
+  <line x1="355" y1="118" x2="332" y2="133" stroke="#d4956a" stroke-width="2" marker-end="url(#arrow-down)" stroke-dasharray="4,3"/>
+  <line x1="335" y1="200" x2="305" y2="200" stroke="#d4956a" stroke-width="2" marker-end="url(#arrow-down)" stroke-dasharray="4,3"/>
+  <line x1="355" y1="282" x2="332" y2="267" stroke="#d4956a" stroke-width="2" marker-end="url(#arrow-down)" stroke-dasharray="4,3"/>
+  <line x1="85" y1="118" x2="108" y2="133" stroke="#d4956a" stroke-width="2" marker-end="url(#arrow-down)" stroke-dasharray="4,3"/>
+  <line x1="105" y1="200" x2="135" y2="200" stroke="#d4956a" stroke-width="2" marker-end="url(#arrow-down)" stroke-dasharray="4,3"/>
+  <line x1="85" y1="282" x2="108" y2="267" stroke="#d4956a" stroke-width="2" marker-end="url(#arrow-down)" stroke-dasharray="4,3"/>
 
   <!-- Legend -->
-  <rect x="10" y="345" width="420" height="50" rx="6" fill="#0f3460" opacity="0.9"/>
-  <line x1="25" y1="365" x2="50" y2="365" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#arrow-up)"/>
-  <text x="58" y="369" fill="#ff6b6b" font-size="12">Gradient (steepest uphill)</text>
-  <line x1="245" y1="365" x2="270" y2="365" stroke="#64ffda" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow-down)"/>
-  <text x="278" y="369" fill="#64ffda" font-size="12">Negative gradient (steepest downhill)</text>
-  <text x="120" y="387" fill="#888" font-size="11">Contour lines = level curves of the function (same value along each curve)</text>
+  <rect x="10" y="345" width="420" height="50" rx="6" fill="#25252e" opacity="0.9"/>
+  <line x1="25" y1="365" x2="50" y2="365" stroke="#c47070" stroke-width="2.5" marker-end="url(#arrow-up)"/>
+  <text x="58" y="369" fill="#c47070" font-size="12">Gradient (steepest uphill)</text>
+  <line x1="245" y1="365" x2="270" y2="365" stroke="#d4956a" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow-down)"/>
+  <text x="278" y="369" fill="#d4956a" font-size="12">Negative gradient (steepest downhill)</text>
+  <text x="120" y="387" fill="#a8a49c" font-size="11">Contour lines = level curves of the function (same value along each curve)</text>
 </svg>
-<p style="font-size:14px; color:#888;">Gradient arrows are always <strong>perpendicular to the contour lines</strong>. The negative gradient always points toward the minimum.</p>
+<p style="font-size:14px; color:#a8a49c;">Gradient arrows are always <strong>perpendicular to the contour lines</strong>. The negative gradient always points toward the minimum.</p>
 </div>
 
 <div class="why-box">
@@ -457,45 +421,45 @@ $$\nabla^2 f(x) = \begin{bmatrix} \dfrac{\partial^2 f}{\partial x_1^2} & \dfrac{
 <svg viewBox="0 0 600 220" width="600" height="220" xmlns="http://www.w3.org/2000/svg">
   <!-- Bowl (positive definite) -->
   <g transform="translate(0,0)">
-    <text x="100" y="18" fill="#64ffda" font-size="14" text-anchor="middle" font-weight="bold">Bowl (Positive Definite)</text>
-    <text x="100" y="34" fill="#888" font-size="11" text-anchor="middle">All eigenvalues &gt; 0 = local minimum</text>
+    <text x="100" y="18" fill="#d4956a" font-size="14" text-anchor="middle" font-weight="bold">Bowl (Positive Definite)</text>
+    <text x="100" y="34" fill="#a8a49c" font-size="11" text-anchor="middle">All eigenvalues &gt; 0 = local minimum</text>
     <!-- Bowl shape -->
     <ellipse cx="100" cy="160" rx="80" ry="20" fill="none" stroke="#555" stroke-width="1"/>
-    <path d="M20,160 Q100,80 180,160" fill="none" stroke="#64ffda" stroke-width="2.5"/>
-    <path d="M20,160 Q100,100 180,160" fill="none" stroke="#64ffda" stroke-width="1.5" opacity="0.4"/>
-    <circle cx="100" cy="125" r="4" fill="#ffd93d"/>
-    <text x="100" y="120" fill="#ffd93d" font-size="11" text-anchor="middle">min</text>
+    <path d="M20,160 Q100,80 180,160" fill="none" stroke="#d4956a" stroke-width="2.5"/>
+    <path d="M20,160 Q100,100 180,160" fill="none" stroke="#d4956a" stroke-width="1.5" opacity="0.4"/>
+    <circle cx="100" cy="125" r="4" fill="#c9a84c"/>
+    <text x="100" y="120" fill="#c9a84c" font-size="11" text-anchor="middle">min</text>
     <!-- Vertical guide lines showing curve -->
-    <line x1="100" y1="80" x2="100" y2="170" stroke="#333" stroke-width="1" stroke-dasharray="3,3"/>
+    <line x1="100" y1="80" x2="100" y2="170" stroke="#2e2e38" stroke-width="1" stroke-dasharray="3,3"/>
   </g>
 
   <!-- Saddle (indefinite) -->
   <g transform="translate(200,0)">
-    <text x="100" y="18" fill="#bb86fc" font-size="14" text-anchor="middle" font-weight="bold">Saddle (Indefinite)</text>
-    <text x="100" y="34" fill="#888" font-size="11" text-anchor="middle">Mixed eigenvalue signs</text>
+    <text x="100" y="18" fill="#9b89b6" font-size="14" text-anchor="middle" font-weight="bold">Saddle (Indefinite)</text>
+    <text x="100" y="34" fill="#a8a49c" font-size="11" text-anchor="middle">Mixed eigenvalue signs</text>
     <!-- Saddle shape: curves up left-right, down front-back -->
-    <path d="M20,130 Q60,170 100,130 Q140,90 180,130" fill="none" stroke="#bb86fc" stroke-width="2.5"/>
-    <path d="M60,80 Q100,130 140,80" fill="none" stroke="#bb86fc" stroke-width="1.5" opacity="0.5" stroke-dasharray="4,3"/>
-    <path d="M60,180 Q100,130 140,180" fill="none" stroke="#bb86fc" stroke-width="1.5" opacity="0.5" stroke-dasharray="4,3"/>
-    <circle cx="100" cy="130" r="4" fill="#ffd93d"/>
-    <text x="100" y="125" fill="#ffd93d" font-size="11" text-anchor="middle">saddle</text>
+    <path d="M20,130 Q60,170 100,130 Q140,90 180,130" fill="none" stroke="#9b89b6" stroke-width="2.5"/>
+    <path d="M60,80 Q100,130 140,80" fill="none" stroke="#9b89b6" stroke-width="1.5" opacity="0.5" stroke-dasharray="4,3"/>
+    <path d="M60,180 Q100,130 140,180" fill="none" stroke="#9b89b6" stroke-width="1.5" opacity="0.5" stroke-dasharray="4,3"/>
+    <circle cx="100" cy="130" r="4" fill="#c9a84c"/>
+    <text x="100" y="125" fill="#c9a84c" font-size="11" text-anchor="middle">saddle</text>
     <text x="100" y="200" fill="#666" font-size="10" text-anchor="middle">up in one dir, down in another</text>
   </g>
 
   <!-- Dome (negative definite) -->
   <g transform="translate(400,0)">
-    <text x="100" y="18" fill="#ff6b6b" font-size="14" text-anchor="middle" font-weight="bold">Dome (Negative Definite)</text>
-    <text x="100" y="34" fill="#888" font-size="11" text-anchor="middle">All eigenvalues &lt; 0 = local maximum</text>
+    <text x="100" y="18" fill="#c47070" font-size="14" text-anchor="middle" font-weight="bold">Dome (Negative Definite)</text>
+    <text x="100" y="34" fill="#a8a49c" font-size="11" text-anchor="middle">All eigenvalues &lt; 0 = local maximum</text>
     <!-- Dome shape -->
     <ellipse cx="100" cy="160" rx="80" ry="20" fill="none" stroke="#555" stroke-width="1"/>
-    <path d="M20,160 Q100,60 180,160" fill="none" stroke="#ff6b6b" stroke-width="2.5"/>
-    <path d="M20,160 Q100,80 180,160" fill="none" stroke="#ff6b6b" stroke-width="1.5" opacity="0.4"/>
-    <circle cx="100" cy="85" r="4" fill="#ffd93d"/>
-    <text x="100" y="80" fill="#ffd93d" font-size="11" text-anchor="middle">max</text>
-    <line x1="100" y1="60" x2="100" y2="170" stroke="#333" stroke-width="1" stroke-dasharray="3,3"/>
+    <path d="M20,160 Q100,60 180,160" fill="none" stroke="#c47070" stroke-width="2.5"/>
+    <path d="M20,160 Q100,80 180,160" fill="none" stroke="#c47070" stroke-width="1.5" opacity="0.4"/>
+    <circle cx="100" cy="85" r="4" fill="#c9a84c"/>
+    <text x="100" y="80" fill="#c9a84c" font-size="11" text-anchor="middle">max</text>
+    <line x1="100" y1="60" x2="100" y2="170" stroke="#2e2e38" stroke-width="1" stroke-dasharray="3,3"/>
   </g>
 </svg>
-<p style="font-size:14px; color:#888;">The eigenvalues of the Hessian determine the shape. Positive = curves up (bowl). Negative = curves down (dome). Mixed = saddle.</p>
+<p style="font-size:14px; color:#a8a49c;">The eigenvalues of the Hessian determine the shape. Positive = curves up (bowl). Negative = curves down (dome). Mixed = saddle.</p>
 </div>
 
 
@@ -503,11 +467,11 @@ $$\nabla^2 f(x) = \begin{bmatrix} \dfrac{\partial^2 f}{\partial x_1^2} & \dfrac{
 <h3>Why Does the Hessian Matter for This Course?</h3>
 <p>The Hessian appears in nearly every major topic:</p>
 <ul style="margin-top:8px; margin-left:20px;">
-  <li><strong>Newton's method</strong> (<a href="cg-07-newton.html" style="color:#64ffda;">Page 07</a>) uses the Hessian to build a local quadratic model and solve $\nabla^2 f(x_k) \, p = -\nabla f(x_k)$ for the step $p$.</li>
-  <li><strong>BFGS / Quasi-Newton</strong> (<a href="cg-12-quasi-newton.html" style="color:#64ffda;">Page 12</a>) approximates the Hessian using only gradient information &mdash; avoiding the expensive computation of all second derivatives.</li>
-  <li><strong>Trust regions</strong> (<a href="cg-09-trust-region.html" style="color:#64ffda;">Page 09</a>) use the Hessian in the quadratic model $m_k(p) = f_k + g_k^T p + \frac{1}{2} p^T B_k p$ where $B_k \approx \nabla^2 f(x_k)$.</li>
-  <li><strong>Sufficient optimality conditions</strong> (<a href="cg-03-linear-algebra.html" style="color:#64ffda;">Page 03</a>) require $\nabla^2 f(x^*)$ to be positive definite at a minimum.</li>
-  <li><strong>Condition number</strong> (<a href="cg-01-math-foundations.html" style="color:#64ffda;">Page 01</a>) uses the eigenvalues of $\nabla^2 f$ to measure how hard a problem is.</li>
+  <li><strong>Newton's method</strong> (<a href="cg-07-newton.html" style="color:#d4956a;">Page 07</a>) uses the Hessian to build a local quadratic model and solve $\nabla^2 f(x_k) \, p = -\nabla f(x_k)$ for the step $p$.</li>
+  <li><strong>BFGS / Quasi-Newton</strong> (<a href="cg-12-quasi-newton.html" style="color:#d4956a;">Page 12</a>) approximates the Hessian using only gradient information &mdash; avoiding the expensive computation of all second derivatives.</li>
+  <li><strong>Trust regions</strong> (<a href="cg-09-trust-region.html" style="color:#d4956a;">Page 09</a>) use the Hessian in the quadratic model $m_k(p) = f_k + g_k^T p + \frac{1}{2} p^T B_k p$ where $B_k \approx \nabla^2 f(x_k)$.</li>
+  <li><strong>Sufficient optimality conditions</strong> (<a href="cg-03-linear-algebra.html" style="color:#d4956a;">Page 03</a>) require $\nabla^2 f(x^*)$ to be positive definite at a minimum.</li>
+  <li><strong>Condition number</strong> (<a href="cg-01-math-foundations.html" style="color:#d4956a;">Page 01</a>) uses the eigenvalues of $\nabla^2 f$ to measure how hard a problem is.</li>
 </ul>
 <p style="margin-top:8px;">If the gradient is the single most important vector in optimization, the Hessian is the single most important matrix.</p>
 </div>
@@ -530,14 +494,14 @@ Imagine two gears connected together. Gear A turns, which makes Gear B turn. If 
 
 <div class="formula-box">
 $$\frac{dy}{dx} = f'(g(x)) \cdot g'(x)$$
-<p style="color:#ccc; font-size:15px; margin-top:8px;">"Derivative of the outer function, evaluated at the inner function, times derivative of the inner function."</p>
+<p style="color:#b8b4ac; font-size:15px; margin-top:8px;">"Derivative of the outer function, evaluated at the inner function, times derivative of the inner function."</p>
 </div>
 
 <p>In multiple variables, the chain rule generalizes. If $f$ depends on $\mathbf{u} = (u_1, u_2)$ and each $u_i$ depends on $\mathbf{x} = (x_1, x_2)$, then:</p>
 
 <div class="formula-box">
 $$\frac{\partial f}{\partial x_j} = \sum_{i} \frac{\partial f}{\partial u_i} \cdot \frac{\partial u_i}{\partial x_j}$$
-<p style="color:#ccc; font-size:15px; margin-top:8px;">Sum over all intermediate variables. Each path from $x_j$ to $f$ through some $u_i$ contributes one term to the sum.</p>
+<p style="color:#b8b4ac; font-size:15px; margin-top:8px;">Sum over all intermediate variables. Each path from $x_j$ to $f$ through some $u_i$ contributes one term to the sum.</p>
 </div>
 
 <div class="hand-calc">
@@ -563,7 +527,7 @@ $$\frac{\partial f}{\partial x_j} = \sum_{i} \frac{\partial f}{\partial u_i} \cd
 
 <div class="why-box">
 <h3>Why Does the Chain Rule Matter Here?</h3>
-<p>Many optimization problems involve <em>composed</em> functions. In logistic regression, the loss is $-\log(\sigma(\mathbf{w}^T \mathbf{x}))$ where $\sigma$ is the sigmoid. Computing the gradient requires chaining through $\log$, then $\sigma$, then the linear function $\mathbf{w}^T \mathbf{x}$. Backpropagation in neural networks is literally the chain rule applied layer by layer. In nonlinear least squares (<a href="cg-13-least-squares.html" style="color:#64ffda;">Page 13</a>), the chain rule connects residual gradients to the overall objective gradient.</p>
+<p>Many optimization problems involve <em>composed</em> functions. In logistic regression, the loss is $-\log(\sigma(\mathbf{w}^T \mathbf{x}))$ where $\sigma$ is the sigmoid. Computing the gradient requires chaining through $\log$, then $\sigma$, then the linear function $\mathbf{w}^T \mathbf{x}$. Backpropagation in neural networks is literally the chain rule applied layer by layer. In nonlinear least squares (<a href="cg-13-least-squares.html" style="color:#d4956a;">Page 13</a>), the chain rule connects residual gradients to the overall objective gradient.</p>
 </div>
 
 
@@ -653,9 +617,9 @@ $$J(x) = \begin{bmatrix} \dfrac{\partial r_1}{\partial x_1} & \dfrac{\partial r_
 <div class="why-box">
 <h3>Where Does the Jacobian Appear in This Course?</h3>
 <ul style="margin-left:20px;">
-  <li><strong>Newton's method for nonlinear systems</strong> (<a href="cg-14-nonlinear-systems.html" style="color:#64ffda;">Page 14</a>): replace the single Hessian with the Jacobian to solve systems of equations.</li>
-  <li><strong>Nonlinear least squares</strong> (<a href="cg-13-least-squares.html" style="color:#64ffda;">Page 13</a>): the Gauss-Newton method uses the Jacobian of the residual vector. The approximate Hessian is $J^T J$.</li>
-  <li><strong>KKT conditions for constrained optimization</strong> (<a href="cg-15-constrained.html" style="color:#64ffda;">Page 15</a>): the Jacobian of the constraint functions appears in the KKT system.</li>
+  <li><strong>Newton's method for nonlinear systems</strong> (<a href="cg-14-nonlinear-systems.html" style="color:#d4956a;">Page 14</a>): replace the single Hessian with the Jacobian to solve systems of equations.</li>
+  <li><strong>Nonlinear least squares</strong> (<a href="cg-13-least-squares.html" style="color:#d4956a;">Page 13</a>): the Gauss-Newton method uses the Jacobian of the residual vector. The approximate Hessian is $J^T J$.</li>
+  <li><strong>KKT conditions for constrained optimization</strong> (<a href="cg-15-constrained.html" style="color:#d4956a;">Page 15</a>): the Jacobian of the constraint functions appears in the KKT system.</li>
 </ul>
 <p style="margin-top:8px;">If you understand the gradient, the Jacobian is just "do the gradient for each equation and stack them as rows."</p>
 </div>

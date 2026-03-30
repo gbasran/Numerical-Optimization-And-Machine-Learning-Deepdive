@@ -8,49 +8,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
-.container { max-width: 900px; margin: 0 auto; }
-h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
-.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
-h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
-.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
-.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
-.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
-.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
-.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
-.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
-.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
-.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
-.hand-calc .result { color: #64ffda; font-weight: bold; }
-.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
-.exam-flag { background: #2a1a1a; border: 2px solid #ff6b6b; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
-.exam-flag h4 { color: #ff6b6b; margin-bottom: 8px; }
-.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
-.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
-.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
-.step-table tr:nth-child(even) { background: #16213e; }
-.algo-box { border-left: 4px solid #64ffda; padding: 16px 20px; margin: 20px 0; background: #0f3460; border-radius: 0 12px 12px 0; }
-.algo-box .algo-title { color: #ffd93d; font-weight: bold; font-size: 18px; margin-bottom: 12px; }
-.algo-box .algo-line { padding: 6px 0; font-size: 16px; }
-.algo-box .algo-comment { color: #888; font-size: 14px; }
-.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
-.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
-.glossary dl { font-size: 15px; }
-.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
-.glossary dd { margin-left: 20px; color: #ccc; }
-.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
-.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
-.nav a:hover { text-decoration: underline; }
-.nav p { margin: 4px 0; }
-svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
-.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
-.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
-.breakdown dd { color: #ccc; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
@@ -65,7 +23,7 @@ svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
 <div class="analogy">
 <strong>Physical analogy &mdash; Gradient descent zigzags because it has no memory.</strong><br><br>
 
-Imagine you are hiking down into an elongated valley &mdash; shaped like a bathtub that is very long and very narrow. Gradient descent (<a href="cg-06-gradient-descent.html" style="color:#64ffda;">Page 06</a>) always walks in the direction of steepest downhill. On the first step, you go steeply down the narrow wall of the valley. But this overshoots past the center and you end up on the opposite wall. On the next step, steepest downhill points back across the valley again. You zigzag back and forth, each step nearly perpendicular to the last, making painfully slow progress along the valley floor toward the actual minimum.<br><br>
+Imagine you are hiking down into an elongated valley &mdash; shaped like a bathtub that is very long and very narrow. Gradient descent (<a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>) always walks in the direction of steepest downhill. On the first step, you go steeply down the narrow wall of the valley. But this overshoots past the center and you end up on the opposite wall. On the next step, steepest downhill points back across the valley again. You zigzag back and forth, each step nearly perpendicular to the last, making painfully slow progress along the valley floor toward the actual minimum.<br><br>
 
 <strong>Why does this happen?</strong> Because gradient descent has no memory. Each step is chosen independently, using only the current gradient. It does not remember what directions it has already explored. So it keeps re-exploring the same narrow cross-valley direction, undoing progress from the previous step.<br><br>
 
@@ -84,10 +42,10 @@ The payoff is stunning: for a problem with $n$ unknowns, CG finds the exact answ
 $$f(x) = \frac{1}{2}x^T A x - b^T x$$
 
 <dl class="breakdown">
-  <dt>$A$</dt><dd>an $n \times n$ symmetric positive definite matrix (recall positive definiteness from <a href="cg-03-linear-algebra.html" style="color:#64ffda;">Page 03</a> &mdash; all eigenvalues positive, the matrix defines a bowl shape)</dd>
+  <dt>$A$</dt><dd>an $n \times n$ symmetric positive definite matrix (recall positive definiteness from <a href="cg-03-linear-algebra.html" style="color:#d4956a;">Page 03</a> &mdash; all eigenvalues positive, the matrix defines a bowl shape)</dd>
   <dt>$x$</dt><dd>the unknown vector we want to find (the solution)</dd>
   <dt>$b$</dt><dd>a known right-hand-side vector</dd>
-  <dt>$f(x)$</dt><dd>a quadratic function (recall from <a href="cg-05-convexity.html" style="color:#64ffda;">Page 05</a>) whose unique minimum is at $x^* = A^{-1}b$</dd>
+  <dt>$f(x)$</dt><dd>a quadratic function (recall from <a href="cg-05-convexity.html" style="color:#d4956a;">Page 05</a>) whose unique minimum is at $x^* = A^{-1}b$</dd>
 </dl>
 
 <p style="margin-top: 12px;"><strong>Why are these equivalent?</strong> Take the gradient of $f$: $\nabla f(x) = Ax - b$. Setting the gradient to zero gives $Ax = b$. So finding where the quadratic bowl bottoms out is the same as solving the linear system.</p>
@@ -95,7 +53,7 @@ $$f(x) = \frac{1}{2}x^T A x - b^T x$$
 
 <div class="why-box">
 <h3>Why CG is remarkable</h3>
-<p>For an $n$-dimensional problem, CG finds the <strong>exact</strong> solution in at most $n$ steps. Gradient descent might take thousands of steps (especially when the condition number of $A$ is large &mdash; recall from <a href="cg-01-math-foundations.html" style="color:#64ffda;">Page 01</a>). Newton's method (<a href="cg-07-newton-method.html" style="color:#64ffda;">Page 07</a>) solves it in 1 step, but requires computing and inverting the Hessian &mdash; expensive for large problems. CG is the sweet spot: much faster than GD, much cheaper per step than Newton.</p>
+<p>For an $n$-dimensional problem, CG finds the <strong>exact</strong> solution in at most $n$ steps. Gradient descent might take thousands of steps (especially when the condition number of $A$ is large &mdash; recall from <a href="cg-01-math-foundations.html" style="color:#d4956a;">Page 01</a>). Newton's method (<a href="cg-07-newton-method.html" style="color:#d4956a;">Page 07</a>) solves it in 1 step, but requires computing and inverting the Hessian &mdash; expensive for large problems. CG is the sweet spot: much faster than GD, much cheaper per step than Newton.</p>
 </div>
 
 
@@ -145,35 +103,35 @@ $$p_i^T A\, p_j = 0 \quad \text{for all } i \neq j$$
 <div class="algo-box">
 <div class="algo-title">Algorithm 5.2: Linear Conjugate Gradient (CG)</div>
 
-<div class="algo-line"><span style="color:#64ffda; font-weight:bold;">Given:</span> SPD matrix $A$, right-hand side $b$, initial guess $x_0$, tolerance $\epsilon$</div>
+<div class="algo-line"><span style="color:#d4956a; font-weight:bold;">Given:</span> SPD matrix $A$, right-hand side $b$, initial guess $x_0$, tolerance $\epsilon$</div>
 <br>
-<div class="algo-line"><span style="color:#bb86fc; font-weight:bold;">Initialize:</span></div>
+<div class="algo-line"><span style="color:#9b89b6; font-weight:bold;">Initialize:</span></div>
 <div class="algo-line" style="padding-left: 24px;">$r_0 = A x_0 - b$</div>
 <div class="algo-line" style="padding-left: 48px;"><span class="algo-comment">// $r_0$ = the residual. "How far off is our current guess from satisfying $Ax = b$?" If $r_0 = 0$, we already have the answer.</span></div>
 <div class="algo-line" style="padding-left: 24px;">$p_0 = -r_0$</div>
 <div class="algo-line" style="padding-left: 48px;"><span class="algo-comment">// First search direction = negative residual = steepest descent direction (same as GD's first step)</span></div>
 <br>
-<div class="algo-line"><span style="color:#ffd93d; font-weight:bold;">for</span> $k = 0, 1, 2, \ldots$</div>
+<div class="algo-line"><span style="color:#c9a84c; font-weight:bold;">for</span> $k = 0, 1, 2, \ldots$</div>
 <br>
-<div class="algo-line" style="padding-left: 24px;"><span style="color:#bb86fc; font-weight:bold;">Step 1:</span> $\alpha_k = -\dfrac{r_k^T p_k}{p_k^T A p_k}$</div>
+<div class="algo-line" style="padding-left: 24px;"><span style="color:#9b89b6; font-weight:bold;">Step 1:</span> $\alpha_k = -\dfrac{r_k^T p_k}{p_k^T A p_k}$</div>
 <div class="algo-line" style="padding-left: 48px;"><span class="algo-comment">// Optimal step size: how far to walk along $p_k$ to minimize $f$. The numerator measures "how much downhill is left along $p_k$" and the denominator measures "how curved the function is along $p_k$."</span></div>
 <br>
-<div class="algo-line" style="padding-left: 24px;"><span style="color:#bb86fc; font-weight:bold;">Step 2:</span> $x_{k+1} = x_k + \alpha_k\, p_k$</div>
+<div class="algo-line" style="padding-left: 24px;"><span style="color:#9b89b6; font-weight:bold;">Step 2:</span> $x_{k+1} = x_k + \alpha_k\, p_k$</div>
 <div class="algo-line" style="padding-left: 48px;"><span class="algo-comment">// Update the solution: move from current point $x_k$ by step $\alpha_k$ in direction $p_k$</span></div>
 <br>
-<div class="algo-line" style="padding-left: 24px;"><span style="color:#bb86fc; font-weight:bold;">Step 3:</span> $r_{k+1} = r_k + \alpha_k\, A p_k$</div>
+<div class="algo-line" style="padding-left: 24px;"><span style="color:#9b89b6; font-weight:bold;">Step 3:</span> $r_{k+1} = r_k + \alpha_k\, A p_k$</div>
 <div class="algo-line" style="padding-left: 48px;"><span class="algo-comment">// Update the residual. Equivalently: $r_{k+1} = A x_{k+1} - b$. The recurrence avoids re-multiplying $A x_{k+1}$.</span></div>
 <br>
-<div class="algo-line" style="padding-left: 24px;"><span style="color:#bb86fc; font-weight:bold;">Step 4:</span> Check: if $\|r_{k+1}\| < \epsilon$, <span style="color:#64ffda;">stop</span> (converged!)</div>
+<div class="algo-line" style="padding-left: 24px;"><span style="color:#9b89b6; font-weight:bold;">Step 4:</span> Check: if $\|r_{k+1}\| < \epsilon$, <span style="color:#d4956a;">stop</span> (converged!)</div>
 <div class="algo-line" style="padding-left: 48px;"><span class="algo-comment">// If the residual is tiny, $Ax_{k+1} \approx b$ and we have found the solution.</span></div>
 <br>
-<div class="algo-line" style="padding-left: 24px;"><span style="color:#bb86fc; font-weight:bold;">Step 5:</span> $\beta_{k+1} = \dfrac{r_{k+1}^T A p_k}{p_k^T A p_k}$</div>
+<div class="algo-line" style="padding-left: 24px;"><span style="color:#9b89b6; font-weight:bold;">Step 5:</span> $\beta_{k+1} = \dfrac{r_{k+1}^T A p_k}{p_k^T A p_k}$</div>
 <div class="algo-line" style="padding-left: 48px;"><span class="algo-comment">// The conjugacy coefficient. This determines how much of the OLD direction $p_k$ to mix into the NEW direction $p_{k+1}$ so that the new direction is A-conjugate to $p_k$.</span></div>
 <br>
-<div class="algo-line" style="padding-left: 24px;"><span style="color:#bb86fc; font-weight:bold;">Step 6:</span> $p_{k+1} = -r_{k+1} + \beta_{k+1}\, p_k$</div>
+<div class="algo-line" style="padding-left: 24px;"><span style="color:#9b89b6; font-weight:bold;">Step 6:</span> $p_{k+1} = -r_{k+1} + \beta_{k+1}\, p_k$</div>
 <div class="algo-line" style="padding-left: 48px;"><span class="algo-comment">// New search direction = negative new residual (steepest descent part) + correction from old direction (conjugacy part). The $\beta$ term rotates the steepest descent direction just enough to make it A-conjugate to $p_k$.</span></div>
 <br>
-<div class="algo-line"><span style="color:#ffd93d; font-weight:bold;">end for</span></div>
+<div class="algo-line"><span style="color:#c9a84c; font-weight:bold;">end for</span></div>
 </div>
 
 <div class="why-box">
@@ -202,7 +160,7 @@ $$p_i^T A\, p_j = 0 \quad \text{for all } i \neq j$$
 $$A = \begin{bmatrix} 5 & 2 \\ 2 & 2 \end{bmatrix}, \quad b = \begin{bmatrix} 7 \\ 4 \end{bmatrix}, \quad x_0 = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$$
 
 <p style="margin-top: 8px;">We want to solve $Ax = b$, i.e., find $x^*$ such that $\begin{bmatrix} 5 & 2 \\ 2 & 2 \end{bmatrix}x^* = \begin{bmatrix} 7 \\ 4 \end{bmatrix}$.</p>
-<p class="check">Quick check: Is $A$ symmetric? Yes ($A = A^T$). Is $A$ positive definite? Check eigenvalues or use the leading minors test from <a href="cg-03-linear-algebra.html" style="color:#ffd93d;">Page 03</a>: $\det(5) = 5 > 0$, $\det(A) = 10 - 4 = 6 > 0$. Yes, $A$ is SPD.</p>
+<p class="check">Quick check: Is $A$ symmetric? Yes ($A = A^T$). Is $A$ positive definite? Check eigenvalues or use the leading minors test from <a href="cg-03-linear-algebra.html" style="color:#c9a84c;">Page 03</a>: $\det(5) = 5 > 0$, $\det(A) = 10 - 4 = 6 > 0$. Yes, $A$ is SPD.</p>
 </div>
 </div>
 
@@ -415,7 +373,7 @@ $$Ax_2 = \begin{bmatrix} 5 & 2 \\ 2 & 2 \end{bmatrix}\begin{bmatrix} 1 \\ 1 \end
 <tr><td style="text-align:left;">$r_k^T p_k$</td><td>$-65$</td><td>$-21060/151321$</td></tr>
 <tr><td style="text-align:left;">$p_k^T A p_k$</td><td>$389$</td><td>$3195012600/151321^2$</td></tr>
 <tr><td style="text-align:left;">$\alpha_k$</td><td>$65/389$</td><td>$151321/151710$</td></tr>
-<tr><td style="text-align:left;">$x_{k+1}$</td><td>$(455/389,\; 260/389)$</td><td style="color:#64ffda; font-weight:bold;">$(1, 1)$ = exact solution</td></tr>
+<tr><td style="text-align:left;">$x_{k+1}$</td><td>$(455/389,\; 260/389)$</td><td style="color:#d4956a; font-weight:bold;">$(1, 1)$ = exact solution</td></tr>
 <tr><td style="text-align:left;">$\beta_{k+1}$</td><td>$324/151321$</td><td>(not needed)</td></tr>
 </table>
 </div>
@@ -434,10 +392,10 @@ $$Ax_2 = \begin{bmatrix} 5 & 2 \\ 2 & 2 \end{bmatrix}\begin{bmatrix} 1 \\ 1 \end
   <rect width="700" height="420" fill="#0f1a2e" rx="12"/>
 
   <!-- Title -->
-  <text x="350" y="30" fill="#ffd93d" font-size="16" font-weight="bold" text-anchor="middle">Gradient Descent vs Conjugate Gradient on Elongated Contours</text>
+  <text x="350" y="30" fill="#c9a84c" font-size="16" font-weight="bold" text-anchor="middle">Gradient Descent vs Conjugate Gradient on Elongated Contours</text>
 
   <!-- LEFT PANEL: GD zigzag -->
-  <text x="175" y="55" fill="#ff6b6b" font-size="14" font-weight="bold" text-anchor="middle">Gradient Descent: zigzag path</text>
+  <text x="175" y="55" fill="#c47070" font-size="14" font-weight="bold" text-anchor="middle">Gradient Descent: zigzag path</text>
 
   <!-- Contour ellipses (elongated) -->
   <ellipse cx="140" cy="240" rx="130" ry="45" fill="none" stroke="#334" stroke-width="1.5" transform="rotate(-20,140,240)"/>
@@ -447,28 +405,28 @@ $$Ax_2 = \begin{bmatrix} 5 & 2 \\ 2 & 2 \end{bmatrix}\begin{bmatrix} 1 \\ 1 \end
   <ellipse cx="140" cy="240" rx="10" ry="4" fill="none" stroke="#778" stroke-width="1.5" transform="rotate(-20,140,240)"/>
 
   <!-- GD path: zigzag -->
-  <polyline points="270,155 170,290 200,185 155,270 170,220 148,250 140,240" fill="none" stroke="#ff6b6b" stroke-width="2.5" stroke-linejoin="round"/>
+  <polyline points="270,155 170,290 200,185 155,270 170,220 148,250 140,240" fill="none" stroke="#c47070" stroke-width="2.5" stroke-linejoin="round"/>
 
   <!-- Points along GD path -->
-  <circle cx="270" cy="155" r="5" fill="#ff6b6b"/>
-  <text x="278" y="152" fill="#ff6b6b" font-size="12">x_0</text>
-  <circle cx="170" cy="290" r="4" fill="#ff6b6b"/>
-  <circle cx="200" cy="185" r="4" fill="#ff6b6b"/>
-  <circle cx="155" cy="270" r="4" fill="#ff6b6b"/>
-  <circle cx="170" cy="220" r="4" fill="#ff6b6b"/>
-  <circle cx="148" cy="250" r="3" fill="#ff6b6b"/>
-  <circle cx="140" cy="240" r="5" fill="#64ffda"/>
-  <text x="120" y="257" fill="#64ffda" font-size="12">x*</text>
+  <circle cx="270" cy="155" r="5" fill="#c47070"/>
+  <text x="278" y="152" fill="#c47070" font-size="12">x_0</text>
+  <circle cx="170" cy="290" r="4" fill="#c47070"/>
+  <circle cx="200" cy="185" r="4" fill="#c47070"/>
+  <circle cx="155" cy="270" r="4" fill="#c47070"/>
+  <circle cx="170" cy="220" r="4" fill="#c47070"/>
+  <circle cx="148" cy="250" r="3" fill="#c47070"/>
+  <circle cx="140" cy="240" r="5" fill="#d4956a"/>
+  <text x="120" y="257" fill="#d4956a" font-size="12">x*</text>
 
-  <text x="175" y="360" fill="#ff6b6b" font-size="13" text-anchor="middle">7 steps, still zigzagging</text>
-  <text x="175" y="378" fill="#888" font-size="12" text-anchor="middle">Each step is perpendicular to the last</text>
-  <text x="175" y="396" fill="#888" font-size="12" text-anchor="middle">(steepest descent undoes progress)</text>
+  <text x="175" y="360" fill="#c47070" font-size="13" text-anchor="middle">7 steps, still zigzagging</text>
+  <text x="175" y="378" fill="#a8a49c" font-size="12" text-anchor="middle">Each step is perpendicular to the last</text>
+  <text x="175" y="396" fill="#a8a49c" font-size="12" text-anchor="middle">(steepest descent undoes progress)</text>
 
   <!-- Divider -->
-  <line x1="350" y1="45" x2="350" y2="410" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="350" y1="45" x2="350" y2="410" stroke="#2e2e38" stroke-width="1" stroke-dasharray="4,4"/>
 
   <!-- RIGHT PANEL: CG direct -->
-  <text x="525" y="55" fill="#64ffda" font-size="14" font-weight="bold" text-anchor="middle">Conjugate Gradient: direct path</text>
+  <text x="525" y="55" fill="#d4956a" font-size="14" font-weight="bold" text-anchor="middle">Conjugate Gradient: direct path</text>
 
   <!-- Same contour ellipses (right panel) -->
   <ellipse cx="490" cy="240" rx="130" ry="45" fill="none" stroke="#334" stroke-width="1.5" transform="rotate(-20,490,240)"/>
@@ -478,28 +436,28 @@ $$Ax_2 = \begin{bmatrix} 5 & 2 \\ 2 & 2 \end{bmatrix}\begin{bmatrix} 1 \\ 1 \end
   <ellipse cx="490" cy="240" rx="10" ry="4" fill="none" stroke="#778" stroke-width="1.5" transform="rotate(-20,490,240)"/>
 
   <!-- CG path: 2 straight lines -->
-  <polyline points="620,155 530,200 490,240" fill="none" stroke="#64ffda" stroke-width="3" stroke-linejoin="round"/>
+  <polyline points="620,155 530,200 490,240" fill="none" stroke="#d4956a" stroke-width="3" stroke-linejoin="round"/>
 
   <!-- Points along CG path -->
-  <circle cx="620" cy="155" r="5" fill="#64ffda"/>
-  <text x="628" y="152" fill="#64ffda" font-size="12">x_0</text>
-  <circle cx="530" cy="200" r="5" fill="#bb86fc"/>
-  <text x="538" y="196" fill="#bb86fc" font-size="12">x_1</text>
-  <circle cx="490" cy="240" r="5" fill="#ffd93d"/>
-  <text x="470" y="257" fill="#ffd93d" font-size="12">x* = x_2</text>
+  <circle cx="620" cy="155" r="5" fill="#d4956a"/>
+  <text x="628" y="152" fill="#d4956a" font-size="12">x_0</text>
+  <circle cx="530" cy="200" r="5" fill="#9b89b6"/>
+  <text x="538" y="196" fill="#9b89b6" font-size="12">x_1</text>
+  <circle cx="490" cy="240" r="5" fill="#c9a84c"/>
+  <text x="470" y="257" fill="#c9a84c" font-size="12">x* = x_2</text>
 
   <!-- Arrow labels -->
-  <text x="585" y="168" fill="#64ffda" font-size="11">p_0 (steepest descent)</text>
-  <text x="495" y="213" fill="#bb86fc" font-size="11">p_1 (A-conjugate to p_0)</text>
+  <text x="585" y="168" fill="#d4956a" font-size="11">p_0 (steepest descent)</text>
+  <text x="495" y="213" fill="#9b89b6" font-size="11">p_1 (A-conjugate to p_0)</text>
 
-  <text x="525" y="360" fill="#64ffda" font-size="13" text-anchor="middle">Exactly 2 steps for a 2D problem!</text>
-  <text x="525" y="378" fill="#888" font-size="12" text-anchor="middle">Directions are A-conjugate</text>
-  <text x="525" y="396" fill="#888" font-size="12" text-anchor="middle">(progress is permanent)</text>
+  <text x="525" y="360" fill="#d4956a" font-size="13" text-anchor="middle">Exactly 2 steps for a 2D problem!</text>
+  <text x="525" y="378" fill="#a8a49c" font-size="12" text-anchor="middle">Directions are A-conjugate</text>
+  <text x="525" y="396" fill="#a8a49c" font-size="12" text-anchor="middle">(progress is permanent)</text>
 
   <!-- Arrow markers -->
   <defs>
     <marker id="arrowCG" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#64ffda"/>
+      <polygon points="0 0, 10 3.5, 0 7" fill="#d4956a"/>
     </marker>
   </defs>
 </svg>
@@ -524,7 +482,7 @@ $$Ax_2 = \begin{bmatrix} 5 & 2 \\ 2 & 2 \end{bmatrix}\begin{bmatrix} 1 \\ 1 \end
 
 <p style="margin-bottom: 12px;"><strong>3. Storage:</strong> Only need to store $x_k$, $r_k$, $p_k$, and $Ap_k$ &mdash; four vectors of length $n$. No need to store the matrix $A$ itself (only need to compute $Av$ for any vector $v$). This makes CG ideal for enormous sparse systems.</p>
 
-<p style="margin-bottom: 12px;"><strong>4. Convergence rate:</strong> The error after $k$ iterations satisfies $\|x_k - x^*\|_A \leq 2\left(\frac{\sqrt{\kappa} - 1}{\sqrt{\kappa} + 1}\right)^k \|x_0 - x^*\|_A$ where $\kappa = \lambda_{\max}/\lambda_{\min}$ is the condition number of $A$ (recall from <a href="cg-01-math-foundations.html" style="color:#64ffda;">Page 01</a>). Better-conditioned matrices converge faster.</p>
+<p style="margin-bottom: 12px;"><strong>4. Convergence rate:</strong> The error after $k$ iterations satisfies $\|x_k - x^*\|_A \leq 2\left(\frac{\sqrt{\kappa} - 1}{\sqrt{\kappa} + 1}\right)^k \|x_0 - x^*\|_A$ where $\kappa = \lambda_{\max}/\lambda_{\min}$ is the condition number of $A$ (recall from <a href="cg-01-math-foundations.html" style="color:#d4956a;">Page 01</a>). Better-conditioned matrices converge faster.</p>
 
 <p><strong>5. Monotonic decrease:</strong> $f(x_{k+1}) \leq f(x_k)$ at every step. CG never makes things worse.</p>
 </div>
@@ -535,15 +493,15 @@ $$Ax_2 = \begin{bmatrix} 5 & 2 \\ 2 & 2 \end{bmatrix}\begin{bmatrix} 1 \\ 1 \end
 <table class="step-table" style="margin-top: 16px;">
 <tr>
   <th style="text-align:left;">Aspect</th>
-  <th>Gradient Descent (<a href="cg-06-gradient-descent.html" style="color:#64ffda;">06</a>)</th>
+  <th>Gradient Descent (<a href="cg-06-gradient-descent.html" style="color:#d4956a;">06</a>)</th>
   <th>CG</th>
-  <th>Newton (<a href="cg-07-newton-method.html" style="color:#64ffda;">07</a>)</th>
+  <th>Newton (<a href="cg-07-newton-method.html" style="color:#d4956a;">07</a>)</th>
 </tr>
 <tr>
   <td style="text-align:left;">Iterations for $n$-dim quadratic</td>
   <td>Many (depends on $\kappa$)</td>
-  <td style="color:#64ffda; font-weight:bold;">At most $n$</td>
-  <td style="color:#ffd93d; font-weight:bold;">Exactly 1</td>
+  <td style="color:#d4956a; font-weight:bold;">At most $n$</td>
+  <td style="color:#c9a84c; font-weight:bold;">Exactly 1</td>
 </tr>
 <tr>
   <td style="text-align:left;">Cost per iteration</td>
@@ -571,9 +529,9 @@ $$Ax_2 = \begin{bmatrix} 5 & 2 \\ 2 & 2 \end{bmatrix}\begin{bmatrix} 1 \\ 1 \end
 </tr>
 <tr>
   <td style="text-align:left;">Zigzag?</td>
-  <td style="color:#ff6b6b;">Yes, badly</td>
-  <td style="color:#64ffda;">No</td>
-  <td style="color:#64ffda;">No</td>
+  <td style="color:#c47070;">Yes, badly</td>
+  <td style="color:#d4956a;">No</td>
+  <td style="color:#d4956a;">No</td>
 </tr>
 <tr>
   <td style="text-align:left;">Best for</td>
@@ -596,7 +554,7 @@ $$Ax_2 = \begin{bmatrix} 5 & 2 \\ 2 & 2 \end{bmatrix}\begin{bmatrix} 1 \\ 1 \end
 </div>
 
 <div class="note">
-<strong>Looking ahead (<a href="cg-11-nonlinear-cg.html" style="color:#bb86fc;">Page 11</a>):</strong> The CG algorithm above works for <em>linear</em> systems ($Ax = b$) and <em>quadratic</em> functions. But most real problems are nonlinear. Nonlinear CG extends the conjugate gradient idea to general smooth functions, using the same $\beta$ coefficient idea but with line search instead of the exact $\alpha$ formula.
+<strong>Looking ahead (<a href="cg-11-nonlinear-cg.html" style="color:#9b89b6;">Page 11</a>):</strong> The CG algorithm above works for <em>linear</em> systems ($Ax = b$) and <em>quadratic</em> functions. But most real problems are nonlinear. Nonlinear CG extends the conjugate gradient idea to general smooth functions, using the same $\beta$ coefficient idea but with line search instead of the exact $\alpha$ formula.
 </div>
 
 
@@ -620,7 +578,7 @@ $$Ax_2 = \begin{bmatrix} 5 & 2 \\ 2 & 2 \end{bmatrix}\begin{bmatrix} 1 \\ 1 \end
   <dd>The amount of old direction $p_k$ to mix into the new direction $p_{k+1}$ so that A-conjugacy is maintained. Formula: $\beta_{k+1} = r_{k+1}^T A p_k / (p_k^T A p_k)$.</dd>
 
   <dt>Symmetric Positive Definite (SPD)</dt>
-  <dd>A matrix $A$ that is symmetric ($A = A^T$) and positive definite (all eigenvalues positive, equivalently $x^T A x > 0$ for all $x \neq 0$). CG requires $A$ to be SPD. Recall <a href="cg-03-linear-algebra.html" style="color:#64ffda;">Page 03</a>.</dd>
+  <dd>A matrix $A$ that is symmetric ($A = A^T$) and positive definite (all eigenvalues positive, equivalently $x^T A x > 0$ for all $x \neq 0$). CG requires $A$ to be SPD. Recall <a href="cg-03-linear-algebra.html" style="color:#d4956a;">Page 03</a>.</dd>
 
   <dt>Condition number ($\kappa$)</dt>
   <dd>$\kappa(A) = \lambda_{\max} / \lambda_{\min}$. Controls how elongated the contours of $f$ are. Large $\kappa$ = elongated contours = GD zigzags badly, but CG still converges in at most $n$ steps.</dd>

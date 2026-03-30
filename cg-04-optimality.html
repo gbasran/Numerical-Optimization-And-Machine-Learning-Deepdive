@@ -8,45 +8,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
-.container { max-width: 900px; margin: 0 auto; }
-h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
-.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
-h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
-.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
-.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
-.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
-.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
-.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
-.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
-.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
-.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
-.hand-calc .result { color: #64ffda; font-weight: bold; }
-.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
-.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
-.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
-.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
-.step-table tr:nth-child(even) { background: #16213e; }
-.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
-.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
-.glossary dl { font-size: 15px; }
-.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
-.glossary dd { margin-left: 20px; color: #ccc; }
-.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
-.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
-.nav a:hover { text-decoration: underline; }
-.nav p { margin: 4px 0; }
-svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
-.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
-.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
-.breakdown dd { color: #ccc; }
-.theorem-box { background: #1a0a2e; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.theorem-box h3 { color: #bb86fc; margin-bottom: 8px; font-size: 18px; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
@@ -165,10 +127,10 @@ $$\nabla f(x^*) = \mathbf{0} \quad \text{AND} \quad \nabla^2 f(x^*) \text{ is ne
 <table class="step-table">
 <tr><th>Gradient</th><th>Hessian</th><th>Conclusion</th></tr>
 <tr><td>$\nabla f \neq 0$</td><td>N/A</td><td>Not a stationary point. Move on.</td></tr>
-<tr><td>$\nabla f = 0$</td><td>PD (all $\lambda_i > 0$)</td><td style="color:#64ffda;">Strict local minimum (SOSC)</td></tr>
-<tr><td>$\nabla f = 0$</td><td>ND (all $\lambda_i < 0$)</td><td style="color:#bb86fc;">Strict local maximum</td></tr>
-<tr><td>$\nabla f = 0$</td><td>Indefinite (mixed signs)</td><td style="color:#ff6b6b;">Saddle point</td></tr>
-<tr><td>$\nabla f = 0$</td><td>PSD (some $\lambda_i = 0$, rest $> 0$)</td><td style="color:#ffd93d;">Inconclusive &mdash; need more info</td></tr>
+<tr><td>$\nabla f = 0$</td><td>PD (all $\lambda_i > 0$)</td><td style="color:#d4956a;">Strict local minimum (SOSC)</td></tr>
+<tr><td>$\nabla f = 0$</td><td>ND (all $\lambda_i < 0$)</td><td style="color:#9b89b6;">Strict local maximum</td></tr>
+<tr><td>$\nabla f = 0$</td><td>Indefinite (mixed signs)</td><td style="color:#c47070;">Saddle point</td></tr>
+<tr><td>$\nabla f = 0$</td><td>PSD (some $\lambda_i = 0$, rest $> 0$)</td><td style="color:#c9a84c;">Inconclusive &mdash; need more info</td></tr>
 </table>
 </div>
 
@@ -233,19 +195,19 @@ $$\nabla f(x^*) = \mathbf{0} \quad \text{AND} \quad \nabla^2 f(x^*) \text{ is ne
 
   <strong>Point $(0, 0)$:</strong>
   $$H = \begin{bmatrix} -6 & 6 \\ 6 & 0 \end{bmatrix}$$
-  $\det = (-6)(0) - (6)(6) = -36 < 0$ $\Rightarrow$ <span style="color:#ff6b6b;">Indefinite = Saddle Point</span>
+  $\det = (-6)(0) - (6)(6) = -36 < 0$ $\Rightarrow$ <span style="color:#c47070;">Indefinite = Saddle Point</span>
 
   <br><br><strong>Point $(0, -1)$:</strong>
   $$H = \begin{bmatrix} -6 + 12 & 0 - 12 + 6 \end{bmatrix} = \begin{bmatrix} 6 & -6 \\ -6 & 0 \end{bmatrix}$$
-  $\det = (6)(0) - (-6)(-6) = -36 < 0$ $\Rightarrow$ <span style="color:#ff6b6b;">Indefinite = Saddle Point</span>
+  $\det = (6)(0) - (-6)(-6) = -36 < 0$ $\Rightarrow$ <span style="color:#c47070;">Indefinite = Saddle Point</span>
 
   <br><br><strong>Point $(1, 0)$:</strong>
   $$H = \begin{bmatrix} 12 - 6 & -12 + 6 \\ -12 + 6 & 12 \end{bmatrix} = \begin{bmatrix} 6 & -6 \\ -6 & 12 \end{bmatrix}$$
-  $\det = (6)(12) - (-6)(-6) = 72 - 36 = 36 > 0$ and $a_{11} = 6 > 0$ $\Rightarrow$ <span style="color:#64ffda;">PD = Local Minimum</span>
+  $\det = (6)(12) - (-6)(-6) = 72 - 36 = 36 > 0$ and $a_{11} = 6 > 0$ $\Rightarrow$ <span style="color:#d4956a;">PD = Local Minimum</span>
 
   <br><br><strong>Point $(-1, -1)$:</strong>
   $$H = \begin{bmatrix} -12 - 6 + 12 & 12 - 12 + 6 \\ 12 - 12 + 6 & -12 \end{bmatrix} = \begin{bmatrix} -6 & 6 \\ 6 & -12 \end{bmatrix}$$
-  $\det = (-6)(-12) - (6)(6) = 72 - 36 = 36 > 0$ and $a_{11} = -6 < 0$ $\Rightarrow$ <span style="color:#bb86fc;">ND = Local Maximum</span>
+  $\det = (-6)(-12) - (6)(6) = 72 - 36 = 36 > 0$ and $a_{11} = -6 < 0$ $\Rightarrow$ <span style="color:#9b89b6;">ND = Local Maximum</span>
 </div>
 </div>
 
@@ -257,7 +219,7 @@ $$\nabla f(x^*) = \mathbf{0} \quad \text{AND} \quad \nabla^2 f(x^*) \text{ is ne
   <td>$-36$</td>
   <td>$-6$</td>
   <td>$+6\sqrt{2}, -6\sqrt{2}$</td>
-  <td style="color:#ff6b6b;">Saddle</td>
+  <td style="color:#c47070;">Saddle</td>
 </tr>
 <tr>
   <td>$(0, -1)$</td>
@@ -265,7 +227,7 @@ $$\nabla f(x^*) = \mathbf{0} \quad \text{AND} \quad \nabla^2 f(x^*) \text{ is ne
   <td>$-36$</td>
   <td>$6$</td>
   <td>$3+3\sqrt{5}, 3-3\sqrt{5}$</td>
-  <td style="color:#ff6b6b;">Saddle</td>
+  <td style="color:#c47070;">Saddle</td>
 </tr>
 <tr>
   <td>$(1, 0)$</td>
@@ -273,7 +235,7 @@ $$\nabla f(x^*) = \mathbf{0} \quad \text{AND} \quad \nabla^2 f(x^*) \text{ is ne
   <td>$36$</td>
   <td>$6$</td>
   <td>$9+3\sqrt{5}, 9-3\sqrt{5}$</td>
-  <td style="color:#64ffda;">Local Min</td>
+  <td style="color:#d4956a;">Local Min</td>
 </tr>
 <tr>
   <td>$(-1, -1)$</td>
@@ -281,7 +243,7 @@ $$\nabla f(x^*) = \mathbf{0} \quad \text{AND} \quad \nabla^2 f(x^*) \text{ is ne
   <td>$36$</td>
   <td>$-6$</td>
   <td>$-9+3\sqrt{5}, -9-3\sqrt{5}$</td>
-  <td style="color:#bb86fc;">Local Max</td>
+  <td style="color:#9b89b6;">Local Max</td>
 </tr>
 </table>
 
@@ -300,81 +262,81 @@ Since $\sqrt{5} \approx 2.236$: $\lambda_1 \approx 15.71$ and $\lambda_2 \approx
 
 <svg viewBox="0 0 800 620" style="width:100%; margin:24px 0;">
   <!-- Start -->
-  <rect x="310" y="10" width="180" height="40" rx="20" fill="#0f3460" stroke="#64ffda" stroke-width="2"/>
-  <text x="400" y="36" text-anchor="middle" fill="#64ffda" font-size="14" font-weight="bold">Start: Given f and x*</text>
+  <rect x="310" y="10" width="180" height="40" rx="20" fill="#25252e" stroke="#d4956a" stroke-width="2"/>
+  <text x="400" y="36" text-anchor="middle" fill="#d4956a" font-size="14" font-weight="bold">Start: Given f and x*</text>
 
   <!-- Arrow down -->
-  <line x1="400" y1="50" x2="400" y2="80" stroke="#888" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="50" x2="400" y2="80" stroke="#a8a49c" stroke-width="2" marker-end="url(#arrowhead)"/>
 
   <!-- Compute gradient -->
-  <rect x="280" y="80" width="240" height="40" rx="8" fill="#0f3460" stroke="#bb86fc" stroke-width="2"/>
-  <text x="400" y="106" text-anchor="middle" fill="#e0e0e0" font-size="14">Compute nabla f(x*)</text>
+  <rect x="280" y="80" width="240" height="40" rx="8" fill="#25252e" stroke="#9b89b6" stroke-width="2"/>
+  <text x="400" y="106" text-anchor="middle" fill="#e8e4dc" font-size="14">Compute nabla f(x*)</text>
 
   <!-- Arrow down -->
-  <line x1="400" y1="120" x2="400" y2="155" stroke="#888" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="120" x2="400" y2="155" stroke="#a8a49c" stroke-width="2" marker-end="url(#arrowhead)"/>
 
   <!-- Decision: gradient = 0? -->
-  <polygon points="400,155 520,195 400,235 280,195" fill="#1a1a2e" stroke="#ffd93d" stroke-width="2"/>
-  <text x="400" y="199" text-anchor="middle" fill="#ffd93d" font-size="13" font-weight="bold">nabla f = 0?</text>
+  <polygon points="400,155 520,195 400,235 280,195" fill="#17171c" stroke="#c9a84c" stroke-width="2"/>
+  <text x="400" y="199" text-anchor="middle" fill="#c9a84c" font-size="13" font-weight="bold">nabla f = 0?</text>
 
   <!-- No branch (right) -->
-  <line x1="520" y1="195" x2="620" y2="195" stroke="#ff6b6b" stroke-width="2" marker-end="url(#arrowhead)"/>
-  <text x="560" y="187" fill="#ff6b6b" font-size="12" font-weight="bold">No</text>
-  <rect x="620" y="175" width="160" height="40" rx="8" fill="#1e1e3a" stroke="#ff6b6b" stroke-width="2"/>
-  <text x="700" y="200" text-anchor="middle" fill="#ff6b6b" font-size="13">Not stationary. Stop.</text>
+  <line x1="520" y1="195" x2="620" y2="195" stroke="#c47070" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="560" y="187" fill="#c47070" font-size="12" font-weight="bold">No</text>
+  <rect x="620" y="175" width="160" height="40" rx="8" fill="#1e1e25" stroke="#c47070" stroke-width="2"/>
+  <text x="700" y="200" text-anchor="middle" fill="#c47070" font-size="13">Not stationary. Stop.</text>
 
   <!-- Yes branch (down) -->
-  <line x1="400" y1="235" x2="400" y2="270" stroke="#64ffda" stroke-width="2" marker-end="url(#arrowhead)"/>
-  <text x="414" y="257" fill="#64ffda" font-size="12" font-weight="bold">Yes</text>
+  <line x1="400" y1="235" x2="400" y2="270" stroke="#d4956a" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="414" y="257" fill="#d4956a" font-size="12" font-weight="bold">Yes</text>
 
   <!-- Compute Hessian -->
-  <rect x="260" y="270" width="280" height="40" rx="8" fill="#0f3460" stroke="#bb86fc" stroke-width="2"/>
-  <text x="400" y="296" text-anchor="middle" fill="#e0e0e0" font-size="14">Compute Hessian nabla^2 f(x*)</text>
+  <rect x="260" y="270" width="280" height="40" rx="8" fill="#25252e" stroke="#9b89b6" stroke-width="2"/>
+  <text x="400" y="296" text-anchor="middle" fill="#e8e4dc" font-size="14">Compute Hessian nabla^2 f(x*)</text>
 
   <!-- Arrow down -->
-  <line x1="400" y1="310" x2="400" y2="345" stroke="#888" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="310" x2="400" y2="345" stroke="#a8a49c" stroke-width="2" marker-end="url(#arrowhead)"/>
 
   <!-- Check eigenvalues -->
-  <rect x="260" y="345" width="280" height="40" rx="8" fill="#0f3460" stroke="#bb86fc" stroke-width="2"/>
-  <text x="400" y="371" text-anchor="middle" fill="#e0e0e0" font-size="14">Find eigenvalues of Hessian</text>
+  <rect x="260" y="345" width="280" height="40" rx="8" fill="#25252e" stroke="#9b89b6" stroke-width="2"/>
+  <text x="400" y="371" text-anchor="middle" fill="#e8e4dc" font-size="14">Find eigenvalues of Hessian</text>
 
   <!-- Arrow down -->
-  <line x1="400" y1="385" x2="400" y2="415" stroke="#888" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="385" x2="400" y2="415" stroke="#a8a49c" stroke-width="2" marker-end="url(#arrowhead)"/>
 
   <!-- Decision: eigenvalue signs? -->
-  <polygon points="400,415 560,465 400,515 240,465" fill="#1a1a2e" stroke="#ffd93d" stroke-width="2"/>
-  <text x="400" y="460" text-anchor="middle" fill="#ffd93d" font-size="12" font-weight="bold">Eigenvalue signs?</text>
+  <polygon points="400,415 560,465 400,515 240,465" fill="#17171c" stroke="#c9a84c" stroke-width="2"/>
+  <text x="400" y="460" text-anchor="middle" fill="#c9a84c" font-size="12" font-weight="bold">Eigenvalue signs?</text>
 
   <!-- All positive (left) -->
-  <line x1="240" y1="465" x2="80" y2="465" stroke="#64ffda" stroke-width="2" marker-end="url(#arrowhead)"/>
-  <text x="170" y="457" fill="#64ffda" font-size="11" font-weight="bold">All > 0</text>
-  <rect x="10" y="445" width="70" height="40" rx="8" fill="#0a2e1a" stroke="#64ffda" stroke-width="2"/>
-  <text x="45" y="465" text-anchor="middle" fill="#64ffda" font-size="12" font-weight="bold">Local</text>
-  <text x="45" y="479" text-anchor="middle" fill="#64ffda" font-size="12" font-weight="bold">Min</text>
+  <line x1="240" y1="465" x2="80" y2="465" stroke="#d4956a" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="170" y="457" fill="#d4956a" font-size="11" font-weight="bold">All > 0</text>
+  <rect x="10" y="445" width="70" height="40" rx="8" fill="rgba(106, 171, 142, 0.07)" stroke="#d4956a" stroke-width="2"/>
+  <text x="45" y="465" text-anchor="middle" fill="#d4956a" font-size="12" font-weight="bold">Local</text>
+  <text x="45" y="479" text-anchor="middle" fill="#d4956a" font-size="12" font-weight="bold">Min</text>
 
   <!-- All negative (right) -->
-  <line x1="560" y1="465" x2="680" y2="465" stroke="#bb86fc" stroke-width="2" marker-end="url(#arrowhead)"/>
-  <text x="610" y="457" fill="#bb86fc" font-size="11" font-weight="bold">All &lt; 0</text>
-  <rect x="680" y="445" width="90" height="40" rx="8" fill="#2d1b4e" stroke="#bb86fc" stroke-width="2"/>
-  <text x="725" y="465" text-anchor="middle" fill="#bb86fc" font-size="12" font-weight="bold">Local</text>
-  <text x="725" y="479" text-anchor="middle" fill="#bb86fc" font-size="12" font-weight="bold">Max</text>
+  <line x1="560" y1="465" x2="680" y2="465" stroke="#9b89b6" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="610" y="457" fill="#9b89b6" font-size="11" font-weight="bold">All &lt; 0</text>
+  <rect x="680" y="445" width="90" height="40" rx="8" fill="#2a2536" stroke="#9b89b6" stroke-width="2"/>
+  <text x="725" y="465" text-anchor="middle" fill="#9b89b6" font-size="12" font-weight="bold">Local</text>
+  <text x="725" y="479" text-anchor="middle" fill="#9b89b6" font-size="12" font-weight="bold">Max</text>
 
   <!-- Mixed (down-left) -->
-  <line x1="330" y1="500" x2="200" y2="560" stroke="#ff6b6b" stroke-width="2" marker-end="url(#arrowhead)"/>
-  <text x="250" y="525" fill="#ff6b6b" font-size="11" font-weight="bold">Mixed</text>
-  <rect x="120" y="545" width="120" height="40" rx="8" fill="#1e1e3a" stroke="#ff6b6b" stroke-width="2"/>
-  <text x="180" y="570" text-anchor="middle" fill="#ff6b6b" font-size="12" font-weight="bold">Saddle Point</text>
+  <line x1="330" y1="500" x2="200" y2="560" stroke="#c47070" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="250" y="525" fill="#c47070" font-size="11" font-weight="bold">Mixed</text>
+  <rect x="120" y="545" width="120" height="40" rx="8" fill="#1e1e25" stroke="#c47070" stroke-width="2"/>
+  <text x="180" y="570" text-anchor="middle" fill="#c47070" font-size="12" font-weight="bold">Saddle Point</text>
 
   <!-- Some zero (down-right) -->
-  <line x1="470" y1="500" x2="560" y2="560" stroke="#ffd93d" stroke-width="2" marker-end="url(#arrowhead)"/>
-  <text x="530" y="525" fill="#ffd93d" font-size="11" font-weight="bold">Some = 0</text>
-  <rect x="500" y="545" width="140" height="40" rx="8" fill="#1e1e3a" stroke="#ffd93d" stroke-width="2"/>
-  <text x="570" y="570" text-anchor="middle" fill="#ffd93d" font-size="12" font-weight="bold">Inconclusive</text>
+  <line x1="470" y1="500" x2="560" y2="560" stroke="#c9a84c" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="530" y="525" fill="#c9a84c" font-size="11" font-weight="bold">Some = 0</text>
+  <rect x="500" y="545" width="140" height="40" rx="8" fill="#1e1e25" stroke="#c9a84c" stroke-width="2"/>
+  <text x="570" y="570" text-anchor="middle" fill="#c9a84c" font-size="12" font-weight="bold">Inconclusive</text>
 
   <!-- Arrowhead definition -->
   <defs>
     <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#888"/>
+      <polygon points="0 0, 10 3.5, 0 7" fill="#a8a49c"/>
     </marker>
   </defs>
 </svg>
@@ -404,11 +366,11 @@ It turns out this point IS a saddle (because of the $x_1^5$ term), but you canno
 
 <table class="step-table" style="margin-top:12px;">
 <tr><th>Algorithm</th><th>What It Finds</th><th>Condition Used</th><th>Page</th></tr>
-<tr><td>Gradient Descent</td><td>Points where $\|\nabla f\| \approx 0$</td><td>FONC</td><td><a href="cg-06-gradient-descent.html" style="color:#64ffda;">06</a></td></tr>
-<tr><td>Newton's Method</td><td>Points where $\nabla f = 0$ using Hessian</td><td>FONC + uses $\nabla^2 f$</td><td><a href="cg-07-newton-method.html" style="color:#64ffda;">07</a></td></tr>
-<tr><td>Trust Region</td><td>Points where $\nabla f = 0$ with PD safeguard</td><td>SOSC (ensures PD model)</td><td><a href="cg-09-trust-region.html" style="color:#64ffda;">09</a></td></tr>
-<tr><td>Conjugate Gradient</td><td>Exact minimizer of quadratic</td><td>SOSC (requires PD $A$)</td><td><a href="cg-10-conjugate-gradient.html" style="color:#64ffda;">10</a></td></tr>
-<tr><td>BFGS</td><td>Points where $\nabla f = 0$ with PD approximation</td><td>SOSC (maintains PD $B_k$)</td><td><a href="cg-12-bfgs.html" style="color:#64ffda;">12</a></td></tr>
+<tr><td>Gradient Descent</td><td>Points where $\|\nabla f\| \approx 0$</td><td>FONC</td><td><a href="cg-06-gradient-descent.html" style="color:#d4956a;">06</a></td></tr>
+<tr><td>Newton's Method</td><td>Points where $\nabla f = 0$ using Hessian</td><td>FONC + uses $\nabla^2 f$</td><td><a href="cg-07-newton-method.html" style="color:#d4956a;">07</a></td></tr>
+<tr><td>Trust Region</td><td>Points where $\nabla f = 0$ with PD safeguard</td><td>SOSC (ensures PD model)</td><td><a href="cg-09-trust-region.html" style="color:#d4956a;">09</a></td></tr>
+<tr><td>Conjugate Gradient</td><td>Exact minimizer of quadratic</td><td>SOSC (requires PD $A$)</td><td><a href="cg-10-conjugate-gradient.html" style="color:#d4956a;">10</a></td></tr>
+<tr><td>BFGS</td><td>Points where $\nabla f = 0$ with PD approximation</td><td>SOSC (maintains PD $B_k$)</td><td><a href="cg-12-bfgs.html" style="color:#d4956a;">12</a></td></tr>
 </table>
 
 <p style="margin-top:16px;"><strong>The pattern:</strong> Simple algorithms (gradient descent) only use first-order conditions. Sophisticated algorithms (Newton, BFGS, trust region) also use second-order information, which is why they converge faster &mdash; they check not just "is the ground flat?" but also "does the ground curve upward?"</p>
@@ -420,22 +382,22 @@ It turns out this point IS a saddle (because of the $x_1^5$ term), but you canno
 
 <div class="step">
   <div class="step-label">(a) $H = \begin{bmatrix} 4 & 1 \\ 1 & 3 \end{bmatrix}$</div>
-  $a_{11} = 4 > 0$, $\det = 12 - 1 = 11 > 0$ $\Rightarrow$ <span style="color:#64ffda;">PD = local minimum</span>
+  $a_{11} = 4 > 0$, $\det = 12 - 1 = 11 > 0$ $\Rightarrow$ <span style="color:#d4956a;">PD = local minimum</span>
 </div>
 
 <div class="step">
   <div class="step-label">(b) $H = \begin{bmatrix} -2 & 1 \\ 1 & -5 \end{bmatrix}$</div>
-  $a_{11} = -2 < 0$, $\det = 10 - 1 = 9 > 0$ $\Rightarrow$ <span style="color:#bb86fc;">ND = local maximum</span>
+  $a_{11} = -2 < 0$, $\det = 10 - 1 = 9 > 0$ $\Rightarrow$ <span style="color:#9b89b6;">ND = local maximum</span>
 </div>
 
 <div class="step">
   <div class="step-label">(c) $H = \begin{bmatrix} 3 & 4 \\ 4 & 2 \end{bmatrix}$</div>
-  $\det = 6 - 16 = -10 < 0$ $\Rightarrow$ <span style="color:#ff6b6b;">Indefinite = saddle point</span>
+  $\det = 6 - 16 = -10 < 0$ $\Rightarrow$ <span style="color:#c47070;">Indefinite = saddle point</span>
 </div>
 
 <div class="step">
   <div class="step-label">(d) $H = \begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix}$</div>
-  $\det = 1 - 1 = 0$, eigenvalues are 0 and 2. PSD but not PD $\Rightarrow$ <span style="color:#ffd93d;">Inconclusive</span>
+  $\det = 1 - 1 = 0$, eigenvalues are 0 and 2. PSD but not PD $\Rightarrow$ <span style="color:#c9a84c;">Inconclusive</span>
 </div>
 
 <div class="check">
@@ -452,7 +414,7 @@ Practice tip: on an exam, the 2&times;2 shortcut ($a_{11}$ sign and $\det$ sign)
 <table class="step-table" style="margin-top:12px;">
 <tr><th>Situation</th><th>What We Know</th><th>What We Cannot Know</th></tr>
 <tr><td>$\nabla f \neq 0$</td><td>Definitely NOT a min/max/saddle</td><td>N/A &mdash; move on</td></tr>
-<tr><td>$\nabla f = 0$, $H$ PD</td><td>Guaranteed local min (SOSC)</td><td>Whether it is the global min (need convexity, <a href="cg-05-convexity.html" style="color:#64ffda;">Page 05</a>)</td></tr>
+<tr><td>$\nabla f = 0$, $H$ PD</td><td>Guaranteed local min (SOSC)</td><td>Whether it is the global min (need convexity, <a href="cg-05-convexity.html" style="color:#d4956a;">Page 05</a>)</td></tr>
 <tr><td>$\nabla f = 0$, $H$ ND</td><td>Guaranteed local max</td><td>Whether it is the global max</td></tr>
 <tr><td>$\nabla f = 0$, $H$ indefinite</td><td>Guaranteed saddle</td><td>N/A &mdash; classification complete</td></tr>
 <tr><td>$\nabla f = 0$, $H$ singular</td><td>Stationary, but type unknown</td><td>Need higher-order analysis</td></tr>

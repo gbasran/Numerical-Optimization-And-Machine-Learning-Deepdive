@@ -8,49 +8,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
-.container { max-width: 900px; margin: 0 auto; }
-h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
-.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
-h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
-.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
-.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
-.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
-.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
-.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
-.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
-.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
-.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
-.hand-calc .result { color: #64ffda; font-weight: bold; }
-.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
-.exam-flag { background: #2a1a1a; border: 2px solid #ff6b6b; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
-.exam-flag h4 { color: #ff6b6b; margin-bottom: 8px; }
-.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
-.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
-.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
-.step-table tr:nth-child(even) { background: #16213e; }
-.algo-box { border-left: 4px solid #64ffda; padding: 16px 20px; margin: 20px 0; background: #0f3460; border-radius: 0 12px 12px 0; }
-.algo-box .algo-title { color: #ffd93d; font-weight: bold; font-size: 18px; margin-bottom: 12px; }
-.algo-box .algo-line { padding: 6px 0; font-size: 16px; }
-.algo-box .algo-comment { color: #888; font-size: 14px; }
-.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
-.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
-.glossary dl { font-size: 15px; }
-.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
-.glossary dd { margin-left: 20px; color: #ccc; }
-.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
-.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
-.nav a:hover { text-decoration: underline; }
-.nav p { margin: 4px 0; }
-svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
-.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
-.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
-.breakdown dd { color: #ccc; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
@@ -67,7 +25,7 @@ svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
 
 Imagine you are hiking in dense fog. You have a map (your quadratic model) that shows the terrain around you, but the map is only accurate within a certain radius &mdash; beyond that, it is just a guess. Two hiking strategies emerge:<br><br>
 
-<strong>Line search philosophy (Pages <a href="cg-08-line-search.html" style="color:#64ffda;">08</a>):</strong> "I pick a direction first &mdash; the steepest downhill on my map &mdash; and then figure out how far to walk in that direction." The direction is chosen, then the distance is chosen. Two separate decisions.<br><br>
+<strong>Line search philosophy (Pages <a href="cg-08-line-search.html" style="color:#d4956a;">08</a>):</strong> "I pick a direction first &mdash; the steepest downhill on my map &mdash; and then figure out how far to walk in that direction." The direction is chosen, then the distance is chosen. Two separate decisions.<br><br>
 
 <strong>Trust-region philosophy:</strong> "I trust my map within a certain RADIUS around where I stand. Inside that circle, the map is reliable. I find the lowest point on my map that is still within that trusted circle. Then I walk there." Direction AND distance are chosen simultaneously, but the step must stay inside the safety zone where the map can be believed.<br><br>
 
@@ -84,9 +42,9 @@ $$\min_{p}\; m_k(p) = f(x_k) + g_k^T p + \tfrac{1}{2}\,p^T B_k\, p \quad \text{s
 <dl class="breakdown">
   <dt>$m_k(p)$</dt><dd>the <strong>quadratic model</strong> &mdash; our "map" of the terrain near $x_k$. It approximates the true function $f$ using a Taylor expansion up to second order.</dd>
   <dt>$f(x_k)$</dt><dd>the value of the real function at the current point &mdash; the "elevation where we stand now"</dd>
-  <dt>$g_k = \nabla f(x_k)$</dt><dd>the gradient at the current point (recall from <a href="cg-02-multivariable-bridge.html" style="color:#64ffda;">Page 02</a> &mdash; the direction of steepest increase)</dd>
+  <dt>$g_k = \nabla f(x_k)$</dt><dd>the gradient at the current point (recall from <a href="cg-02-multivariable-bridge.html" style="color:#d4956a;">Page 02</a> &mdash; the direction of steepest increase)</dd>
   <dt>$g_k^T p$</dt><dd>the linear (first-order) contribution &mdash; how much the function changes due to the slope</dd>
-  <dt>$B_k$</dt><dd>the Hessian $\nabla^2 f(x_k)$ or an approximation to it (recall the Hessian from <a href="cg-02-multivariable-bridge.html" style="color:#64ffda;">Page 02</a> &mdash; the curvature matrix)</dd>
+  <dt>$B_k$</dt><dd>the Hessian $\nabla^2 f(x_k)$ or an approximation to it (recall the Hessian from <a href="cg-02-multivariable-bridge.html" style="color:#d4956a;">Page 02</a> &mdash; the curvature matrix)</dd>
   <dt>$\tfrac{1}{2}\,p^T B_k\, p$</dt><dd>the quadratic (second-order) contribution &mdash; how curvature bends the prediction</dd>
   <dt>$p$</dt><dd>the step we are computing &mdash; a vector telling us which direction and how far to move</dd>
   <dt>$\|p\| \leq \Delta_k$</dt><dd>the <strong>trust-region constraint</strong> &mdash; the step must have length at most $\Delta_k$</dd>
@@ -97,7 +55,7 @@ $$\min_{p}\; m_k(p) = f(x_k) + g_k^T p + \tfrac{1}{2}\,p^T B_k\, p \quad \text{s
 </div>
 
 <div class="note">
-<strong>Connection to Newton's method (<a href="cg-07-newton-method.html" style="color:#bb86fc;">Page 07</a>):</strong> Without the constraint $\|p\| \leq \Delta_k$, the minimizer of $m_k(p)$ is exactly the Newton step: $p_N = -B_k^{-1} g_k$. Trust region says: "Use Newton when it's safe (inside the circle), but rein it in when Newton wants to jump too far."
+<strong>Connection to Newton's method (<a href="cg-07-newton-method.html" style="color:#9b89b6;">Page 07</a>):</strong> Without the constraint $\|p\| \leq \Delta_k$, the minimizer of $m_k(p)$ is exactly the Newton step: $p_N = -B_k^{-1} g_k$. Trust region says: "Use Newton when it's safe (inside the circle), but rein it in when Newton wants to jump too far."
 </div>
 
 <!-- SVG Diagram: Trust Region on Contour Plot -->
@@ -107,81 +65,81 @@ $$\min_{p}\; m_k(p) = f(x_k) + g_k^T p + \tfrac{1}{2}\,p^T B_k\, p \quad \text{s
   <rect width="700" height="400" fill="#0f1a2e" rx="12"/>
 
   <!-- Title -->
-  <text x="350" y="30" fill="#ffd93d" font-size="16" font-weight="bold" text-anchor="middle">Trust Region: Two Scenarios</text>
+  <text x="350" y="30" fill="#c9a84c" font-size="16" font-weight="bold" text-anchor="middle">Trust Region: Two Scenarios</text>
 
   <!-- LEFT PANEL: Newton inside -->
-  <text x="175" y="55" fill="#64ffda" font-size="14" font-weight="bold" text-anchor="middle">Case 1: Newton step INSIDE circle</text>
+  <text x="175" y="55" fill="#d4956a" font-size="14" font-weight="bold" text-anchor="middle">Case 1: Newton step INSIDE circle</text>
 
   <!-- Contour ellipses (left) -->
   <ellipse cx="120" cy="260" rx="120" ry="80" fill="none" stroke="#334" stroke-width="1.5"/>
   <ellipse cx="120" cy="260" rx="90" ry="60" fill="none" stroke="#445" stroke-width="1.5"/>
   <ellipse cx="120" cy="260" rx="60" ry="40" fill="none" stroke="#556" stroke-width="1.5"/>
   <ellipse cx="120" cy="260" rx="30" ry="20" fill="none" stroke="#667" stroke-width="1.5"/>
-  <text x="120" y="265" fill="#888" font-size="11" text-anchor="middle">minimum</text>
+  <text x="120" y="265" fill="#a8a49c" font-size="11" text-anchor="middle">minimum</text>
 
   <!-- Current point (left) -->
-  <circle cx="220" cy="200" r="6" fill="#ff6b6b"/>
-  <text x="232" y="196" fill="#ff6b6b" font-size="13" font-weight="bold">x_k</text>
+  <circle cx="220" cy="200" r="6" fill="#c47070"/>
+  <text x="232" y="196" fill="#c47070" font-size="13" font-weight="bold">x_k</text>
 
   <!-- Trust region circle (left) -->
-  <circle cx="220" cy="200" r="80" fill="none" stroke="#64ffda" stroke-width="2" stroke-dasharray="8,4"/>
-  <text x="308" y="178" fill="#64ffda" font-size="12">Delta_k</text>
+  <circle cx="220" cy="200" r="80" fill="none" stroke="#d4956a" stroke-width="2" stroke-dasharray="8,4"/>
+  <text x="308" y="178" fill="#d4956a" font-size="12">Delta_k</text>
 
   <!-- Newton point (left) - INSIDE circle -->
-  <circle cx="175" cy="230" r="6" fill="#bb86fc"/>
-  <text x="155" y="250" fill="#bb86fc" font-size="12" font-weight="bold">p_N</text>
+  <circle cx="175" cy="230" r="6" fill="#9b89b6"/>
+  <text x="155" y="250" fill="#9b89b6" font-size="12" font-weight="bold">p_N</text>
 
   <!-- Arrow from x_k to Newton point -->
-  <line x1="220" y1="200" x2="179" y2="228" stroke="#bb86fc" stroke-width="2" marker-end="url(#arrowPurple)"/>
+  <line x1="220" y1="200" x2="179" y2="228" stroke="#9b89b6" stroke-width="2" marker-end="url(#arrowPurple)"/>
 
   <!-- Checkmark -->
-  <text x="175" y="280" fill="#64ffda" font-size="14" text-anchor="middle">Accept Newton step!</text>
+  <text x="175" y="280" fill="#d4956a" font-size="14" text-anchor="middle">Accept Newton step!</text>
 
   <!-- RIGHT PANEL: Newton outside -->
-  <text x="525" y="55" fill="#ff6b6b" font-size="14" font-weight="bold" text-anchor="middle">Case 2: Newton step OUTSIDE circle</text>
+  <text x="525" y="55" fill="#c47070" font-size="14" font-weight="bold" text-anchor="middle">Case 2: Newton step OUTSIDE circle</text>
 
   <!-- Contour ellipses (right) -->
   <ellipse cx="430" cy="300" rx="120" ry="80" fill="none" stroke="#334" stroke-width="1.5"/>
   <ellipse cx="430" cy="300" rx="90" ry="60" fill="none" stroke="#445" stroke-width="1.5"/>
   <ellipse cx="430" cy="300" rx="60" ry="40" fill="none" stroke="#556" stroke-width="1.5"/>
   <ellipse cx="430" cy="300" rx="30" ry="20" fill="none" stroke="#667" stroke-width="1.5"/>
-  <text x="430" y="305" fill="#888" font-size="11" text-anchor="middle">minimum</text>
+  <text x="430" y="305" fill="#a8a49c" font-size="11" text-anchor="middle">minimum</text>
 
   <!-- Current point (right) -->
-  <circle cx="580" cy="160" r="6" fill="#ff6b6b"/>
-  <text x="592" y="156" fill="#ff6b6b" font-size="13" font-weight="bold">x_k</text>
+  <circle cx="580" cy="160" r="6" fill="#c47070"/>
+  <text x="592" y="156" fill="#c47070" font-size="13" font-weight="bold">x_k</text>
 
   <!-- Trust region circle (right) - smaller -->
-  <circle cx="580" cy="160" r="55" fill="none" stroke="#64ffda" stroke-width="2" stroke-dasharray="8,4"/>
-  <text x="640" y="145" fill="#64ffda" font-size="12">Delta_k</text>
+  <circle cx="580" cy="160" r="55" fill="none" stroke="#d4956a" stroke-width="2" stroke-dasharray="8,4"/>
+  <text x="640" y="145" fill="#d4956a" font-size="12">Delta_k</text>
 
   <!-- Newton point (right) - OUTSIDE circle -->
-  <circle cx="460" cy="280" r="6" fill="#bb86fc" opacity="0.4"/>
-  <text x="470" y="296" fill="#bb86fc" font-size="12" opacity="0.5">p_N (too far!)</text>
+  <circle cx="460" cy="280" r="6" fill="#9b89b6" opacity="0.4"/>
+  <text x="470" y="296" fill="#9b89b6" font-size="12" opacity="0.5">p_N (too far!)</text>
 
   <!-- Dashed arrow to Newton (rejected) -->
-  <line x1="580" y1="160" x2="465" y2="276" stroke="#bb86fc" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.4"/>
+  <line x1="580" y1="160" x2="465" y2="276" stroke="#9b89b6" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.4"/>
 
   <!-- Constrained point on boundary (right) -->
-  <circle cx="541" cy="207" r="6" fill="#ffd93d"/>
-  <text x="500" y="228" fill="#ffd93d" font-size="12" font-weight="bold">p* (on boundary)</text>
+  <circle cx="541" cy="207" r="6" fill="#c9a84c"/>
+  <text x="500" y="228" fill="#c9a84c" font-size="12" font-weight="bold">p* (on boundary)</text>
 
   <!-- Solid arrow to constrained point -->
-  <line x1="580" y1="160" x2="545" y2="203" stroke="#ffd93d" stroke-width="2.5" marker-end="url(#arrowGold)"/>
+  <line x1="580" y1="160" x2="545" y2="203" stroke="#c9a84c" stroke-width="2.5" marker-end="url(#arrowGold)"/>
 
   <!-- Label -->
-  <text x="525" y="340" fill="#ffd93d" font-size="14" text-anchor="middle">Clip to boundary!</text>
+  <text x="525" y="340" fill="#c9a84c" font-size="14" text-anchor="middle">Clip to boundary!</text>
 
   <!-- Divider -->
-  <line x1="350" y1="45" x2="350" y2="380" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="350" y1="45" x2="350" y2="380" stroke="#2e2e38" stroke-width="1" stroke-dasharray="4,4"/>
 
   <!-- Arrow markers -->
   <defs>
     <marker id="arrowPurple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#bb86fc"/>
+      <polygon points="0 0, 10 3.5, 0 7" fill="#9b89b6"/>
     </marker>
     <marker id="arrowGold" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#ffd93d"/>
+      <polygon points="0 0, 10 3.5, 0 7" fill="#c9a84c"/>
     </marker>
   </defs>
 </svg>
@@ -189,7 +147,7 @@ $$\min_{p}\; m_k(p) = f(x_k) + g_k^T p + \tfrac{1}{2}\,p^T B_k\, p \quad \text{s
 
 <div class="why-box">
 <h3>Why trust region instead of line search?</h3>
-<p>Line search (<a href="cg-08-line-search.html" style="color:#64ffda;">Page 08</a>) needs a "descent direction" first &mdash; if the direction is bad, no step length can save you. Trust region does not pick a direction first. It searches over ALL directions simultaneously, constrained only by the radius. This makes it more robust, especially when the Hessian is indefinite (saddle-point curvature) where Newton's direction might actually go uphill.</p>
+<p>Line search (<a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a>) needs a "descent direction" first &mdash; if the direction is bad, no step length can save you. Trust region does not pick a direction first. It searches over ALL directions simultaneously, constrained only by the radius. This makes it more robust, especially when the Hessian is indefinite (saddle-point curvature) where Newton's direction might actually go uphill.</p>
 </div>
 
 
@@ -240,33 +198,33 @@ $$\rho_k = \frac{f(x_k) - f(x_k + p_k)}{m_k(0) - m_k(p_k)} = \frac{\text{actual 
   <th>Update $\Delta$</th>
 </tr>
 <tr>
-  <td style="text-align:left; color:#ff6b6b; font-weight:bold;">$\rho_k < 0$</td>
+  <td style="text-align:left; color:#c47070; font-weight:bold;">$\rho_k < 0$</td>
   <td>Model predicted improvement, but $f$ <em>increased</em></td>
-  <td style="color:#ff6b6b;">Reject</td>
+  <td style="color:#c47070;">Reject</td>
   <td>Shrink: $\Delta_{k+1} = \tfrac{1}{4}\Delta_k$</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#ff6b6b; font-weight:bold;">$0 < \rho_k < 0.25$</td>
+  <td style="text-align:left; color:#c47070; font-weight:bold;">$0 < \rho_k < 0.25$</td>
   <td>Model is a poor predictor &mdash; actual reduction much less than predicted</td>
-  <td style="color:#ff6b6b;">Reject</td>
+  <td style="color:#c47070;">Reject</td>
   <td>Shrink: $\Delta_{k+1} = \tfrac{1}{4}\Delta_k$</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#ffd93d; font-weight:bold;">$0.25 \leq \rho_k < 0.75$</td>
+  <td style="text-align:left; color:#c9a84c; font-weight:bold;">$0.25 \leq \rho_k < 0.75$</td>
   <td>Model is reasonably accurate</td>
-  <td style="color:#64ffda;">Accept</td>
+  <td style="color:#d4956a;">Accept</td>
   <td>Keep: $\Delta_{k+1} = \Delta_k$</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#64ffda; font-weight:bold;">$\rho_k \geq 0.75$ AND $\|p_k\| = \Delta_k$</td>
+  <td style="text-align:left; color:#d4956a; font-weight:bold;">$\rho_k \geq 0.75$ AND $\|p_k\| = \Delta_k$</td>
   <td>Model is excellent AND step hit the boundary (we might be constrained)</td>
-  <td style="color:#64ffda;">Accept</td>
+  <td style="color:#d4956a;">Accept</td>
   <td>Expand: $\Delta_{k+1} = \min(2\Delta_k, \hat{\Delta})$</td>
 </tr>
 <tr>
-  <td style="text-align:left; color:#64ffda; font-weight:bold;">$\rho_k \geq 0.75$ AND $\|p_k\| < \Delta_k$</td>
+  <td style="text-align:left; color:#d4956a; font-weight:bold;">$\rho_k \geq 0.75$ AND $\|p_k\| < \Delta_k$</td>
   <td>Model is excellent, but step is interior (radius was already big enough)</td>
-  <td style="color:#64ffda;">Accept</td>
+  <td style="color:#d4956a;">Accept</td>
   <td>Keep: $\Delta_{k+1} = \Delta_k$</td>
 </tr>
 </table>
@@ -288,30 +246,30 @@ $$\rho_k = \frac{f(x_k) - f(x_k + p_k)}{m_k(0) - m_k(p_k)} = \frac{\text{actual 
 <div class="algo-box">
 <div class="algo-title">Algorithm 4.1: Trust-Region Method</div>
 
-<div class="algo-line"><span style="color:#64ffda; font-weight:bold;">Given:</span> starting point $x_0$, initial radius $\Delta_0 > 0$, maximum radius $\hat{\Delta} > 0$, threshold $\eta \in [0, \tfrac{1}{4})$</div>
+<div class="algo-line"><span style="color:#d4956a; font-weight:bold;">Given:</span> starting point $x_0$, initial radius $\Delta_0 > 0$, maximum radius $\hat{\Delta} > 0$, threshold $\eta \in [0, \tfrac{1}{4})$</div>
 <div class="algo-line" style="padding-left: 24px;"><span class="algo-comment">// $\hat{\Delta}$ = the largest the radius is ever allowed to grow. $\eta$ = acceptance threshold (typically $\eta = 0$ or small).</span></div>
 <br>
-<div class="algo-line"><span style="color:#ffd93d; font-weight:bold;">for</span> $k = 0, 1, 2, \ldots$</div>
+<div class="algo-line"><span style="color:#c9a84c; font-weight:bold;">for</span> $k = 0, 1, 2, \ldots$</div>
 <br>
-<div class="algo-line" style="padding-left: 24px;"><span style="color:#bb86fc; font-weight:bold;">Step 1:</span> Compute $g_k = \nabla f(x_k)$ and $B_k = \nabla^2 f(x_k)$ (or approximation)</div>
+<div class="algo-line" style="padding-left: 24px;"><span style="color:#9b89b6; font-weight:bold;">Step 1:</span> Compute $g_k = \nabla f(x_k)$ and $B_k = \nabla^2 f(x_k)$ (or approximation)</div>
 <div class="algo-line" style="padding-left: 48px;"><span class="algo-comment">// Build the quadratic model $m_k(p) = f(x_k) + g_k^T p + \tfrac{1}{2} p^T B_k p$</span></div>
 <br>
-<div class="algo-line" style="padding-left: 24px;"><span style="color:#bb86fc; font-weight:bold;">Step 2:</span> Approximately solve: $\min_p\; m_k(p)$ subject to $\|p\| \leq \Delta_k$, to get $p_k$</div>
+<div class="algo-line" style="padding-left: 24px;"><span style="color:#9b89b6; font-weight:bold;">Step 2:</span> Approximately solve: $\min_p\; m_k(p)$ subject to $\|p\| \leq \Delta_k$, to get $p_k$</div>
 <div class="algo-line" style="padding-left: 48px;"><span class="algo-comment">// Find the best step inside the circle. Exact solve or use Cauchy point (Part D).</span></div>
 <br>
-<div class="algo-line" style="padding-left: 24px;"><span style="color:#bb86fc; font-weight:bold;">Step 3:</span> Compute the ratio: $\rho_k = \dfrac{f(x_k) - f(x_k + p_k)}{m_k(0) - m_k(p_k)}$</div>
+<div class="algo-line" style="padding-left: 24px;"><span style="color:#9b89b6; font-weight:bold;">Step 3:</span> Compute the ratio: $\rho_k = \dfrac{f(x_k) - f(x_k + p_k)}{m_k(0) - m_k(p_k)}$</div>
 <div class="algo-line" style="padding-left: 48px;"><span class="algo-comment">// Compare actual vs predicted reduction</span></div>
 <br>
-<div class="algo-line" style="padding-left: 24px;"><span style="color:#bb86fc; font-weight:bold;">Step 4:</span> Update the radius:</div>
-<div class="algo-line" style="padding-left: 48px;"><span style="color:#ff6b6b;">if</span> $\rho_k < \tfrac{1}{4}$: &nbsp; $\Delta_{k+1} = \tfrac{1}{4}\,\Delta_k$ <span class="algo-comment">// model was bad &rarr; shrink</span></div>
-<div class="algo-line" style="padding-left: 48px;"><span style="color:#64ffda;">else if</span> $\rho_k > \tfrac{3}{4}$ and $\|p_k\| = \Delta_k$: &nbsp; $\Delta_{k+1} = \min(2\Delta_k,\, \hat{\Delta})$ <span class="algo-comment">// model great + hit boundary &rarr; expand</span></div>
-<div class="algo-line" style="padding-left: 48px;"><span style="color:#ffd93d;">else:</span> &nbsp; $\Delta_{k+1} = \Delta_k$ <span class="algo-comment">// keep radius the same</span></div>
+<div class="algo-line" style="padding-left: 24px;"><span style="color:#9b89b6; font-weight:bold;">Step 4:</span> Update the radius:</div>
+<div class="algo-line" style="padding-left: 48px;"><span style="color:#c47070;">if</span> $\rho_k < \tfrac{1}{4}$: &nbsp; $\Delta_{k+1} = \tfrac{1}{4}\,\Delta_k$ <span class="algo-comment">// model was bad &rarr; shrink</span></div>
+<div class="algo-line" style="padding-left: 48px;"><span style="color:#d4956a;">else if</span> $\rho_k > \tfrac{3}{4}$ and $\|p_k\| = \Delta_k$: &nbsp; $\Delta_{k+1} = \min(2\Delta_k,\, \hat{\Delta})$ <span class="algo-comment">// model great + hit boundary &rarr; expand</span></div>
+<div class="algo-line" style="padding-left: 48px;"><span style="color:#c9a84c;">else:</span> &nbsp; $\Delta_{k+1} = \Delta_k$ <span class="algo-comment">// keep radius the same</span></div>
 <br>
-<div class="algo-line" style="padding-left: 24px;"><span style="color:#bb86fc; font-weight:bold;">Step 5:</span> Update the iterate:</div>
-<div class="algo-line" style="padding-left: 48px;"><span style="color:#64ffda;">if</span> $\rho_k > \eta$: &nbsp; $x_{k+1} = x_k + p_k$ <span class="algo-comment">// accept the step</span></div>
-<div class="algo-line" style="padding-left: 48px;"><span style="color:#ff6b6b;">else:</span> &nbsp; $x_{k+1} = x_k$ <span class="algo-comment">// reject the step, stay put</span></div>
+<div class="algo-line" style="padding-left: 24px;"><span style="color:#9b89b6; font-weight:bold;">Step 5:</span> Update the iterate:</div>
+<div class="algo-line" style="padding-left: 48px;"><span style="color:#d4956a;">if</span> $\rho_k > \eta$: &nbsp; $x_{k+1} = x_k + p_k$ <span class="algo-comment">// accept the step</span></div>
+<div class="algo-line" style="padding-left: 48px;"><span style="color:#c47070;">else:</span> &nbsp; $x_{k+1} = x_k$ <span class="algo-comment">// reject the step, stay put</span></div>
 <br>
-<div class="algo-line"><span style="color:#ffd93d; font-weight:bold;">end for</span></div>
+<div class="algo-line"><span style="color:#c9a84c; font-weight:bold;">end for</span></div>
 </div>
 
 <div class="why-box">
@@ -422,7 +380,7 @@ $$\frac{\partial f}{\partial x_2} = 2x_2 - 2x_1$$
 <div class="hand-calc">
 <h3>Step 3: Compute the Hessian $B_0 = \nabla^2 f(x_0)$</h3>
 <div class="step">
-<p class="step-label">We need all four second partial derivatives (recall the Hessian from <a href="cg-02-multivariable-bridge.html" style="color:#ffd93d;">Page 02</a>):</p>
+<p class="step-label">We need all four second partial derivatives (recall the Hessian from <a href="cg-02-multivariable-bridge.html" style="color:#c9a84c;">Page 02</a>):</p>
 
 <p><strong>$\frac{\partial^2 f}{\partial x_1^2}$:</strong> Differentiate $\frac{\partial f}{\partial x_1} = 4x_1 - 2x_2 + 6x_1^2 + 4x_1^3$ with respect to $x_1$:</p>
 $$\frac{\partial^2 f}{\partial x_1^2} = 4 + 12x_1 + 12x_1^2$$
@@ -460,10 +418,10 @@ $$m_0(p) = 4 + 12p_1 + 14p_1^2 - 2p_1 p_2 + p_2^2$$
 <div class="hand-calc">
 <h3>Step 5: Compute the Newton Step $p_N$</h3>
 <div class="step">
-<p class="step-label">The Newton step solves $B_0\, p = -g_0$ (recall from <a href="cg-07-newton-method.html" style="color:#ffd93d;">Page 07</a>):</p>
+<p class="step-label">The Newton step solves $B_0\, p = -g_0$ (recall from <a href="cg-07-newton-method.html" style="color:#c9a84c;">Page 07</a>):</p>
 $$\begin{bmatrix} 28 & -2 \\ -2 & 2 \end{bmatrix}\begin{bmatrix} p_1 \\ p_2 \end{bmatrix} = \begin{bmatrix} -12 \\ 0 \end{bmatrix}$$
 
-<p style="margin-top: 12px;">Using the 2x2 inverse formula (recall from <a href="cg-03-linear-algebra.html" style="color:#ffd93d;">Page 03</a>): for $A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}$, $A^{-1} = \frac{1}{ad - bc}\begin{bmatrix} d & -b \\ -c & a \end{bmatrix}$.</p>
+<p style="margin-top: 12px;">Using the 2x2 inverse formula (recall from <a href="cg-03-linear-algebra.html" style="color:#c9a84c;">Page 03</a>): for $A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}$, $A^{-1} = \frac{1}{ad - bc}\begin{bmatrix} d & -b \\ -c & a \end{bmatrix}$.</p>
 
 <p>$\det(B_0) = (28)(2) - (-2)(-2) = 56 - 4 = 52$</p>
 
@@ -590,7 +548,7 @@ $$\rho_0 = \frac{94644}{13^3 \cdot 36} = \frac{94644}{79092} \approx 1.197$$
 <div class="step">
 <p class="step-label">Apply the decision rules from Algorithm 4.1:</p>
 
-<p><strong>Check:</strong> $\rho_0 \approx 1.20 > 0.75$? <span style="color:#64ffda;">YES</span> &mdash; the model was excellent.</p>
+<p><strong>Check:</strong> $\rho_0 \approx 1.20 > 0.75$? <span style="color:#d4956a;">YES</span> &mdash; the model was excellent.</p>
 
 <p><strong>Check:</strong> Did we hit the boundary? $\|p_0\| \approx 0.653$ vs. $\Delta_0 = 1$. Since $0.653 < 1$, we did <strong>NOT</strong> hit the boundary.</p>
 
@@ -598,7 +556,7 @@ $$\rho_0 = \frac{94644}{13^3 \cdot 36} = \frac{94644}{79092} \approx 1.197$$
 
 $$\Delta_1 = \Delta_0 = 1$$
 
-<p class="result">Decision: <span style="color:#64ffda;">Accept the step</span> ($x_1 = [7/13, 7/13]$), <span style="color:#ffd93d;">keep the radius</span> ($\Delta_1 = 1$).</p>
+<p class="result">Decision: <span style="color:#d4956a;">Accept the step</span> ($x_1 = [7/13, 7/13]$), <span style="color:#c9a84c;">keep the radius</span> ($\Delta_1 = 1$).</p>
 <p class="check">Why not expand? Because the boundary was not active. Making the radius bigger would not have changed the Newton step at all &mdash; it was already inside. Expansion only helps when we're being constrained.</p>
 </div>
 </div>
@@ -617,14 +575,14 @@ $$\Delta_1 = \Delta_0 = 1$$
 <tr><td style="text-align:left;">$\Delta_0$</td><td>$1$</td></tr>
 <tr><td style="text-align:left;">$p_0$ (Newton step)</td><td>$[-6/13, -6/13]^T \approx [-0.462, -0.462]^T$</td></tr>
 <tr><td style="text-align:left;">$\|p_0\|$</td><td>$6\sqrt{2}/13 \approx 0.653$</td></tr>
-<tr><td style="text-align:left;">Inside trust region?</td><td style="color:#64ffda;">Yes ($0.653 \leq 1$)</td></tr>
+<tr><td style="text-align:left;">Inside trust region?</td><td style="color:#d4956a;">Yes ($0.653 \leq 1$)</td></tr>
 <tr><td style="text-align:left;">$x_1$</td><td>$[7/13, 7/13]^T \approx [0.538, 0.538]^T$</td></tr>
 <tr><td style="text-align:left;">$f(x_1)$</td><td>$19600/28561 \approx 0.686$</td></tr>
 <tr><td style="text-align:left;">Actual reduction</td><td>$\approx 3.314$</td></tr>
 <tr><td style="text-align:left;">$m_0(p_0)$</td><td>$16/13 \approx 1.231$</td></tr>
 <tr><td style="text-align:left;">Predicted reduction</td><td>$36/13 \approx 2.769$</td></tr>
 <tr><td style="text-align:left;">$\rho_0$</td><td>$\approx 1.20$</td></tr>
-<tr><td style="text-align:left;">Step accepted?</td><td style="color:#64ffda;">Yes ($\rho_0 > \eta$)</td></tr>
+<tr><td style="text-align:left;">Step accepted?</td><td style="color:#d4956a;">Yes ($\rho_0 > \eta$)</td></tr>
 <tr><td style="text-align:left;">$\Delta_1$</td><td>$1$ (kept, did not hit boundary)</td></tr>
 </table>
 </div>
@@ -639,7 +597,7 @@ $$\Delta_1 = \Delta_0 = 1$$
 <table class="step-table" style="margin-top: 16px;">
 <tr>
   <th style="text-align:left;">Aspect</th>
-  <th>Line Search (<a href="cg-08-line-search.html" style="color:#64ffda;">Page 08</a>)</th>
+  <th>Line Search (<a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a>)</th>
   <th>Trust Region</th>
 </tr>
 <tr>

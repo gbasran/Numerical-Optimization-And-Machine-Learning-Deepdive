@@ -8,49 +8,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
-.container { max-width: 900px; margin: 0 auto; }
-h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
-.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
-h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
-.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
-.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
-.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
-.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
-.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
-.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
-.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
-.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
-.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
-.hand-calc .result { color: #64ffda; font-weight: bold; }
-.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
-.exam-flag { background: #2a1a1a; border: 2px solid #ff6b6b; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
-.exam-flag h4 { color: #ff6b6b; margin-bottom: 8px; }
-.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
-.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
-.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
-.step-table tr:nth-child(even) { background: #16213e; }
-.algo-box { border-left: 4px solid #64ffda; padding: 16px 20px; margin: 20px 0; background: #0f3460; border-radius: 0 12px 12px 0; }
-.algo-box .algo-title { color: #ffd93d; font-weight: bold; font-size: 18px; margin-bottom: 12px; }
-.algo-box .algo-line { padding: 6px 0; font-size: 16px; }
-.algo-box .algo-comment { color: #888; font-size: 14px; }
-.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
-.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
-.glossary dl { font-size: 15px; }
-.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
-.glossary dd { margin-left: 20px; color: #ccc; }
-.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
-.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
-.nav a:hover { text-decoration: underline; }
-.nav p { margin: 4px 0; }
-svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
-.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
-.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
-.breakdown dd { color: #ccc; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
@@ -66,7 +24,7 @@ svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
 
 <!-- ===================== PART A ===================== -->
 <h2>Part A: Gradient Descent with Exact Line Search</h2>
-<p><em>Core method from <a href="cg-06-gradient-descent.html" style="color:#64ffda;">Page 06</a>. Mirrors Assignment 1 style.</em></p>
+<p><em>Core method from <a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>. Mirrors Assignment 1 style.</em></p>
 
 <div class="formula-box">
 <strong>Problem:</strong> Consider $f(x_1, x_2) = 3x_1^2 + 2x_2^2$. Starting from $x_0 = \begin{bmatrix} 2 \\ 1 \end{bmatrix}$, perform <strong>one iteration</strong> of gradient descent with exact line search.
@@ -77,7 +35,7 @@ svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
 
 <div class="step">
 <div class="step-label">Step 1: Compute the gradient at $x_0$</div>
-The gradient is $\nabla f(x) = \begin{bmatrix} 6x_1 \\ 4x_2 \end{bmatrix}$ (recall: differentiate each variable, <a href="cg-02-multivariable-bridge.html" style="color:#64ffda;">Page 02</a>).
+The gradient is $\nabla f(x) = \begin{bmatrix} 6x_1 \\ 4x_2 \end{bmatrix}$ (recall: differentiate each variable, <a href="cg-02-multivariable-bridge.html" style="color:#d4956a;">Page 02</a>).
 
 $$\nabla f(x_0) = \nabla f\!\left(\begin{bmatrix} 2 \\ 1 \end{bmatrix}\right) = \begin{bmatrix} 6(2) \\ 4(1) \end{bmatrix} = \begin{bmatrix} 12 \\ 4 \end{bmatrix}$$
 </div>
@@ -132,7 +90,7 @@ $$f(x_1) = 3\left(\frac{4}{841}\right) + 2\left(\frac{81}{841}\right) = \frac{12
 
 <!-- ===================== PART B ===================== -->
 <h2>Part B: Newton's Method for Optimization</h2>
-<p><em>Core method from <a href="cg-07-newton-method.html" style="color:#64ffda;">Page 07</a>. Mirrors Assignment 1 style.</em></p>
+<p><em>Core method from <a href="cg-07-newton-method.html" style="color:#d4956a;">Page 07</a>. Mirrors Assignment 1 style.</em></p>
 
 <div class="formula-box">
 <strong>Problem:</strong> Consider $f(x_1, x_2) = x_1^4 + x_2^2 - 2x_1^2$. Starting from $x_0 = \begin{bmatrix} 2 \\ 1 \end{bmatrix}$, perform <strong>one Newton step</strong>.
@@ -151,7 +109,7 @@ $$\nabla f(x_0) = \begin{bmatrix} 4(8) - 4(2) \\ 2(1) \end{bmatrix} = \begin{bma
 
 <div class="step">
 <div class="step-label">Step 2: Compute the Hessian at $x_0$</div>
-The Hessian is the matrix of second partial derivatives (<a href="cg-02-multivariable-bridge.html" style="color:#64ffda;">Page 02</a>):
+The Hessian is the matrix of second partial derivatives (<a href="cg-02-multivariable-bridge.html" style="color:#d4956a;">Page 02</a>):
 
 $$\nabla^2 f(x) = \begin{bmatrix} 12x_1^2 - 4 & 0 \\ 0 & 2 \end{bmatrix}$$
 
@@ -195,7 +153,7 @@ $$f(x_1) = (16/11)^4 + 0 - 2(16/11)^2 = \frac{65536}{14641} - \frac{512}{121} = 
 
 <!-- ===================== PART C ===================== -->
 <h2>Part C: Trust-Region Method</h2>
-<p><em>Core method from <a href="cg-09-trust-region.html" style="color:#64ffda;">Page 09</a>. Mirrors Quiz 4 format exactly.</em></p>
+<p><em>Core method from <a href="cg-09-trust-region.html" style="color:#d4956a;">Page 09</a>. Mirrors Quiz 4 format exactly.</em></p>
 
 <div class="formula-box">
 <strong>Problem:</strong> Consider $f(x_1, x_2) = x_1^2 + 4x_2^2 + x_1 x_2$. At $x_0 = \begin{bmatrix} 2 \\ 1 \end{bmatrix}$ with trust-region radius $\Delta_0 = 1$, parameters $\eta = 0.25$.
@@ -234,7 +192,7 @@ Solve $B_0 p^N = -g_0$:
 
 $$\begin{bmatrix} 2 & 1 \\ 1 & 8 \end{bmatrix} \begin{bmatrix} p_1 \\ p_2 \end{bmatrix} = \begin{bmatrix} -5 \\ -10 \end{bmatrix}$$
 
-Using the $2 \times 2$ inverse formula (<a href="cg-03-linear-algebra.html" style="color:#64ffda;">Page 03</a>): $\det(B) = 16 - 1 = 15$.
+Using the $2 \times 2$ inverse formula (<a href="cg-03-linear-algebra.html" style="color:#d4956a;">Page 03</a>): $\det(B) = 16 - 1 = 15$.
 
 $$B_0^{-1} = \frac{1}{15}\begin{bmatrix} 8 & -1 \\ -1 & 2 \end{bmatrix}$$
 
@@ -311,7 +269,7 @@ Since $\rho_0 > 0.75$ and $\|p\| = \sqrt{0.49 + 0.09} = \sqrt{0.58} \approx 0.76
 
 <!-- ===================== PART D ===================== -->
 <h2>Part D: Conjugate Gradient (Linear CG)</h2>
-<p><em>Core method from <a href="cg-10-conjugate-gradient.html" style="color:#64ffda;">Page 10</a>. Mirrors Quiz 5 format exactly.</em></p>
+<p><em>Core method from <a href="cg-10-conjugate-gradient.html" style="color:#d4956a;">Page 10</a>. Mirrors Quiz 5 format exactly.</em></p>
 
 <div class="formula-box">
 <strong>Problem:</strong> Solve $Ax = b$ using CG, where
@@ -403,7 +361,7 @@ $$Ax_2 = \begin{bmatrix}4&1\\1&3\end{bmatrix}\begin{bmatrix}1/11\\7/11\end{bmatr
 
 <!-- ===================== PART E ===================== -->
 <h2>Part E: BFGS Method</h2>
-<p><em>Core method from <a href="cg-12-bfgs.html" style="color:#64ffda;">Page 12</a>. Mirrors Quiz 6 format exactly.</em></p>
+<p><em>Core method from <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>. Mirrors Quiz 6 format exactly.</em></p>
 
 <div class="formula-box">
 <strong>Problem:</strong> Consider $f(x_1, x_2) = 2x_1^2 + x_2^2 - 2x_1 x_2$, $x_0 = \begin{bmatrix}2\\1\end{bmatrix}$, $H_0 = I$ (initial inverse Hessian approximation). Perform <strong>one BFGS iteration</strong> with exact line search.
@@ -504,7 +462,7 @@ $$H_1 = \frac{1}{250}\begin{bmatrix}109 & 97\\97 & 201\end{bmatrix}$$
 
 <!-- ===================== PART F ===================== -->
 <h2>Part F: Newton for Nonlinear Systems</h2>
-<p><em>Core method from <a href="cg-14-nonlinear-equations.html" style="color:#64ffda;">Page 14</a>. Mirrors Quiz 7 format exactly.</em></p>
+<p><em>Core method from <a href="cg-14-nonlinear-equations.html" style="color:#d4956a;">Page 14</a>. Mirrors Quiz 7 format exactly.</em></p>
 
 <div class="formula-box">
 <strong>Problem:</strong> Solve the system
@@ -525,7 +483,7 @@ $$r(x_0) = \begin{bmatrix}1 + 1 - 3\\1 + 1 - 5\end{bmatrix} = \begin{bmatrix}-1\
 
 <div class="step">
 <div class="step-label">Step 2: Compute the Jacobian at $x_0$</div>
-The Jacobian $J(x)$ is the matrix of partial derivatives of the residual components (<a href="cg-02-multivariable-bridge.html" style="color:#64ffda;">Page 02</a>):
+The Jacobian $J(x)$ is the matrix of partial derivatives of the residual components (<a href="cg-02-multivariable-bridge.html" style="color:#d4956a;">Page 02</a>):
 
 $$J(x) = \begin{bmatrix} \partial r_1/\partial x_1 & \partial r_1/\partial x_2 \\ \partial r_2/\partial x_1 & \partial r_2/\partial x_2 \end{bmatrix} = \begin{bmatrix} 2x_1 & 1 \\ 1 & 2x_2 \end{bmatrix}$$
 
@@ -570,7 +528,7 @@ $$\|r(x_1)\| = \sqrt{1/81 + 625/81} = \sqrt{626/81} \approx 2.780$$
 
 <!-- ===================== PART G ===================== -->
 <h2>Part G: KKT Conditions &amp; Constrained Optimization</h2>
-<p><em>Core method from <a href="cg-15-constrained.html" style="color:#64ffda;">Page 15</a>. Mirrors Quiz 8 format exactly.</em></p>
+<p><em>Core method from <a href="cg-15-constrained.html" style="color:#d4956a;">Page 15</a>. Mirrors Quiz 8 format exactly.</em></p>
 
 <div class="formula-box">
 <strong>Problem:</strong> Solve
