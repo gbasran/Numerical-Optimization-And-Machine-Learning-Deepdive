@@ -68,7 +68,7 @@ $$= H_k y_k + (s_k - H_k y_k) = s_k \quad \checkmark$$
 <div class="formula-box">
 <strong>The safeguard rule:</strong>
 
-$$\text{Skip the SR1 update if } \quad |(s_k - H_k y_k)^T y_k| &lt; r \, \|s_k - H_k y_k\| \cdot \|y_k\|$$
+$$\text{Skip the SR1 update if } \quad |(s_k - H_k y_k)^T y_k| \lt  r \, \|s_k - H_k y_k\| \cdot \|y_k\|$$
 
 <dl class="breakdown">
  <dt>$r$</dt><dd>a small positive number, typically $r = 10^{-8}$</dd>
@@ -86,7 +86,7 @@ $$\text{Skip the SR1 update if } \quad |(s_k - H_k y_k)^T y_k| &lt; r \, \|s_k -
 <h3>SR1 Does NOT Preserve Positive Definiteness</h3>
 <p>Unlike BFGS, the SR1 update can produce a matrix $H_{k+1}$ that is NOT positive definite, even if $H_k$ was. This means the search direction $p_k = -H_k g_k$ might not be a descent direction.</p>
 <p style="margin-top:8px;"><strong>When is this OK?</strong> SR1 is most commonly used inside a <strong>trust-region framework</strong> (recall from <a href="cg-09-trust-region.html" style="color:#d4956a;">Page 09</a>). In a trust region, the step is bounded by the trust radius $\Delta_k$, so even if $H_k$ produces a bad direction, the step is kept small enough to be safe. The trust region acts as a safety net.</p>
-<p style="margin-top:8px;"><strong>When is this a problem?</strong> If you use SR1 with a line search (instead of a trust region), you need to check that $p_k$ is a descent direction ($g_k^T p_k &lt; 0$). If not, you fall back to steepest descent.</p>
+<p style="margin-top:8px;"><strong>When is this a problem?</strong> If you use SR1 with a line search (instead of a trust region), you need to check that $p_k$ is a descent direction ($g_k^T p_k \lt  0$). If not, you fall back to steepest descent.</p>
 </div>
 
 <div class="note">
@@ -259,7 +259,7 @@ $$H_{k+1} = H_k - \frac{H_k y_k y_k^T H_k}{y_k^T H_k y_k} + \frac{s_k s_k^T}{s_k
  <dt>$H_k y_k y_k^T H_k$</dt><dd>outer product involving $H_k y_k$; a rank-1 matrix</dd>
  <dt>$y_k^T H_k y_k$</dt><dd>a scalar: the gradient change's "energy" under the current inverse Hessian</dd>
  <dt>$s_k s_k^T$</dt><dd>outer product of the step with itself; rank-1 matrix</dd>
- <dt>$s_k^T y_k$</dt><dd>a scalar: the curvature condition value (must be $&gt; 0$ for the update to be valid)</dd>
+ <dt>$s_k^T y_k$</dt><dd>a scalar: the curvature condition value (must be $\gt  0$ for the update to be valid)</dd>
 </dl>
 
 <p style="margin-top:12px;">Like BFGS, this is a <strong>rank-2 update</strong>: subtract one rank-1 matrix ($\frac{H_k y_k y_k^T H_k}{y_k^T H_k y_k}$) and add another ($\frac{s_k s_k^T}{s_k^T y_k}$).</p>
@@ -309,15 +309,15 @@ $$H_{k+1} = H_k - \frac{H_k y_k y_k^T H_k}{y_k^T H_k y_k} + \frac{s_k s_k^T}{s_k
 </tr>
 <tr>
  <td style="text-align:left; color:#d4956a;">Preserves PD?</td>
- <td>Yes (with $s_k^Ty_k &gt; 0$)</td>
+ <td>Yes (with $s_k^Ty_k \gt  0$)</td>
  <td><strong>No</strong>; can lose PD</td>
- <td>Yes (with $s_k^Ty_k &gt; 0$)</td>
+ <td>Yes (with $s_k^Ty_k \gt  0$)</td>
 </tr>
 <tr>
  <td style="text-align:left; color:#d4956a;">Needs safeguard?</td>
- <td>No (Wolfe guarantees $s_k^Ty_k &gt; 0$)</td>
+ <td>No (Wolfe guarantees $s_k^Ty_k \gt  0$)</td>
  <td>Yes; skip rule for small denominator</td>
- <td>No (Wolfe guarantees $s_k^Ty_k &gt; 0$)</td>
+ <td>No (Wolfe guarantees $s_k^Ty_k \gt  0$)</td>
 </tr>
 <tr>
  <td style="text-align:left; color:#d4956a;">Best framework</td>

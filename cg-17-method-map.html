@@ -384,7 +384,7 @@ If the exam asks you to compare methods, pull from this table. The key axes to d
 <ul style="margin: 12px 0 0 20px; line-height: 2;">
  <li><strong style="color:#c9a84c;">Exact line search</strong>: Minimize $\phi(\alpha) = f(x_k + \alpha d_k)$ exactly. Only practical for quadratics (closed-form). <a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a></li>
  <li><strong style="color:#c9a84c;">Backtracking (Armijo only)</strong>: Start with $\alpha = 1$, shrink by factor $\rho$ until Armijo holds. Simple, cheap, good enough for GD. <a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a></li>
- <li><strong style="color:#c9a84c;">Wolfe conditions</strong>: Armijo + curvature condition. More expensive search, but essential for BFGS (guarantees $s^T y &gt; 0$). <a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a></li>
+ <li><strong style="color:#c9a84c;">Wolfe conditions</strong>: Armijo + curvature condition. More expensive search, but essential for BFGS (guarantees $s^T y \gt  0$). <a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a></li>
  <li><strong style="color:#c9a84c;">Strong Wolfe</strong>: Tighter curvature condition. Needed for nonlinear CG. <a href="cg-08-line-search.html" style="color:#d4956a;">Page 08</a></li>
 </ul>
 </div>

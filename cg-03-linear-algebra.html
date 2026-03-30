@@ -197,19 +197,19 @@ The eigenvalues of a matrix tell you which of these shapes you have. All positiv
 <div class="formula-box">
 <strong>Formal Definition: Positive Definiteness</strong>
 
-$$\text{A symmetric matrix } A \text{ is positive definite (PD) if } \mathbf{x}^T A \mathbf{x} &gt; 0 \text{ for all } \mathbf{x} \neq \mathbf{0}$$
+$$\text{A symmetric matrix } A \text{ is positive definite (PD) if } \mathbf{x}^T A \mathbf{x} \gt  0 \text{ for all } \mathbf{x} \neq \mathbf{0}$$
 
 <dl class="breakdown">
  <dt>$\mathbf{x}$</dt><dd>any nonzero vector (any direction you might walk)</dd>
  <dt>$\mathbf{x}^T A \mathbf{x}$</dt><dd>a scalar number; the "curvature" in direction $\mathbf{x}$</dd>
- <dt>$&gt; 0$</dt><dd>the curvature is positive (upward) in EVERY direction</dd>
+ <dt>$\gt  0$</dt><dd>the curvature is positive (upward) in EVERY direction</dd>
 </dl>
 
 <p style="margin-top:12px;"><strong>Equivalent characterizations (any one is enough):</strong></p>
 <ol style="margin-left:20px; margin-top:8px;">
- <li>All eigenvalues of $A$ are strictly positive: $\lambda_i &gt; 0$ for all $i$</li>
- <li>$\mathbf{x}^T A \mathbf{x} &gt; 0$ for all $\mathbf{x} \neq \mathbf{0}$</li>
- <li>For 2&times;2: the top-left entry $a_{11} &gt; 0$ AND the determinant $\det(A) &gt; 0$</li>
+ <li>All eigenvalues of $A$ are strictly positive: $\lambda_i \gt  0$ for all $i$</li>
+ <li>$\mathbf{x}^T A \mathbf{x} \gt  0$ for all $\mathbf{x} \neq \mathbf{0}$</li>
+ <li>For 2&times;2: the top-left entry $a_{11} \gt  0$ AND the determinant $\det(A) \gt  0$</li>
 </ol>
 </div>
 
@@ -218,8 +218,8 @@ $$\text{A symmetric matrix } A \text{ is positive definite (PD) if } \mathbf{x}^
 
 <table class="step-table" style="margin-top:12px;">
 <tr><th>Classification</th><th>Eigenvalue Condition</th><th>Surface Shape</th><th>Optimization Meaning</th></tr>
-<tr><td style="color:#d4956a;">Positive Definite (PD)</td><td>All $\lambda_i &gt; 0$</td><td>Bowl</td><td>Local minimum</td></tr>
-<tr><td style="color:#9b89b6;">Negative Definite (ND)</td><td>All $\lambda_i &lt; 0$</td><td>Dome</td><td>Local maximum</td></tr>
+<tr><td style="color:#d4956a;">Positive Definite (PD)</td><td>All $\lambda_i \gt  0$</td><td>Bowl</td><td>Local minimum</td></tr>
+<tr><td style="color:#9b89b6;">Negative Definite (ND)</td><td>All $\lambda_i \lt  0$</td><td>Dome</td><td>Local maximum</td></tr>
 <tr><td style="color:#c47070;">Indefinite</td><td>Mixed signs</td><td>Saddle</td><td>Saddle point</td></tr>
 <tr><td style="color:#d4956a;">Positive Semidefinite (PSD)</td><td>All $\lambda_i \geq 0$</td><td>Bowl (possibly flat)</td><td>Could be min (need more info)</td></tr>
 <tr><td style="color:#9b89b6;">Negative Semidefinite (NSD)</td><td>All $\lambda_i \leq 0$</td><td>Dome (possibly flat)</td><td>Could be max (need more info)</td></tr>
@@ -229,9 +229,9 @@ $$\text{A symmetric matrix } A \text{ is positive definite (PD) if } \mathbf{x}^
 <div class="note">
 <strong>The 2&times;2 shortcut (very useful on exams):</strong><br>
 For a symmetric 2&times;2 matrix $\begin{bmatrix} a & b \\ b & d \end{bmatrix}$:<br>
-&bull; <strong>PD</strong> if $a &gt; 0$ and $ad - b^2 &gt; 0$<br>
-&bull; <strong>ND</strong> if $a &lt; 0$ and $ad - b^2 &gt; 0$<br>
-&bull; <strong>Indefinite</strong> if $ad - b^2 &lt; 0$<br>
+&bull; <strong>PD</strong> if $a \gt  0$ and $ad - b^2 \gt  0$<br>
+&bull; <strong>ND</strong> if $a \lt  0$ and $ad - b^2 \gt  0$<br>
+&bull; <strong>Indefinite</strong> if $ad - b^2 \lt  0$<br>
 &bull; <strong>Semidefinite / Inconclusive</strong> if $ad - b^2 = 0$<br>
 This is faster than computing eigenvalues!
 </div>
@@ -248,9 +248,9 @@ This is faster than computing eigenvalues!
 
 <div class="step">
  <div class="step-label">Step 2: Use the 2&times;2 shortcut</div>
- $a_{11} = -6 &lt; 0$ and $\det(H) = (-6)(6) - (6)(6) = -36 - 36 = -72 &lt; 0$.
+ $a_{11} = -6 \lt  0$ and $\det(H) = (-6)(6) - (6)(6) = -36 - 36 = -72 \lt  0$.
  <br><br>
- Since $\det &lt; 0$, the matrix is <strong>indefinite</strong> (mixed eigenvalues).
+ Since $\det \lt  0$, the matrix is <strong>indefinite</strong> (mixed eigenvalues).
 </div>
 
 <div class="step">
@@ -263,11 +263,11 @@ This is faster than computing eigenvalues!
 </div>
 
 <div class="step">
- <div class="result">Result: Eigenvalues are $\lambda_1 = 6\sqrt{2} &gt; 0$ and $\lambda_2 = -6\sqrt{2} &lt; 0$. Mixed signs = indefinite = saddle point at $(0,0)$.</div>
+ <div class="result">Result: Eigenvalues are $\lambda_1 = 6\sqrt{2} \gt  0$ and $\lambda_2 = -6\sqrt{2} \lt  0$. Mixed signs = indefinite = saddle point at $(0,0)$.</div>
 </div>
 
 <div class="check">
-This matches: the 2&times;2 shortcut told us $\det &lt; 0$ which means indefinite, and indeed one eigenvalue is positive and one is negative. The point $(0,0)$ is a saddle point → see <a href="cg-04-optimality.html">Page 04</a> for the full classification.
+This matches: the 2&times;2 shortcut told us $\det \lt  0$ which means indefinite, and indeed one eigenvalue is positive and one is negative. The point $(0,0)$ is a saddle point → see <a href="cg-04-optimality.html">Page 04</a> for the full classification.
 </div>
 </div>
 
@@ -463,7 +463,7 @@ $$\kappa(A) = \frac{\sigma_{\max}}{\sigma_{\min}} = \frac{\lambda_{\max}}{\lambd
  <dd>$\det(A - \lambda I) = 0$. A polynomial whose roots are the eigenvalues of $A$. For $n \times n$ matrices, it is degree $n$.</dd>
 
  <dt>Positive Definite (PD)</dt>
- <dd>A symmetric matrix with all eigenvalues strictly positive. Geometrically: a bowl. $\mathbf{x}^T A \mathbf{x} &gt; 0$ for all $\mathbf{x} \neq 0$.</dd>
+ <dd>A symmetric matrix with all eigenvalues strictly positive. Geometrically: a bowl. $\mathbf{x}^T A \mathbf{x} \gt  0$ for all $\mathbf{x} \neq 0$.</dd>
 
  <dt>Negative Definite (ND)</dt>
  <dd>A symmetric matrix with all eigenvalues strictly negative. Geometrically: a dome (upside-down bowl).</dd>

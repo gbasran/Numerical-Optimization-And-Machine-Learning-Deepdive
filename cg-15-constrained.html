@@ -49,7 +49,7 @@ $$\min_{x \in \mathbb{R}^n} f(x) \quad \text{subject to} \quad c_i(x) \leq 0, \;
 <p>At a point $x^*$, an inequality constraint $c_i(x) \leq 0$ is:</p>
 <ul style="margin-left:20px; margin-top:10px;">
  <li><strong style="color:#d4956a;">ACTIVE</strong> if $c_i(x^*) = 0$ , you are exactly ON the fence. The constraint is binding.</li>
- <li><strong style="color:#a8a49c;">INACTIVE</strong> if $c_i(x^*) &lt; 0$; you are strictly INSIDE the fence, away from the wall. The constraint has "slack."</li>
+ <li><strong style="color:#a8a49c;">INACTIVE</strong> if $c_i(x^*) \lt  0$; you are strictly INSIDE the fence, away from the wall. The constraint has "slack."</li>
 </ul>
 <p style="margin-top:12px;">The <strong>active set</strong> $\mathcal{A}(x^*) = \{i : c_i(x^*) = 0\}$ collects the indices of all active constraints.</p>
 </div>
@@ -66,7 +66,7 @@ $$\min_{x \in \mathbb{R}^n} f(x) \quad \text{subject to} \quad c_i(x) \leq 0, \;
 <strong>The "Prices for Constraints" Analogy</strong><br><br>
 The Lagrangian is a brilliant trick: instead of solving a constrained problem directly (which is hard), we combine the objective and all constraints into a single unconstrained-looking function. Each constraint gets a "price" called a <strong>Lagrange multiplier</strong> $\lambda_i$.<br><br>
 Think of it this way. You want to find the lowest altitude (minimize $f$) inside the fenced yard. Each fence has a "toll"; the multiplier $\lambda_i$. If you are ON fence $i$ (active constraint, $c_i = 0$), the toll might be positive: there is a real cost to being blocked by that fence. The fence is preventing you from going lower, and $\lambda_i$ measures how much lower you COULD go if that fence were removed.<br><br>
-If you are AWAY from fence $i$ (inactive constraint, $c_i &lt; 0$), the toll is zero: $\lambda_i = 0$. That fence does not affect you at all, so its price is zero.<br><br>
+If you are AWAY from fence $i$ (inactive constraint, $c_i \lt  0$), the toll is zero: $\lambda_i = 0$. That fence does not affect you at all, so its price is zero.<br><br>
 The Lagrangian packages all of this into one expression.
 </div>
 
@@ -78,7 +78,7 @@ $$\mathcal{L}(x, \lambda) = f(x) + \sum_{i=1}^{m} \lambda_i \, c_i(x)$$
  <dt>$f(x)$</dt><dd>the original objective function (what we want to minimize)</dd>
  <dt>$\lambda_i$</dt><dd>the Lagrange multiplier for constraint $i$; the "price" of that constraint</dd>
  <dt>$c_i(x)$</dt><dd>the $i$-th constraint function (recall: $c_i(x) \leq 0$ defines the feasible region)</dd>
- <dt>$\lambda_i c_i(x)$</dt><dd>the penalty for constraint $i$: if $c_i = 0$ (active), this contributes $0$ regardless of $\lambda_i$; if $c_i &lt; 0$ (inactive), then $\lambda_i = 0$ so this also contributes $0$</dd>
+ <dt>$\lambda_i c_i(x)$</dt><dd>the penalty for constraint $i$: if $c_i = 0$ (active), this contributes $0$ regardless of $\lambda_i$; if $c_i \lt  0$ (inactive), then $\lambda_i = 0$ so this also contributes $0$</dd>
 </dl>
 </div>
 
@@ -122,7 +122,7 @@ $$c_i(x^*) \leq 0 \quad \text{for all } i = 1, \ldots, m$$
 
 <div class="analogy">
 <strong>Physical meaning:</strong> The point must be <strong>inside or on the fence</strong>. A point outside the feasible region is not allowed, no matter how good its objective value is. This is the most intuitive condition; it just says "obey the constraints."<br><br>
-You cant claim a point is optimal if it is illegal. If $c_i(x^*) &gt; 0$ for any $i$, then $x^*$ is outside the fence and is not a valid solution.
+You cant claim a point is optimal if it is illegal. If $c_i(x^*) \gt  0$ for any $i$, then $x^*$ is outside the fence and is not a valid solution.
 </div>
 
 <!-- KKT 3: Dual Feasibility -->
@@ -135,7 +135,7 @@ $$\lambda_i^* \geq 0 \quad \text{for all } i = 1, \ldots, m$$
 <div class="analogy">
 <strong>Physical meaning:</strong> The multipliers must be <strong>non-negative</strong>. Why? Because constraints can only <strong>PUSH</strong> (prevent you from leaving the feasible region), they cannot <strong>PULL</strong> (attract you toward the boundary from inside).<br><br>
 Think about a physical fence. If you lean against it, it pushes back, that is, a positive force (positive $\lambda_i$). A fence cannot reach out and pull you toward it. A negative multiplier would mean the constraint is pulling you toward the boundary, which makes no physical sense for an inequality constraint.<br><br>
-If $\lambda_i &lt; 0$, it would mean that removing the constraint would make the objective <em>worse</em>, which contradicts the idea that constraints restrict you.
+If $\lambda_i \lt  0$, it would mean that removing the constraint would make the objective <em>worse</em>, which contradicts the idea that constraints restrict you.
 </div>
 
 <!-- KKT 4: Complementary Slackness -->
@@ -148,8 +148,8 @@ $$\lambda_i^* \, c_i(x^*) = 0 \quad \text{for all } i = 1, \ldots, m$$
 <div class="analogy">
 <strong>Physical meaning:</strong> For each constraint, there are only two possibilities:<br><br>
 <strong>Case 1:</strong> You are ON the fence ($c_i(x^*) = 0$, active) and the price might be positive ($\lambda_i^* \geq 0$). The product is $\lambda_i \cdot 0 = 0$. &checkmark;<br><br>
-<strong>Case 2:</strong> You are AWAY from the fence ($c_i(x^*) &lt; 0$, inactive) and the price MUST be zero ($\lambda_i^* = 0$). The product is $0 \cdot c_i = 0$. &checkmark;<br><br>
-What is IMPOSSIBLE: being away from the fence ($c_i &lt; 0$) while also having a positive price ($\lambda_i &gt; 0$). That would mean a constraint that is not binding is somehow affecting the optimal solution, which makes no sense. If the fence is not touching you, it has no influence.<br><br>
+<strong>Case 2:</strong> You are AWAY from the fence ($c_i(x^*) \lt  0$, inactive) and the price MUST be zero ($\lambda_i^* = 0$). The product is $0 \cdot c_i = 0$. &checkmark;<br><br>
+What is IMPOSSIBLE: being away from the fence ($c_i \lt  0$) while also having a positive price ($\lambda_i \gt  0$). That would mean a constraint that is not binding is somehow affecting the optimal solution, which makes no sense. If the fence is not touching you, it has no influence.<br><br>
 <strong>In practice:</strong> complementary slackness is the key tool for case analysis. For each constraint, either $\lambda_i = 0$ or $c_i = 0$ (or both). This dramatically reduces the number of equations you need to solve.
 </div>
 
@@ -240,7 +240,7 @@ $$\frac{\partial \mathcal{L}}{\partial x_2} = -2 + \lambda_1 + 3\lambda_2 - \lam
 <div class="step">
 <span class="step-label">Case A: $c_1$ and $c_2$ both active (on both non-trivial fences)</span><br>
 <p>Active: $c_1 = 0 \Rightarrow x_1 + x_2 = 4$ and $c_2 = 0 \Rightarrow x_1 + 3x_2 = 6$.</p>
-<p>Assume $c_3, c_4$ inactive, so $x_1 &gt; 0, x_2 &gt; 0$, meaning $\lambda_3 = 0, \lambda_4 = 0$ by comp. slackness.</p>
+<p>Assume $c_3, c_4$ inactive, so $x_1 \gt  0, x_2 \gt  0$, meaning $\lambda_3 = 0, \lambda_4 = 0$ by comp. slackness.</p>
 
 <p><strong>Solve for $x$:</strong></p>
 <p>$x_1 + x_2 = 4$ and $x_1 + 3x_2 = 6$.</p>
@@ -249,14 +249,14 @@ $$\frac{\partial \mathcal{L}}{\partial x_2} = -2 + \lambda_1 + 3\lambda_2 - \lam
 <p>Candidate: $(x_1, x_2) = (3, 1)$.</p>
 
 <p><strong>Check primal feasibility:</strong></p>
-<p>$c_1 = 3 + 1 - 4 = 0$ &checkmark;, $c_2 = 3 + 3 - 6 = 0$ &checkmark;, $c_3 = -3 &lt; 0$ &checkmark;, $c_4 = -1 &lt; 0$ &checkmark;.</p>
+<p>$c_1 = 3 + 1 - 4 = 0$ &checkmark;, $c_2 = 3 + 3 - 6 = 0$ &checkmark;, $c_3 = -3 \lt  0$ &checkmark;, $c_4 = -1 \lt  0$ &checkmark;.</p>
 
 <p><strong>Solve for $\lambda$ from stationarity (with $\lambda_3 = \lambda_4 = 0$):</strong></p>
 <p>$(S1): \lambda_1 + \lambda_2 = 3$</p>
 <p>$(S2): \lambda_1 + 3\lambda_2 = 2$</p>
 <p>Subtract: $2\lambda_2 = -1 \Rightarrow \lambda_2 = -\frac{1}{2}$</p>
 
-<p><strong style="color:#c47070;">FAILS dual feasibility:</strong> $\lambda_2 = -\frac{1}{2} &lt; 0$. NOT a KKT point.</p>
+<p><strong style="color:#c47070;">FAILS dual feasibility:</strong> $\lambda_2 = -\frac{1}{2} \lt  0$. NOT a KKT point.</p>
 </div>
 
 <div class="step">
@@ -265,12 +265,12 @@ $$\frac{\partial \mathcal{L}}{\partial x_2} = -2 + \lambda_1 + 3\lambda_2 - \lam
 <p>So $x_1 = 4, \; x_2 = 0$.</p>
 
 <p><strong>Check primal feasibility:</strong></p>
-<p>$c_1 = 4 + 0 - 4 = 0$ &checkmark;, $c_2 = 4 + 0 - 6 = -2 &lt; 0$ &checkmark;, $c_3 = -4 &lt; 0$ &checkmark;, $c_4 = 0$ &checkmark;.</p>
+<p>$c_1 = 4 + 0 - 4 = 0$ &checkmark;, $c_2 = 4 + 0 - 6 = -2 \lt  0$ &checkmark;, $c_3 = -4 \lt  0$ &checkmark;, $c_4 = 0$ &checkmark;.</p>
 <p>All constraints satisfied. &checkmark;</p>
 
 <p><strong>Identify inactive constraints and their multipliers:</strong></p>
-<p>$c_2$ inactive ($c_2 = -2 &lt; 0$) $\Rightarrow \lambda_2 = 0$ by comp. slackness.</p>
-<p>$c_3$ inactive ($c_3 = -4 &lt; 0$) $\Rightarrow \lambda_3 = 0$ by comp. slackness.</p>
+<p>$c_2$ inactive ($c_2 = -2 \lt  0$) $\Rightarrow \lambda_2 = 0$ by comp. slackness.</p>
+<p>$c_3$ inactive ($c_3 = -4 \lt  0$) $\Rightarrow \lambda_3 = 0$ by comp. slackness.</p>
 
 <p><strong>Solve for $\lambda_1, \lambda_4$ from stationarity (with $\lambda_2 = \lambda_3 = 0$):</strong></p>
 <p>$(S1): \lambda_1 + 0 - 0 = 3 \Rightarrow \lambda_1 = 3$</p>
@@ -292,7 +292,7 @@ $$\frac{\partial \mathcal{L}}{\partial x_2} = -2 + \lambda_1 + 3\lambda_2 - \lam
 <p>So $(x_1, x_2) = (6, 0)$.</p>
 
 <p><strong>Check primal feasibility:</strong></p>
-<p>$c_1 = 6 + 0 - 4 = 2 &gt; 0$.</p>
+<p>$c_1 = 6 + 0 - 4 = 2 \gt  0$.</p>
 <p><strong style="color:#c47070;">FAILS primal feasibility.</strong> The point $(6, 0)$ violates $x_1 + x_2 \leq 4$. Not feasible.</p>
 </div>
 
@@ -302,7 +302,7 @@ $$\frac{\partial \mathcal{L}}{\partial x_2} = -2 + \lambda_1 + 3\lambda_2 - \lam
 <p>So $(x_1, x_2) = (0, 4)$.</p>
 
 <p><strong>Check primal feasibility:</strong></p>
-<p>$c_2 = 0 + 12 - 6 = 6 &gt; 0$.</p>
+<p>$c_2 = 0 + 12 - 6 = 6 \gt  0$.</p>
 <p><strong style="color:#c47070;">FAILS primal feasibility.</strong> The point $(0, 4)$ violates $x_1 + 3x_2 \leq 6$. Not feasible.</p>
 </div>
 
@@ -312,7 +312,7 @@ $$\frac{\partial \mathcal{L}}{\partial x_2} = -2 + \lambda_1 + 3\lambda_2 - \lam
 <p>So $(x_1, x_2) = (0, 2)$.</p>
 
 <p><strong>Check primal feasibility:</strong></p>
-<p>$c_1 = 0 + 2 - 4 = -2 \leq 0$ &checkmark;, $c_2 = 0$ &checkmark;, $c_3 = 0$ &checkmark;, $c_4 = -2 &lt; 0$ &checkmark;.</p>
+<p>$c_1 = 0 + 2 - 4 = -2 \leq 0$ &checkmark;, $c_2 = 0$ &checkmark;, $c_3 = 0$ &checkmark;, $c_4 = -2 \lt  0$ &checkmark;.</p>
 <p>All constraints satisfied. &checkmark;</p>
 
 <p><strong>Identify inactive constraints:</strong></p>
@@ -323,7 +323,7 @@ $$\frac{\partial \mathcal{L}}{\partial x_2} = -2 + \lambda_1 + 3\lambda_2 - \lam
 <p>$(S2): 3\lambda_2 = 2 \Rightarrow \lambda_2 = \frac{2}{3}$</p>
 <p>From $(S1)$: $\lambda_3 = \frac{2}{3} - 3 = -\frac{7}{3}$</p>
 
-<p><strong style="color:#c47070;">FAILS dual feasibility:</strong> $\lambda_3 = -\frac{7}{3} &lt; 0$. NOT a KKT point.</p>
+<p><strong style="color:#c47070;">FAILS dual feasibility:</strong> $\lambda_3 = -\frac{7}{3} \lt  0$. NOT a KKT point.</p>
 </div>
 
 <div class="step">
@@ -337,7 +337,7 @@ $$\frac{\partial \mathcal{L}}{\partial x_2} = -2 + \lambda_1 + 3\lambda_2 - \lam
 
 <p><strong>Stationarity:</strong></p>
 <p>$(S1): -\lambda_3 = 3 \Rightarrow \lambda_3 = -3$</p>
-<p><strong style="color:#c47070;">FAILS dual feasibility:</strong> $\lambda_3 = -3 &lt; 0$. NOT a KKT point.</p>
+<p><strong style="color:#c47070;">FAILS dual feasibility:</strong> $\lambda_3 = -3 \lt  0$. NOT a KKT point.</p>
 </div>
 
 <div class="step">
@@ -363,7 +363,7 @@ $$\frac{\partial \mathcal{L}}{\partial x_2} = -2 + \lambda_1 + 3\lambda_2 - \lam
 <p class="check"><strong>Interpretation:</strong> The optimal point sits at the corner where the fence $x_1 + x_2 = 4$ meets the $x_1$-axis ($x_2 = 0$). The multiplier $\lambda_1 = 3$ tells us that relaxing the first constraint (moving the fence from 4 to 5) would improve the objective by approximately 3 units. The multiplier $\lambda_4 = 1$ tells us that allowing $x_2$ to go slightly negative would improve the objective by approximately 1 unit.</p>
 </div>
 
-<p>Lets compare with Case A: $(3, 1)$ gives $f = -11$, which is worse (higher) than $f = -12$. And Case A failed KKT anyway because $\lambda_2 &lt; 0$; the dual feasibility check correctly rejected it.</p>
+<p>Lets compare with Case A: $(3, 1)$ gives $f = -11$, which is worse (higher) than $f = -12$. And Case A failed KKT anyway because $\lambda_2 \lt  0$; the dual feasibility check correctly rejected it.</p>
 
 <!-- ===================== PART F ===================== -->
 <h2>Part F: Geometric Interpretation</h2>
@@ -451,7 +451,7 @@ $$\frac{\partial \mathcal{L}}{\partial x_2} = -2 + \lambda_1 + 3\lambda_2 - \lam
  <dd>A constraint $c_i(x) \leq 0$ that is satisfied with equality at a point: $c_i(x^*) = 0$. You are on the fence.</dd>
 
  <dt>Inactive Constraint</dt>
- <dd>A constraint satisfied strictly: $c_i(x^*) &lt; 0$. You are away from the fence; it has no influence on you.</dd>
+ <dd>A constraint satisfied strictly: $c_i(x^*) \lt  0$. You are away from the fence; it has no influence on you.</dd>
 
  <dt>Lagrangian $\mathcal{L}(x, \lambda)$</dt>
  <dd>$f(x) + \sum \lambda_i c_i(x)$. Combines the objective and all constraints into one function using multipliers.</dd>

@@ -31,8 +31,8 @@ The beautiful insight: you do not need to find the PERFECT step size. You just n
 <div class="formula-box">
 <strong>The Line Search Framework</strong>
 
-<p>Given: current point $x_k$ and search direction $p_k$ (a descent direction, meaning $\nabla f(x_k)^T p_k &lt; 0$).</p>
-<p>Find: step size $\alpha_k &gt; 0$.</p>
+<p>Given: current point $x_k$ and search direction $p_k$ (a descent direction, meaning $\nabla f(x_k)^T p_k \lt  0$).</p>
+<p>Find: step size $\alpha_k \gt  0$.</p>
 <p>Update: $x_{k+1} = x_k + \alpha_k p_k$.</p>
 
 <p style="margin-top:16px;">To analyze the step size, we define the <strong>one-dimensional slice</strong>:</p>
@@ -41,9 +41,9 @@ $$\phi(\alpha) = f(x_k + \alpha p_k)$$
 <dl class="breakdown">
  <dt>$\phi(\alpha)$</dt><dd>the function value as you walk a distance $\alpha$ in direction $p_k$. This converts the multi-dimensional problem into a 1D function of the single variable $\alpha$.</dd>
  <dt>$\alpha = 0$</dt><dd>$\phi(0) = f(x_k)$, your current function value</dd>
- <dt>$\alpha &gt; 0$</dt><dd>walking forward along $p_k$</dd>
+ <dt>$\alpha \gt  0$</dt><dd>walking forward along $p_k$</dd>
  <dt>$\phi'(\alpha)$</dt><dd>$= \nabla f(x_k + \alpha p_k)^T p_k$; the slope of $\phi$ at step size $\alpha$. By the chain rule.</dd>
- <dt>$\phi'(0)$</dt><dd>$= \nabla f(x_k)^T p_k &lt; 0$; the initial slope is negative because $p_k$ is a descent direction. This guarantees $\phi$ is initially decreasing.</dd>
+ <dt>$\phi'(0)$</dt><dd>$= \nabla f(x_k)^T p_k \lt  0$; the initial slope is negative because $p_k$ is a descent direction. This guarantees $\phi$ is initially decreasing.</dd>
 </dl>
 </div>
 
@@ -109,7 +109,7 @@ $$\phi(\alpha) \leq \phi(0) + c_1 \alpha \phi'(0)$$
 <dl class="breakdown">
  <dt>Left side: $f(x_k + \alpha p_k)$</dt><dd>the <strong>actual</strong> function value after taking a step of size $\alpha$</dd>
  <dt>$f(x_k)$</dt><dd>the current function value (before the step)</dd>
- <dt>$c_1$</dt><dd>a small constant, typically $c_1 = 10^{-4}$. It controls how much decrease we demand. Must satisfy $0 &lt; c_1 &lt; 1$.</dd>
+ <dt>$c_1$</dt><dd>a small constant, typically $c_1 = 10^{-4}$. It controls how much decrease we demand. Must satisfy $0 \lt  c_1 \lt  1$.</dd>
  <dt>$\alpha$</dt><dd>the candidate step size we are testing</dd>
  <dt>$\nabla f(x_k)^T p_k$</dt><dd>the directional derivative at $x_k$ in direction $p_k$. This is <strong>negative</strong> because $p_k$ is a descent direction. So $c_1 \alpha \nabla f(x_k)^T p_k$ is a negative number, making the right side <em>less</em> than $f(x_k)$.</dd>
  <dt>$c_1 \alpha \nabla f(x_k)^T p_k$</dt><dd>the "minimum expected decrease." It is a fraction $c_1$ of what the linear model predicts.</dd>
@@ -154,7 +154,7 @@ $$\phi(\alpha) \leq \phi(0) + c_1 \alpha \phi'(0)$$
 
 <div class="why-box">
 <h3>Why does Armijo alone have a problem?</h3>
-<p>The Armijo condition can be satisfied by extremely tiny step sizes. If $\alpha$ is tiny, then $\phi(\alpha) \approx \phi(0) + \alpha \phi'(0)$, which is less than $\phi(0) + c_1 \alpha \phi'(0)$ because $\phi'(0) &lt; 0$ and $c_1 &lt; 1$. So $\alpha = 10^{-100}$ would pass Armijo!</p>
+<p>The Armijo condition can be satisfied by extremely tiny step sizes. If $\alpha$ is tiny, then $\phi(\alpha) \approx \phi(0) + \alpha \phi'(0)$, which is less than $\phi(0) + c_1 \alpha \phi'(0)$ because $\phi'(0) \lt  0$ and $c_1 \lt  1$. So $\alpha = 10^{-100}$ would pass Armijo!</p>
 <p style="margin-top:8px;">Tiny steps make progress, technically, but they waste iterations. We need a second condition to prevent steps that are too short. That is the <strong>curvature condition</strong> (Wolfe).</p>
 </div>
 
@@ -178,17 +178,17 @@ $$f(x_k + \alpha_k p_k) \leq f(x_k) + c_1 \alpha_k \nabla f(x_k)^T p_k$$
 <p><strong>2. Curvature Condition:</strong></p>
 $$\nabla f(x_k + \alpha_k p_k)^T p_k \geq c_2 \, \nabla f(x_k)^T p_k$$
 
-<p style="margin-top:12px;">where $0 &lt; c_1 &lt; c_2 &lt; 1$. Typical values: $c_1 = 10^{-4}$, $c_2 = 0.9$ (for Newton/quasi-Newton) or $c_2 = 0.1$ (for CG).</p>
+<p style="margin-top:12px;">where $0 \lt  c_1 \lt  c_2 \lt  1$. Typical values: $c_1 = 10^{-4}$, $c_2 = 0.9$ (for Newton/quasi-Newton) or $c_2 = 0.1$ (for CG).</p>
 
 <dl class="breakdown">
  <dt>Left side of (2): $\nabla f(x_k + \alpha_k p_k)^T p_k$</dt><dd>the directional derivative (slope of $\phi$) <em>at the new point</em> $x_k + \alpha_k p_k$. This is $\phi'(\alpha_k)$.</dd>
- <dt>Right side of (2): $c_2 \, \nabla f(x_k)^T p_k$</dt><dd>a fraction $c_2$ of the initial slope $\phi'(0)$. Since $\phi'(0) &lt; 0$, this is a negative number.</dd>
+ <dt>Right side of (2): $c_2 \, \nabla f(x_k)^T p_k$</dt><dd>a fraction $c_2$ of the initial slope $\phi'(0)$. Since $\phi'(0) \lt  0$, this is a negative number.</dd>
  <dt>The inequality $\phi'(\alpha_k) \geq c_2 \phi'(0)$</dt><dd>says the slope at the new point must be less steep (less negative) than $c_2$ times the initial slope. In other words: the slope must have flattened out at least somewhat.</dd>
 </dl>
 </div>
 
 <div class="note">
-<strong>Reading the curvature condition:</strong> Both sides are negative (for a descent direction before reaching a minimum). The right side is more negative (since $c_2 &lt; 1$ and we are multiplying a negative number by a fraction less than 1, we get a number closer to zero than the original). So the condition says: the new slope $\phi'(\alpha)$ must be "closer to zero or positive" compared to $c_2 \phi'(0)$. Geometrically: you must have walked far enough that the slope has flattened.
+<strong>Reading the curvature condition:</strong> Both sides are negative (for a descent direction before reaching a minimum). The right side is more negative (since $c_2 \lt  1$ and we are multiplying a negative number by a fraction less than 1, we get a number closer to zero than the original). So the condition says: the new slope $\phi'(\alpha)$ must be "closer to zero or positive" compared to $c_2 \phi'(0)$. Geometrically: you must have walked far enough that the slope has flattened.
 </div>
 
 <div class="formula-box">
@@ -209,8 +209,8 @@ $$\bigl|\nabla f(x_k + \alpha_k p_k)^T p_k\bigr| \leq c_2 \bigl|\nabla f(x_k)^T 
 
 <div class="why-box">
 <h3>Why does BFGS need the Strong Wolfe conditions?</h3>
-<p>The BFGS update formula (<a href="cg-12-bfgs.html">Page 12</a>) requires the <strong>curvature condition</strong> $s_k^T y_k &gt; 0$, where $s_k = x_{k+1} - x_k$ and $y_k = \nabla f(x_{k+1}) - \nabla f(x_k)$.</p>
-<p style="margin-top:8px;">Writing this out: $s_k^T y_k = \alpha_k p_k^T (\nabla f(x_{k+1}) - \nabla f(x_k)) = \alpha_k (\phi'(\alpha_k) - \phi'(0))$. Since $\phi'(0) &lt; 0$, the Wolfe curvature condition $\phi'(\alpha_k) \geq c_2 \phi'(0)$ (with $c_2 &lt; 1$) implies $\phi'(\alpha_k) &gt; \phi'(0)$, which gives $s_k^T y_k &gt; 0$.</p>
+<p>The BFGS update formula (<a href="cg-12-bfgs.html">Page 12</a>) requires the <strong>curvature condition</strong> $s_k^T y_k \gt  0$, where $s_k = x_{k+1} - x_k$ and $y_k = \nabla f(x_{k+1}) - \nabla f(x_k)$.</p>
+<p style="margin-top:8px;">Writing this out: $s_k^T y_k = \alpha_k p_k^T (\nabla f(x_{k+1}) - \nabla f(x_k)) = \alpha_k (\phi'(\alpha_k) - \phi'(0))$. Since $\phi'(0) \lt  0$, the Wolfe curvature condition $\phi'(\alpha_k) \geq c_2 \phi'(0)$ (with $c_2 \lt  1$) implies $\phi'(\alpha_k) \gt  \phi'(0)$, which gives $s_k^T y_k \gt  0$.</p>
 <p style="margin-top:8px;">The <strong>strong</strong> Wolfe condition additionally prevents $\phi'(\alpha_k)$ from being too large positive, which keeps the BFGS update well-behaved.</p>
 </div>
 
@@ -219,7 +219,7 @@ $$\bigl|\nabla f(x_k + \alpha_k p_k)^T p_k\bigr| \leq c_2 \bigl|\nabla f(x_k)^T 
 
 $$f(x_k) + (1 - c)\alpha \nabla f(x_k)^T p_k \leq f(x_k + \alpha p_k) \leq f(x_k) + c \, \alpha \nabla f(x_k)^T p_k$$
 
-<p style="margin-top:12px;">where $0 &lt; c &lt; 1/2$. This provides symmetric upper and lower bounds on the function value. The upper bound is the Armijo condition. The lower bound prevents too-short steps (the function cannot decrease TOO much, which happens when you use a step that is much larger than needed).</p>
+<p style="margin-top:12px;">where $0 \lt  c \lt  1/2$. This provides symmetric upper and lower bounds on the function value. The upper bound is the Armijo condition. The lower bound prevents too-short steps (the function cannot decrease TOO much, which happens when you use a step that is much larger than needed).</p>
 
 <dl class="breakdown">
  <dt>Upper bound</dt><dd>Same as Armijo; prevents insufficient decrease (steps too long)</dd>
@@ -227,7 +227,7 @@ $$f(x_k) + (1 - c)\alpha \nabla f(x_k)^T p_k \leq f(x_k + \alpha p_k) \leq f(x_k
  <dt>$c$</dt><dd>Typically $c = 10^{-4}$. Must be less than $1/2$ for both bounds to be compatible.</dd>
 </dl>
 
-<p style="margin-top:12px; color:#aaa;">Goldstein conditions are simpler than Wolfe but less commonly used because they do not guarantee $s_k^T y_k &gt; 0$, so they cannot be used with BFGS.</p>
+<p style="margin-top:12px; color:#aaa;">Goldstein conditions are simpler than Wolfe but less commonly used because they do not guarantee $s_k^T y_k \gt  0$, so they cannot be used with BFGS.</p>
 </div>
 
 <div class="exam-flag">
@@ -235,8 +235,8 @@ $$f(x_k) + (1 - c)\alpha \nabla f(x_k)^T p_k \leq f(x_k + \alpha p_k) \leq f(x_k
 <p>Quiz 3 asked you to compare Armijo, Goldstein, Wolfe, and Strong Wolfe on logistic regression. Key takeaways:</p>
 <ul style="margin-left:20px; margin-top:8px;">
  <li><strong>Armijo alone:</strong> Allows too-short steps. Simple to implement. Used in backtracking.</li>
- <li><strong>Goldstein:</strong> Symmetric bounds. Simple. But cannot guarantee $s_k^T y_k &gt; 0$ for BFGS.</li>
- <li><strong>Wolfe:</strong> Armijo + curvature. Guarantees $s_k^T y_k &gt; 0$. Standard for quasi-Newton.</li>
+ <li><strong>Goldstein:</strong> Symmetric bounds. Simple. But cannot guarantee $s_k^T y_k \gt  0$ for BFGS.</li>
+ <li><strong>Wolfe:</strong> Armijo + curvature. Guarantees $s_k^T y_k \gt  0$. Standard for quasi-Newton.</li>
  <li><strong>Strong Wolfe:</strong> Wolfe with absolute value. Best for BFGS. Slightly harder to implement.</li>
 </ul>
 </div>
@@ -252,15 +252,15 @@ Why start with $\alpha = 1$? Because for Newton's method and quasi-Newton method
 
 <div class="algo-box">
 <div class="algo-title">Algorithm: Backtracking Line Search</div>
-<div class="algo-line"><strong style="color:#d4956a;">Input:</strong> initial step size $\bar{\alpha} &gt; 0$ (typically $\bar{\alpha} = 1$), shrink factor $\rho \in (0, 1)$ (typically $\rho = 0.5$ or $0.8$), Armijo parameter $c_1 \in (0, 1)$ (typically $c_1 = 10^{-4}$)</div>
+<div class="algo-line"><strong style="color:#d4956a;">Input:</strong> initial step size $\bar{\alpha} \gt  0$ (typically $\bar{\alpha} = 1$), shrink factor $\rho \in (0, 1)$ (typically $\rho = 0.5$ or $0.8$), Armijo parameter $c_1 \in (0, 1)$ (typically $c_1 = 10^{-4}$)</div>
 <div class="algo-line"><strong style="color:#d4956a;">Step 1:</strong> Set $\alpha \leftarrow \bar{\alpha}$</div>
-<div class="algo-line"><strong style="color:#d4956a;">Step 2:</strong> <strong>While</strong> $f(x_k + \alpha p_k) &gt; f(x_k) + c_1 \alpha \nabla f(x_k)^T p_k$: <span class="algo-comment">&larr; Armijo fails?</span></div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 2:</strong> <strong>While</strong> $f(x_k + \alpha p_k) \gt  f(x_k) + c_1 \alpha \nabla f(x_k)^T p_k$: <span class="algo-comment">&larr; Armijo fails?</span></div>
 <div class="algo-line" style="padding-left:40px;">$\alpha \leftarrow \rho \, \alpha$ <span class="algo-comment">&larr; shrink the step size</span></div>
 <div class="algo-line"><strong style="color:#d4956a;">Step 3:</strong> Return $\alpha_k = \alpha$</div>
 </div>
 
 <div class="note">
-<strong>Convergence guarantee:</strong> Backtracking always terminates (assuming $p_k$ is a descent direction). Since $\phi'(0) = \nabla f(x_k)^T p_k &lt; 0$, there exists a sufficiently small $\alpha$ such that $\phi(\alpha) &lt; \phi(0) + c_1 \alpha \phi'(0)$. As $\alpha \to 0$, the left side approaches $\phi(0)$ while the right side approaches $\phi(0)$ from below, but the left side approaches faster because $\phi(\alpha) \approx \phi(0) + \alpha \phi'(0)$ and $c_1 &lt; 1$.
+<strong>Convergence guarantee:</strong> Backtracking always terminates (assuming $p_k$ is a descent direction). Since $\phi'(0) = \nabla f(x_k)^T p_k \lt  0$, there exists a sufficiently small $\alpha$ such that $\phi(\alpha) \lt  \phi(0) + c_1 \alpha \phi'(0)$. As $\alpha \to 0$, the left side approaches $\phi(0)$ while the right side approaches $\phi(0)$ from below, but the left side approaches faster because $\phi(\alpha) \approx \phi(0) + \alpha \phi'(0)$ and $c_1 \lt  1$.
 </div>
 
 <div class="hand-calc">
@@ -273,14 +273,14 @@ Why start with $\alpha = 1$? Because for Newton's method and quasi-Newton method
 <span class="step-label">Trial 1: $\alpha = 1$</span><br>
 <p>Suppose $f(x_k + 1 \cdot p_k) = 12$. (The function went UP; we overshot.)</p>
 <p>Armijo threshold: $10 - 0.005(1) = 9.995$</p>
-<p style="color:#c47070;">$12 &gt; 9.995$? YES &rarr; FAIL. Shrink: $\alpha \leftarrow 0.8 \times 1 = 0.8$</p>
+<p style="color:#c47070;">$12 \gt  9.995$? YES &rarr; FAIL. Shrink: $\alpha \leftarrow 0.8 \times 1 = 0.8$</p>
 </div>
 
 <div class="step">
 <span class="step-label">Trial 2: $\alpha = 0.8$</span><br>
 <p>Suppose $f(x_k + 0.8 \cdot p_k) = 10.5$. (Still went up, but less.)</p>
 <p>Armijo threshold: $10 - 0.005(0.8) = 9.996$</p>
-<p style="color:#c47070;">$10.5 &gt; 9.996$? YES &rarr; FAIL. Shrink: $\alpha \leftarrow 0.8 \times 0.8 = 0.64$</p>
+<p style="color:#c47070;">$10.5 \gt  9.996$? YES &rarr; FAIL. Shrink: $\alpha \leftarrow 0.8 \times 0.8 = 0.64$</p>
 </div>
 
 <div class="step">
@@ -314,7 +314,7 @@ $$f'(3) = 4(27) - 8(3) = 108 - 24 = 84$$
 <p>$x_0 + 1 \cdot p_0 = 3 + 1(-84) = -81$. That is way too far!</p>
 <p>$f(-81) = (-81)^4 - 4(-81)^2 + 4 = 43{,}046{,}721 - 26{,}244 + 4 = 43{,}020{,}481$</p>
 <p>Armijo threshold: $49 - 0.7056 = 48.29$</p>
-<p style="color:#c47070;">$43{,}020{,}481 &gt; 48.29$ &rarr; FAIL. $\alpha \leftarrow 0.5$</p>
+<p style="color:#c47070;">$43{,}020{,}481 \gt  48.29$ &rarr; FAIL. $\alpha \leftarrow 0.5$</p>
 </div>
 
 <div class="step">
@@ -350,7 +350,7 @@ $$f'(3) = 4(27) - 8(3) = 108 - 24 = 84$$
  <th>Condition</th>
  <th>What It Guarantees</th>
  <th>Typical Use</th>
- <th>Guarantees $s_k^T y_k &gt; 0$?</th>
+ <th>Guarantees $s_k^T y_k \gt  0$?</th>
 </tr>
 <tr>
  <td style="text-align:left;"><strong>Armijo only</strong></td>
@@ -390,9 +390,9 @@ $$f'(3) = 4(27) - 8(3) = 108 - 24 = 84$$
 <h4>Key Relationships to Remember</h4>
 <ul style="margin-left:20px;">
  <li>Strong Wolfe $\implies$ Wolfe $\implies$ Armijo. (Each condition is stricter than the previous.)</li>
- <li>$c_1 &lt; c_2$ is required (if $c_1 \geq c_2$, no step size could satisfy both conditions simultaneously).</li>
+ <li>$c_1 \lt  c_2$ is required (if $c_1 \geq c_2$, no step size could satisfy both conditions simultaneously).</li>
  <li>Typical values: $c_1 = 10^{-4}$, $c_2 = 0.9$ (Newton/BFGS) or $c_2 = 0.1$ (CG).</li>
- <li>For BFGS to work: need $s_k^T y_k &gt; 0$ &rarr; need Wolfe conditions &rarr; use Strong Wolfe for safety.</li>
+ <li>For BFGS to work: need $s_k^T y_k \gt  0$ &rarr; need Wolfe conditions &rarr; use Strong Wolfe for safety.</li>
  <li>Backtracking only checks Armijo, so it is not suitable for BFGS (unless you add a curvature check).</li>
 </ul>
 </div>
@@ -438,7 +438,7 @@ $$f'(3) = 4(27) - 8(3) = 108 - 24 = 84$$
  <dd>The one-dimensional slice of $f$ along the search direction. All line search conditions are expressed in terms of $\phi$.</dd>
 
  <dt>Descent Direction</dt>
- <dd>A direction $p_k$ such that $\nabla f(x_k)^T p_k &lt; 0$, guaranteeing that small positive steps decrease $f$.</dd>
+ <dd>A direction $p_k$ such that $\nabla f(x_k)^T p_k \lt  0$, guaranteeing that small positive steps decrease $f$.</dd>
 
  <dt>Armijo Condition (Sufficient Decrease)</dt>
  <dd>$f(x_k + \alpha p_k) \leq f(x_k) + c_1 \alpha \nabla f(x_k)^T p_k$. Ensures the step makes at least a minimum amount of progress. Prevents too-long steps.</dd>
@@ -459,12 +459,12 @@ $$f'(3) = 4(27) - 8(3) = 108 - 24 = 84$$
  <dd>Typically $10^{-4}$. Controls how much decrease is "sufficient." Small value = lenient (easy to satisfy).</dd>
 
  <dt>$c_2$ (Curvature parameter)</dt>
- <dd>Typically $0.9$ for Newton/BFGS, $0.1$ for CG. Controls how flat the slope must be. Must satisfy $c_1 &lt; c_2 &lt; 1$.</dd>
+ <dd>Typically $0.9$ for Newton/BFGS, $0.1$ for CG. Controls how flat the slope must be. Must satisfy $c_1 \lt  c_2 \lt  1$.</dd>
 
  <dt>$\rho$ (Backtracking shrink factor)</dt>
  <dd>Typically $0.5$ or $0.8$. Each failed trial multiplies $\alpha$ by $\rho$, shrinking the step.</dd>
 
- <dt>$s_k^T y_k &gt; 0$ (Curvature Condition for BFGS)</dt>
+ <dt>$s_k^T y_k \gt  0$ (Curvature Condition for BFGS)</dt>
  <dd>Required by the BFGS update formula. Guaranteed by the Wolfe conditions. This is WHY BFGS uses Wolfe line search.</dd>
 </dl>
 </div>

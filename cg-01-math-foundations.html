@@ -259,7 +259,7 @@ $$\|x\|_\infty = \max(|x_1|, |x_2|, \ldots, |x_n|)$$
 </div>
 
 <div class="note">
-<strong>Where norms appear in this course:</strong> Stopping criteria use $\|\nabla f(x_k)\| &lt; \epsilon$ (we stop when the gradient is "small enough"). Convergence rates measure $\|x_k - x^*\|$ (distance from the current guess to the true answer). Trust regions limit $\|p\| \leq \Delta$ (the step must stay within a ball of radius $\Delta$).
+<strong>Where norms appear in this course:</strong> Stopping criteria use $\|\nabla f(x_k)\| \lt  \epsilon$ (we stop when the gradient is "small enough"). Convergence rates measure $\|x_k - x^*\|$ (distance from the current guess to the true answer). Trust regions limit $\|p\| \leq \Delta$ (the step must stay within a ball of radius $\Delta$).
 </div>
 
 
@@ -330,7 +330,7 @@ $$\|x_{k+1} - x^*\| \leq M\, \|x_k - x^*\|^2$$
 
 <div class="step">
  <span class="step-label">Step 3: Check for Q-linear.</span><br>
- For Q-linear convergence we need $e_{k+1}/e_k \leq r$ for some fixed $r &lt; 1$.
+ For Q-linear convergence we need $e_{k+1}/e_k \leq r$ for some fixed $r \lt  1$.
  <br>Since $1/(k+1)$ changes with $k$ (it is not a fixed constant), this is <em>not</em> merely Q-linear; it is <strong>at least</strong> superlinear.
  <br>(Technically we could pick $r$ to be the largest ratio, which is $1/2$ at $k=1$, so it <em>is</em> Q-linear too. But the important point is it does better than linear.)
 </div>

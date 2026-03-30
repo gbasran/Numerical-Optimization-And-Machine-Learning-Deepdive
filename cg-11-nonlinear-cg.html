@@ -81,7 +81,7 @@ $$\beta_{k+1}^{FR} = \frac{\|\nabla f(x_{k+1})\|^2}{\|\nabla f(x_k)\|^2} = \frac
  <dt>$\beta_{k+1}^{FR}$</dt><dd>the mixing coefficient; how much of the old direction $p_k$ to blend into the new direction $p_{k+1}$</dd>
 </dl>
 
-<p style="margin-top:12px;">The ratio $\frac{\|g_{k+1}\|^2}{\|g_k\|^2}$ is always non-negative (both numerator and denominator are squared norms). If the gradient got bigger, $\beta &gt; 1$. If the gradient got smaller, $\beta &lt; 1$. If the gradient stayed the same size, $\beta = 1$.</p>
+<p style="margin-top:12px;">The ratio $\frac{\|g_{k+1}\|^2}{\|g_k\|^2}$ is always non-negative (both numerator and denominator are squared norms). If the gradient got bigger, $\beta \gt  1$. If the gradient got smaller, $\beta \lt  1$. If the gradient stayed the same size, $\beta = 1$.</p>
 </div>
 
 <p>Here is the full Fletcher-Reeves algorithm, line by line:</p>
@@ -108,7 +108,7 @@ $$\beta_{k+1}^{FR} = \frac{\|\nabla f(x_{k+1})\|^2}{\|\nabla f(x_k)\|^2} = \frac
 <div class="algo-line" style="padding-left:24px;"><strong>Step 4:</strong> $g_{k+1} = \nabla f(x_{k+1})$</div>
 <div class="algo-comment" style="padding-left:24px;">&emsp; Compute gradient at new point.</div>
 
-<div class="algo-line" style="padding-left:24px;"><strong>Step 5:</strong> If $\|g_{k+1}\| &lt; \epsilon$: <strong>STOP</strong>; we have converged.</div>
+<div class="algo-line" style="padding-left:24px;"><strong>Step 5:</strong> If $\|g_{k+1}\| \lt  \epsilon$: <strong>STOP</strong>; we have converged.</div>
 <div class="algo-comment" style="padding-left:24px;">&emsp; Gradient is nearly zero = nearly at a stationary point.</div>
 
 <div class="algo-line" style="padding-left:24px;"><strong>Step 6:</strong> $\beta_{k+1}^{FR} = \dfrac{g_{k+1}^T g_{k+1}}{g_k^T g_k}$</div>
@@ -180,7 +180,7 @@ $$\beta_{k+1}^{PR+} = \max\!\left(\beta_{k+1}^{PR},\; 0\right)$$
 <p style="margin-top:8px;">PR+ clamps $\beta$ to be at least zero. When PR would give a negative value, PR+ simply restarts with pure steepest descent ($\beta = 0$). This gives us:</p>
 <ul style="margin-top:8px; margin-left:20px;">
  <li>The automatic restart property of PR (when $\beta \approx 0$)</li>
- <li>Protection against bad directions (when $\beta &lt; 0$)</li>
+ <li>Protection against bad directions (when $\beta \lt  0$)</li>
  <li>Global convergence guarantees (which raw PR lacks)</li>
 </ul>
 </div>

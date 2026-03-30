@@ -99,10 +99,10 @@ $$x_{k+1} = x_k + p_k$$
 
 <div class="algo-box">
 <div class="algo-title">Algorithm: Newton's Method (Pure / Local)</div>
-<div class="algo-line"><strong style="color:#d4956a;">Input:</strong> starting point $x_0$, tolerance $\epsilon &gt; 0$</div>
+<div class="algo-line"><strong style="color:#d4956a;">Input:</strong> starting point $x_0$, tolerance $\epsilon \gt  0$</div>
 <div class="algo-line"><strong style="color:#d4956a;">Step 0:</strong> Set $k = 0$</div>
 <div class="algo-line"><strong style="color:#d4956a;">Step 1:</strong> Compute the gradient $g_k = \nabla f(x_k)$ <span class="algo-comment">&larr; the slope</span></div>
-<div class="algo-line"><strong style="color:#d4956a;">Step 2:</strong> If $\|g_k\| &lt; \epsilon$, STOP</div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 2:</strong> If $\|g_k\| \lt  \epsilon$, STOP</div>
 <div class="algo-line"><strong style="color:#d4956a;">Step 3:</strong> Compute the Hessian $H_k = \nabla^2 f(x_k)$ <span class="algo-comment">&larr; the curvature</span></div>
 <div class="algo-line"><strong style="color:#d4956a;">Step 4:</strong> Solve $H_k p_k = -g_k$ for $p_k$ <span class="algo-comment">&larr; find the bottom of the local bowl</span></div>
 <div class="algo-line"><strong style="color:#d4956a;">Step 5:</strong> Update: $x_{k+1} = x_k + p_k$ <span class="algo-comment">&larr; jump to the bottom</span></div>
@@ -192,7 +192,7 @@ But if you are out in the countryside, far from the city, the GPS might give non
 
 <p style="margin-bottom:12px;">Suppose:</p>
 <ol style="margin-left:24px; margin-bottom:16px;">
- <li style="margin:6px 0;"><strong>(Smooth Hessian)</strong> The Hessian $\nabla^2 f$ is Lipschitz continuous: there exists $L &gt; 0$ such that $\|\nabla^2 f(x) - \nabla^2 f(y)\| \leq L\|x - y\|$ for all $x, y$ near $x^*$.</li>
+ <li style="margin:6px 0;"><strong>(Smooth Hessian)</strong> The Hessian $\nabla^2 f$ is Lipschitz continuous: there exists $L \gt  0$ such that $\|\nabla^2 f(x) - \nabla^2 f(y)\| \leq L\|x - y\|$ for all $x, y$ near $x^*$.</li>
  <li style="margin:6px 0;"><strong>(Non-degenerate minimum)</strong> $\nabla f(x^*) = 0$ and $\nabla^2 f(x^*)$ is positive definite (i.e., $x^*$ is a strong local minimum).</li>
  <li style="margin:6px 0;"><strong>(Close enough start)</strong> $x_0$ is sufficiently close to $x^*$.</li>
 </ol>
@@ -234,7 +234,7 @@ $$\|x_{k+1} - x^*\| \leq C \|x_k - x^*\|^2$$
 <h4>Exam Pattern: "Compare convergence rates"</h4>
 <p>You may be asked to compare GD (linear convergence) vs Newton (quadratic convergence). Key contrast:</p>
 <ul style="margin-left:20px; margin-top:8px;">
- <li><strong>GD:</strong> $\|e_{k+1}\| \leq c \|e_k\|$ with $c &lt; 1$. Error decreases by a constant factor each step. Needs many iterations for high precision.</li>
+ <li><strong>GD:</strong> $\|e_{k+1}\| \leq c \|e_k\|$ with $c \lt  1$. Error decreases by a constant factor each step. Needs many iterations for high precision.</li>
  <li><strong>Newton:</strong> $\|e_{k+1}\| \leq C \|e_k\|^2$. Error gets squared each step. Very few iterations for high precision, but only works near the solution and costs more per iteration.</li>
 </ul>
 </div>

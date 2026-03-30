@@ -169,12 +169,12 @@ $$\min_x \; c^T x \;-\; \mu \sum_{i=1}^{n} \ln(x_i) \quad \text{subject to} \qua
  <dd>The original LP objective (the tilt pulling you toward the optimum)</dd>
  <dt>$-\mu \sum \ln(x_i)$</dt>
  <dd>The <strong>log barrier</strong>; the repulsive force field. Each $\ln(x_i)$ term goes to $-\infty$ as $x_i \to 0^+$, so the negative sign creates a penalty that pushes $x_i$ away from zero.</dd>
- <dt>$\mu &gt; 0$</dt>
+ <dt>$\mu \gt  0$</dt>
  <dd>The <strong>barrier parameter</strong>; controls force field strength. Large $\mu$ = strong repulsion (stay far from walls). Small $\mu$ = weak repulsion (can approach walls closely).</dd>
  <dt>$Ax = b$</dt>
  <dd>The equality constraints remain unchanged.</dd>
 </dl>
-<p style="margin-top: 12px; color: #b8b4ac; font-size: 16px;"><strong>Key insight:</strong> This barrier problem has NO inequality constraints ($x \geq 0$). The log barrier automatically enforces $x &gt; 0$ because $\ln(x_i)$ is only defined for $x_i &gt; 0$. We have traded the hard constraint $x \geq 0$ for a smooth penalty term.</p>
+<p style="margin-top: 12px; color: #b8b4ac; font-size: 16px;"><strong>Key insight:</strong> This barrier problem has NO inequality constraints ($x \geq 0$). The log barrier automatically enforces $x \gt  0$ because $\ln(x_i)$ is only defined for $x_i \gt  0$. We have traded the hard constraint $x \geq 0$ for a smooth penalty term.</p>
 </div>
 
 <div class="why-box">
@@ -192,8 +192,8 @@ $$\min_x \; c^T x \;-\; \mu \sum_{i=1}^{n} \ln(x_i) \quad \text{subject to} \qua
 
 <div class="formula-box">
 <p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">The Central Path</p>
-<p>For each value of $\mu &gt; 0$, the barrier problem has a unique solution $x(\mu)$. As $\mu$ varies from large to small, these solutions trace out a curve called the <strong>central path</strong>:</p>
-$$\{x(\mu) : \mu &gt; 0\}$$
+<p>For each value of $\mu \gt  0$, the barrier problem has a unique solution $x(\mu)$. As $\mu$ varies from large to small, these solutions trace out a curve called the <strong>central path</strong>:</p>
+$$\{x(\mu) : \mu \gt  0\}$$
 <p style="margin-top: 12px;">As $\mu \to 0$, the central path converges to the optimal solution $x^*$ of the original LP.</p>
 </div>
 
@@ -243,12 +243,12 @@ $$\{x(\mu) : \mu &gt; 0\}$$
 
 <p style="margin: 8px 0;"><span style="color: #d4956a; font-weight: bold;">1. Stationarity:</span> $c - A^T \lambda - \mu_{\text{mult}} = 0$</p>
 
-<p style="margin: 8px 0;"><span style="color: #d4956a; font-weight: bold;">2. Primal feasibility:</span> $Ax = b$, $x &gt; 0$ (strictly positive; we stay in the interior)</p>
+<p style="margin: 8px 0;"><span style="color: #d4956a; font-weight: bold;">2. Primal feasibility:</span> $Ax = b$, $x \gt  0$ (strictly positive; we stay in the interior)</p>
 
 <p style="margin: 8px 0;"><span style="color: #d4956a; font-weight: bold;">3. Relaxed complementarity:</span> $\mu_{\text{mult},i} \cdot x_i = \sigma$ for each $i$</p>
-<p style="font-size: 15px; color: #b8b4ac; margin-left: 20px;">Instead of $\mu_i x_i = 0$ (exact complementarity), we have $\mu_i x_i = \sigma &gt; 0$. As $\sigma \to 0$, this approaches exact complementarity.</p>
+<p style="font-size: 15px; color: #b8b4ac; margin-left: 20px;">Instead of $\mu_i x_i = 0$ (exact complementarity), we have $\mu_i x_i = \sigma \gt  0$. As $\sigma \to 0$, this approaches exact complementarity.</p>
 
-<p style="margin: 8px 0;"><span style="color: #d4956a; font-weight: bold;">4. Dual feasibility:</span> $\mu_{\text{mult}} &gt; 0$ (strictly positive in the interior)</p>
+<p style="margin: 8px 0;"><span style="color: #d4956a; font-weight: bold;">4. Dual feasibility:</span> $\mu_{\text{mult}} \gt  0$ (strictly positive in the interior)</p>
 </div>
 
 <div class="why-box">
@@ -262,15 +262,15 @@ $$\{x(\mu) : \mu &gt; 0\}$$
 
 <div class="algo-box">
 <p class="algo-title">Interior Point Method for LP</p>
-<div class="algo-line"><strong>Input:</strong> $c$, $A$, $b$, initial strictly feasible $(x_0, \lambda_0, \mu_0)$ with $x_0 &gt; 0$, $\mu_0 &gt; 0$</div>
+<div class="algo-line"><strong>Input:</strong> $c$, $A$, $b$, initial strictly feasible $(x_0, \lambda_0, \mu_0)$ with $x_0 \gt  0$, $\mu_0 \gt  0$</div>
 <div class="algo-line"><strong>Parameters:</strong> $\sigma \in (0,1)$ <span class="algo-comment">(centering parameter, typically 0.1&ndash;0.5)</span></div>
 <div class="algo-line">&nbsp;</div>
 <div class="algo-line"><strong>for</strong> $k = 0, 1, 2, \ldots$:</div>
 <div class="algo-line" style="padding-left: 24px;">1. Compute barrier parameter: $\tau_k = \sigma \cdot \frac{x_k^T \mu_k}{n}$ <span class="algo-comment">&larr; the "average" complementarity, reduced by factor $\sigma$</span></div>
 <div class="algo-line" style="padding-left: 24px;">2. Solve the Newton system for the relaxed KKT conditions <span class="algo-comment">&larr; uses Newton's method from <a href="cg-07-newton-method.html">Page 07</a></span></div>
-<div class="algo-line" style="padding-left: 24px;">3. Take a step along the Newton direction (with step size to stay feasible: $x &gt; 0$, $\mu &gt; 0$)</div>
+<div class="algo-line" style="padding-left: 24px;">3. Take a step along the Newton direction (with step size to stay feasible: $x \gt  0$, $\mu \gt  0$)</div>
 <div class="algo-line" style="padding-left: 24px;">4. Update: $x_{k+1}$, $\lambda_{k+1}$, $\mu_{k+1}$</div>
-<div class="algo-line" style="padding-left: 24px;">5. <strong>if</strong> $x_k^T \mu_k / n &lt; \epsilon$: <strong>stop</strong> <span class="algo-comment">&larr; complementarity is close to zero, we have converged</span></div>
+<div class="algo-line" style="padding-left: 24px;">5. <strong>if</strong> $x_k^T \mu_k / n \lt  \epsilon$: <strong>stop</strong> <span class="algo-comment">&larr; complementarity is close to zero, we have converged</span></div>
 </div>
 
 <div class="note">
@@ -402,7 +402,7 @@ $$\{x(\mu) : \mu &gt; 0\}$$
  <dd>The curve traced by the barrier problem solutions $x(\mu)$ as $\mu$ varies from $+\infty$ to $0$. It starts in the "center" of the feasible region and converges to the LP optimal vertex.</dd>
 
  <dt>Relaxed Complementarity</dt>
- <dd>The condition $\mu_i x_i = \sigma$ (for $\sigma &gt; 0$) instead of exact complementary slackness $\mu_i x_i = 0$. This turns the combinatorial KKT conditions into a smooth system solvable by Newton's method.</dd>
+ <dd>The condition $\mu_i x_i = \sigma$ (for $\sigma \gt  0$) instead of exact complementary slackness $\mu_i x_i = 0$. This turns the combinatorial KKT conditions into a smooth system solvable by Newton's method.</dd>
 
  <dt>Slack Variable</dt>
  <dd>A non-negative variable $s$ added to convert inequality $a^T x \leq b$ into equality $a^T x + s = b$ with $s \geq 0$. This is a standard technique for putting LPs into equality form.</dd>

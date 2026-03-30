@@ -122,7 +122,7 @@ $$p_i^T A\, p_j = 0 \quad \text{for all } i \neq j$$
 <div class="algo-line" style="padding-left: 24px;"><span style="color:#9b89b6; font-weight:bold;">Step 3:</span> $r_{k+1} = r_k + \alpha_k\, A p_k$</div>
 <div class="algo-line" style="padding-left: 48px;"><span class="algo-comment">// Update the residual. Equivalently: $r_{k+1} = A x_{k+1} - b$. The recurrence avoids re-multiplying $A x_{k+1}$.</span></div>
 <br>
-<div class="algo-line" style="padding-left: 24px;"><span style="color:#9b89b6; font-weight:bold;">Step 4:</span> Check: if $\|r_{k+1}\| &lt; \epsilon$, <span style="color:#d4956a;">stop</span> (converged!)</div>
+<div class="algo-line" style="padding-left: 24px;"><span style="color:#9b89b6; font-weight:bold;">Step 4:</span> Check: if $\|r_{k+1}\| \lt  \epsilon$, <span style="color:#d4956a;">stop</span> (converged!)</div>
 <div class="algo-line" style="padding-left: 48px;"><span class="algo-comment">// If the residual is tiny, $Ax_{k+1} \approx b$ and we have found the solution.</span></div>
 <br>
 <div class="algo-line" style="padding-left: 24px;"><span style="color:#9b89b6; font-weight:bold;">Step 5:</span> $\beta_{k+1} = \dfrac{r_{k+1}^T A p_k}{p_k^T A p_k}$</div>
@@ -160,7 +160,7 @@ $$p_i^T A\, p_j = 0 \quad \text{for all } i \neq j$$
 $$A = \begin{bmatrix} 5 & 2 \\ 2 & 2 \end{bmatrix}, \quad b = \begin{bmatrix} 7 \\ 4 \end{bmatrix}, \quad x_0 = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$$
 
 <p style="margin-top: 8px;">We want to solve $Ax = b$, i.e., find $x^*$ such that $\begin{bmatrix} 5 & 2 \\ 2 & 2 \end{bmatrix}x^* = \begin{bmatrix} 7 \\ 4 \end{bmatrix}$.</p>
-<p class="check">Quick check: Is $A$ symmetric? Yes ($A = A^T$). Is $A$ positive definite? Check eigenvalues or use the leading minors test from <a href="cg-03-linear-algebra.html" style="color:#c9a84c;">Page 03</a>: $\det(5) = 5 &gt; 0$, $\det(A) = 10 - 4 = 6 &gt; 0$. Yes, $A$ is SPD.</p>
+<p class="check">Quick check: Is $A$ symmetric? Yes ($A = A^T$). Is $A$ positive definite? Check eigenvalues or use the leading minors test from <a href="cg-03-linear-algebra.html" style="color:#c9a84c;">Page 03</a>: $\det(5) = 5 \gt  0$, $\det(A) = 10 - 4 = 6 \gt  0$. Yes, $A$ is SPD.</p>
 </div>
 </div>
 
@@ -199,7 +199,7 @@ $$p_0^T A p_0 = \begin{bmatrix} 7 & 4 \end{bmatrix}\begin{bmatrix} 43 \\ 22 \end
 <p class="step-label">Compute $\alpha_0$:</p>
 $$\alpha_0 = -\frac{r_0^T p_0}{p_0^T A p_0} = -\frac{-65}{389} = \frac{65}{389}$$
 <p class="result">$\alpha_0 = \dfrac{65}{389}$</p>
-<p class="check">$\alpha_0 &gt; 0$: good, we are stepping in the downhill direction.</p>
+<p class="check">$\alpha_0 \gt  0$: good, we are stepping in the downhill direction.</p>
 </div>
 
 <div class="step">
@@ -578,7 +578,7 @@ $$Ax_2 = \begin{bmatrix} 5 & 2 \\ 2 & 2 \end{bmatrix}\begin{bmatrix} 1 \\ 1 \end
  <dd>The amount of old direction $p_k$ to mix into the new direction $p_{k+1}$ so that A-conjugacy is maintained. Formula: $\beta_{k+1} = r_{k+1}^T A p_k / (p_k^T A p_k)$.</dd>
 
  <dt>Symmetric Positive Definite (SPD)</dt>
- <dd>A matrix $A$ that is symmetric ($A = A^T$) and positive definite (all eigenvalues positive, equivalently $x^T A x &gt; 0$ for all $x \neq 0$). CG requires $A$ to be SPD. Recall <a href="cg-03-linear-algebra.html" style="color:#d4956a;">Page 03</a>.</dd>
+ <dd>A matrix $A$ that is symmetric ($A = A^T$) and positive definite (all eigenvalues positive, equivalently $x^T A x \gt  0$ for all $x \neq 0$). CG requires $A$ to be SPD. Recall <a href="cg-03-linear-algebra.html" style="color:#d4956a;">Page 03</a>.</dd>
 
  <dt>Condition number ($\kappa$)</dt>
  <dd>$\kappa(A) = \lambda_{\max} / \lambda_{\min}$. Controls how elongated the contours of $f$ are. Large $\kappa$ = elongated contours = GD zigzags badly, but CG still converges in at most $n$ steps.</dd>
