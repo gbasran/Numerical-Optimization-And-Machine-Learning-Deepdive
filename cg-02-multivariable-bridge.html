@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page 02 &mdash; Multivariable Calculus Bridge: Partials, Gradients, Hessians, Jacobians</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
+.container { max-width: 900px; margin: 0 auto; }
+h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
+.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
+h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
+.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
+.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
+.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
+.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
+.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
+.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
+.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
+.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
+.hand-calc .result { color: #64ffda; font-weight: bold; }
+.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
+.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
+.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
+.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
+.step-table tr:nth-child(even) { background: #16213e; }
+.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
+.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
+.glossary dl { font-size: 15px; }
+.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
+.glossary dd { margin-left: 20px; color: #ccc; }
+.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
+.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
+.nav a:hover { text-decoration: underline; }
+.nav p { margin: 4px 0; }
+svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
+.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
+.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
+.breakdown dd { color: #ccc; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Page 02: Multivariable Calculus Bridge</h1>
+<p class="subtitle">Partial derivatives, gradients, Hessians, and Jacobians &mdash; the full toolkit, explained from zero for someone who has not taken multivariable calculus</p>
+
+<div class="note">
+<strong>If you never took multivariable calculus, this page is your lifeline.</strong> Everything here builds on single-variable calculus (derivatives of $x^2$, power rule, product rule). We are just applying those same rules while pretending other variables are constants. That is the entire trick.
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- PART A: PARTIAL DERIVATIVES                                        -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+
+<h2>Part A: Partial Derivatives &mdash; One Knob at a Time</h2>
+
+<span class="tag">PREREQUISITE SKILL</span>
+
+<div class="analogy">
+<strong>Analogy &mdash; Stereo volume knobs.</strong>
+<br><br>
+Imagine you have a stereo system with two knobs: <em>bass</em> and <em>treble</em>. Each knob changes the sound. The overall sound quality $f$ depends on both knobs: $f(\text{bass}, \text{treble})$.
+<br><br>
+Now, a partial derivative with respect to bass means this: <strong>hold the treble knob perfectly still</strong>, turn the bass knob just a tiny bit, and measure how much the sound quality changes. That measurement &mdash; the rate of change of $f$ when only bass moves &mdash; is the partial derivative $\frac{\partial f}{\partial \text{bass}}$.
+<br><br>
+Similarly, the partial derivative with respect to treble means: freeze the bass knob, wiggle treble, and measure the change.
+<br><br>
+That is literally it. A partial derivative is <strong>a regular derivative where you pretend all other variables are constants</strong>. If you can differentiate $x^2$, you can take partial derivatives. The $\partial$ symbol (curly d) just means "I am only moving one knob."
+</div>
+
+<div class="formula-box">
+<p><strong>Notation:</strong></p>
+$$\frac{\partial f}{\partial x_1}$$
+<p style="color:#ccc; font-size:16px; margin-top:10px;">means: "take the derivative of $f$ with respect to $x_1$, treating every other variable ($x_2, x_3, \ldots$) as if they were just numbers (constants)."</p>
+<dl class="breakdown">
+  <dt>$\partial$</dt><dd>The "partial" symbol &mdash; signals that there are other variables being held fixed.</dd>
+  <dt>$f$</dt><dd>The function of multiple variables.</dd>
+  <dt>$x_1$</dt><dd>The specific variable we are differentiating with respect to.</dd>
+</dl>
+</div>
+
+<div class="hand-calc">
+<h3>Warm-Up Example: $f(x_1, x_2) = x_1^2 + 3x_1 x_2 + x_2^2$</h3>
+
+<div class="step">
+  <span class="step-label">Partial with respect to $x_1$: treat $x_2$ as a constant.</span><br>
+  Look at each term:
+  <ul style="margin-left:20px; margin-top:6px;">
+    <li>$x_1^2$ &rarr; derivative is $2x_1$ (power rule, nothing special)</li>
+    <li>$3x_1 x_2$ &rarr; $x_2$ is treated as a constant, so this is like $3c \cdot x_1$ &rarr; derivative is $3x_2$</li>
+    <li>$x_2^2$ &rarr; this is a constant (no $x_1$ in it) &rarr; derivative is $0$</li>
+  </ul>
+  <br>
+  $\displaystyle\frac{\partial f}{\partial x_1} = $ <span class="result">$2x_1 + 3x_2$</span>
+</div>
+
+<div class="step">
+  <span class="step-label">Partial with respect to $x_2$: treat $x_1$ as a constant.</span><br>
+  Look at each term:
+  <ul style="margin-left:20px; margin-top:6px;">
+    <li>$x_1^2$ &rarr; constant (no $x_2$) &rarr; derivative is $0$</li>
+    <li>$3x_1 x_2$ &rarr; $x_1$ is a constant, so this is like $3c \cdot x_2$ &rarr; derivative is $3x_1$</li>
+    <li>$x_2^2$ &rarr; derivative is $2x_2$ (power rule)</li>
+  </ul>
+  <br>
+  $\displaystyle\frac{\partial f}{\partial x_2} = $ <span class="result">$3x_1 + 2x_2$</span>
+</div>
+
+<p class="check">Sanity check: both partials have the same "mixed" coefficient (3) because $3x_1 x_2$ contributes equally to each partial. This symmetry is not a coincidence &mdash; it comes from the mixed partial derivative theorem.</p>
+</div>
+
+
+<div class="hand-calc">
+<h3>Quiz 2 Practice: $f(x_1, x_2) = 2x_1^3 - 3x_1^2 - 6x_1 x_2(x_1 - x_2 - 1)$</h3>
+
+<div class="step">
+  <span class="step-label">Step 1: Expand the function first.</span><br>
+  Start with the product $-6x_1 x_2(x_1 - x_2 - 1)$:
+  <br>$= -6x_1 x_2 \cdot x_1 + (-6x_1 x_2)(-x_2) + (-6x_1 x_2)(-1)$
+  <br>$= -6x_1^2 x_2 + 6x_1 x_2^2 + 6x_1 x_2$
+  <br><br>
+  So the full expanded function is:
+  <br><span class="result">$f(x_1, x_2) = 2x_1^3 - 3x_1^2 - 6x_1^2 x_2 + 6x_1 x_2^2 + 6x_1 x_2$</span>
+</div>
+
+<div class="step">
+  <span class="step-label">Step 2: Partial with respect to $x_1$.</span><br>
+  Differentiate each term with respect to $x_1$ (treating $x_2$ as constant):
+  <ul style="margin-left:20px; margin-top:6px;">
+    <li>$2x_1^3$ &rarr; $6x_1^2$</li>
+    <li>$-3x_1^2$ &rarr; $-6x_1$</li>
+    <li>$-6x_1^2 x_2$ &rarr; $x_2$ is constant, so $-6 \cdot 2x_1 \cdot x_2 = -12x_1 x_2$</li>
+    <li>$6x_1 x_2^2$ &rarr; $x_2^2$ is constant, so $6x_2^2$</li>
+    <li>$6x_1 x_2$ &rarr; $x_2$ is constant, so $6x_2$</li>
+  </ul>
+  <br>
+  $\displaystyle\frac{\partial f}{\partial x_1} = $ <span class="result">$6x_1^2 - 6x_1 - 12x_1 x_2 + 6x_2^2 + 6x_2$</span>
+</div>
+
+<div class="step">
+  <span class="step-label">Step 3: Partial with respect to $x_2$.</span><br>
+  Differentiate each term with respect to $x_2$ (treating $x_1$ as constant):
+  <ul style="margin-left:20px; margin-top:6px;">
+    <li>$2x_1^3$ &rarr; $0$ (no $x_2$)</li>
+    <li>$-3x_1^2$ &rarr; $0$ (no $x_2$)</li>
+    <li>$-6x_1^2 x_2$ &rarr; $x_1^2$ is constant, so $-6x_1^2$</li>
+    <li>$6x_1 x_2^2$ &rarr; $x_1$ is constant, so $6x_1 \cdot 2x_2 = 12x_1 x_2$</li>
+    <li>$6x_1 x_2$ &rarr; $x_1$ is constant, so $6x_1$</li>
+  </ul>
+  <br>
+  $\displaystyle\frac{\partial f}{\partial x_2} = $ <span class="result">$-6x_1^2 + 12x_1 x_2 + 6x_1$</span>
+</div>
+
+<p class="check">We will use these partial derivatives in Part B to build the gradient and in Part C to build the Hessian.</p>
+</div>
+
+<div class="note">
+<strong>A partial derivative is NOTHING SCARY.</strong> It is a regular derivative with extra variables frozen. Every rule you already know (power rule, product rule, chain rule) works exactly the same way. The only difference is you ignore variables that are not the one you are differentiating with respect to.
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- PART B: THE GRADIENT                                               -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+
+<h2>Part B: The Gradient &mdash; All Slopes at Once</h2>
+
+<span class="tag">THE MOST IMPORTANT VECTOR IN OPTIMIZATION</span>
+
+<div class="analogy">
+<strong>Analogy &mdash; Blindfolded on a hill.</strong>
+<br><br>
+You are standing on the side of a hill, blindfolded. You cannot see the landscape, but you can feel the slope under your feet. You shuffle your left foot north and your right foot south &mdash; you feel that the ground tilts downward to the north. That tilt is the partial derivative in the north-south direction. Then you shuffle east-west and feel a gentle tilt downward to the east. That tilt is the partial derivative in the east-west direction.
+<br><br>
+Now take these two numbers &mdash; the north-south slope and the east-west slope &mdash; and stack them into a vector: $[\text{north-south tilt}, \text{east-west tilt}]$. That vector is the <strong>gradient</strong> $\nabla f$. It points in the direction of steepest <em>uphill</em>.
+<br><br>
+To go downhill as fast as possible, walk in the <em>opposite</em> direction: $-\nabla f$. This is the entire idea behind <strong>gradient descent</strong>. The algorithm literally says: "compute the gradient, flip it, and walk that way."
+<br><br>
+The gradient also has a magnitude: $\|\nabla f\|$ tells you how steep the hill is. When $\|\nabla f\| \approx 0$, you are on flat ground &mdash; either a valley bottom (minimum), a hilltop (maximum), or a saddle point. This is why optimization algorithms stop when $\|\nabla f\| < \epsilon$.
+</div>
+
+<div class="formula-box">
+<p><strong>Gradient of a function of two variables:</strong></p>
+$$\nabla f(x) = \begin{bmatrix} \dfrac{\partial f}{\partial x_1} \\[12pt] \dfrac{\partial f}{\partial x_2} \end{bmatrix}$$
+
+<dl class="breakdown">
+  <dt>$\nabla$</dt><dd>"Nabla" or "del" &mdash; the gradient operator. It collects all partial derivatives into one vector.</dd>
+  <dt>$\nabla f(x)$</dt><dd>A vector with the same dimension as $x$. Each component is the partial derivative of $f$ with respect to that variable.</dd>
+</dl>
+<p style="color:#ccc; font-size:15px; margin-top:12px;">For a function of $n$ variables: $\nabla f(x) = \left[\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \ldots, \frac{\partial f}{\partial x_n}\right]^T$</p>
+</div>
+
+
+<div class="hand-calc">
+<h3>Quiz 2 Continuation: Gradient and Stationary Points</h3>
+
+<p>From Part A we found:</p>
+<p>$\frac{\partial f}{\partial x_1} = 6x_1^2 - 6x_1 - 12x_1 x_2 + 6x_2^2 + 6x_2$</p>
+<p>$\frac{\partial f}{\partial x_2} = -6x_1^2 + 12x_1 x_2 + 6x_1$</p>
+
+<div class="step">
+  <span class="step-label">Step 1: Write the gradient.</span><br>
+  $$\nabla f(x) = \begin{bmatrix} 6x_1^2 - 6x_1 - 12x_1 x_2 + 6x_2^2 + 6x_2 \\ -6x_1^2 + 12x_1 x_2 + 6x_1 \end{bmatrix}$$
+</div>
+
+<div class="step">
+  <span class="step-label">Step 2: Set the gradient equal to zero (find stationary points).</span><br>
+  A stationary point is where the hill is flat in every direction. Set both components to zero:
+  <br><br>
+  Equation (1): $6x_1^2 - 6x_1 - 12x_1 x_2 + 6x_2^2 + 6x_2 = 0$
+  <br>
+  Equation (2): $-6x_1^2 + 12x_1 x_2 + 6x_1 = 0$
+</div>
+
+<div class="step">
+  <span class="step-label">Step 3: Solve equation (2) first (it is simpler).</span><br>
+  $-6x_1^2 + 12x_1 x_2 + 6x_1 = 0$
+  <br>Factor out $6x_1$:
+  <br>$6x_1(-x_1 + 2x_2 + 1) = 0$
+  <br><br>
+  Either $x_1 = 0$ or $-x_1 + 2x_2 + 1 = 0$ (i.e., $x_1 = 2x_2 + 1$).
+</div>
+
+<div class="step">
+  <span class="step-label">Step 4a: Case $x_1 = 0$. Substitute into equation (1).</span><br>
+  $6(0) - 6(0) - 12(0)x_2 + 6x_2^2 + 6x_2 = 0$
+  <br>$6x_2^2 + 6x_2 = 0$
+  <br>$6x_2(x_2 + 1) = 0$
+  <br>So $x_2 = 0$ or $x_2 = -1$.
+  <br><br>
+  <span class="result">Stationary points from this case: $(0, 0)$ and $(0, -1)$.</span>
+</div>
+
+<div class="step">
+  <span class="step-label">Step 4b: Case $x_1 = 2x_2 + 1$. Substitute into equation (1).</span><br>
+  Let $x_1 = 2x_2 + 1$. Substitute into equation (1):
+  <br>$6(2x_2+1)^2 - 6(2x_2+1) - 12(2x_2+1)x_2 + 6x_2^2 + 6x_2 = 0$
+  <br><br>
+  Expand $(2x_2+1)^2 = 4x_2^2 + 4x_2 + 1$:
+  <br>$6(4x_2^2 + 4x_2 + 1) - 6(2x_2+1) - 12(2x_2+1)x_2 + 6x_2^2 + 6x_2$
+  <br>$= 24x_2^2 + 24x_2 + 6 - 12x_2 - 6 - 24x_2^2 - 12x_2 + 6x_2^2 + 6x_2$
+  <br>$= (24 - 24 + 6)x_2^2 + (24 - 12 - 12 + 6)x_2 + (6 - 6)$
+  <br>$= 6x_2^2 + 6x_2$
+  <br>$= 6x_2(x_2 + 1) = 0$
+  <br><br>
+  So $x_2 = 0 \Rightarrow x_1 = 1$, or $x_2 = -1 \Rightarrow x_1 = -1$.
+  <br><br>
+  <span class="result">Stationary points from this case: $(1, 0)$ and $(-1, -1)$.</span>
+</div>
+
+<div class="step">
+  <span class="step-label">Summary: All four stationary points.</span><br>
+  <span class="result">$(0, 0)$, $(0, -1)$, $(1, 0)$, $(-1, -1)$</span>
+  <br>We will classify these (minimum, maximum, or saddle) in Part C using the Hessian.
+</div>
+</div>
+
+
+<!-- SVG: Gradient arrows on contour plot -->
+<div style="text-align:center; margin: 30px 0;">
+<svg viewBox="0 0 440 400" width="440" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow-up" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0,0 8,3 0,6" fill="#ff6b6b"/>
+    </marker>
+    <marker id="arrow-down" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0,0 8,3 0,6" fill="#64ffda"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="440" height="400" fill="#1a1a2e"/>
+
+  <!-- Contour ellipses (function "bowl") -->
+  <ellipse cx="220" cy="200" rx="20" ry="15" fill="none" stroke="#333" stroke-width="1.5"/>
+  <ellipse cx="220" cy="200" rx="50" ry="37" fill="none" stroke="#3a3a5e" stroke-width="1.5"/>
+  <ellipse cx="220" cy="200" rx="85" ry="63" fill="none" stroke="#3a3a5e" stroke-width="1.5"/>
+  <ellipse cx="220" cy="200" rx="125" ry="93" fill="none" stroke="#3a3a5e" stroke-width="1.5"/>
+  <ellipse cx="220" cy="200" rx="170" ry="126" fill="none" stroke="#444" stroke-width="1.5"/>
+
+  <!-- Minimum point -->
+  <circle cx="220" cy="200" r="5" fill="#ffd93d"/>
+  <text x="228" y="196" fill="#ffd93d" font-size="13" font-weight="bold">x* (min)</text>
+
+  <!-- Gradient arrows (pointing outward = uphill, red) -->
+  <line x1="340" y1="130" x2="370" y2="110" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#arrow-up)"/>
+  <line x1="310" y1="200" x2="348" y2="200" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#arrow-up)"/>
+  <line x1="340" y1="270" x2="370" y2="290" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#arrow-up)"/>
+  <line x1="100" y1="130" x2="70" y2="110" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#arrow-up)"/>
+  <line x1="130" y1="200" x2="92" y2="200" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#arrow-up)"/>
+  <line x1="100" y1="270" x2="70" y2="290" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#arrow-up)"/>
+  <line x1="220" y1="100" x2="220" y2="65" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#arrow-up)"/>
+  <line x1="220" y1="300" x2="220" y2="335" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#arrow-up)"/>
+
+  <!-- Negative gradient arrows (pointing inward = downhill, teal) -->
+  <line x1="355" y1="118" x2="332" y2="133" stroke="#64ffda" stroke-width="2" marker-end="url(#arrow-down)" stroke-dasharray="4,3"/>
+  <line x1="335" y1="200" x2="305" y2="200" stroke="#64ffda" stroke-width="2" marker-end="url(#arrow-down)" stroke-dasharray="4,3"/>
+  <line x1="355" y1="282" x2="332" y2="267" stroke="#64ffda" stroke-width="2" marker-end="url(#arrow-down)" stroke-dasharray="4,3"/>
+  <line x1="85" y1="118" x2="108" y2="133" stroke="#64ffda" stroke-width="2" marker-end="url(#arrow-down)" stroke-dasharray="4,3"/>
+  <line x1="105" y1="200" x2="135" y2="200" stroke="#64ffda" stroke-width="2" marker-end="url(#arrow-down)" stroke-dasharray="4,3"/>
+  <line x1="85" y1="282" x2="108" y2="267" stroke="#64ffda" stroke-width="2" marker-end="url(#arrow-down)" stroke-dasharray="4,3"/>
+
+  <!-- Legend -->
+  <rect x="10" y="345" width="420" height="50" rx="6" fill="#0f3460" opacity="0.9"/>
+  <line x1="25" y1="365" x2="50" y2="365" stroke="#ff6b6b" stroke-width="2.5" marker-end="url(#arrow-up)"/>
+  <text x="58" y="369" fill="#ff6b6b" font-size="12">Gradient (steepest uphill)</text>
+  <line x1="245" y1="365" x2="270" y2="365" stroke="#64ffda" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow-down)"/>
+  <text x="278" y="369" fill="#64ffda" font-size="12">Negative gradient (steepest downhill)</text>
+  <text x="120" y="387" fill="#888" font-size="11">Contour lines = level curves of the function (same value along each curve)</text>
+</svg>
+<p style="font-size:14px; color:#888;">Gradient arrows are always <strong>perpendicular to the contour lines</strong>. The negative gradient always points toward the minimum.</p>
+</div>
+
+<div class="why-box">
+<h3>Why Does This Matter?</h3>
+<p>Setting $\nabla f = \mathbf{0}$ is HOW you find stationary points (candidates for minima, maxima, saddle points). This single operation is the foundation of EVERY optimization method in this course. The gradient gives us:</p>
+<ul style="margin-top:8px; margin-left:20px;">
+  <li><strong>Direction:</strong> $-\nabla f$ is the steepest-descent direction (used by gradient descent, Pages 04&ndash;05).</li>
+  <li><strong>Stopping criterion:</strong> $\|\nabla f(x_k)\| < \epsilon$ means we are at (or very near) a stationary point.</li>
+  <li><strong>Optimality condition:</strong> If $x^*$ is a local minimum, then $\nabla f(x^*) = \mathbf{0}$ (necessary condition, Page 03).</li>
+</ul>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- PART C: THE HESSIAN                                                -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+
+<h2>Part C: The Hessian &mdash; The Curvature Map</h2>
+
+<span class="tag">SECOND-ORDER INFORMATION</span>
+
+<div class="analogy">
+<strong>Analogy &mdash; Gradient vs. Hessian.</strong>
+<br><br>
+The gradient tells you <strong>which way is downhill</strong>. The Hessian tells you <strong>how curvy the ground is in every direction</strong>.
+<br><br>
+Imagine the terrain under your feet. On a gentle rolling hill, the curvature is low &mdash; you can take big confident steps and you will not overshoot anything. Near a cliff edge, the curvature is high &mdash; you need tiny, careful steps or you will fall off.
+<br><br>
+The Hessian is a matrix that encodes the curvature of the function in every possible direction. Its entries are "second partial derivatives" &mdash; derivatives of derivatives. Think of it this way:
+<ul style="margin-left:20px; margin-top:8px;">
+  <li>The gradient says "the ground slopes 30 degrees to the north." (First derivative = slope.)</li>
+  <li>The Hessian says "as you walk north, that 30-degree slope is getting steeper at 5 degrees per meter." (Second derivative = how fast the slope changes.)</li>
+</ul>
+<br>
+The Hessian's eigenvalues give you the curvature along the principal axes:
+<ul style="margin-left:20px; margin-top:8px;">
+  <li>All eigenvalues positive &rarr; you are at the bottom of a bowl (local minimum).</li>
+  <li>All eigenvalues negative &rarr; you are at the top of a dome (local maximum).</li>
+  <li>Mixed signs &rarr; you are on a saddle (minimum in some directions, maximum in others).</li>
+</ul>
+</div>
+
+<div class="formula-box">
+<p><strong>Hessian of a function of two variables:</strong></p>
+$$\nabla^2 f(x) = \begin{bmatrix} \dfrac{\partial^2 f}{\partial x_1^2} & \dfrac{\partial^2 f}{\partial x_1 \partial x_2} \\[14pt] \dfrac{\partial^2 f}{\partial x_2 \partial x_1} & \dfrac{\partial^2 f}{\partial x_2^2} \end{bmatrix}$$
+
+<dl class="breakdown">
+  <dt>$\frac{\partial^2 f}{\partial x_1^2}$</dt>
+  <dd>Second derivative with respect to $x_1$ &mdash; how fast the $x_1$-slope changes as you move in the $x_1$ direction. (Top-left entry.)</dd>
+  <dt>$\frac{\partial^2 f}{\partial x_1 \partial x_2}$</dt>
+  <dd>Mixed partial &mdash; how the $x_1$-slope changes as you move in the $x_2$ direction. This is the "cross-curvature." (Top-right entry.)</dd>
+  <dt>$\frac{\partial^2 f}{\partial x_2 \partial x_1}$</dt>
+  <dd>Same as the top-right by Schwarz's theorem: $\frac{\partial^2 f}{\partial x_2 \partial x_1} = \frac{\partial^2 f}{\partial x_1 \partial x_2}$. The Hessian is always symmetric. (Bottom-left entry.)</dd>
+  <dt>$\frac{\partial^2 f}{\partial x_2^2}$</dt>
+  <dd>Second derivative with respect to $x_2$ &mdash; curvature in the $x_2$ direction. (Bottom-right entry.)</dd>
+</dl>
+</div>
+
+
+<div class="hand-calc">
+<h3>Quiz 2 Continuation: Computing the Hessian</h3>
+
+<p>From Part A we found:</p>
+<p>$\frac{\partial f}{\partial x_1} = 6x_1^2 - 6x_1 - 12x_1 x_2 + 6x_2^2 + 6x_2$</p>
+<p>$\frac{\partial f}{\partial x_2} = -6x_1^2 + 12x_1 x_2 + 6x_1$</p>
+
+<div class="step">
+  <span class="step-label">Entry (1,1): $\frac{\partial^2 f}{\partial x_1^2}$ &mdash; differentiate $\frac{\partial f}{\partial x_1}$ with respect to $x_1$.</span><br>
+  $\frac{\partial}{\partial x_1}(6x_1^2 - 6x_1 - 12x_1 x_2 + 6x_2^2 + 6x_2)$
+  <br>$= 12x_1 - 6 - 12x_2 + 0 + 0$
+  <br><span class="result">$= 12x_1 - 6 - 12x_2$</span>
+</div>
+
+<div class="step">
+  <span class="step-label">Entry (1,2): $\frac{\partial^2 f}{\partial x_1 \partial x_2}$ &mdash; differentiate $\frac{\partial f}{\partial x_1}$ with respect to $x_2$.</span><br>
+  $\frac{\partial}{\partial x_2}(6x_1^2 - 6x_1 - 12x_1 x_2 + 6x_2^2 + 6x_2)$
+  <br>$= 0 - 0 - 12x_1 + 12x_2 + 6$
+  <br><span class="result">$= -12x_1 + 12x_2 + 6$</span>
+</div>
+
+<div class="step">
+  <span class="step-label">Entry (2,1): By symmetry, equals entry (1,2).</span><br>
+  <span class="result">$= -12x_1 + 12x_2 + 6$</span>
+  <br>(You can verify: differentiate $\frac{\partial f}{\partial x_2} = -6x_1^2 + 12x_1 x_2 + 6x_1$ with respect to $x_1$: $-12x_1 + 12x_2 + 6$. Same result.)
+</div>
+
+<div class="step">
+  <span class="step-label">Entry (2,2): $\frac{\partial^2 f}{\partial x_2^2}$ &mdash; differentiate $\frac{\partial f}{\partial x_2}$ with respect to $x_2$.</span><br>
+  $\frac{\partial}{\partial x_2}(-6x_1^2 + 12x_1 x_2 + 6x_1)$
+  <br>$= 0 + 12x_1 + 0$
+  <br><span class="result">$= 12x_1$</span>
+</div>
+
+<div class="step">
+  <span class="step-label">The full Hessian:</span><br>
+  $$\nabla^2 f(x) = \begin{bmatrix} 12x_1 - 6 - 12x_2 & -12x_1 + 12x_2 + 6 \\ -12x_1 + 12x_2 + 6 & 12x_1 \end{bmatrix}$$
+</div>
+
+<div class="step">
+  <span class="step-label">Evaluate at stationary point $(1, 0)$:</span><br>
+  $$\nabla^2 f(1, 0) = \begin{bmatrix} 12(1) - 6 - 12(0) & -12(1) + 12(0) + 6 \\ -12(1) + 12(0) + 6 & 12(1) \end{bmatrix} = \begin{bmatrix} 6 & -6 \\ -6 & 12 \end{bmatrix}$$
+  <br>
+  Eigenvalue check (determinant and trace):
+  <br>$\text{det} = (6)(12) - (-6)(-6) = 72 - 36 = 36 > 0$
+  <br>$\text{trace} = 6 + 12 = 18 > 0$
+  <br>Determinant positive and trace positive $\Rightarrow$ both eigenvalues are positive $\Rightarrow$ <span class="result">$(1, 0)$ is a local minimum.</span>
+</div>
+
+<div class="step">
+  <span class="step-label">Evaluate at stationary point $(0, 0)$:</span><br>
+  $$\nabla^2 f(0, 0) = \begin{bmatrix} -6 & 6 \\ 6 & 0 \end{bmatrix}$$
+  <br>$\text{det} = (-6)(0) - (6)(6) = 0 - 36 = -36 < 0$
+  <br>Determinant negative $\Rightarrow$ one eigenvalue positive, one negative $\Rightarrow$ <span class="result">$(0, 0)$ is a saddle point.</span>
+</div>
+
+<div class="step">
+  <span class="step-label">Evaluate at stationary point $(0, -1)$:</span><br>
+  $$\nabla^2 f(0, -1) = \begin{bmatrix} 12(0) - 6 - 12(-1) & -12(0) + 12(-1) + 6 \\ -12(0) + 12(-1) + 6 & 12(0) \end{bmatrix} = \begin{bmatrix} 6 & -6 \\ -6 & 0 \end{bmatrix}$$
+  <br>$\text{det} = (6)(0) - (-6)(-6) = 0 - 36 = -36 < 0$
+  <br><span class="result">$(0, -1)$ is a saddle point.</span>
+</div>
+
+<div class="step">
+  <span class="step-label">Evaluate at stationary point $(-1, -1)$:</span><br>
+  $$\nabla^2 f(-1, -1) = \begin{bmatrix} 12(-1) - 6 - 12(-1) & -12(-1) + 12(-1) + 6 \\ -12(-1) + 12(-1) + 6 & 12(-1) \end{bmatrix} = \begin{bmatrix} -6 & 6 \\ 6 & -12 \end{bmatrix}$$
+  <br>$\text{det} = (-6)(-12) - (6)(6) = 72 - 36 = 36 > 0$
+  <br>$\text{trace} = -6 + (-12) = -18 < 0$
+  <br>Determinant positive and trace negative $\Rightarrow$ both eigenvalues are negative $\Rightarrow$ <span class="result">$(-1, -1)$ is a local maximum.</span>
+</div>
+
+<p class="check">Summary: $(1,0)$ = local min, $(-1,-1)$ = local max, $(0,0)$ and $(0,-1)$ = saddle points. The second derivative test (determinant and trace of Hessian) classifies all four.</p>
+</div>
+
+
+<!-- SVG: Bowl, Saddle, Dome -->
+<div style="text-align:center; margin: 30px 0;">
+<svg viewBox="0 0 600 220" width="600" height="220" xmlns="http://www.w3.org/2000/svg">
+  <!-- Bowl (positive definite) -->
+  <g transform="translate(0,0)">
+    <text x="100" y="18" fill="#64ffda" font-size="14" text-anchor="middle" font-weight="bold">Bowl (Positive Definite)</text>
+    <text x="100" y="34" fill="#888" font-size="11" text-anchor="middle">All eigenvalues &gt; 0 = local minimum</text>
+    <!-- Bowl shape -->
+    <ellipse cx="100" cy="160" rx="80" ry="20" fill="none" stroke="#555" stroke-width="1"/>
+    <path d="M20,160 Q100,80 180,160" fill="none" stroke="#64ffda" stroke-width="2.5"/>
+    <path d="M20,160 Q100,100 180,160" fill="none" stroke="#64ffda" stroke-width="1.5" opacity="0.4"/>
+    <circle cx="100" cy="125" r="4" fill="#ffd93d"/>
+    <text x="100" y="120" fill="#ffd93d" font-size="11" text-anchor="middle">min</text>
+    <!-- Vertical guide lines showing curve -->
+    <line x1="100" y1="80" x2="100" y2="170" stroke="#333" stroke-width="1" stroke-dasharray="3,3"/>
+  </g>
+
+  <!-- Saddle (indefinite) -->
+  <g transform="translate(200,0)">
+    <text x="100" y="18" fill="#bb86fc" font-size="14" text-anchor="middle" font-weight="bold">Saddle (Indefinite)</text>
+    <text x="100" y="34" fill="#888" font-size="11" text-anchor="middle">Mixed eigenvalue signs</text>
+    <!-- Saddle shape: curves up left-right, down front-back -->
+    <path d="M20,130 Q60,170 100,130 Q140,90 180,130" fill="none" stroke="#bb86fc" stroke-width="2.5"/>
+    <path d="M60,80 Q100,130 140,80" fill="none" stroke="#bb86fc" stroke-width="1.5" opacity="0.5" stroke-dasharray="4,3"/>
+    <path d="M60,180 Q100,130 140,180" fill="none" stroke="#bb86fc" stroke-width="1.5" opacity="0.5" stroke-dasharray="4,3"/>
+    <circle cx="100" cy="130" r="4" fill="#ffd93d"/>
+    <text x="100" y="125" fill="#ffd93d" font-size="11" text-anchor="middle">saddle</text>
+    <text x="100" y="200" fill="#666" font-size="10" text-anchor="middle">up in one dir, down in another</text>
+  </g>
+
+  <!-- Dome (negative definite) -->
+  <g transform="translate(400,0)">
+    <text x="100" y="18" fill="#ff6b6b" font-size="14" text-anchor="middle" font-weight="bold">Dome (Negative Definite)</text>
+    <text x="100" y="34" fill="#888" font-size="11" text-anchor="middle">All eigenvalues &lt; 0 = local maximum</text>
+    <!-- Dome shape -->
+    <ellipse cx="100" cy="160" rx="80" ry="20" fill="none" stroke="#555" stroke-width="1"/>
+    <path d="M20,160 Q100,60 180,160" fill="none" stroke="#ff6b6b" stroke-width="2.5"/>
+    <path d="M20,160 Q100,80 180,160" fill="none" stroke="#ff6b6b" stroke-width="1.5" opacity="0.4"/>
+    <circle cx="100" cy="85" r="4" fill="#ffd93d"/>
+    <text x="100" y="80" fill="#ffd93d" font-size="11" text-anchor="middle">max</text>
+    <line x1="100" y1="60" x2="100" y2="170" stroke="#333" stroke-width="1" stroke-dasharray="3,3"/>
+  </g>
+</svg>
+<p style="font-size:14px; color:#888;">The eigenvalues of the Hessian determine the shape. Positive = curves up (bowl). Negative = curves down (dome). Mixed = saddle.</p>
+</div>
+
+
+<div class="why-box">
+<h3>Why Does the Hessian Matter for This Course?</h3>
+<p>The Hessian appears in nearly every major topic:</p>
+<ul style="margin-top:8px; margin-left:20px;">
+  <li><strong>Newton's method</strong> (<a href="cg-07-newton.html" style="color:#64ffda;">Page 07</a>) uses the Hessian to build a local quadratic model and solve $\nabla^2 f(x_k) \, p = -\nabla f(x_k)$ for the step $p$.</li>
+  <li><strong>BFGS / Quasi-Newton</strong> (<a href="cg-12-quasi-newton.html" style="color:#64ffda;">Page 12</a>) approximates the Hessian using only gradient information &mdash; avoiding the expensive computation of all second derivatives.</li>
+  <li><strong>Trust regions</strong> (<a href="cg-09-trust-region.html" style="color:#64ffda;">Page 09</a>) use the Hessian in the quadratic model $m_k(p) = f_k + g_k^T p + \frac{1}{2} p^T B_k p$ where $B_k \approx \nabla^2 f(x_k)$.</li>
+  <li><strong>Sufficient optimality conditions</strong> (<a href="cg-03-linear-algebra.html" style="color:#64ffda;">Page 03</a>) require $\nabla^2 f(x^*)$ to be positive definite at a minimum.</li>
+  <li><strong>Condition number</strong> (<a href="cg-01-math-foundations.html" style="color:#64ffda;">Page 01</a>) uses the eigenvalues of $\nabla^2 f$ to measure how hard a problem is.</li>
+</ul>
+<p style="margin-top:8px;">If the gradient is the single most important vector in optimization, the Hessian is the single most important matrix.</p>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- PART D: CHAIN RULE                                                 -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+
+<h2>Part D: The Chain Rule in Multiple Variables</h2>
+
+<span class="tag">COMPOSITION</span>
+
+<div class="analogy">
+<strong>Analogy &mdash; Gears.</strong>
+Imagine two gears connected together. Gear A turns, which makes Gear B turn. If Gear A rotates at 3 rpm and Gear B has a 2:1 ratio, then Gear B rotates at $3 \times 2 = 6$ rpm. The chain rule says: the overall rate of change is the product of the individual rates of change along the chain.
+</div>
+
+<p>In single-variable calculus, if $y = f(g(x))$, then:</p>
+
+<div class="formula-box">
+$$\frac{dy}{dx} = f'(g(x)) \cdot g'(x)$$
+<p style="color:#ccc; font-size:15px; margin-top:8px;">"Derivative of the outer function, evaluated at the inner function, times derivative of the inner function."</p>
+</div>
+
+<p>In multiple variables, the chain rule generalizes. If $f$ depends on $\mathbf{u} = (u_1, u_2)$ and each $u_i$ depends on $\mathbf{x} = (x_1, x_2)$, then:</p>
+
+<div class="formula-box">
+$$\frac{\partial f}{\partial x_j} = \sum_{i} \frac{\partial f}{\partial u_i} \cdot \frac{\partial u_i}{\partial x_j}$$
+<p style="color:#ccc; font-size:15px; margin-top:8px;">Sum over all intermediate variables. Each path from $x_j$ to $f$ through some $u_i$ contributes one term to the sum.</p>
+</div>
+
+<div class="hand-calc">
+<h3>Quick Example: $f(u) = u^2$ where $u = x_1^2 + x_2$</h3>
+
+<div class="step">
+  <span class="step-label">Step 1: Identify the chain.</span><br>
+  $f$ depends on $u$, and $u$ depends on $x_1$ and $x_2$.
+</div>
+
+<div class="step">
+  <span class="step-label">Step 2: Partial with respect to $x_1$.</span><br>
+  $\displaystyle\frac{\partial f}{\partial x_1} = \frac{\partial f}{\partial u} \cdot \frac{\partial u}{\partial x_1} = 2u \cdot 2x_1 = 2(x_1^2 + x_2)(2x_1) = $ <span class="result">$4x_1(x_1^2 + x_2)$</span>
+</div>
+
+<div class="step">
+  <span class="step-label">Step 3: Partial with respect to $x_2$.</span><br>
+  $\displaystyle\frac{\partial f}{\partial x_2} = \frac{\partial f}{\partial u} \cdot \frac{\partial u}{\partial x_2} = 2u \cdot 1 = $ <span class="result">$2(x_1^2 + x_2)$</span>
+</div>
+
+<p class="check">Verify by direct substitution: $f = (x_1^2 + x_2)^2 = x_1^4 + 2x_1^2 x_2 + x_2^2$. Then $\frac{\partial f}{\partial x_1} = 4x_1^3 + 4x_1 x_2 = 4x_1(x_1^2 + x_2)$. Same answer.</p>
+</div>
+
+<div class="why-box">
+<h3>Why Does the Chain Rule Matter Here?</h3>
+<p>Many optimization problems involve <em>composed</em> functions. In logistic regression, the loss is $-\log(\sigma(\mathbf{w}^T \mathbf{x}))$ where $\sigma$ is the sigmoid. Computing the gradient requires chaining through $\log$, then $\sigma$, then the linear function $\mathbf{w}^T \mathbf{x}$. Backpropagation in neural networks is literally the chain rule applied layer by layer. In nonlinear least squares (<a href="cg-13-least-squares.html" style="color:#64ffda;">Page 13</a>), the chain rule connects residual gradients to the overall objective gradient.</p>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- PART E: THE JACOBIAN                                               -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+
+<h2>Part E: The Jacobian &mdash; For Systems of Equations</h2>
+
+<span class="tag">MULTI-OUTPUT FUNCTIONS</span>
+
+<div class="analogy">
+<strong>Analogy &mdash; Gradient vs. Jacobian.</strong>
+<br><br>
+The gradient is for <strong>one function with many inputs</strong>. You have one output $f$ and many variables $(x_1, x_2, \ldots)$, and you stack all the partial derivatives into a single vector.
+<br><br>
+The Jacobian is for <strong>many functions with many inputs</strong>. You have multiple outputs $(r_1, r_2, \ldots)$ and multiple variables $(x_1, x_2, \ldots)$. Each function $r_i$ has its own gradient. The Jacobian stacks the gradient of each function as a <em>row</em> of a matrix.
+<br><br>
+Think of it this way: if the gradient is a vector that says "here is how one function changes in each direction," then the Jacobian is a matrix that says "here is how each of several functions changes in each direction."
+<br><br>
+A practical example: suppose you need to find where a circle and a line intersect. That is a system of two equations (circle equation = 0, line equation = 0) in two unknowns ($x_1, x_2$). Newton's method for this system needs the Jacobian to figure out how to adjust $x_1$ and $x_2$ simultaneously.
+</div>
+
+<div class="formula-box">
+<p><strong>Jacobian of a system $\mathbf{r}(x) = [r_1(x), r_2(x)]^T$:</strong></p>
+$$J(x) = \begin{bmatrix} \dfrac{\partial r_1}{\partial x_1} & \dfrac{\partial r_1}{\partial x_2} \\[12pt] \dfrac{\partial r_2}{\partial x_1} & \dfrac{\partial r_2}{\partial x_2} \end{bmatrix}$$
+
+<dl class="breakdown">
+  <dt>$J(x)$</dt><dd>The Jacobian matrix &mdash; has as many rows as there are functions, and as many columns as there are variables.</dd>
+  <dt>Row $i$</dt><dd>The gradient of $r_i$ written as a row: $[\frac{\partial r_i}{\partial x_1}, \frac{\partial r_i}{\partial x_2}]$.</dd>
+  <dt>Column $j$</dt><dd>How all functions change when $x_j$ changes: $[\frac{\partial r_1}{\partial x_j}, \frac{\partial r_2}{\partial x_j}]^T$.</dd>
+</dl>
+</div>
+
+
+<div class="hand-calc">
+<h3>Quiz 7 Practice: Jacobian for Circle-Line Intersection</h3>
+
+<p>System: find $(x_1, x_2)$ satisfying both:</p>
+<p>$r_1(x) = x_1^2 + x_2^2 - 1 = 0$ &nbsp; (unit circle)</p>
+<p>$r_2(x) = x_1 - x_2 = 0$ &nbsp; (line $x_1 = x_2$)</p>
+
+<div class="step">
+  <span class="step-label">Step 1: Partial derivatives of $r_1$.</span><br>
+  $\frac{\partial r_1}{\partial x_1} = 2x_1$, &emsp; $\frac{\partial r_1}{\partial x_2} = 2x_2$
+</div>
+
+<div class="step">
+  <span class="step-label">Step 2: Partial derivatives of $r_2$.</span><br>
+  $\frac{\partial r_2}{\partial x_1} = 1$, &emsp; $\frac{\partial r_2}{\partial x_2} = -1$
+</div>
+
+<div class="step">
+  <span class="step-label">Step 3: Assemble the Jacobian.</span><br>
+  $$J(x) = \begin{bmatrix} 2x_1 & 2x_2 \\ 1 & -1 \end{bmatrix}$$
+</div>
+
+<div class="step">
+  <span class="step-label">Step 4: Evaluate at $x^{(0)} = [0.8, 0.5]^T$.</span><br>
+  $$J(0.8, 0.5) = \begin{bmatrix} 2(0.8) & 2(0.5) \\ 1 & -1 \end{bmatrix} = \begin{bmatrix} 1.6 & 1.0 \\ 1 & -1 \end{bmatrix}$$
+</div>
+
+<div class="step">
+  <span class="step-label">Step 5: Newton step for systems (preview of Page 14).</span><br>
+  Newton's method for systems solves $J(x^{(k)}) \, \Delta x = -\mathbf{r}(x^{(k)})$ for $\Delta x$.
+  <br><br>
+  First, evaluate $\mathbf{r}(x^{(0)})$:
+  <br>$r_1(0.8, 0.5) = 0.64 + 0.25 - 1 = -0.11$
+  <br>$r_2(0.8, 0.5) = 0.8 - 0.5 = 0.3$
+  <br><br>
+  Solve:
+  $\begin{bmatrix} 1.6 & 1.0 \\ 1 & -1 \end{bmatrix} \begin{bmatrix} \Delta x_1 \\ \Delta x_2 \end{bmatrix} = \begin{bmatrix} 0.11 \\ -0.3 \end{bmatrix}$
+  <br><br>
+  From row 2: $\Delta x_1 - \Delta x_2 = -0.3$, so $\Delta x_1 = \Delta x_2 - 0.3$.
+  <br>Substitute into row 1: $1.6(\Delta x_2 - 0.3) + 1.0\, \Delta x_2 = 0.11$
+  <br>$1.6\,\Delta x_2 - 0.48 + \Delta x_2 = 0.11$
+  <br>$2.6\,\Delta x_2 = 0.59$
+  <br>$\Delta x_2 = 0.2269$
+  <br>$\Delta x_1 = 0.2269 - 0.3 = -0.0731$
+  <br><br>
+  $x^{(1)} = x^{(0)} + \Delta x = [0.8 - 0.0731, \; 0.5 + 0.2269]^T = $ <span class="result">$[0.7269, \; 0.7269]^T$</span>
+</div>
+
+<p class="check">Notice that $x_1^{(1)} \approx x_2^{(1)}$ &mdash; Newton already pushed us almost onto the line $x_1 = x_2$! The exact solution is $x_1 = x_2 = 1/\sqrt{2} \approx 0.7071$. After one more Newton step we would be extremely close.</p>
+</div>
+
+<div class="why-box">
+<h3>Where Does the Jacobian Appear in This Course?</h3>
+<ul style="margin-left:20px;">
+  <li><strong>Newton's method for nonlinear systems</strong> (<a href="cg-14-nonlinear-systems.html" style="color:#64ffda;">Page 14</a>): replace the single Hessian with the Jacobian to solve systems of equations.</li>
+  <li><strong>Nonlinear least squares</strong> (<a href="cg-13-least-squares.html" style="color:#64ffda;">Page 13</a>): the Gauss-Newton method uses the Jacobian of the residual vector. The approximate Hessian is $J^T J$.</li>
+  <li><strong>KKT conditions for constrained optimization</strong> (<a href="cg-15-constrained.html" style="color:#64ffda;">Page 15</a>): the Jacobian of the constraint functions appears in the KKT system.</li>
+</ul>
+<p style="margin-top:8px;">If you understand the gradient, the Jacobian is just "do the gradient for each equation and stack them as rows."</p>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- GLOSSARY                                                           -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+
+<h2>Glossary</h2>
+
+<div class="glossary">
+<h3>Key Terms from This Page</h3>
+<dl>
+  <dt>Partial derivative ($\frac{\partial f}{\partial x_i}$)</dt>
+  <dd>The derivative of $f$ with respect to one variable $x_i$, holding all other variables constant. Uses the same rules as single-variable calculus (power rule, product rule, chain rule) &mdash; you just pretend the other variables are numbers.</dd>
+
+  <dt>Gradient ($\nabla f$)</dt>
+  <dd>A vector that collects all partial derivatives of a scalar function: $\nabla f = [\frac{\partial f}{\partial x_1}, \ldots, \frac{\partial f}{\partial x_n}]^T$. It points in the direction of steepest increase of $f$. Its magnitude $\|\nabla f\|$ measures how steep the function is at that point. Setting $\nabla f = \mathbf{0}$ finds stationary points.</dd>
+
+  <dt>Hessian ($\nabla^2 f$)</dt>
+  <dd>A symmetric matrix of second partial derivatives. Entry $(i,j)$ is $\frac{\partial^2 f}{\partial x_i \partial x_j}$. It encodes the curvature of $f$ in every direction. Its eigenvalues determine whether a stationary point is a minimum (all positive), maximum (all negative), or saddle (mixed signs).</dd>
+
+  <dt>Jacobian ($J$)</dt>
+  <dd>A matrix of first partial derivatives for a vector-valued function $\mathbf{r}: \mathbb{R}^n \to \mathbb{R}^m$. Row $i$ is the gradient of $r_i$ written as a row. It has $m$ rows (one per function) and $n$ columns (one per variable). It generalizes the gradient from scalar functions to vector functions.</dd>
+
+  <dt>Stationary point</dt>
+  <dd>A point $x^*$ where $\nabla f(x^*) = \mathbf{0}$ &mdash; the function is "flat" in every direction. Could be a local minimum, local maximum, or saddle point. The Hessian is needed to classify which type.</dd>
+
+  <dt>Second derivative test (2D)</dt>
+  <dd>For a stationary point in two dimensions, compute $D = \det(\nabla^2 f) = f_{x_1 x_1} f_{x_2 x_2} - (f_{x_1 x_2})^2$. If $D > 0$ and $f_{x_1 x_1} > 0$: local minimum. If $D > 0$ and $f_{x_1 x_1} < 0$: local maximum. If $D < 0$: saddle point. If $D = 0$: inconclusive.</dd>
+
+  <dt>Chain rule (multivariable)</dt>
+  <dd>If $f$ depends on intermediate variables $u_1, \ldots, u_m$ which each depend on $x_1, \ldots, x_n$, then $\frac{\partial f}{\partial x_j} = \sum_i \frac{\partial f}{\partial u_i} \frac{\partial u_i}{\partial x_j}$. Each "path" from $x_j$ to $f$ through an intermediate variable contributes a term.</dd>
+
+  <dt>Symmetric matrix</dt>
+  <dd>A matrix equal to its own transpose: $A = A^T$, meaning $a_{ij} = a_{ji}$. The Hessian is always symmetric (for functions with continuous second derivatives) because $\frac{\partial^2 f}{\partial x_i \partial x_j} = \frac{\partial^2 f}{\partial x_j \partial x_i}$. Symmetric matrices have real eigenvalues.</dd>
+</dl>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- NAVIGATION                                                         -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+
+<div class="nav">
+  <p><a href="cg-01-math-foundations.html">&larr; Previous: Page 01 &mdash; Math Foundations</a></p>
+  <p><a href="cg-03-linear-algebra.html">Next: Page 03 &mdash; Linear Algebra Essentials &rarr;</a></p>
+  <p><a href="index.html">Back to Index</a></p>
+</div>
+
+</div><!-- .container -->
+</body>
+</html>

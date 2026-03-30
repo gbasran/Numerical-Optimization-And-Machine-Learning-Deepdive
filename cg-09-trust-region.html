@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page 09 &mdash; Trust-Region Methods | MATH 3850 Course Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
+.container { max-width: 900px; margin: 0 auto; }
+h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
+.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
+h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
+.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
+.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
+.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
+.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
+.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
+.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
+.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
+.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
+.hand-calc .result { color: #64ffda; font-weight: bold; }
+.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
+.exam-flag { background: #2a1a1a; border: 2px solid #ff6b6b; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
+.exam-flag h4 { color: #ff6b6b; margin-bottom: 8px; }
+.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
+.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
+.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
+.step-table tr:nth-child(even) { background: #16213e; }
+.algo-box { border-left: 4px solid #64ffda; padding: 16px 20px; margin: 20px 0; background: #0f3460; border-radius: 0 12px 12px 0; }
+.algo-box .algo-title { color: #ffd93d; font-weight: bold; font-size: 18px; margin-bottom: 12px; }
+.algo-box .algo-line { padding: 6px 0; font-size: 16px; }
+.algo-box .algo-comment { color: #888; font-size: 14px; }
+.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
+.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
+.glossary dl { font-size: 15px; }
+.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
+.glossary dd { margin-left: 20px; color: #ccc; }
+.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
+.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
+.nav a:hover { text-decoration: underline; }
+.nav p { margin: 4px 0; }
+svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
+.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
+.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
+.breakdown dd { color: #ccc; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<span class="tag">PAGE 09</span>
+<h1>Trust-Region Methods</h1>
+<p class="subtitle">A fundamentally different philosophy from line search &mdash; control WHERE you step, not just HOW FAR &mdash; mirrors Quiz 4 exactly</p>
+
+<!-- ===================== PART A ===================== -->
+<h2>Part A: The Trust-Region Idea &mdash; Safety Zone</h2>
+
+<div class="analogy">
+<strong>Physical analogy &mdash; Line search vs. trust region: two hiking philosophies.</strong><br><br>
+
+Imagine you are hiking in dense fog. You have a map (your quadratic model) that shows the terrain around you, but the map is only accurate within a certain radius &mdash; beyond that, it is just a guess. Two hiking strategies emerge:<br><br>
+
+<strong>Line search philosophy (Pages <a href="cg-08-line-search.html" style="color:#64ffda;">08</a>):</strong> "I pick a direction first &mdash; the steepest downhill on my map &mdash; and then figure out how far to walk in that direction." The direction is chosen, then the distance is chosen. Two separate decisions.<br><br>
+
+<strong>Trust-region philosophy:</strong> "I trust my map within a certain RADIUS around where I stand. Inside that circle, the map is reliable. I find the lowest point on my map that is still within that trusted circle. Then I walk there." Direction AND distance are chosen simultaneously, but the step must stay inside the safety zone where the map can be believed.<br><br>
+
+What makes this powerful is the feedback loop. After you take the step, you compare what actually happened (real change in elevation) to what your map predicted. If the map was honest &mdash; it predicted a 50-meter drop and you actually dropped 48 meters &mdash; you trust it more and expand the radius. If the map was wrong &mdash; it predicted a 50-meter drop but you only dropped 5 meters &mdash; you shrink the radius. If the map was catastrophically wrong &mdash; it predicted a drop but you actually went UP &mdash; you reject the step entirely and try again with a much smaller circle.<br><br>
+
+The key insight: <strong>trust region adapts automatically</strong>. Near the solution where the quadratic model is very accurate, the radius grows large, and you take big Newton-like steps. Far from the solution where the model is poor, the radius shrinks, and you take cautious steepest-descent-like steps. No hand-tuning needed.
+</div>
+
+<div class="formula-box">
+<strong>The Trust-Region Subproblem</strong>
+
+$$\min_{p}\; m_k(p) = f(x_k) + g_k^T p + \tfrac{1}{2}\,p^T B_k\, p \quad \text{subject to} \quad \|p\| \leq \Delta_k$$
+
+<dl class="breakdown">
+  <dt>$m_k(p)$</dt><dd>the <strong>quadratic model</strong> &mdash; our "map" of the terrain near $x_k$. It approximates the true function $f$ using a Taylor expansion up to second order.</dd>
+  <dt>$f(x_k)$</dt><dd>the value of the real function at the current point &mdash; the "elevation where we stand now"</dd>
+  <dt>$g_k = \nabla f(x_k)$</dt><dd>the gradient at the current point (recall from <a href="cg-02-multivariable-bridge.html" style="color:#64ffda;">Page 02</a> &mdash; the direction of steepest increase)</dd>
+  <dt>$g_k^T p$</dt><dd>the linear (first-order) contribution &mdash; how much the function changes due to the slope</dd>
+  <dt>$B_k$</dt><dd>the Hessian $\nabla^2 f(x_k)$ or an approximation to it (recall the Hessian from <a href="cg-02-multivariable-bridge.html" style="color:#64ffda;">Page 02</a> &mdash; the curvature matrix)</dd>
+  <dt>$\tfrac{1}{2}\,p^T B_k\, p$</dt><dd>the quadratic (second-order) contribution &mdash; how curvature bends the prediction</dd>
+  <dt>$p$</dt><dd>the step we are computing &mdash; a vector telling us which direction and how far to move</dd>
+  <dt>$\|p\| \leq \Delta_k$</dt><dd>the <strong>trust-region constraint</strong> &mdash; the step must have length at most $\Delta_k$</dd>
+  <dt>$\Delta_k$</dt><dd>the <strong>trust-region radius</strong> &mdash; the size of the safety zone at iteration $k$</dd>
+</dl>
+
+<p style="margin-top: 12px;">In words: "Find the step $p$ that makes the quadratic model as small as possible, but don't go farther than $\Delta_k$ from the current point."</p>
+</div>
+
+<div class="note">
+<strong>Connection to Newton's method (<a href="cg-07-newton-method.html" style="color:#bb86fc;">Page 07</a>):</strong> Without the constraint $\|p\| \leq \Delta_k$, the minimizer of $m_k(p)$ is exactly the Newton step: $p_N = -B_k^{-1} g_k$. Trust region says: "Use Newton when it's safe (inside the circle), but rein it in when Newton wants to jump too far."
+</div>
+
+<!-- SVG Diagram: Trust Region on Contour Plot -->
+<div style="text-align: center; margin: 30px 0;">
+<svg width="700" height="400" viewBox="0 0 700 400">
+  <!-- Background -->
+  <rect width="700" height="400" fill="#0f1a2e" rx="12"/>
+
+  <!-- Title -->
+  <text x="350" y="30" fill="#ffd93d" font-size="16" font-weight="bold" text-anchor="middle">Trust Region: Two Scenarios</text>
+
+  <!-- LEFT PANEL: Newton inside -->
+  <text x="175" y="55" fill="#64ffda" font-size="14" font-weight="bold" text-anchor="middle">Case 1: Newton step INSIDE circle</text>
+
+  <!-- Contour ellipses (left) -->
+  <ellipse cx="120" cy="260" rx="120" ry="80" fill="none" stroke="#334" stroke-width="1.5"/>
+  <ellipse cx="120" cy="260" rx="90" ry="60" fill="none" stroke="#445" stroke-width="1.5"/>
+  <ellipse cx="120" cy="260" rx="60" ry="40" fill="none" stroke="#556" stroke-width="1.5"/>
+  <ellipse cx="120" cy="260" rx="30" ry="20" fill="none" stroke="#667" stroke-width="1.5"/>
+  <text x="120" y="265" fill="#888" font-size="11" text-anchor="middle">minimum</text>
+
+  <!-- Current point (left) -->
+  <circle cx="220" cy="200" r="6" fill="#ff6b6b"/>
+  <text x="232" y="196" fill="#ff6b6b" font-size="13" font-weight="bold">x_k</text>
+
+  <!-- Trust region circle (left) -->
+  <circle cx="220" cy="200" r="80" fill="none" stroke="#64ffda" stroke-width="2" stroke-dasharray="8,4"/>
+  <text x="308" y="178" fill="#64ffda" font-size="12">Delta_k</text>
+
+  <!-- Newton point (left) - INSIDE circle -->
+  <circle cx="175" cy="230" r="6" fill="#bb86fc"/>
+  <text x="155" y="250" fill="#bb86fc" font-size="12" font-weight="bold">p_N</text>
+
+  <!-- Arrow from x_k to Newton point -->
+  <line x1="220" y1="200" x2="179" y2="228" stroke="#bb86fc" stroke-width="2" marker-end="url(#arrowPurple)"/>
+
+  <!-- Checkmark -->
+  <text x="175" y="280" fill="#64ffda" font-size="14" text-anchor="middle">Accept Newton step!</text>
+
+  <!-- RIGHT PANEL: Newton outside -->
+  <text x="525" y="55" fill="#ff6b6b" font-size="14" font-weight="bold" text-anchor="middle">Case 2: Newton step OUTSIDE circle</text>
+
+  <!-- Contour ellipses (right) -->
+  <ellipse cx="430" cy="300" rx="120" ry="80" fill="none" stroke="#334" stroke-width="1.5"/>
+  <ellipse cx="430" cy="300" rx="90" ry="60" fill="none" stroke="#445" stroke-width="1.5"/>
+  <ellipse cx="430" cy="300" rx="60" ry="40" fill="none" stroke="#556" stroke-width="1.5"/>
+  <ellipse cx="430" cy="300" rx="30" ry="20" fill="none" stroke="#667" stroke-width="1.5"/>
+  <text x="430" y="305" fill="#888" font-size="11" text-anchor="middle">minimum</text>
+
+  <!-- Current point (right) -->
+  <circle cx="580" cy="160" r="6" fill="#ff6b6b"/>
+  <text x="592" y="156" fill="#ff6b6b" font-size="13" font-weight="bold">x_k</text>
+
+  <!-- Trust region circle (right) - smaller -->
+  <circle cx="580" cy="160" r="55" fill="none" stroke="#64ffda" stroke-width="2" stroke-dasharray="8,4"/>
+  <text x="640" y="145" fill="#64ffda" font-size="12">Delta_k</text>
+
+  <!-- Newton point (right) - OUTSIDE circle -->
+  <circle cx="460" cy="280" r="6" fill="#bb86fc" opacity="0.4"/>
+  <text x="470" y="296" fill="#bb86fc" font-size="12" opacity="0.5">p_N (too far!)</text>
+
+  <!-- Dashed arrow to Newton (rejected) -->
+  <line x1="580" y1="160" x2="465" y2="276" stroke="#bb86fc" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.4"/>
+
+  <!-- Constrained point on boundary (right) -->
+  <circle cx="541" cy="207" r="6" fill="#ffd93d"/>
+  <text x="500" y="228" fill="#ffd93d" font-size="12" font-weight="bold">p* (on boundary)</text>
+
+  <!-- Solid arrow to constrained point -->
+  <line x1="580" y1="160" x2="545" y2="203" stroke="#ffd93d" stroke-width="2.5" marker-end="url(#arrowGold)"/>
+
+  <!-- Label -->
+  <text x="525" y="340" fill="#ffd93d" font-size="14" text-anchor="middle">Clip to boundary!</text>
+
+  <!-- Divider -->
+  <line x1="350" y1="45" x2="350" y2="380" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowPurple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#bb86fc"/>
+    </marker>
+    <marker id="arrowGold" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#ffd93d"/>
+    </marker>
+  </defs>
+</svg>
+</div>
+
+<div class="why-box">
+<h3>Why trust region instead of line search?</h3>
+<p>Line search (<a href="cg-08-line-search.html" style="color:#64ffda;">Page 08</a>) needs a "descent direction" first &mdash; if the direction is bad, no step length can save you. Trust region does not pick a direction first. It searches over ALL directions simultaneously, constrained only by the radius. This makes it more robust, especially when the Hessian is indefinite (saddle-point curvature) where Newton's direction might actually go uphill.</p>
+</div>
+
+
+<!-- ===================== PART B ===================== -->
+<h2>Part B: The Ratio Test &mdash; Is the Model Honest?</h2>
+
+<div class="analogy">
+<strong>Physical analogy &mdash; A weather forecaster's track record.</strong><br><br>
+
+Imagine you hire a weather forecaster (your quadratic model). Every day, they predict tomorrow's temperature change. After the day passes, you compare their prediction to what actually happened.<br><br>
+
+<strong>Ratio near 1:</strong> The forecaster predicted a 10-degree drop, and it actually dropped 9.5 degrees. The prediction was nearly perfect. You trust this forecaster more &mdash; next time, you let them make predictions further ahead (expand the trust radius).<br><br>
+
+<strong>Ratio near 0 but positive:</strong> The forecaster predicted a 10-degree drop, but the temperature only dropped 1 degree. The prediction was in the right direction but wildly optimistic. You still keep the forecaster (the step did improve things), but you limit their forecast range (shrink the radius).<br><br>
+
+<strong>Ratio near 0:</strong> The forecaster predicted a 10-degree drop, but nothing happened. Useless prediction. Reject it, shrink their range drastically.<br><br>
+
+<strong>Ratio negative:</strong> The forecaster predicted a 10-degree DROP, but the temperature actually ROSE 5 degrees. The prediction was not just wrong &mdash; it was backwards. This is dangerous. Reject the step immediately, shrink the radius dramatically, and demand the forecaster re-predict within a much smaller window.<br><br>
+
+The ratio $\rho_k$ is exactly this: it compares the real outcome to the model's prediction, and we use it to dynamically adjust how much we trust the model.
+</div>
+
+<div class="formula-box">
+<strong>The Ratio $\rho_k$</strong>
+
+$$\rho_k = \frac{f(x_k) - f(x_k + p_k)}{m_k(0) - m_k(p_k)} = \frac{\text{actual reduction}}{\text{predicted reduction}}$$
+
+<dl class="breakdown">
+  <dt>$f(x_k)$</dt><dd>the true function value at the current point (before the step)</dd>
+  <dt>$f(x_k + p_k)$</dt><dd>the true function value AFTER taking the proposed step $p_k$</dd>
+  <dt>$f(x_k) - f(x_k + p_k)$</dt><dd>the <strong>actual reduction</strong> &mdash; how much $f$ really decreased (positive = improved, negative = got worse)</dd>
+  <dt>$m_k(0)$</dt><dd>the model's value at $p = 0$ (the current point) = $f(x_k)$ (the model is exact at the current point)</dd>
+  <dt>$m_k(p_k)$</dt><dd>the model's predicted value after step $p_k$</dd>
+  <dt>$m_k(0) - m_k(p_k)$</dt><dd>the <strong>predicted reduction</strong> &mdash; how much the model thinks $f$ will decrease</dd>
+</dl>
+
+<p style="margin-top: 12px;">Since $p_k$ minimizes $m_k$ subject to the constraint, we always have $m_k(p_k) \leq m_k(0)$, so the <strong>denominator is always non-negative</strong>. The sign of $\rho_k$ depends entirely on the numerator: did $f$ actually decrease?</p>
+</div>
+
+<div class="formula-box">
+<strong>Decision Rules Based on $\rho_k$</strong>
+
+<table class="step-table" style="margin-top: 16px;">
+<tr>
+  <th style="text-align:left;">Condition</th>
+  <th>What it means</th>
+  <th>Accept step?</th>
+  <th>Update $\Delta$</th>
+</tr>
+<tr>
+  <td style="text-align:left; color:#ff6b6b; font-weight:bold;">$\rho_k < 0$</td>
+  <td>Model predicted improvement, but $f$ <em>increased</em></td>
+  <td style="color:#ff6b6b;">Reject</td>
+  <td>Shrink: $\Delta_{k+1} = \tfrac{1}{4}\Delta_k$</td>
+</tr>
+<tr>
+  <td style="text-align:left; color:#ff6b6b; font-weight:bold;">$0 < \rho_k < 0.25$</td>
+  <td>Model is a poor predictor &mdash; actual reduction much less than predicted</td>
+  <td style="color:#ff6b6b;">Reject</td>
+  <td>Shrink: $\Delta_{k+1} = \tfrac{1}{4}\Delta_k$</td>
+</tr>
+<tr>
+  <td style="text-align:left; color:#ffd93d; font-weight:bold;">$0.25 \leq \rho_k < 0.75$</td>
+  <td>Model is reasonably accurate</td>
+  <td style="color:#64ffda;">Accept</td>
+  <td>Keep: $\Delta_{k+1} = \Delta_k$</td>
+</tr>
+<tr>
+  <td style="text-align:left; color:#64ffda; font-weight:bold;">$\rho_k \geq 0.75$ AND $\|p_k\| = \Delta_k$</td>
+  <td>Model is excellent AND step hit the boundary (we might be constrained)</td>
+  <td style="color:#64ffda;">Accept</td>
+  <td>Expand: $\Delta_{k+1} = \min(2\Delta_k, \hat{\Delta})$</td>
+</tr>
+<tr>
+  <td style="text-align:left; color:#64ffda; font-weight:bold;">$\rho_k \geq 0.75$ AND $\|p_k\| < \Delta_k$</td>
+  <td>Model is excellent, but step is interior (radius was already big enough)</td>
+  <td style="color:#64ffda;">Accept</td>
+  <td>Keep: $\Delta_{k+1} = \Delta_k$</td>
+</tr>
+</table>
+</div>
+
+<div class="note">
+<strong>Why expand only when $\|p_k\| = \Delta_k$?</strong> If the step is in the interior of the trust region (did NOT hit the boundary), then the radius was already large enough &mdash; making it bigger would not change the step at all. We only expand when the boundary was an active constraint, meaning a larger radius might yield a better step.
+</div>
+
+<div class="why-box">
+<h3>Why the 0.25 and 0.75 thresholds?</h3>
+<p>These are not magical numbers. They come from the textbook (Nocedal &amp; Wright, Algorithm 4.1). The idea: 0.25 separates "poor model" from "acceptable model," and 0.75 separates "acceptable" from "excellent." Some implementations use slightly different thresholds, but the logic is always the same: bad ratio = shrink, good ratio + boundary hit = expand, everything else = keep.</p>
+</div>
+
+
+<!-- ===================== PART C ===================== -->
+<h2>Part C: Algorithm 4.1 &mdash; The Full Trust-Region Algorithm</h2>
+
+<div class="algo-box">
+<div class="algo-title">Algorithm 4.1: Trust-Region Method</div>
+
+<div class="algo-line"><span style="color:#64ffda; font-weight:bold;">Given:</span> starting point $x_0$, initial radius $\Delta_0 > 0$, maximum radius $\hat{\Delta} > 0$, threshold $\eta \in [0, \tfrac{1}{4})$</div>
+<div class="algo-line" style="padding-left: 24px;"><span class="algo-comment">// $\hat{\Delta}$ = the largest the radius is ever allowed to grow. $\eta$ = acceptance threshold (typically $\eta = 0$ or small).</span></div>
+<br>
+<div class="algo-line"><span style="color:#ffd93d; font-weight:bold;">for</span> $k = 0, 1, 2, \ldots$</div>
+<br>
+<div class="algo-line" style="padding-left: 24px;"><span style="color:#bb86fc; font-weight:bold;">Step 1:</span> Compute $g_k = \nabla f(x_k)$ and $B_k = \nabla^2 f(x_k)$ (or approximation)</div>
+<div class="algo-line" style="padding-left: 48px;"><span class="algo-comment">// Build the quadratic model $m_k(p) = f(x_k) + g_k^T p + \tfrac{1}{2} p^T B_k p$</span></div>
+<br>
+<div class="algo-line" style="padding-left: 24px;"><span style="color:#bb86fc; font-weight:bold;">Step 2:</span> Approximately solve: $\min_p\; m_k(p)$ subject to $\|p\| \leq \Delta_k$, to get $p_k$</div>
+<div class="algo-line" style="padding-left: 48px;"><span class="algo-comment">// Find the best step inside the circle. Exact solve or use Cauchy point (Part D).</span></div>
+<br>
+<div class="algo-line" style="padding-left: 24px;"><span style="color:#bb86fc; font-weight:bold;">Step 3:</span> Compute the ratio: $\rho_k = \dfrac{f(x_k) - f(x_k + p_k)}{m_k(0) - m_k(p_k)}$</div>
+<div class="algo-line" style="padding-left: 48px;"><span class="algo-comment">// Compare actual vs predicted reduction</span></div>
+<br>
+<div class="algo-line" style="padding-left: 24px;"><span style="color:#bb86fc; font-weight:bold;">Step 4:</span> Update the radius:</div>
+<div class="algo-line" style="padding-left: 48px;"><span style="color:#ff6b6b;">if</span> $\rho_k < \tfrac{1}{4}$: &nbsp; $\Delta_{k+1} = \tfrac{1}{4}\,\Delta_k$ <span class="algo-comment">// model was bad &rarr; shrink</span></div>
+<div class="algo-line" style="padding-left: 48px;"><span style="color:#64ffda;">else if</span> $\rho_k > \tfrac{3}{4}$ and $\|p_k\| = \Delta_k$: &nbsp; $\Delta_{k+1} = \min(2\Delta_k,\, \hat{\Delta})$ <span class="algo-comment">// model great + hit boundary &rarr; expand</span></div>
+<div class="algo-line" style="padding-left: 48px;"><span style="color:#ffd93d;">else:</span> &nbsp; $\Delta_{k+1} = \Delta_k$ <span class="algo-comment">// keep radius the same</span></div>
+<br>
+<div class="algo-line" style="padding-left: 24px;"><span style="color:#bb86fc; font-weight:bold;">Step 5:</span> Update the iterate:</div>
+<div class="algo-line" style="padding-left: 48px;"><span style="color:#64ffda;">if</span> $\rho_k > \eta$: &nbsp; $x_{k+1} = x_k + p_k$ <span class="algo-comment">// accept the step</span></div>
+<div class="algo-line" style="padding-left: 48px;"><span style="color:#ff6b6b;">else:</span> &nbsp; $x_{k+1} = x_k$ <span class="algo-comment">// reject the step, stay put</span></div>
+<br>
+<div class="algo-line"><span style="color:#ffd93d; font-weight:bold;">end for</span></div>
+</div>
+
+<div class="why-box">
+<h3>Key observations about Algorithm 4.1</h3>
+<p><strong>1. Steps 4 and 5 are independent:</strong> The radius update (Step 4) and the iterate update (Step 5) use different thresholds. A step can be accepted ($\rho_k > \eta$) even while the radius is shrunk ($\rho_k < 0.25$). In fact, with $\eta = 0$, any step that does not make things worse is accepted.</p>
+<p style="margin-top: 8px;"><strong>2. We always evaluate $f(x_k + p_k)$:</strong> Even if we might reject the step, we need the true function value to compute $\rho_k$. This costs one extra function evaluation per iteration.</p>
+<p style="margin-top: 8px;"><strong>3. The maximum radius $\hat{\Delta}$:</strong> This prevents the radius from growing without bound. In practice, $\hat{\Delta}$ is set large enough that it rarely matters.</p>
+</div>
+
+
+<!-- ===================== PART D ===================== -->
+<h2>Part D: The Cauchy Point</h2>
+
+<div class="analogy">
+<strong>Physical analogy &mdash; The cautious minimum.</strong><br><br>
+The Cauchy point is the simplest possible solution to the trust-region subproblem. Instead of finding the absolute best point inside the circle (which requires solving a potentially hard optimization), you just walk along the steepest descent direction until either:<br>
+(a) you reach the point where the model starts going back up (the quadratic's minimum along that line), or<br>
+(b) you hit the trust-region boundary (the edge of your safety zone).<br><br>
+It is like a hiker who only knows how to walk straight downhill and stop when they either reach the bottom of a valley or hit a fence. Not the smartest strategy, but guaranteed to make decent progress every time.
+</div>
+
+<div class="formula-box">
+<strong>The Cauchy Point $p_k^C$</strong>
+
+$$p_k^C = -\tau_k \frac{\Delta_k}{\|g_k\|}\, g_k$$
+
+<dl class="breakdown">
+  <dt>$g_k$</dt><dd>the gradient at $x_k$ &mdash; points uphill, so $-g_k$ points steepest downhill</dd>
+  <dt>$\frac{\Delta_k}{\|g_k\|}\,g_k$</dt><dd>this is the gradient <strong>scaled</strong> so its length equals $\Delta_k$ (the trust-region radius). It points from the center to the trust-region boundary along the gradient direction.</dd>
+  <dt>$\tau_k \in (0, 1]$</dt><dd>a scalar that controls how far along the steepest descent direction we go. $\tau_k = 1$ means go all the way to the boundary. $\tau_k < 1$ means stop before the boundary (because the model's minimum along this line is closer).</dd>
+</dl>
+</div>
+
+<div class="formula-box">
+<strong>Computing $\tau_k$ &mdash; Two Cases</strong>
+
+<p style="margin-bottom: 12px;">The value of $\tau_k$ depends on the curvature of the model along the gradient direction:</p>
+
+<p><strong>Case 1:</strong> $g_k^T B_k g_k \leq 0$ (the model has zero or negative curvature along the gradient direction)</p>
+$$\tau_k = 1$$
+<p>The model is flat or curving downward along $-g_k$, so it never has a minimum along this line within the trust region. Go all the way to the boundary.</p>
+
+<p style="margin-top: 16px;"><strong>Case 2:</strong> $g_k^T B_k g_k > 0$ (the model has positive curvature &mdash; a bowl shape along this direction)</p>
+$$\tau_k = \min\!\left(1,\; \frac{\|g_k\|^3}{\Delta_k \cdot g_k^T B_k g_k}\right)$$
+<p>The model has a minimum along $-g_k$ at distance $\frac{\|g_k\|^2}{g_k^T B_k g_k}$ from $x_k$. If this minimum is inside the trust region, $\tau_k < 1$ (stop at the minimum). If it is outside, $\tau_k = 1$ (go to the boundary).</p>
+</div>
+
+<div class="why-box">
+<h3>Why bother with the Cauchy point?</h3>
+<p><strong>Guaranteed convergence.</strong> Theorem 4.4 in the textbook proves: if every step produces at least as much reduction as the Cauchy point, then the algorithm is globally convergent (the gradient norms go to zero). The Cauchy point is the "minimum quality bar" for the subproblem solution. Any better solution (like the exact Newton step when it fits inside the circle) is a bonus.</p>
+</div>
+
+<div class="note">
+<strong>In practice:</strong> Good implementations solve the subproblem more accurately than just the Cauchy point (e.g., using the "dogleg" method or iteratively solving the subproblem). But on exams, you typically either compute the Newton step (and check if it fits) or compute the Cauchy point. Quiz 4 asks for the Newton step approach.
+</div>
+
+
+<!-- ===================== PART E ===================== -->
+<h2>Part E: Full Hand Computation &mdash; Mirrors Quiz 4</h2>
+
+<div class="exam-flag">
+<h4>EXAM ALERT: This is the exact type of problem from Quiz 4</h4>
+<p>You will be given a function, a starting point, and a trust-region radius. You must: compute the gradient and Hessian, build the quadratic model, compute the Newton step, check if it fits inside the trust region, compute the ratio $\rho_k$, and decide whether to accept the step and how to update $\Delta$.</p>
+</div>
+
+<div class="hand-calc">
+<h3>Problem Setup</h3>
+<div class="step">
+$$f(x_1, x_2) = 2x_1^2 + x_2^2 - 2x_1 x_2 + 2x_1^3 + x_1^4$$
+$$x_0 = (1, 1), \quad \Delta_0 = 1$$
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 1: Compute $f(x_0)$</h3>
+<div class="step">
+<p class="step-label">Evaluate each term at $(x_1, x_2) = (1, 1)$:</p>
+$$2x_1^2 = 2(1)^2 = 2$$
+$$x_2^2 = (1)^2 = 1$$
+$$-2x_1 x_2 = -2(1)(1) = -2$$
+$$2x_1^3 = 2(1)^3 = 2$$
+$$x_1^4 = (1)^4 = 1$$
+
+$$f(x_0) = 2 + 1 - 2 + 2 + 1 = \boxed{4}$$
+<p class="result">$f(x_0) = 4$</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 2: Compute the Gradient $g_0 = \nabla f(x_0)$</h3>
+<div class="step">
+<p class="step-label">Partial derivative with respect to $x_1$:</p>
+<p>Differentiate each term: $\frac{\partial}{\partial x_1}(2x_1^2) = 4x_1$, $\frac{\partial}{\partial x_1}(x_2^2) = 0$, $\frac{\partial}{\partial x_1}(-2x_1 x_2) = -2x_2$, $\frac{\partial}{\partial x_1}(2x_1^3) = 6x_1^2$, $\frac{\partial}{\partial x_1}(x_1^4) = 4x_1^3$.</p>
+$$\frac{\partial f}{\partial x_1} = 4x_1 - 2x_2 + 6x_1^2 + 4x_1^3$$
+<p>At $(1, 1)$: $4(1) - 2(1) + 6(1)^2 + 4(1)^3 = 4 - 2 + 6 + 4 = 12$</p>
+</div>
+<div class="step">
+<p class="step-label">Partial derivative with respect to $x_2$:</p>
+<p>Differentiate each term: $\frac{\partial}{\partial x_2}(2x_1^2) = 0$, $\frac{\partial}{\partial x_2}(x_2^2) = 2x_2$, $\frac{\partial}{\partial x_2}(-2x_1 x_2) = -2x_1$, the last two terms have no $x_2$.</p>
+$$\frac{\partial f}{\partial x_2} = 2x_2 - 2x_1$$
+<p>At $(1, 1)$: $2(1) - 2(1) = 0$</p>
+</div>
+<div class="step">
+<p class="result">$$g_0 = \nabla f(x_0) = \begin{bmatrix} 12 \\ 0 \end{bmatrix}$$</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 3: Compute the Hessian $B_0 = \nabla^2 f(x_0)$</h3>
+<div class="step">
+<p class="step-label">We need all four second partial derivatives (recall the Hessian from <a href="cg-02-multivariable-bridge.html" style="color:#ffd93d;">Page 02</a>):</p>
+
+<p><strong>$\frac{\partial^2 f}{\partial x_1^2}$:</strong> Differentiate $\frac{\partial f}{\partial x_1} = 4x_1 - 2x_2 + 6x_1^2 + 4x_1^3$ with respect to $x_1$:</p>
+$$\frac{\partial^2 f}{\partial x_1^2} = 4 + 12x_1 + 12x_1^2$$
+<p>At $(1,1)$: $4 + 12(1) + 12(1)^2 = 4 + 12 + 12 = 28$</p>
+
+<p style="margin-top: 12px;"><strong>$\frac{\partial^2 f}{\partial x_1 \partial x_2}$:</strong> Differentiate $\frac{\partial f}{\partial x_1} = 4x_1 - 2x_2 + 6x_1^2 + 4x_1^3$ with respect to $x_2$:</p>
+$$\frac{\partial^2 f}{\partial x_1 \partial x_2} = -2$$
+<p>At $(1,1)$: $-2$</p>
+
+<p style="margin-top: 12px;"><strong>$\frac{\partial^2 f}{\partial x_2 \partial x_1}$:</strong> Differentiate $\frac{\partial f}{\partial x_2} = 2x_2 - 2x_1$ with respect to $x_1$:</p>
+$$\frac{\partial^2 f}{\partial x_2 \partial x_1} = -2$$
+<p>At $(1,1)$: $-2$ (matches the cross-partial above, as expected)</p>
+
+<p style="margin-top: 12px;"><strong>$\frac{\partial^2 f}{\partial x_2^2}$:</strong> Differentiate $\frac{\partial f}{\partial x_2} = 2x_2 - 2x_1$ with respect to $x_2$:</p>
+$$\frac{\partial^2 f}{\partial x_2^2} = 2$$
+<p>At $(1,1)$: $2$</p>
+</div>
+<div class="step">
+<p class="result">$$B_0 = \nabla^2 f(x_0) = \begin{bmatrix} 28 & -2 \\ -2 & 2 \end{bmatrix}$$</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 4: Build the Quadratic Model $m_0(p)$</h3>
+<div class="step">
+<p class="step-label">Substituting our computed values into the model formula:</p>
+$$m_0(p) = f(x_0) + g_0^T p + \frac{1}{2} p^T B_0\, p$$
+$$m_0(p) = 4 + \begin{bmatrix} 12 & 0 \end{bmatrix}\begin{bmatrix} p_1 \\ p_2 \end{bmatrix} + \frac{1}{2}\begin{bmatrix} p_1 & p_2 \end{bmatrix}\begin{bmatrix} 28 & -2 \\ -2 & 2 \end{bmatrix}\begin{bmatrix} p_1 \\ p_2 \end{bmatrix}$$
+$$m_0(p) = 4 + 12p_1 + \frac{1}{2}(28p_1^2 - 4p_1 p_2 + 2p_2^2)$$
+$$m_0(p) = 4 + 12p_1 + 14p_1^2 - 2p_1 p_2 + p_2^2$$
+<p class="check">Sanity check: $m_0(0) = 4 = f(x_0)$. The model is exact at the current point.</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 5: Compute the Newton Step $p_N$</h3>
+<div class="step">
+<p class="step-label">The Newton step solves $B_0\, p = -g_0$ (recall from <a href="cg-07-newton-method.html" style="color:#ffd93d;">Page 07</a>):</p>
+$$\begin{bmatrix} 28 & -2 \\ -2 & 2 \end{bmatrix}\begin{bmatrix} p_1 \\ p_2 \end{bmatrix} = \begin{bmatrix} -12 \\ 0 \end{bmatrix}$$
+
+<p style="margin-top: 12px;">Using the 2x2 inverse formula (recall from <a href="cg-03-linear-algebra.html" style="color:#ffd93d;">Page 03</a>): for $A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}$, $A^{-1} = \frac{1}{ad - bc}\begin{bmatrix} d & -b \\ -c & a \end{bmatrix}$.</p>
+
+<p>$\det(B_0) = (28)(2) - (-2)(-2) = 56 - 4 = 52$</p>
+
+$$B_0^{-1} = \frac{1}{52}\begin{bmatrix} 2 & 2 \\ 2 & 28 \end{bmatrix}$$
+
+$$p_N = -B_0^{-1} g_0 = -\frac{1}{52}\begin{bmatrix} 2 & 2 \\ 2 & 28 \end{bmatrix}\begin{bmatrix} 12 \\ 0 \end{bmatrix} = -\frac{1}{52}\begin{bmatrix} 24 \\ 24 \end{bmatrix} = \begin{bmatrix} -24/52 \\ -24/52 \end{bmatrix} = \begin{bmatrix} -6/13 \\ -6/13 \end{bmatrix}$$
+
+<p class="result">$$p_0 = p_N = \begin{bmatrix} -6/13 \\ -6/13 \end{bmatrix} \approx \begin{bmatrix} -0.4615 \\ -0.4615 \end{bmatrix}$$</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 6: Check &mdash; Does the Newton Step Fit Inside the Trust Region?</h3>
+<div class="step">
+<p class="step-label">Compute $\|p_0\|$:</p>
+$$\|p_0\| = \sqrt{\left(\frac{-6}{13}\right)^2 + \left(\frac{-6}{13}\right)^2} = \sqrt{\frac{36}{169} + \frac{36}{169}} = \sqrt{\frac{72}{169}} = \frac{\sqrt{72}}{13} = \frac{6\sqrt{2}}{13}$$
+$$\|p_0\| = \frac{6\sqrt{2}}{13} \approx \frac{6 \times 1.4142}{13} \approx \frac{8.485}{13} \approx 0.6527$$
+
+<p>Compare to $\Delta_0 = 1$:</p>
+$$\|p_0\| \approx 0.653 \leq 1 = \Delta_0 \quad \checkmark$$
+
+<p class="result">The Newton step is INSIDE the trust region. We use it directly: $p_0 = p_N$.</p>
+<p class="check">Note: since $\|p_0\| < \Delta_0$, we did NOT hit the trust-region boundary. This matters for the radius update later.</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 7: Compute the New Point $x_1$</h3>
+<div class="step">
+$$x_1 = x_0 + p_0 = \begin{bmatrix} 1 \\ 1 \end{bmatrix} + \begin{bmatrix} -6/13 \\ -6/13 \end{bmatrix} = \begin{bmatrix} 1 - 6/13 \\ 1 - 6/13 \end{bmatrix} = \begin{bmatrix} 13/13 - 6/13 \\ 13/13 - 6/13 \end{bmatrix}$$
+<p class="result">$$x_1 = \begin{bmatrix} 7/13 \\ 7/13 \end{bmatrix} \approx \begin{bmatrix} 0.5385 \\ 0.5385 \end{bmatrix}$$</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 8: Compute $f(x_1)$</h3>
+<div class="step">
+<p class="step-label">Evaluate $f$ at $x_1 = (7/13, 7/13)$. Let $a = 7/13$ for readability.</p>
+
+$$2a^2 = 2 \cdot \frac{49}{169} = \frac{98}{169}$$
+$$a^2 = \frac{49}{169}$$
+$$-2a \cdot a = -2 \cdot \frac{49}{169} = \frac{-98}{169}$$
+$$2a^3 = 2 \cdot \frac{343}{2197} = \frac{686}{2197}$$
+$$a^4 = \frac{2401}{28561}$$
+
+<p>Combine the first three terms (common denominator 169):</p>
+$$\frac{98}{169} + \frac{49}{169} - \frac{98}{169} = \frac{49}{169}$$
+
+<p>Now add $2a^3$. Note $\frac{49}{169} = \frac{49 \cdot 13}{2197} = \frac{637}{2197}$:</p>
+$$\frac{637}{2197} + \frac{686}{2197} = \frac{1323}{2197}$$
+
+<p>Now add $a^4$. Note $\frac{1323}{2197} = \frac{1323 \cdot 13}{28561} = \frac{17199}{28561}$:</p>
+$$f(x_1) = \frac{17199}{28561} + \frac{2401}{28561} = \frac{19600}{28561}$$
+
+<p>Simplify: $28561 = 13^4$ and $19600 = 196 \times 100 = 14^2 \times 10^2$. So:</p>
+$$f(x_1) = \frac{19600}{28561} \approx 0.6862$$
+
+<p class="result">$f(x_1) \approx 0.686$</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 9: Actual Reduction</h3>
+<div class="step">
+$$\text{actual reduction} = f(x_0) - f(x_1) = 4 - 0.6862 = 3.3138$$
+<p class="result">Actual reduction $\approx 3.314$</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 10: Predicted Reduction</h3>
+<div class="step">
+<p class="step-label">Compute $m_0(p_0)$ &mdash; the model's predicted value at $p_0 = (-6/13, -6/13)$:</p>
+
+<p>Recall: $m_0(p) = 4 + 12p_1 + 14p_1^2 - 2p_1 p_2 + p_2^2$</p>
+
+<p>Substituting $p_1 = p_2 = -6/13$:</p>
+
+$$12p_1 = 12 \cdot \frac{-6}{13} = \frac{-72}{13}$$
+
+$$14p_1^2 = 14 \cdot \frac{36}{169} = \frac{504}{169}$$
+
+$$-2p_1 p_2 = -2 \cdot \frac{(-6)(-6)}{169} = -2 \cdot \frac{36}{169} = \frac{-72}{169}$$
+
+$$p_2^2 = \frac{36}{169}$$
+
+<p>Combine the quadratic terms:</p>
+$$\frac{504}{169} - \frac{72}{169} + \frac{36}{169} = \frac{468}{169} = \frac{36}{13}$$
+
+<p>So:</p>
+$$m_0(p_0) = 4 + \frac{-72}{13} + \frac{36}{13} = 4 + \frac{-36}{13} = \frac{52}{13} - \frac{36}{13} = \frac{16}{13}$$
+
+$$m_0(p_0) = \frac{16}{13} \approx 1.2308$$
+
+<p>Predicted reduction:</p>
+$$\text{predicted reduction} = m_0(0) - m_0(p_0) = 4 - \frac{16}{13} = \frac{52 - 16}{13} = \frac{36}{13} \approx 2.769$$
+
+<p class="result">Predicted reduction = $\frac{36}{13} \approx 2.769$</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 11: Compute the Ratio $\rho_0$</h3>
+<div class="step">
+$$\rho_0 = \frac{\text{actual reduction}}{\text{predicted reduction}} = \frac{f(x_0) - f(x_1)}{m_0(0) - m_0(p_0)} = \frac{3.3138}{2.769}$$
+
+<p>More precisely: actual reduction = $4 - \frac{19600}{28561} = \frac{4 \cdot 28561 - 19600}{28561} = \frac{114244 - 19600}{28561} = \frac{94644}{28561}$</p>
+
+<p>Predicted reduction = $\frac{36}{13}$</p>
+
+$$\rho_0 = \frac{94644/28561}{36/13} = \frac{94644}{28561} \cdot \frac{13}{36} = \frac{94644 \cdot 13}{28561 \cdot 36}$$
+
+<p>Note $28561 = 13^4$, so $28561 \cdot 36 = 13^4 \cdot 36$ and $94644 \cdot 13 = 94644 \cdot 13$:</p>
+
+$$\rho_0 = \frac{94644}{13^3 \cdot 36} = \frac{94644}{79092} \approx 1.197$$
+
+<p class="result">$$\rho_0 \approx 1.20$$</p>
+<p class="check">$\rho_0 > 1$ means the model actually UNDERESTIMATED the reduction. The real function decreased even more than the model predicted. This is great!</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 12: Update the Trust-Region Radius</h3>
+<div class="step">
+<p class="step-label">Apply the decision rules from Algorithm 4.1:</p>
+
+<p><strong>Check:</strong> $\rho_0 \approx 1.20 > 0.75$? <span style="color:#64ffda;">YES</span> &mdash; the model was excellent.</p>
+
+<p><strong>Check:</strong> Did we hit the boundary? $\|p_0\| \approx 0.653$ vs. $\Delta_0 = 1$. Since $0.653 < 1$, we did <strong>NOT</strong> hit the boundary.</p>
+
+<p>According to the rules: $\rho_k \geq 0.75$ AND $\|p_k\| < \Delta_k$ &rarr; <strong>accept the step, keep $\Delta$ unchanged</strong>.</p>
+
+$$\Delta_1 = \Delta_0 = 1$$
+
+<p class="result">Decision: <span style="color:#64ffda;">Accept the step</span> ($x_1 = [7/13, 7/13]$), <span style="color:#ffd93d;">keep the radius</span> ($\Delta_1 = 1$).</p>
+<p class="check">Why not expand? Because the boundary was not active. Making the radius bigger would not have changed the Newton step at all &mdash; it was already inside. Expansion only helps when we're being constrained.</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Summary Table: First Iteration</h3>
+<table class="step-table">
+<tr>
+  <th>Quantity</th>
+  <th>Value</th>
+</tr>
+<tr><td style="text-align:left;">$x_0$</td><td>$(1, 1)$</td></tr>
+<tr><td style="text-align:left;">$f(x_0)$</td><td>$4$</td></tr>
+<tr><td style="text-align:left;">$g_0$</td><td>$[12, 0]^T$</td></tr>
+<tr><td style="text-align:left;">$B_0$</td><td>$\begin{bmatrix} 28 & -2 \\ -2 & 2 \end{bmatrix}$</td></tr>
+<tr><td style="text-align:left;">$\Delta_0$</td><td>$1$</td></tr>
+<tr><td style="text-align:left;">$p_0$ (Newton step)</td><td>$[-6/13, -6/13]^T \approx [-0.462, -0.462]^T$</td></tr>
+<tr><td style="text-align:left;">$\|p_0\|$</td><td>$6\sqrt{2}/13 \approx 0.653$</td></tr>
+<tr><td style="text-align:left;">Inside trust region?</td><td style="color:#64ffda;">Yes ($0.653 \leq 1$)</td></tr>
+<tr><td style="text-align:left;">$x_1$</td><td>$[7/13, 7/13]^T \approx [0.538, 0.538]^T$</td></tr>
+<tr><td style="text-align:left;">$f(x_1)$</td><td>$19600/28561 \approx 0.686$</td></tr>
+<tr><td style="text-align:left;">Actual reduction</td><td>$\approx 3.314$</td></tr>
+<tr><td style="text-align:left;">$m_0(p_0)$</td><td>$16/13 \approx 1.231$</td></tr>
+<tr><td style="text-align:left;">Predicted reduction</td><td>$36/13 \approx 2.769$</td></tr>
+<tr><td style="text-align:left;">$\rho_0$</td><td>$\approx 1.20$</td></tr>
+<tr><td style="text-align:left;">Step accepted?</td><td style="color:#64ffda;">Yes ($\rho_0 > \eta$)</td></tr>
+<tr><td style="text-align:left;">$\Delta_1$</td><td>$1$ (kept, did not hit boundary)</td></tr>
+</table>
+</div>
+
+
+<!-- ===================== PART F ===================== -->
+<h2>Part F: Trust Region vs Line Search &mdash; When to Use Which</h2>
+
+<div class="formula-box">
+<strong>Head-to-Head Comparison</strong>
+
+<table class="step-table" style="margin-top: 16px;">
+<tr>
+  <th style="text-align:left;">Aspect</th>
+  <th>Line Search (<a href="cg-08-line-search.html" style="color:#64ffda;">Page 08</a>)</th>
+  <th>Trust Region</th>
+</tr>
+<tr>
+  <td style="text-align:left;">Philosophy</td>
+  <td>Choose direction, then step length</td>
+  <td>Choose direction and step length simultaneously</td>
+</tr>
+<tr>
+  <td style="text-align:left;">Key parameter</td>
+  <td>Step length $\alpha_k$</td>
+  <td>Trust radius $\Delta_k$</td>
+</tr>
+<tr>
+  <td style="text-align:left;">Subproblem</td>
+  <td>1D minimization along a line</td>
+  <td>Constrained optimization in $n$ dimensions</td>
+</tr>
+<tr>
+  <td style="text-align:left;">Robustness</td>
+  <td>Needs a descent direction; if Hessian is indefinite, must modify it</td>
+  <td>Handles indefinite Hessians naturally (just shrinks the radius)</td>
+</tr>
+<tr>
+  <td style="text-align:left;">Adaptivity</td>
+  <td>Wolfe conditions ensure sufficient decrease</td>
+  <td>Ratio test adapts the radius automatically</td>
+</tr>
+<tr>
+  <td style="text-align:left;">Near solution</td>
+  <td>Takes Newton steps with $\alpha = 1$</td>
+  <td>Takes Newton steps (fit inside large radius)</td>
+</tr>
+<tr>
+  <td style="text-align:left;">Far from solution</td>
+  <td>Takes damped Newton or GD steps</td>
+  <td>Takes Cauchy-like steps (small radius)</td>
+</tr>
+<tr>
+  <td style="text-align:left;">Implementation</td>
+  <td>Simpler (backtracking is easy)</td>
+  <td>More complex (subproblem solver needed)</td>
+</tr>
+<tr>
+  <td style="text-align:left;">Textbook reference</td>
+  <td>N&amp;W Chapter 3</td>
+  <td>N&amp;W Chapter 4</td>
+</tr>
+</table>
+</div>
+
+<div class="why-box">
+<h3>The bottom line</h3>
+<p>Both approaches are globally convergent when properly implemented. Trust-region methods are more robust (they handle difficult problems better) but have a harder subproblem. Line-search methods are simpler to code and work great when the search direction is reliable (e.g., Newton with a positive definite Hessian). In practice, many high-quality optimization libraries offer both options.</p>
+</div>
+
+<div class="note">
+<strong>On the exam:</strong> You will not be asked to choose between line search and trust region. You will be told which one to use. But understanding the conceptual difference &mdash; and being able to explain WHY trust region is more robust &mdash; is a common theory question.
+</div>
+
+
+<!-- ===================== GLOSSARY ===================== -->
+<div class="glossary">
+<h3>Glossary</h3>
+<dl>
+  <dt>Trust-region radius ($\Delta_k$)</dt>
+  <dd>The maximum distance the algorithm is willing to step from the current point. Updated each iteration based on model accuracy.</dd>
+
+  <dt>Quadratic model ($m_k$)</dt>
+  <dd>A second-order Taylor approximation to $f$ around the current point. Uses the gradient $g_k$ and Hessian (or approximation) $B_k$.</dd>
+
+  <dt>Trust-region subproblem</dt>
+  <dd>The constrained optimization: minimize $m_k(p)$ subject to $\|p\| \leq \Delta_k$. This is what we solve at each iteration to find the step.</dd>
+
+  <dt>Ratio $\rho_k$</dt>
+  <dd>The ratio of actual-to-predicted reduction. Measures how well the quadratic model predicts reality. Used to accept/reject steps and adjust $\Delta_k$.</dd>
+
+  <dt>Cauchy point ($p_k^C$)</dt>
+  <dd>The steepest descent step clipped to the trust region. Guaranteed to produce sufficient decrease. It is the "minimum quality" solution to the subproblem.</dd>
+
+  <dt>Maximum radius ($\hat{\Delta}$)</dt>
+  <dd>An upper bound on $\Delta_k$. Prevents the trust region from growing unboundedly.</dd>
+
+  <dt>Acceptance threshold ($\eta$)</dt>
+  <dd>A small non-negative number (often 0). Steps with $\rho_k > \eta$ are accepted; otherwise rejected. Typically $\eta \in [0, 1/4)$.</dd>
+
+  <dt>Interior step</dt>
+  <dd>A step where $\|p_k\| < \Delta_k$ &mdash; the trust-region constraint is NOT active. The Newton step fits inside the circle.</dd>
+
+  <dt>Boundary step</dt>
+  <dd>A step where $\|p_k\| = \Delta_k$ &mdash; the trust-region constraint IS active. The optimal model step would go farther, but the boundary stops it.</dd>
+</dl>
+</div>
+
+
+<!-- ===================== NAV ===================== -->
+<div class="nav">
+  <p><a href="cg-08-line-search.html">&larr; Previous: Page 08 &mdash; Line Search Methods</a></p>
+  <p><a href="cg-10-conjugate-gradient.html">Next: Page 10 &mdash; Conjugate Gradient Methods &rarr;</a></p>
+  <p style="margin-top: 12px;"><a href="index.html">Back to Index</a></p>
+</div>
+
+</div>
+</body>
+</html>

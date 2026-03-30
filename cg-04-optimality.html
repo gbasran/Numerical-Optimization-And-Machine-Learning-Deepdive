@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page 04 &mdash; Optimality Conditions | MATH 3850 Course Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
+.container { max-width: 900px; margin: 0 auto; }
+h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
+.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
+h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
+.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
+.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
+.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
+.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
+.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
+.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
+.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
+.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
+.hand-calc .result { color: #64ffda; font-weight: bold; }
+.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
+.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
+.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
+.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
+.step-table tr:nth-child(even) { background: #16213e; }
+.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
+.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
+.glossary dl { font-size: 15px; }
+.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
+.glossary dd { margin-left: 20px; color: #ccc; }
+.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
+.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
+.nav a:hover { text-decoration: underline; }
+.nav p { margin: 4px 0; }
+svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
+.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
+.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
+.breakdown dd { color: #ccc; }
+.theorem-box { background: #1a0a2e; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.theorem-box h3 { color: #bb86fc; margin-bottom: 8px; font-size: 18px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<span class="tag">PAGE 04</span>
+<h1>Optimality Conditions</h1>
+<p class="subtitle">How to tell if you are at a minimum, maximum, or saddle &mdash; the theoretical backbone of every optimization algorithm</p>
+
+<!-- ===================== PART A ===================== -->
+<h2>Part A: First-Order Necessary Conditions (FONC)</h2>
+
+<div class="analogy">
+<strong>Physical analogy &mdash; The bottom of a valley is flat.</strong><br><br>
+Imagine you are standing at the very bottom of a valley. You look north &mdash; the ground goes uphill. You look south &mdash; uphill. East &mdash; uphill. West &mdash; uphill. <em>Every single direction goes uphill.</em> That means, right where you stand, the ground is perfectly flat. There is zero slope in any direction.<br><br>
+Mathematically, "zero slope in every direction" means the gradient is the zero vector: $\nabla f(x^*) = \mathbf{0}$.<br><br>
+<strong>But here is the catch:</strong> flat ground does not GUARANTEE you are at a valley bottom! You could also be standing on:<br>
+&bull; The very top of a hill (also flat at the peak)<br>
+&bull; A perfectly level mountain pass (a saddle &mdash; flat at the center but curving up in some directions and down in others)<br><br>
+So $\nabla f = \mathbf{0}$ is <strong>necessary</strong> for a minimum (it MUST be true), but NOT <strong>sufficient</strong> (it alone does not PROVE you are at a minimum). We need to check curvature too &mdash; that is Part B.
+</div>
+
+<div class="formula-box">
+<strong>Theorem 1: First-Order Necessary Conditions (FONC)</strong>
+
+<p style="margin-bottom:12px;">If $x^*$ is a local minimizer of $f$ and $\nabla f$ is continuous in a neighborhood of $x^*$, then:</p>
+
+$$\nabla f(x^*) = \mathbf{0}$$
+
+<dl class="breakdown">
+  <dt>$x^*$</dt><dd>the candidate point &mdash; the location we are testing</dd>
+  <dt>$\nabla f(x^*)$</dt><dd>the gradient evaluated at $x^*$ (recall from <a href="cg-02-multivariable-bridge.html">Page 02</a>: the vector of all partial derivatives)</dd>
+  <dt>$\mathbf{0}$</dt><dd>the zero vector &mdash; all components are zero, meaning no slope in any direction</dd>
+  <dt>local minimizer</dt><dd>a point where $f(x^*) \leq f(x)$ for all $x$ sufficiently close to $x^*$</dd>
+</dl>
+
+<p style="margin-top:12px;"><strong>In plain English:</strong> At a local minimum, the gradient must be zero. If the gradient is NOT zero at some point, that point is definitely NOT a local minimum.</p>
+</div>
+
+<div class="why-box">
+<h3>Why This Matters for Algorithms</h3>
+<p>This is the reason EVERY optimization algorithm looks for points where $\nabla f = \mathbf{0}$. The standard stopping criterion is:</p>
+$$\|\nabla f(x_k)\| < \epsilon$$
+<p style="margin-top:8px;">where $\epsilon$ is a small tolerance (like $10^{-6}$). This checks: "is the gradient close enough to zero that we are probably near a stationary point?" Every algorithm on pages <a href="cg-06-gradient-descent.html">06</a> through <a href="cg-14-nonlinear-equations.html">14</a> uses this stopping rule.</p>
+</div>
+
+<div class="note">
+<strong>Terminology: "Stationary point" vs "minimizer"</strong><br>
+A <strong>stationary point</strong> is any point where $\nabla f = \mathbf{0}$. It could be a minimum, maximum, or saddle.<br>
+A <strong>minimizer</strong> is a stationary point that is actually a minimum.<br>
+Every minimizer is a stationary point. Not every stationary point is a minimizer.
+</div>
+
+
+<!-- ===================== PART B ===================== -->
+<h2>Part B: Second-Order Conditions (SONC and SOSC)</h2>
+
+<div class="analogy">
+<strong>Physical analogy &mdash; Flat ground plus curvature tells the whole story.</strong><br><br>
+You know the ground is flat where you stand (gradient = zero). Now you need to feel the <em>curvature</em>. Kneel down and feel the ground in every direction:<br><br>
+<strong>Curving upward in EVERY direction?</strong> You are in a valley. This is a <strong>minimum</strong>. The Hessian (the curvature matrix from <a href="cg-02-multivariable-bridge.html">Page 02</a>) is positive definite.<br><br>
+<strong>Curving downward in EVERY direction?</strong> You are on a hilltop. This is a <strong>maximum</strong>. The Hessian is negative definite.<br><br>
+<strong>Curving up in some directions, down in others?</strong> You are on a mountain pass (saddle). The Hessian is indefinite &mdash; it has both positive and negative eigenvalues (see <a href="cg-03-linear-algebra.html">Page 03</a>).<br><br>
+<strong>Flat in some direction?</strong> Inconclusive &mdash; the second-order test cannot decide. You would need higher-order derivatives.
+</div>
+
+<div class="theorem-box">
+<h3>Theorem 2: Second-Order Necessary Conditions (SONC)</h3>
+<p>If $x^*$ is a local minimizer and $\nabla^2 f$ is continuous near $x^*$, then:</p>
+$$\nabla f(x^*) = \mathbf{0} \quad \text{AND} \quad \nabla^2 f(x^*) \text{ is positive semidefinite (PSD)}$$
+
+<dl class="breakdown">
+  <dt>$\nabla^2 f(x^*)$</dt><dd>the Hessian matrix evaluated at $x^*$ (the matrix of all second partial derivatives)</dd>
+  <dt>PSD</dt><dd>all eigenvalues $\geq 0$ (curvature is non-negative in every direction)</dd>
+</dl>
+
+<p style="margin-top:12px;"><strong>"Necessary" means:</strong> If $x^*$ IS a minimum, then these conditions MUST hold. But satisfying them does NOT guarantee $x^*$ IS a minimum. (The ground could be flat in some direction &mdash; that is PSD but not PD.)</p>
+</div>
+
+<div class="theorem-box">
+<h3>Theorem 3: Second-Order Sufficient Conditions (SOSC)</h3>
+<p>If $\nabla^2 f$ is continuous near $x^*$ and:</p>
+$$\nabla f(x^*) = \mathbf{0} \quad \text{AND} \quad \nabla^2 f(x^*) \text{ is positive definite (PD)}$$
+<p>then $x^*$ is a <strong>strict local minimizer</strong>.</p>
+
+<dl class="breakdown">
+  <dt>PD</dt><dd>all eigenvalues strictly $> 0$ (curvature is strictly positive in EVERY direction)</dd>
+  <dt>strict local minimizer</dt><dd>$f(x^*) < f(x)$ for all $x \neq x^*$ nearby (it is strictly the lowest point in a neighborhood)</dd>
+</dl>
+
+<p style="margin-top:12px;"><strong>"Sufficient" means:</strong> If these conditions are satisfied, then $x^*$ IS guaranteed to be a local minimum. This is the PROOF that you are at a minimum.</p>
+</div>
+
+<div class="note">
+<strong>Necessary vs Sufficient &mdash; a critical distinction:</strong><br><br>
+<strong>Necessary condition:</strong> "If you are a minimum, then THIS must be true." (Direction: minimum $\Rightarrow$ condition)<br>
+<strong>Sufficient condition:</strong> "If THIS is true, then you are guaranteed to be a minimum." (Direction: condition $\Rightarrow$ minimum)<br><br>
+Example from everyday life:<br>
+&bull; <em>Necessary</em> for driving: you must have a car. (If you are driving, you have a car.)<br>
+&bull; <em>Sufficient</em> for driving: having a car, a license, fuel, and keys. (If you have all of these, you CAN drive.)<br>
+&bull; Having a car alone is necessary but NOT sufficient (you also need fuel, keys, etc.)<br><br>
+Same idea: gradient = 0 is necessary but not sufficient. Gradient = 0 AND Hessian PD is sufficient.
+</div>
+
+<div class="theorem-box">
+<h3>Theorem 4: Second-Order Sufficient Conditions for Maximizer</h3>
+<p>If $\nabla^2 f$ is continuous near $x^*$ and:</p>
+$$\nabla f(x^*) = \mathbf{0} \quad \text{AND} \quad \nabla^2 f(x^*) \text{ is negative definite (ND)}$$
+<p>then $x^*$ is a <strong>strict local maximizer</strong>.</p>
+
+<p style="margin-top:12px;">Same logic: all eigenvalues are strictly negative means the surface curves downward in every direction from $x^*$, making it a hilltop.</p>
+</div>
+
+<div class="formula-box">
+<strong>Summary: The Decision Rules</strong>
+
+<table class="step-table">
+<tr><th>Gradient</th><th>Hessian</th><th>Conclusion</th></tr>
+<tr><td>$\nabla f \neq 0$</td><td>N/A</td><td>Not a stationary point. Move on.</td></tr>
+<tr><td>$\nabla f = 0$</td><td>PD (all $\lambda_i > 0$)</td><td style="color:#64ffda;">Strict local minimum (SOSC)</td></tr>
+<tr><td>$\nabla f = 0$</td><td>ND (all $\lambda_i < 0$)</td><td style="color:#bb86fc;">Strict local maximum</td></tr>
+<tr><td>$\nabla f = 0$</td><td>Indefinite (mixed signs)</td><td style="color:#ff6b6b;">Saddle point</td></tr>
+<tr><td>$\nabla f = 0$</td><td>PSD (some $\lambda_i = 0$, rest $> 0$)</td><td style="color:#ffd93d;">Inconclusive &mdash; need more info</td></tr>
+</table>
+</div>
+
+
+<!-- ===================== PART C ===================== -->
+<h2>Part C: Full Classification Example &mdash; Mirrors Quiz 2</h2>
+
+<div class="hand-calc">
+<h3>Classify All Stationary Points of $f(x_1, x_2) = 2x_1^3 - 3x_1^2 - 6x_1 x_2(x_1 - x_2 - 1)$</h3>
+<p>This mirrors the Quiz 2 function. We will go through every step: find stationary points, compute the Hessian at each one, check eigenvalues, and classify.</p>
+
+<div class="step">
+  <div class="step-label">Step 1: Expand the function</div>
+  First, expand $-6x_1 x_2(x_1 - x_2 - 1)$:
+  $$-6x_1 x_2 \cdot x_1 + 6x_1 x_2 \cdot x_2 + 6x_1 x_2 \cdot 1 = -6x_1^2 x_2 + 6x_1 x_2^2 + 6x_1 x_2$$
+  So the full function is:
+  $$f(x_1, x_2) = 2x_1^3 - 3x_1^2 - 6x_1^2 x_2 + 6x_1 x_2^2 + 6x_1 x_2$$
+</div>
+
+<div class="step">
+  <div class="step-label">Step 2: Compute the gradient (set $\nabla f = 0$)</div>
+  $$\frac{\partial f}{\partial x_1} = 6x_1^2 - 6x_1 - 12x_1 x_2 + 6x_2^2 + 6x_2 = 0$$
+  $$\frac{\partial f}{\partial x_2} = -6x_1^2 + 12x_1 x_2 + 6x_1 = 0$$
+
+  From the second equation, factor out $6x_1$:
+  $$6x_1(-x_1 + 2x_2 + 1) = 0$$
+  So either $x_1 = 0$ or $x_1 = 2x_2 + 1$.
+</div>
+
+<div class="step">
+  <div class="step-label">Step 3: Solve for stationary points</div>
+  <strong>Case 1: $x_1 = 0$.</strong> Substitute into the first equation:
+  $$0 - 0 - 0 + 6x_2^2 + 6x_2 = 0 \implies 6x_2(x_2 + 1) = 0$$
+  So $x_2 = 0$ or $x_2 = -1$. Stationary points: $(0, 0)$ and $(0, -1)$.
+
+  <br><br><strong>Case 2: $x_1 = 2x_2 + 1$.</strong> Substitute into the first equation:
+  $$6(2x_2+1)^2 - 6(2x_2+1) - 12(2x_2+1)x_2 + 6x_2^2 + 6x_2 = 0$$
+  Expand $(2x_2+1)^2 = 4x_2^2 + 4x_2 + 1$:
+  $$24x_2^2 + 24x_2 + 6 - 12x_2 - 6 - 24x_2^2 - 12x_2 + 6x_2^2 + 6x_2 = 0$$
+  $$6x_2^2 + 6x_2 = 0 \implies 6x_2(x_2 + 1) = 0$$
+  So $x_2 = 0 \Rightarrow x_1 = 1$, or $x_2 = -1 \Rightarrow x_1 = -1$.<br>
+  Stationary points: $(1, 0)$ and $(-1, -1)$.
+</div>
+
+<div class="step">
+  <div class="step-label">Step 4: Compute the Hessian</div>
+  $$\nabla^2 f = \begin{bmatrix} \frac{\partial^2 f}{\partial x_1^2} & \frac{\partial^2 f}{\partial x_1 \partial x_2} \\ \frac{\partial^2 f}{\partial x_2 \partial x_1} & \frac{\partial^2 f}{\partial x_2^2} \end{bmatrix}$$
+
+  $$\frac{\partial^2 f}{\partial x_1^2} = 12x_1 - 6 - 12x_2$$
+  $$\frac{\partial^2 f}{\partial x_1 \partial x_2} = -12x_1 + 12x_2 + 6$$
+  $$\frac{\partial^2 f}{\partial x_2^2} = 12x_1$$
+
+  Wait &mdash; let us recompute $\frac{\partial^2 f}{\partial x_2^2}$ more carefully. From $\frac{\partial f}{\partial x_2} = -6x_1^2 + 12x_1 x_2 + 6x_1$:
+  $$\frac{\partial^2 f}{\partial x_2^2} = 12x_1$$
+
+  So:
+  $$\nabla^2 f = \begin{bmatrix} 12x_1 - 6 - 12x_2 & -12x_1 + 12x_2 + 6 \\ -12x_1 + 12x_2 + 6 & 12x_1 \end{bmatrix}$$
+</div>
+
+<div class="step">
+  <div class="step-label">Step 5: Evaluate at each stationary point and classify</div>
+
+  <strong>Point $(0, 0)$:</strong>
+  $$H = \begin{bmatrix} -6 & 6 \\ 6 & 0 \end{bmatrix}$$
+  $\det = (-6)(0) - (6)(6) = -36 < 0$ $\Rightarrow$ <span style="color:#ff6b6b;">Indefinite = Saddle Point</span>
+
+  <br><br><strong>Point $(0, -1)$:</strong>
+  $$H = \begin{bmatrix} -6 + 12 & 0 - 12 + 6 \end{bmatrix} = \begin{bmatrix} 6 & -6 \\ -6 & 0 \end{bmatrix}$$
+  $\det = (6)(0) - (-6)(-6) = -36 < 0$ $\Rightarrow$ <span style="color:#ff6b6b;">Indefinite = Saddle Point</span>
+
+  <br><br><strong>Point $(1, 0)$:</strong>
+  $$H = \begin{bmatrix} 12 - 6 & -12 + 6 \\ -12 + 6 & 12 \end{bmatrix} = \begin{bmatrix} 6 & -6 \\ -6 & 12 \end{bmatrix}$$
+  $\det = (6)(12) - (-6)(-6) = 72 - 36 = 36 > 0$ and $a_{11} = 6 > 0$ $\Rightarrow$ <span style="color:#64ffda;">PD = Local Minimum</span>
+
+  <br><br><strong>Point $(-1, -1)$:</strong>
+  $$H = \begin{bmatrix} -12 - 6 + 12 & 12 - 12 + 6 \\ 12 - 12 + 6 & -12 \end{bmatrix} = \begin{bmatrix} -6 & 6 \\ 6 & -12 \end{bmatrix}$$
+  $\det = (-6)(-12) - (6)(6) = 72 - 36 = 36 > 0$ and $a_{11} = -6 < 0$ $\Rightarrow$ <span style="color:#bb86fc;">ND = Local Maximum</span>
+</div>
+</div>
+
+<table class="step-table">
+<tr><th>Stationary Point</th><th>Hessian</th><th>det(H)</th><th>$a_{11}$</th><th>Eigenvalues</th><th>Classification</th></tr>
+<tr>
+  <td>$(0, 0)$</td>
+  <td>$\begin{bmatrix} -6 & 6 \\ 6 & 0 \end{bmatrix}$</td>
+  <td>$-36$</td>
+  <td>$-6$</td>
+  <td>$+6\sqrt{2}, -6\sqrt{2}$</td>
+  <td style="color:#ff6b6b;">Saddle</td>
+</tr>
+<tr>
+  <td>$(0, -1)$</td>
+  <td>$\begin{bmatrix} 6 & -6 \\ -6 & 0 \end{bmatrix}$</td>
+  <td>$-36$</td>
+  <td>$6$</td>
+  <td>$3+3\sqrt{5}, 3-3\sqrt{5}$</td>
+  <td style="color:#ff6b6b;">Saddle</td>
+</tr>
+<tr>
+  <td>$(1, 0)$</td>
+  <td>$\begin{bmatrix} 6 & -6 \\ -6 & 12 \end{bmatrix}$</td>
+  <td>$36$</td>
+  <td>$6$</td>
+  <td>$9+3\sqrt{5}, 9-3\sqrt{5}$</td>
+  <td style="color:#64ffda;">Local Min</td>
+</tr>
+<tr>
+  <td>$(-1, -1)$</td>
+  <td>$\begin{bmatrix} -6 & 6 \\ 6 & -12 \end{bmatrix}$</td>
+  <td>$36$</td>
+  <td>$-6$</td>
+  <td>$-9+3\sqrt{5}, -9-3\sqrt{5}$</td>
+  <td style="color:#bb86fc;">Local Max</td>
+</tr>
+</table>
+
+<div class="note">
+<strong>How the eigenvalues were found (for the curious):</strong><br>
+For $(1, 0)$ with $H = \begin{bmatrix} 6 & -6 \\ -6 & 12 \end{bmatrix}$:
+trace $= 18$, det $= 36$.<br>
+$\lambda^2 - 18\lambda + 36 = 0$.<br>
+$\lambda = \frac{18 \pm \sqrt{324 - 144}}{2} = \frac{18 \pm \sqrt{180}}{2} = \frac{18 \pm 6\sqrt{5}}{2} = 9 \pm 3\sqrt{5}$.<br>
+Since $\sqrt{5} \approx 2.236$: $\lambda_1 \approx 15.71$ and $\lambda_2 \approx 2.29$. Both positive, so PD.
+</div>
+
+
+<!-- ===================== PART D ===================== -->
+<h2>Part D: The Classification Flowchart</h2>
+
+<svg viewBox="0 0 800 620" style="width:100%; margin:24px 0;">
+  <!-- Start -->
+  <rect x="310" y="10" width="180" height="40" rx="20" fill="#0f3460" stroke="#64ffda" stroke-width="2"/>
+  <text x="400" y="36" text-anchor="middle" fill="#64ffda" font-size="14" font-weight="bold">Start: Given f and x*</text>
+
+  <!-- Arrow down -->
+  <line x1="400" y1="50" x2="400" y2="80" stroke="#888" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Compute gradient -->
+  <rect x="280" y="80" width="240" height="40" rx="8" fill="#0f3460" stroke="#bb86fc" stroke-width="2"/>
+  <text x="400" y="106" text-anchor="middle" fill="#e0e0e0" font-size="14">Compute nabla f(x*)</text>
+
+  <!-- Arrow down -->
+  <line x1="400" y1="120" x2="400" y2="155" stroke="#888" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Decision: gradient = 0? -->
+  <polygon points="400,155 520,195 400,235 280,195" fill="#1a1a2e" stroke="#ffd93d" stroke-width="2"/>
+  <text x="400" y="199" text-anchor="middle" fill="#ffd93d" font-size="13" font-weight="bold">nabla f = 0?</text>
+
+  <!-- No branch (right) -->
+  <line x1="520" y1="195" x2="620" y2="195" stroke="#ff6b6b" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="560" y="187" fill="#ff6b6b" font-size="12" font-weight="bold">No</text>
+  <rect x="620" y="175" width="160" height="40" rx="8" fill="#1e1e3a" stroke="#ff6b6b" stroke-width="2"/>
+  <text x="700" y="200" text-anchor="middle" fill="#ff6b6b" font-size="13">Not stationary. Stop.</text>
+
+  <!-- Yes branch (down) -->
+  <line x1="400" y1="235" x2="400" y2="270" stroke="#64ffda" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="414" y="257" fill="#64ffda" font-size="12" font-weight="bold">Yes</text>
+
+  <!-- Compute Hessian -->
+  <rect x="260" y="270" width="280" height="40" rx="8" fill="#0f3460" stroke="#bb86fc" stroke-width="2"/>
+  <text x="400" y="296" text-anchor="middle" fill="#e0e0e0" font-size="14">Compute Hessian nabla^2 f(x*)</text>
+
+  <!-- Arrow down -->
+  <line x1="400" y1="310" x2="400" y2="345" stroke="#888" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Check eigenvalues -->
+  <rect x="260" y="345" width="280" height="40" rx="8" fill="#0f3460" stroke="#bb86fc" stroke-width="2"/>
+  <text x="400" y="371" text-anchor="middle" fill="#e0e0e0" font-size="14">Find eigenvalues of Hessian</text>
+
+  <!-- Arrow down -->
+  <line x1="400" y1="385" x2="400" y2="415" stroke="#888" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Decision: eigenvalue signs? -->
+  <polygon points="400,415 560,465 400,515 240,465" fill="#1a1a2e" stroke="#ffd93d" stroke-width="2"/>
+  <text x="400" y="460" text-anchor="middle" fill="#ffd93d" font-size="12" font-weight="bold">Eigenvalue signs?</text>
+
+  <!-- All positive (left) -->
+  <line x1="240" y1="465" x2="80" y2="465" stroke="#64ffda" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="170" y="457" fill="#64ffda" font-size="11" font-weight="bold">All > 0</text>
+  <rect x="10" y="445" width="70" height="40" rx="8" fill="#0a2e1a" stroke="#64ffda" stroke-width="2"/>
+  <text x="45" y="465" text-anchor="middle" fill="#64ffda" font-size="12" font-weight="bold">Local</text>
+  <text x="45" y="479" text-anchor="middle" fill="#64ffda" font-size="12" font-weight="bold">Min</text>
+
+  <!-- All negative (right) -->
+  <line x1="560" y1="465" x2="680" y2="465" stroke="#bb86fc" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="610" y="457" fill="#bb86fc" font-size="11" font-weight="bold">All &lt; 0</text>
+  <rect x="680" y="445" width="90" height="40" rx="8" fill="#2d1b4e" stroke="#bb86fc" stroke-width="2"/>
+  <text x="725" y="465" text-anchor="middle" fill="#bb86fc" font-size="12" font-weight="bold">Local</text>
+  <text x="725" y="479" text-anchor="middle" fill="#bb86fc" font-size="12" font-weight="bold">Max</text>
+
+  <!-- Mixed (down-left) -->
+  <line x1="330" y1="500" x2="200" y2="560" stroke="#ff6b6b" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="250" y="525" fill="#ff6b6b" font-size="11" font-weight="bold">Mixed</text>
+  <rect x="120" y="545" width="120" height="40" rx="8" fill="#1e1e3a" stroke="#ff6b6b" stroke-width="2"/>
+  <text x="180" y="570" text-anchor="middle" fill="#ff6b6b" font-size="12" font-weight="bold">Saddle Point</text>
+
+  <!-- Some zero (down-right) -->
+  <line x1="470" y1="500" x2="560" y2="560" stroke="#ffd93d" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="530" y="525" fill="#ffd93d" font-size="11" font-weight="bold">Some = 0</text>
+  <rect x="500" y="545" width="140" height="40" rx="8" fill="#1e1e3a" stroke="#ffd93d" stroke-width="2"/>
+  <text x="570" y="570" text-anchor="middle" fill="#ffd93d" font-size="12" font-weight="bold">Inconclusive</text>
+
+  <!-- Arrowhead definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#888"/>
+    </marker>
+  </defs>
+</svg>
+
+<div class="note">
+<strong>The subtle case: Hessian = zero matrix.</strong><br><br>
+Consider $f(x_1, x_2) = (x_2 - x_1^2)^2 + x_1^5$ from Quiz 2, Question 2. At $(0, 0)$:
+<ul style="margin-left:20px; margin-top:8px;">
+  <li>$\nabla f(0,0) = \mathbf{0}$ &#10003; (it is stationary)</li>
+  <li>$\nabla^2 f(0,0) = \begin{bmatrix} 0 & 0 \\ 0 & 2 \end{bmatrix}$ &mdash; eigenvalues are 0 and 2</li>
+  <li>This is positive semidefinite (eigenvalues $\geq 0$), so the second-order test is <strong>inconclusive</strong></li>
+</ul>
+It turns out this point IS a saddle (because of the $x_1^5$ term), but you cannot determine that from the Hessian alone. You would need to look at higher-order behavior. The takeaway: when the Hessian is singular (has zero eigenvalues), more work is needed.
+</div>
+
+
+<!-- ===================== PART E ===================== -->
+<h2>Part E: Connecting Optimality to Algorithms</h2>
+
+<div class="why-box">
+<h3>How Each Algorithm Uses These Conditions</h3>
+<p>Every algorithm in this course is ultimately trying to find points that satisfy the optimality conditions above. Here is how each one connects:</p>
+</div>
+
+<div class="formula-box">
+<strong>Algorithm-Condition Connection Map</strong>
+
+<table class="step-table" style="margin-top:12px;">
+<tr><th>Algorithm</th><th>What It Finds</th><th>Condition Used</th><th>Page</th></tr>
+<tr><td>Gradient Descent</td><td>Points where $\|\nabla f\| \approx 0$</td><td>FONC</td><td><a href="cg-06-gradient-descent.html" style="color:#64ffda;">06</a></td></tr>
+<tr><td>Newton's Method</td><td>Points where $\nabla f = 0$ using Hessian</td><td>FONC + uses $\nabla^2 f$</td><td><a href="cg-07-newton-method.html" style="color:#64ffda;">07</a></td></tr>
+<tr><td>Trust Region</td><td>Points where $\nabla f = 0$ with PD safeguard</td><td>SOSC (ensures PD model)</td><td><a href="cg-09-trust-region.html" style="color:#64ffda;">09</a></td></tr>
+<tr><td>Conjugate Gradient</td><td>Exact minimizer of quadratic</td><td>SOSC (requires PD $A$)</td><td><a href="cg-10-conjugate-gradient.html" style="color:#64ffda;">10</a></td></tr>
+<tr><td>BFGS</td><td>Points where $\nabla f = 0$ with PD approximation</td><td>SOSC (maintains PD $B_k$)</td><td><a href="cg-12-bfgs.html" style="color:#64ffda;">12</a></td></tr>
+</table>
+
+<p style="margin-top:16px;"><strong>The pattern:</strong> Simple algorithms (gradient descent) only use first-order conditions. Sophisticated algorithms (Newton, BFGS, trust region) also use second-order information, which is why they converge faster &mdash; they check not just "is the ground flat?" but also "does the ground curve upward?"</p>
+</div>
+
+<div class="hand-calc">
+<h3>Quick Practice: Classify Without Full Computation</h3>
+<p>For each Hessian, determine the classification using the 2&times;2 shortcut from <a href="cg-03-linear-algebra.html">Page 03</a>.</p>
+
+<div class="step">
+  <div class="step-label">(a) $H = \begin{bmatrix} 4 & 1 \\ 1 & 3 \end{bmatrix}$</div>
+  $a_{11} = 4 > 0$, $\det = 12 - 1 = 11 > 0$ $\Rightarrow$ <span style="color:#64ffda;">PD = local minimum</span>
+</div>
+
+<div class="step">
+  <div class="step-label">(b) $H = \begin{bmatrix} -2 & 1 \\ 1 & -5 \end{bmatrix}$</div>
+  $a_{11} = -2 < 0$, $\det = 10 - 1 = 9 > 0$ $\Rightarrow$ <span style="color:#bb86fc;">ND = local maximum</span>
+</div>
+
+<div class="step">
+  <div class="step-label">(c) $H = \begin{bmatrix} 3 & 4 \\ 4 & 2 \end{bmatrix}$</div>
+  $\det = 6 - 16 = -10 < 0$ $\Rightarrow$ <span style="color:#ff6b6b;">Indefinite = saddle point</span>
+</div>
+
+<div class="step">
+  <div class="step-label">(d) $H = \begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix}$</div>
+  $\det = 1 - 1 = 0$, eigenvalues are 0 and 2. PSD but not PD $\Rightarrow$ <span style="color:#ffd93d;">Inconclusive</span>
+</div>
+
+<div class="check">
+Practice tip: on an exam, the 2&times;2 shortcut ($a_{11}$ sign and $\det$ sign) is faster than computing eigenvalues. Use eigenvalues only when the question asks for them explicitly, or when the shortcut is inconclusive.
+</div>
+</div>
+
+<div class="note">
+<strong>Common exam mistake:</strong> Checking only the diagonal entries of the Hessian. The matrix $\begin{bmatrix} 3 & 4 \\ 4 & 2 \end{bmatrix}$ has positive diagonals (3 and 2) but is INDEFINITE because the off-diagonal entries are large enough to make $\det < 0$. Always check the determinant, not just the diagonal!
+</div>
+
+<div class="why-box">
+<h3>The Big Picture: What We Can and Cannot Determine</h3>
+<table class="step-table" style="margin-top:12px;">
+<tr><th>Situation</th><th>What We Know</th><th>What We Cannot Know</th></tr>
+<tr><td>$\nabla f \neq 0$</td><td>Definitely NOT a min/max/saddle</td><td>N/A &mdash; move on</td></tr>
+<tr><td>$\nabla f = 0$, $H$ PD</td><td>Guaranteed local min (SOSC)</td><td>Whether it is the global min (need convexity, <a href="cg-05-convexity.html" style="color:#64ffda;">Page 05</a>)</td></tr>
+<tr><td>$\nabla f = 0$, $H$ ND</td><td>Guaranteed local max</td><td>Whether it is the global max</td></tr>
+<tr><td>$\nabla f = 0$, $H$ indefinite</td><td>Guaranteed saddle</td><td>N/A &mdash; classification complete</td></tr>
+<tr><td>$\nabla f = 0$, $H$ singular</td><td>Stationary, but type unknown</td><td>Need higher-order analysis</td></tr>
+</table>
+<p style="margin-top:12px;">The second-order test cannot distinguish between a flat-bottomed minimum and a saddle when the Hessian has zero eigenvalues. This is rare on exams but important to know &mdash; see the $f = (x_2 - x_1^2)^2 + x_1^5$ example above.</p>
+</div>
+
+
+<!-- ===================== GLOSSARY ===================== -->
+<div class="glossary">
+<h3>Glossary</h3>
+<dl>
+  <dt>Stationary Point (Critical Point)</dt>
+  <dd>A point $x^*$ where $\nabla f(x^*) = \mathbf{0}$. Could be a min, max, or saddle.</dd>
+
+  <dt>Local Minimizer</dt>
+  <dd>A point $x^*$ where $f(x^*) \leq f(x)$ for all $x$ in some neighborhood of $x^*$. "The lowest point nearby."</dd>
+
+  <dt>Global Minimizer</dt>
+  <dd>A point $x^*$ where $f(x^*) \leq f(x)$ for ALL $x$ in the domain. "The absolute lowest point anywhere." For convex functions (see <a href="cg-05-convexity.html">Page 05</a>), local = global.</dd>
+
+  <dt>Local Maximizer</dt>
+  <dd>A point $x^*$ where $f(x^*) \geq f(x)$ for all $x$ nearby. The highest point in the neighborhood.</dd>
+
+  <dt>Saddle Point</dt>
+  <dd>A stationary point that is neither a local min nor a local max. The function increases in some directions and decreases in others.</dd>
+
+  <dt>Necessary Condition</dt>
+  <dd>A condition that MUST be true if you are at a minimum. Failing it proves you are NOT at a minimum. Passing it does not guarantee you ARE at a minimum.</dd>
+
+  <dt>Sufficient Condition</dt>
+  <dd>A condition that GUARANTEES you are at a minimum. Passing it proves you ARE at a minimum. Failing it does not prove you are NOT at a minimum (you might still be at a degenerate minimum).</dd>
+
+  <dt>FONC (First-Order Necessary Conditions)</dt>
+  <dd>$\nabla f(x^*) = \mathbf{0}$. The gradient is zero at any minimizer. (Theorem 1)</dd>
+
+  <dt>SONC (Second-Order Necessary Conditions)</dt>
+  <dd>$\nabla f(x^*) = \mathbf{0}$ and $\nabla^2 f(x^*)$ is PSD. (Theorem 2)</dd>
+
+  <dt>SOSC (Second-Order Sufficient Conditions)</dt>
+  <dd>$\nabla f(x^*) = \mathbf{0}$ and $\nabla^2 f(x^*)$ is PD $\Rightarrow$ strict local minimum. (Theorem 3)</dd>
+
+  <dt>Classification</dt>
+  <dd>The process of determining whether a stationary point is a min, max, or saddle, using the eigenvalues of the Hessian.</dd>
+</dl>
+</div>
+
+
+<!-- ===================== NAV ===================== -->
+<div class="nav">
+  <p><a href="cg-03-linear-algebra.html">&larr; Previous: Page 03 &mdash; Linear Algebra Essentials</a></p>
+  <p><a href="cg-05-convexity.html">Next: Page 05 &mdash; Convexity: What Makes Problems Nice &rarr;</a></p>
+  <p style="margin-top:12px;"><a href="index.html">Back to Index</a></p>
+</div>
+
+</div>
+</body>
+</html>

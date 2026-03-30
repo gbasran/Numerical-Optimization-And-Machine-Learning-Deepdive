@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page 18 &mdash; Exam Computations | MATH 3850 Course Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
+.container { max-width: 900px; margin: 0 auto; }
+h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
+.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
+h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
+.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
+.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
+.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
+.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
+.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
+.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
+.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
+.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
+.hand-calc .result { color: #64ffda; font-weight: bold; }
+.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
+.exam-flag { background: #2a1a1a; border: 2px solid #ff6b6b; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
+.exam-flag h4 { color: #ff6b6b; margin-bottom: 8px; }
+.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
+.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
+.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
+.step-table tr:nth-child(even) { background: #16213e; }
+.algo-box { border-left: 4px solid #64ffda; padding: 16px 20px; margin: 20px 0; background: #0f3460; border-radius: 0 12px 12px 0; }
+.algo-box .algo-title { color: #ffd93d; font-weight: bold; font-size: 18px; margin-bottom: 12px; }
+.algo-box .algo-line { padding: 6px 0; font-size: 16px; }
+.algo-box .algo-comment { color: #888; font-size: 14px; }
+.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
+.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
+.glossary dl { font-size: 15px; }
+.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
+.glossary dd { margin-left: 20px; color: #ccc; }
+.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
+.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
+.nav a:hover { text-decoration: underline; }
+.nav p { margin: 4px 0; }
+svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
+.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
+.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
+.breakdown dd { color: #ccc; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<span class="tag">PAGE 18 &mdash; SYNTHESIS</span>
+<h1>Exam Prep: Worked Computation Problems</h1>
+<p class="subtitle">One complete worked problem per method &mdash; every step shown explicitly &mdash; mirrors the exact question types from quizzes 1&ndash;8</p>
+
+<div class="exam-flag">
+<h4>How to use this page</h4>
+<p>For each problem: (1) read the problem statement, (2) try it yourself on paper, (3) then check your work against the solution. Every intermediate number is shown. If you can do all seven problems on this page from scratch, you are ready for the computation portion of the final.</p>
+</div>
+
+<!-- ===================== PART A ===================== -->
+<h2>Part A: Gradient Descent with Exact Line Search</h2>
+<p><em>Core method from <a href="cg-06-gradient-descent.html" style="color:#64ffda;">Page 06</a>. Mirrors Assignment 1 style.</em></p>
+
+<div class="formula-box">
+<strong>Problem:</strong> Consider $f(x_1, x_2) = 3x_1^2 + 2x_2^2$. Starting from $x_0 = \begin{bmatrix} 2 \\ 1 \end{bmatrix}$, perform <strong>one iteration</strong> of gradient descent with exact line search.
+</div>
+
+<div class="hand-calc">
+<h3>Full Worked Solution</h3>
+
+<div class="step">
+<div class="step-label">Step 1: Compute the gradient at $x_0$</div>
+The gradient is $\nabla f(x) = \begin{bmatrix} 6x_1 \\ 4x_2 \end{bmatrix}$ (recall: differentiate each variable, <a href="cg-02-multivariable-bridge.html" style="color:#64ffda;">Page 02</a>).
+
+$$\nabla f(x_0) = \nabla f\!\left(\begin{bmatrix} 2 \\ 1 \end{bmatrix}\right) = \begin{bmatrix} 6(2) \\ 4(1) \end{bmatrix} = \begin{bmatrix} 12 \\ 4 \end{bmatrix}$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 2: Set the search direction</div>
+The steepest descent direction is $d_0 = -\nabla f(x_0)$:
+
+$$d_0 = -\begin{bmatrix} 12 \\ 4 \end{bmatrix} = \begin{bmatrix} -12 \\ -4 \end{bmatrix}$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 3: Compute the exact step size</div>
+We need to minimize $\phi(\alpha) = f(x_0 + \alpha d_0)$ over $\alpha > 0$. The point along the line is:
+
+$$x_0 + \alpha d_0 = \begin{bmatrix} 2 - 12\alpha \\ 1 - 4\alpha \end{bmatrix}$$
+
+Substituting into $f$:
+
+$$\phi(\alpha) = 3(2 - 12\alpha)^2 + 2(1 - 4\alpha)^2$$
+$$= 3(4 - 48\alpha + 144\alpha^2) + 2(1 - 8\alpha + 16\alpha^2)$$
+$$= 12 - 144\alpha + 432\alpha^2 + 2 - 16\alpha + 32\alpha^2$$
+$$= 14 - 160\alpha + 464\alpha^2$$
+
+Set $\phi'(\alpha) = 0$:
+
+$$\phi'(\alpha) = -160 + 928\alpha = 0$$
+$$\alpha_0 = \frac{160}{928} = \frac{5}{29}$$
+
+<p class="check">Shortcut check: For quadratics $f(x) = \frac{1}{2}x^T A x$ (with $A = \begin{bmatrix}6 & 0 \\ 0 & 4\end{bmatrix}$), the exact step size formula is $\alpha = \frac{g^T g}{g^T A g}$. We have $g^T g = 144 + 16 = 160$ and $g^T A g = \begin{bmatrix}12 & 4\end{bmatrix}\begin{bmatrix}72\\16\end{bmatrix} = 864 + 64 = 928$. So $\alpha = 160/928 = 5/29$. Matches!</p>
+</div>
+
+<div class="step">
+<div class="step-label">Step 4: Update the point</div>
+
+$$x_1 = x_0 + \alpha_0 d_0 = \begin{bmatrix} 2 \\ 1 \end{bmatrix} + \frac{5}{29}\begin{bmatrix} -12 \\ -4 \end{bmatrix} = \begin{bmatrix} 2 - 60/29 \\ 1 - 20/29 \end{bmatrix} = \begin{bmatrix} -2/29 \\ 9/29 \end{bmatrix}$$
+
+<div class="result">
+$$x_1 = \begin{bmatrix} -2/29 \\ 9/29 \end{bmatrix} \approx \begin{bmatrix} -0.069 \\ 0.310 \end{bmatrix}$$
+</div>
+</div>
+
+<div class="step">
+<div class="step-label">Step 5: Verify &mdash; function value decreased</div>
+
+$$f(x_0) = 3(4) + 2(1) = 14$$
+$$f(x_1) = 3\left(\frac{4}{841}\right) + 2\left(\frac{81}{841}\right) = \frac{12 + 162}{841} = \frac{174}{841} \approx 0.207$$
+
+<p class="check">Function value dropped from 14 to 0.207. Gradient descent made huge progress in one step.</p>
+</div>
+</div>
+
+<!-- ===================== PART B ===================== -->
+<h2>Part B: Newton's Method for Optimization</h2>
+<p><em>Core method from <a href="cg-07-newton-method.html" style="color:#64ffda;">Page 07</a>. Mirrors Assignment 1 style.</em></p>
+
+<div class="formula-box">
+<strong>Problem:</strong> Consider $f(x_1, x_2) = x_1^4 + x_2^2 - 2x_1^2$. Starting from $x_0 = \begin{bmatrix} 2 \\ 1 \end{bmatrix}$, perform <strong>one Newton step</strong>.
+</div>
+
+<div class="hand-calc">
+<h3>Full Worked Solution</h3>
+
+<div class="step">
+<div class="step-label">Step 1: Compute the gradient at $x_0$</div>
+
+$$\nabla f(x) = \begin{bmatrix} 4x_1^3 - 4x_1 \\ 2x_2 \end{bmatrix}$$
+
+$$\nabla f(x_0) = \begin{bmatrix} 4(8) - 4(2) \\ 2(1) \end{bmatrix} = \begin{bmatrix} 32 - 8 \\ 2 \end{bmatrix} = \begin{bmatrix} 24 \\ 2 \end{bmatrix}$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 2: Compute the Hessian at $x_0$</div>
+The Hessian is the matrix of second partial derivatives (<a href="cg-02-multivariable-bridge.html" style="color:#64ffda;">Page 02</a>):
+
+$$\nabla^2 f(x) = \begin{bmatrix} 12x_1^2 - 4 & 0 \\ 0 & 2 \end{bmatrix}$$
+
+$$\nabla^2 f(x_0) = \begin{bmatrix} 12(4) - 4 & 0 \\ 0 & 2 \end{bmatrix} = \begin{bmatrix} 44 & 0 \\ 0 & 2 \end{bmatrix}$$
+
+<p class="check">Check: is the Hessian positive definite? Eigenvalues are 44 and 2 (diagonal matrix). Both positive, so yes &mdash; Newton step is a descent direction.</p>
+</div>
+
+<div class="step">
+<div class="step-label">Step 3: Solve the Newton system $\nabla^2 f(x_0)\, p_0 = -\nabla f(x_0)$</div>
+
+$$\begin{bmatrix} 44 & 0 \\ 0 & 2 \end{bmatrix} \begin{bmatrix} p_1 \\ p_2 \end{bmatrix} = -\begin{bmatrix} 24 \\ 2 \end{bmatrix} = \begin{bmatrix} -24 \\ -2 \end{bmatrix}$$
+
+Since the Hessian is diagonal, this is trivial:
+
+$$p_1 = -24/44 = -6/11, \qquad p_2 = -2/2 = -1$$
+
+$$p_0 = \begin{bmatrix} -6/11 \\ -1 \end{bmatrix}$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 4: Update the point (with step size $\alpha = 1$)</div>
+Newton's method uses $\alpha = 1$ (the full step):
+
+$$x_1 = x_0 + p_0 = \begin{bmatrix} 2 \\ 1 \end{bmatrix} + \begin{bmatrix} -6/11 \\ -1 \end{bmatrix} = \begin{bmatrix} 16/11 \\ 0 \end{bmatrix}$$
+
+<div class="result">
+$$x_1 = \begin{bmatrix} 16/11 \\ 0 \end{bmatrix} \approx \begin{bmatrix} 1.455 \\ 0 \end{bmatrix}$$
+</div>
+</div>
+
+<div class="step">
+<div class="step-label">Step 5: Verify</div>
+
+$$f(x_0) = 16 + 1 - 8 = 9$$
+$$f(x_1) = (16/11)^4 + 0 - 2(16/11)^2 = \frac{65536}{14641} - \frac{512}{121} = \frac{65536 - 61952}{14641} = \frac{3584}{14641} \approx 0.245$$
+
+<p class="check">Function value dropped from 9 to about 0.245. Note that $f$ has minimizers at $(\pm 1, 0)$ with $f = -1$, so Newton is heading in the right direction but hasn't arrived yet since $f$ is not quadratic. A second Newton step would get much closer.</p>
+</div>
+</div>
+
+<!-- ===================== PART C ===================== -->
+<h2>Part C: Trust-Region Method</h2>
+<p><em>Core method from <a href="cg-09-trust-region.html" style="color:#64ffda;">Page 09</a>. Mirrors Quiz 4 format exactly.</em></p>
+
+<div class="formula-box">
+<strong>Problem:</strong> Consider $f(x_1, x_2) = x_1^2 + 4x_2^2 + x_1 x_2$. At $x_0 = \begin{bmatrix} 2 \\ 1 \end{bmatrix}$ with trust-region radius $\Delta_0 = 1$, parameters $\eta = 0.25$.
+<br><br>
+(a) Write the quadratic model $m_0(p)$.<br>
+(b) Compute the Newton step $p^N$. Is it inside the trust region?<br>
+(c) If the Newton step is outside, compute the Cauchy point.<br>
+(d) Suppose we take step $p = \begin{bmatrix} -0.7 \\ -0.3 \end{bmatrix}$. Compute $\rho_0$ and decide whether to accept the step and how to update $\Delta$.
+</div>
+
+<div class="hand-calc">
+<h3>Full Worked Solution</h3>
+
+<div class="step">
+<div class="step-label">Step 1: Compute gradient and Hessian</div>
+
+$$\nabla f(x) = \begin{bmatrix} 2x_1 + x_2 \\ 8x_2 + x_1 \end{bmatrix}, \qquad \nabla^2 f(x) = \begin{bmatrix} 2 & 1 \\ 1 & 8 \end{bmatrix}$$
+
+At $x_0 = (2, 1)$:
+
+$$g_0 = \nabla f(x_0) = \begin{bmatrix} 5 \\ 10 \end{bmatrix}, \qquad B_0 = \nabla^2 f(x_0) = \begin{bmatrix} 2 & 1 \\ 1 & 8 \end{bmatrix}$$
+
+Note: the Hessian is constant here since $f$ is quadratic. Also $f(x_0) = 4 + 4 + 2 = 10$.
+</div>
+
+<div class="step">
+<div class="step-label">Step 2 (a): Write the quadratic model</div>
+
+$$m_0(p) = f(x_0) + g_0^T p + \frac{1}{2} p^T B_0 p$$
+$$= 10 + \begin{bmatrix} 5 & 10 \end{bmatrix} p + \frac{1}{2} p^T \begin{bmatrix} 2 & 1 \\ 1 & 8 \end{bmatrix} p$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 3 (b): Compute the Newton step</div>
+Solve $B_0 p^N = -g_0$:
+
+$$\begin{bmatrix} 2 & 1 \\ 1 & 8 \end{bmatrix} \begin{bmatrix} p_1 \\ p_2 \end{bmatrix} = \begin{bmatrix} -5 \\ -10 \end{bmatrix}$$
+
+Using the $2 \times 2$ inverse formula (<a href="cg-03-linear-algebra.html" style="color:#64ffda;">Page 03</a>): $\det(B) = 16 - 1 = 15$.
+
+$$B_0^{-1} = \frac{1}{15}\begin{bmatrix} 8 & -1 \\ -1 & 2 \end{bmatrix}$$
+
+$$p^N = -B_0^{-1} g_0 = -\frac{1}{15}\begin{bmatrix} 8 & -1 \\ -1 & 2 \end{bmatrix}\begin{bmatrix} 5 \\ 10 \end{bmatrix} = -\frac{1}{15}\begin{bmatrix} 30 \\ 15 \end{bmatrix} = \begin{bmatrix} -2 \\ -1 \end{bmatrix}$$
+
+Check: $\|p^N\| = \sqrt{4 + 1} = \sqrt{5} \approx 2.236$.
+
+<div class="result">Since $\|p^N\| = \sqrt{5} \approx 2.236 > \Delta_0 = 1$, the Newton step is OUTSIDE the trust region. We cannot take it directly.</div>
+</div>
+
+<div class="step">
+<div class="step-label">Step 4 (c): Compute the Cauchy point</div>
+The Cauchy point is the steepest descent step restricted to the trust region. First, compute the unconstrained steepest descent step size:
+
+$$\alpha^C = \frac{g_0^T g_0}{g_0^T B_0 g_0}$$
+
+$$g_0^T g_0 = 25 + 100 = 125$$
+
+$$B_0 g_0 = \begin{bmatrix} 2 & 1 \\ 1 & 8 \end{bmatrix}\begin{bmatrix} 5 \\ 10 \end{bmatrix} = \begin{bmatrix} 20 \\ 85 \end{bmatrix}$$
+
+$$g_0^T B_0 g_0 = 5(20) + 10(85) = 100 + 850 = 950$$
+
+$$\alpha^C = \frac{125}{950} = \frac{5}{38}$$
+
+The unconstrained Cauchy step is $p^C_{\text{uncon}} = -\alpha^C g_0 = -\frac{5}{38}\begin{bmatrix}5\\10\end{bmatrix} = \begin{bmatrix}-25/38\\-50/38\end{bmatrix}$.
+
+$\|p^C_{\text{uncon}}\| = \frac{5}{38}\sqrt{125} = \frac{5 \cdot 5\sqrt{5}}{38} = \frac{25\sqrt{5}}{38} \approx 1.471$.
+
+Since $1.471 > \Delta_0 = 1$, the unconstrained Cauchy step is also outside the trust region. So we scale it to the boundary:
+
+$$p^C = -\frac{\Delta_0}{\|g_0\|} g_0 = -\frac{1}{\sqrt{125}}\begin{bmatrix}5\\10\end{bmatrix} = \begin{bmatrix} -5/\sqrt{125} \\ -10/\sqrt{125} \end{bmatrix} = \begin{bmatrix} -\sqrt{5}/5 \\ -2\sqrt{5}/5 \end{bmatrix} \approx \begin{bmatrix} -0.447 \\ -0.894 \end{bmatrix}$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 5 (d): Compute $\rho_0$ for the given step</div>
+Given $p = \begin{bmatrix}-0.7\\-0.3\end{bmatrix}$. First compute the actual reduction:
+
+$$f(x_0 + p) = f\!\left(\begin{bmatrix}1.3\\0.7\end{bmatrix}\right) = (1.3)^2 + 4(0.7)^2 + (1.3)(0.7) = 1.69 + 1.96 + 0.91 = 4.56$$
+
+$$\text{actual reduction} = f(x_0) - f(x_0 + p) = 10 - 4.56 = 5.44$$
+
+Now compute the predicted reduction from the model:
+
+$$m_0(p) = 10 + g_0^T p + \frac{1}{2}p^T B_0 p$$
+
+$$g_0^T p = 5(-0.7) + 10(-0.3) = -3.5 - 3.0 = -6.5$$
+
+$$B_0 p = \begin{bmatrix}2&1\\1&8\end{bmatrix}\begin{bmatrix}-0.7\\-0.3\end{bmatrix} = \begin{bmatrix}-1.7\\-3.1\end{bmatrix}$$
+
+$$p^T B_0 p = (-0.7)(-1.7) + (-0.3)(-3.1) = 1.19 + 0.93 = 2.12$$
+
+$$m_0(p) = 10 - 6.5 + \frac{1}{2}(2.12) = 10 - 6.5 + 1.06 = 4.56$$
+
+$$\text{predicted reduction} = m_0(0) - m_0(p) = 10 - 4.56 = 5.44$$
+
+$$\rho_0 = \frac{\text{actual reduction}}{\text{predicted reduction}} = \frac{5.44}{5.44} = 1.0$$
+
+<div class="result">
+$\rho_0 = 1.0$ &mdash; the model perfectly predicted the actual reduction!
+</div>
+
+<p class="check">This makes sense: $f$ is quadratic, and the quadratic model of a quadratic function is exact. So the model always perfectly predicts the actual change.</p>
+</div>
+
+<div class="step">
+<div class="step-label">Step 6 (d): Decision</div>
+Since $\rho_0 = 1.0 > \eta = 0.25$: <strong>Accept the step</strong> ($x_1 = x_0 + p = [1.3, 0.7]^T$).
+
+Since $\rho_0 > 0.75$ and $\|p\| = \sqrt{0.49 + 0.09} = \sqrt{0.58} \approx 0.762 < \Delta_0 = 1$, the step did not hit the boundary, so we keep $\Delta_1 = \Delta_0 = 1$ (no need to expand since we didn't use the full radius).
+
+<p class="check">Common trust-region update rules: if $\rho < 0.25$, shrink $\Delta$ (poor model). If $\rho > 0.75$ AND step hit boundary, expand $\Delta$. Otherwise keep $\Delta$ the same.</p>
+</div>
+</div>
+
+<!-- ===================== PART D ===================== -->
+<h2>Part D: Conjugate Gradient (Linear CG)</h2>
+<p><em>Core method from <a href="cg-10-conjugate-gradient.html" style="color:#64ffda;">Page 10</a>. Mirrors Quiz 5 format exactly.</em></p>
+
+<div class="formula-box">
+<strong>Problem:</strong> Solve $Ax = b$ using CG, where
+
+$$A = \begin{bmatrix} 4 & 1 \\ 1 & 3 \end{bmatrix}, \qquad b = \begin{bmatrix} 1 \\ 2 \end{bmatrix}, \qquad x_0 = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$$
+
+Run <strong>2 iterations</strong> of the CG algorithm.
+</div>
+
+<div class="hand-calc">
+<h3>Full Worked Solution</h3>
+
+<div class="step">
+<div class="step-label">Initialization</div>
+
+$$r_0 = b - Ax_0 = \begin{bmatrix}1\\2\end{bmatrix} - \begin{bmatrix}0\\0\end{bmatrix} = \begin{bmatrix}1\\2\end{bmatrix}$$
+
+$$d_0 = r_0 = \begin{bmatrix}1\\2\end{bmatrix}$$
+
+(The first search direction is the residual, which equals the steepest descent direction.)
+</div>
+
+<div class="step">
+<div class="step-label">Iteration 1: Compute $\alpha_0$</div>
+
+$$\alpha_0 = \frac{r_0^T r_0}{d_0^T A d_0}$$
+
+$$r_0^T r_0 = 1 + 4 = 5$$
+
+$$Ad_0 = \begin{bmatrix}4&1\\1&3\end{bmatrix}\begin{bmatrix}1\\2\end{bmatrix} = \begin{bmatrix}6\\7\end{bmatrix}$$
+
+$$d_0^T A d_0 = 1(6) + 2(7) = 6 + 14 = 20$$
+
+$$\alpha_0 = \frac{5}{20} = \frac{1}{4}$$
+</div>
+
+<div class="step">
+<div class="step-label">Iteration 1: Update $x$ and $r$</div>
+
+$$x_1 = x_0 + \alpha_0 d_0 = \begin{bmatrix}0\\0\end{bmatrix} + \frac{1}{4}\begin{bmatrix}1\\2\end{bmatrix} = \begin{bmatrix}1/4\\1/2\end{bmatrix}$$
+
+$$r_1 = r_0 - \alpha_0 A d_0 = \begin{bmatrix}1\\2\end{bmatrix} - \frac{1}{4}\begin{bmatrix}6\\7\end{bmatrix} = \begin{bmatrix}1 - 3/2\\2 - 7/4\end{bmatrix} = \begin{bmatrix}-1/2\\1/4\end{bmatrix}$$
+</div>
+
+<div class="step">
+<div class="step-label">Iteration 1: Compute $\beta_0$ and new direction</div>
+
+$$\beta_0 = \frac{r_1^T r_1}{r_0^T r_0} = \frac{1/4 + 1/16}{5} = \frac{5/16}{5} = \frac{1}{16}$$
+
+$$d_1 = r_1 + \beta_0 d_0 = \begin{bmatrix}-1/2\\1/4\end{bmatrix} + \frac{1}{16}\begin{bmatrix}1\\2\end{bmatrix} = \begin{bmatrix}-1/2 + 1/16\\1/4 + 2/16\end{bmatrix} = \begin{bmatrix}-7/16\\3/8\end{bmatrix}$$
+
+<p class="check">Orthogonality check: $r_1^T r_0 = (-1/2)(1) + (1/4)(2) = -1/2 + 1/2 = 0$. The residuals are orthogonal, as CG guarantees.</p>
+</div>
+
+<div class="step">
+<div class="step-label">Iteration 2: Compute $\alpha_1$</div>
+
+$$r_1^T r_1 = 1/4 + 1/16 = 5/16$$
+
+$$Ad_1 = \begin{bmatrix}4&1\\1&3\end{bmatrix}\begin{bmatrix}-7/16\\3/8\end{bmatrix} = \begin{bmatrix}-28/16 + 3/8\\-7/16 + 9/8\end{bmatrix} = \begin{bmatrix}-28/16 + 6/16\\-7/16 + 18/16\end{bmatrix} = \begin{bmatrix}-22/16\\11/16\end{bmatrix}$$
+
+$$= \begin{bmatrix}-11/8\\11/16\end{bmatrix}$$
+
+$$d_1^T A d_1 = \left(-\frac{7}{16}\right)\left(-\frac{11}{8}\right) + \left(\frac{3}{8}\right)\left(\frac{11}{16}\right) = \frac{77}{128} + \frac{33}{128} = \frac{110}{128} = \frac{55}{64}$$
+
+$$\alpha_1 = \frac{r_1^T r_1}{d_1^T A d_1} = \frac{5/16}{55/64} = \frac{5}{16} \cdot \frac{64}{55} = \frac{320}{880} = \frac{4}{11}$$
+</div>
+
+<div class="step">
+<div class="step-label">Iteration 2: Update $x$</div>
+
+$$x_2 = x_1 + \alpha_1 d_1 = \begin{bmatrix}1/4\\1/2\end{bmatrix} + \frac{4}{11}\begin{bmatrix}-7/16\\3/8\end{bmatrix} = \begin{bmatrix}1/4 - 7/44\\1/2 + 3/22\end{bmatrix} = \begin{bmatrix}11/44 - 7/44\\11/22 + 3/22\end{bmatrix} = \begin{bmatrix}4/44\\14/22\end{bmatrix}$$
+
+$$= \begin{bmatrix}1/11\\7/11\end{bmatrix}$$
+
+<div class="result">
+$$x_2 = \begin{bmatrix}1/11\\7/11\end{bmatrix}$$
+</div>
+</div>
+
+<div class="step">
+<div class="step-label">Verification: is $x_2$ the exact solution?</div>
+
+$$Ax_2 = \begin{bmatrix}4&1\\1&3\end{bmatrix}\begin{bmatrix}1/11\\7/11\end{bmatrix} = \begin{bmatrix}4/11 + 7/11\\1/11 + 21/11\end{bmatrix} = \begin{bmatrix}11/11\\22/11\end{bmatrix} = \begin{bmatrix}1\\2\end{bmatrix} = b$$
+
+<p class="check">CG solved the $2 \times 2$ system in exactly 2 iterations, as the theory guarantees ($n$ steps for an $n$-dimensional problem).</p>
+</div>
+</div>
+
+<!-- ===================== PART E ===================== -->
+<h2>Part E: BFGS Method</h2>
+<p><em>Core method from <a href="cg-12-bfgs.html" style="color:#64ffda;">Page 12</a>. Mirrors Quiz 6 format exactly.</em></p>
+
+<div class="formula-box">
+<strong>Problem:</strong> Consider $f(x_1, x_2) = 2x_1^2 + x_2^2 - 2x_1 x_2$, $x_0 = \begin{bmatrix}2\\1\end{bmatrix}$, $H_0 = I$ (initial inverse Hessian approximation). Perform <strong>one BFGS iteration</strong> with exact line search.
+</div>
+
+<div class="hand-calc">
+<h3>Full Worked Solution</h3>
+
+<div class="step">
+<div class="step-label">Step 1: Compute gradient at $x_0$</div>
+
+$$\nabla f(x) = \begin{bmatrix}4x_1 - 2x_2\\2x_2 - 2x_1\end{bmatrix}$$
+
+$$g_0 = \nabla f(x_0) = \begin{bmatrix}4(2)-2(1)\\2(1)-2(2)\end{bmatrix} = \begin{bmatrix}6\\-2\end{bmatrix}$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 2: Compute search direction</div>
+
+$$d_0 = -H_0 g_0 = -I \begin{bmatrix}6\\-2\end{bmatrix} = \begin{bmatrix}-6\\2\end{bmatrix}$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 3: Exact line search for $\alpha_0$</div>
+The Hessian of $f$ is $A = \begin{bmatrix}4&-2\\-2&2\end{bmatrix}$. Since $f$ is quadratic: $f(x) = \frac{1}{2}x^T A x$ (with no linear term since the minimum is at origin).
+
+$$\alpha_0 = \frac{g_0^T g_0}{g_0^T A(-H_0^{-1}g_0)}\text{ ... but let's use the general formula.}$$
+
+Actually, for exact line search: $\alpha = -\frac{g_0^T d_0}{d_0^T A d_0}$.
+
+$$g_0^T d_0 = (6)(-6) + (-2)(2) = -36 - 4 = -40$$
+
+$$Ad_0 = \begin{bmatrix}4&-2\\-2&2\end{bmatrix}\begin{bmatrix}-6\\2\end{bmatrix} = \begin{bmatrix}-24-4\\12+4\end{bmatrix} = \begin{bmatrix}-28\\16\end{bmatrix}$$
+
+$$d_0^T A d_0 = (-6)(-28) + (2)(16) = 168 + 32 = 200$$
+
+$$\alpha_0 = \frac{-(-40)}{200} = \frac{40}{200} = \frac{1}{5}$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 4: Update the point</div>
+
+$$x_1 = x_0 + \alpha_0 d_0 = \begin{bmatrix}2\\1\end{bmatrix} + \frac{1}{5}\begin{bmatrix}-6\\2\end{bmatrix} = \begin{bmatrix}2-6/5\\1+2/5\end{bmatrix} = \begin{bmatrix}4/5\\7/5\end{bmatrix}$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 5: Compute $s_0$ and $y_0$</div>
+
+$$s_0 = x_1 - x_0 = \alpha_0 d_0 = \frac{1}{5}\begin{bmatrix}-6\\2\end{bmatrix} = \begin{bmatrix}-6/5\\2/5\end{bmatrix}$$
+
+$$g_1 = \nabla f(x_1) = \begin{bmatrix}4(4/5) - 2(7/5)\\2(7/5) - 2(4/5)\end{bmatrix} = \begin{bmatrix}16/5 - 14/5\\14/5 - 8/5\end{bmatrix} = \begin{bmatrix}2/5\\6/5\end{bmatrix}$$
+
+$$y_0 = g_1 - g_0 = \begin{bmatrix}2/5\\6/5\end{bmatrix} - \begin{bmatrix}6\\-2\end{bmatrix} = \begin{bmatrix}2/5 - 30/5\\6/5 + 10/5\end{bmatrix} = \begin{bmatrix}-28/5\\16/5\end{bmatrix}$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 6: Curvature condition check</div>
+
+$$s_0^T y_0 = \left(-\frac{6}{5}\right)\left(-\frac{28}{5}\right) + \left(\frac{2}{5}\right)\left(\frac{16}{5}\right) = \frac{168}{25} + \frac{32}{25} = \frac{200}{25} = 8$$
+
+<p class="check">$s_0^T y_0 = 8 > 0$. Curvature condition satisfied &mdash; proceed with BFGS update.</p>
+</div>
+
+<div class="step">
+<div class="step-label">Step 7: BFGS inverse Hessian update</div>
+$\rho_0 = \frac{1}{s_0^T y_0} = \frac{1}{8}$
+
+The BFGS update formula:
+$$H_1 = (I - \rho_0 s_0 y_0^T)H_0(I - \rho_0 y_0 s_0^T) + \rho_0 s_0 s_0^T$$
+
+Compute $\rho_0 s_0 y_0^T$:
+
+$$\rho_0 s_0 y_0^T = \frac{1}{8}\begin{bmatrix}-6/5\\2/5\end{bmatrix}\begin{bmatrix}-28/5 & 16/5\end{bmatrix} = \frac{1}{8}\begin{bmatrix}168/25 & -96/25\\-56/25 & 32/25\end{bmatrix} = \begin{bmatrix}21/25 & -12/25\\-7/25 & 4/25\end{bmatrix}$$
+
+$$V_0 = I - \rho_0 s_0 y_0^T = \begin{bmatrix}1-21/25 & 12/25\\7/25 & 1-4/25\end{bmatrix} = \begin{bmatrix}4/25 & 12/25\\7/25 & 21/25\end{bmatrix}$$
+
+Since $H_0 = I$:
+
+$$V_0 H_0 V_0^T = V_0 V_0^T$$
+
+$$V_0 V_0^T = \begin{bmatrix}4/25 & 12/25\\7/25 & 21/25\end{bmatrix}\begin{bmatrix}4/25 & 7/25\\12/25 & 21/25\end{bmatrix} = \begin{bmatrix}(16+144)/625 & (28+252)/625\\(28+252)/625 & (49+441)/625\end{bmatrix}$$
+
+$$= \begin{bmatrix}160/625 & 280/625\\280/625 & 490/625\end{bmatrix} = \begin{bmatrix}32/125 & 56/125\\56/125 & 98/125\end{bmatrix}$$
+
+$$\rho_0 s_0 s_0^T = \frac{1}{8}\begin{bmatrix}36/25 & -12/25\\-12/25 & 4/25\end{bmatrix} = \begin{bmatrix}9/50 & -3/50\\-3/50 & 1/50\end{bmatrix}$$
+
+Converting to common denominator (/250):
+
+$$H_1 = \begin{bmatrix}64/250 + 45/250 & 112/250 - 15/250\\112/250 - 15/250 & 196/250 + 5/250\end{bmatrix} = \begin{bmatrix}109/250 & 97/250\\97/250 & 201/250\end{bmatrix}$$
+
+<div class="result">
+$$H_1 = \frac{1}{250}\begin{bmatrix}109 & 97\\97 & 201\end{bmatrix}$$
+</div>
+
+<p class="check">For reference, the true inverse Hessian is $A^{-1} = \frac{1}{4}\begin{bmatrix}2&2\\2&4\end{bmatrix} = \begin{bmatrix}0.5&0.5\\0.5&1.0\end{bmatrix}$. Our $H_1 \approx \begin{bmatrix}0.436&0.388\\0.388&0.804\end{bmatrix}$ &mdash; getting closer! A second BFGS step on a quadratic would give the exact inverse Hessian.</p>
+</div>
+</div>
+
+<!-- ===================== PART F ===================== -->
+<h2>Part F: Newton for Nonlinear Systems</h2>
+<p><em>Core method from <a href="cg-14-nonlinear-equations.html" style="color:#64ffda;">Page 14</a>. Mirrors Quiz 7 format exactly.</em></p>
+
+<div class="formula-box">
+<strong>Problem:</strong> Solve the system
+
+$$r(x) = \begin{bmatrix} x_1^2 + x_2 - 3 \\ x_1 + x_2^2 - 5 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$$
+
+starting from $x_0 = \begin{bmatrix}1\\1\end{bmatrix}$. Perform <strong>one Newton step</strong>.
+</div>
+
+<div class="hand-calc">
+<h3>Full Worked Solution</h3>
+
+<div class="step">
+<div class="step-label">Step 1: Evaluate the residual at $x_0$</div>
+
+$$r(x_0) = \begin{bmatrix}1 + 1 - 3\\1 + 1 - 5\end{bmatrix} = \begin{bmatrix}-1\\-3\end{bmatrix}$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 2: Compute the Jacobian at $x_0$</div>
+The Jacobian $J(x)$ is the matrix of partial derivatives of the residual components (<a href="cg-02-multivariable-bridge.html" style="color:#64ffda;">Page 02</a>):
+
+$$J(x) = \begin{bmatrix} \partial r_1/\partial x_1 & \partial r_1/\partial x_2 \\ \partial r_2/\partial x_1 & \partial r_2/\partial x_2 \end{bmatrix} = \begin{bmatrix} 2x_1 & 1 \\ 1 & 2x_2 \end{bmatrix}$$
+
+$$J(x_0) = \begin{bmatrix}2&1\\1&2\end{bmatrix}$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 3: Solve $J(x_0)\, p_0 = -r(x_0)$</div>
+
+$$\begin{bmatrix}2&1\\1&2\end{bmatrix}\begin{bmatrix}p_1\\p_2\end{bmatrix} = -\begin{bmatrix}-1\\-3\end{bmatrix} = \begin{bmatrix}1\\3\end{bmatrix}$$
+
+Using the $2 \times 2$ inverse: $\det(J) = 4 - 1 = 3$.
+
+$$J^{-1} = \frac{1}{3}\begin{bmatrix}2&-1\\-1&2\end{bmatrix}$$
+
+$$p_0 = J^{-1}\begin{bmatrix}1\\3\end{bmatrix} = \frac{1}{3}\begin{bmatrix}2-3\\-1+6\end{bmatrix} = \frac{1}{3}\begin{bmatrix}-1\\5\end{bmatrix} = \begin{bmatrix}-1/3\\5/3\end{bmatrix}$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 4: Update the point</div>
+
+$$x_1 = x_0 + p_0 = \begin{bmatrix}1\\1\end{bmatrix} + \begin{bmatrix}-1/3\\5/3\end{bmatrix} = \begin{bmatrix}2/3\\8/3\end{bmatrix}$$
+
+<div class="result">
+$$x_1 = \begin{bmatrix}2/3\\8/3\end{bmatrix} \approx \begin{bmatrix}0.667\\2.667\end{bmatrix}$$
+</div>
+</div>
+
+<div class="step">
+<div class="step-label">Step 5: Verify &mdash; is the residual smaller?</div>
+
+$$r(x_1) = \begin{bmatrix}(2/3)^2 + 8/3 - 3\\2/3 + (8/3)^2 - 5\end{bmatrix} = \begin{bmatrix}4/9 + 8/3 - 3\\2/3 + 64/9 - 5\end{bmatrix}$$
+
+$$= \begin{bmatrix}4/9 + 24/9 - 27/9\\6/9 + 64/9 - 45/9\end{bmatrix} = \begin{bmatrix}1/9\\25/9\end{bmatrix}$$
+
+$$\|r(x_0)\| = \sqrt{1 + 9} = \sqrt{10} \approx 3.162$$
+$$\|r(x_1)\| = \sqrt{1/81 + 625/81} = \sqrt{626/81} \approx 2.780$$
+
+<p class="check">Residual norm decreased from 3.162 to 2.780. Newton is making progress. The convergence will speed up dramatically as we get closer to the root (quadratic convergence kicks in).</p>
+</div>
+</div>
+
+<!-- ===================== PART G ===================== -->
+<h2>Part G: KKT Conditions &amp; Constrained Optimization</h2>
+<p><em>Core method from <a href="cg-15-constrained.html" style="color:#64ffda;">Page 15</a>. Mirrors Quiz 8 format exactly.</em></p>
+
+<div class="formula-box">
+<strong>Problem:</strong> Solve
+
+$$\min\; f(x_1, x_2) = x_1^2 + x_2^2$$
+$$\text{subject to: } \quad x_1 + x_2 \geq 4, \quad x_1 \geq 0, \quad x_2 \geq 0$$
+</div>
+
+<div class="hand-calc">
+<h3>Full Worked Solution</h3>
+
+<div class="step">
+<div class="step-label">Step 1: Convert to standard form (inequality constraints $c_i(x) \geq 0$)</div>
+We have three constraints:
+<ul style="margin-left: 20px;">
+  <li>$c_1(x) = x_1 + x_2 - 4 \geq 0$</li>
+  <li>$c_2(x) = x_1 \geq 0$</li>
+  <li>$c_3(x) = x_2 \geq 0$</li>
+</ul>
+</div>
+
+<div class="step">
+<div class="step-label">Step 2: Write the Lagrangian</div>
+
+$$\mathcal{L}(x, \lambda) = f(x) - \lambda_1 c_1(x) - \lambda_2 c_2(x) - \lambda_3 c_3(x)$$
+$$= x_1^2 + x_2^2 - \lambda_1(x_1 + x_2 - 4) - \lambda_2 x_1 - \lambda_3 x_2$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 3: Write the KKT conditions</div>
+<strong>Stationarity</strong> ($\nabla_x \mathcal{L} = 0$):
+$$\frac{\partial \mathcal{L}}{\partial x_1} = 2x_1 - \lambda_1 - \lambda_2 = 0 \quad \Rightarrow \quad 2x_1 = \lambda_1 + \lambda_2 \quad \text{...(i)}$$
+$$\frac{\partial \mathcal{L}}{\partial x_2} = 2x_2 - \lambda_1 - \lambda_3 = 0 \quad \Rightarrow \quad 2x_2 = \lambda_1 + \lambda_3 \quad \text{...(ii)}$$
+
+<strong>Primal feasibility:</strong> $x_1 + x_2 \geq 4$, $x_1 \geq 0$, $x_2 \geq 0$
+
+<strong>Dual feasibility:</strong> $\lambda_1 \geq 0$, $\lambda_2 \geq 0$, $\lambda_3 \geq 0$
+
+<strong>Complementary slackness:</strong>
+$$\lambda_1(x_1 + x_2 - 4) = 0 \quad \text{...(iii)}$$
+$$\lambda_2 x_1 = 0 \quad \text{...(iv)}$$
+$$\lambda_3 x_2 = 0 \quad \text{...(v)}$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 4: Enumerate cases using complementary slackness</div>
+Each $\lambda_i$ is either 0 or its constraint is active (equality). We check cases systematically.
+
+<strong>Case 1: Only $c_1$ active</strong> ($\lambda_1 > 0$, $\lambda_2 = 0$, $\lambda_3 = 0$)
+
+From (i): $2x_1 = \lambda_1$, from (ii): $2x_2 = \lambda_1$, so $x_1 = x_2$.
+
+From $c_1$ active: $x_1 + x_2 = 4$, so $x_1 = x_2 = 2$.
+
+Then $\lambda_1 = 2(2) = 4 > 0$. Check primal feasibility: $x_1 = 2 > 0$, $x_2 = 2 > 0$.
+
+<div class="result">KKT point: $x^* = (2, 2)$, $\lambda_1 = 4$, $\lambda_2 = \lambda_3 = 0$. All conditions satisfied!</div>
+
+<strong>Case 2: Only $c_2$ active</strong> ($\lambda_1 = 0$, $\lambda_2 > 0$, $\lambda_3 = 0$)
+
+From (iv): $x_1 = 0$. From (i): $0 = \lambda_2$, contradiction ($\lambda_2 > 0$). No solution.
+
+<strong>Case 3: $c_1$ and $c_2$ active</strong> ($\lambda_1 > 0$, $\lambda_2 > 0$, $\lambda_3 = 0$)
+
+$x_1 = 0$ and $x_1 + x_2 = 4$, so $x_2 = 4$. From (ii): $2(4) = \lambda_1$, so $\lambda_1 = 8$. From (i): $0 = 8 + \lambda_2$, so $\lambda_2 = -8 < 0$. Violates dual feasibility!
+
+<strong>Case 4: $c_1$ and $c_3$ active</strong> (by symmetry with Case 3)
+
+$x_2 = 0$, $x_1 = 4$. From (i): $8 = \lambda_1 + \lambda_2$, from (ii): $0 = \lambda_1 + \lambda_3$, so $\lambda_3 = -\lambda_1$. Since $\lambda_1 \geq 0$ and $\lambda_3 \geq 0$, we need $\lambda_1 = 0$ and $\lambda_3 = 0$. Then $\lambda_2 = 8$. But check: if $\lambda_1 = 0$, then $c_1$ should not be active... Actually we assumed $\lambda_1 > 0$. If $\lambda_1 = 0$: from (i) $8 = \lambda_2$, from (ii) $0 = \lambda_3$. Check $c_1$: $4 + 0 - 4 = 0 \geq 0$. This works! But this is actually the case $c_2$ inactive, $c_3$ active, $c_1$ happens to be active at the boundary.
+
+In any case, $(4, 0)$ gives $f = 16$, which is worse than $(2,2)$ giving $f = 8$.
+
+<strong>By symmetry,</strong> $(0, 4)$ gives $f = 16$ as well.
+</div>
+
+<div class="step">
+<div class="step-label">Step 5: Identify the optimal solution</div>
+
+Comparing KKT points:
+<ul style="margin-left: 20px;">
+  <li>$(2, 2)$: $f = 4 + 4 = 8$</li>
+  <li>$(4, 0)$: $f = 16$</li>
+  <li>$(0, 4)$: $f = 16$</li>
+</ul>
+
+<div class="result">The optimal solution is $x^* = (2, 2)$ with $f^* = 8$ and multiplier $\lambda_1 = 4$.</div>
+
+<p class="check">Geometric check: we are minimizing distance from origin subject to being on or above the line $x_1 + x_2 = 4$ in the first quadrant. The closest point on that line to the origin is $(2,2)$ (by symmetry). The multiplier $\lambda_1 = 4 > 0$ tells us the constraint is active (binding) and "costs" us &mdash; if we could relax it, we would move closer to the origin.</p>
+</div>
+</div>
+
+<!-- ===================== NAV ===================== -->
+<div class="nav">
+  <p><a href="cg-17-method-map.html">&larr; Previous: Page 17 &mdash; How All Methods Connect</a></p>
+  <p><a href="cg-19-exam-theory.html">Next: Page 19 &mdash; Exam Theory &rarr;</a></p>
+  <p style="margin-top: 8px;"><a href="index.html">Back to Index</a></p>
+</div>
+
+</div>
+</body>
+</html>

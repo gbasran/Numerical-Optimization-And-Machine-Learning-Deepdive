@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page 20 &mdash; Formula Sheet | MATH 3850 Course Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
+.container { max-width: 900px; margin: 0 auto; }
+h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
+.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
+h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
+.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
+.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
+.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
+.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
+.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
+.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
+.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
+.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
+.hand-calc .result { color: #64ffda; font-weight: bold; }
+.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
+.exam-flag { background: #2a1a1a; border: 2px solid #ff6b6b; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
+.exam-flag h4 { color: #ff6b6b; margin-bottom: 8px; }
+.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
+.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
+.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
+.step-table tr:nth-child(even) { background: #16213e; }
+.algo-box { border-left: 4px solid #64ffda; padding: 16px 20px; margin: 20px 0; background: #0f3460; border-radius: 0 12px 12px 0; }
+.algo-box .algo-title { color: #ffd93d; font-weight: bold; font-size: 18px; margin-bottom: 12px; }
+.algo-box .algo-line { padding: 6px 0; font-size: 16px; }
+.algo-box .algo-comment { color: #888; font-size: 14px; }
+.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
+.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
+.glossary dl { font-size: 15px; }
+.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
+.glossary dd { margin-left: 20px; color: #ccc; }
+.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
+.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
+.nav a:hover { text-decoration: underline; }
+.nav p { margin: 4px 0; }
+svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
+.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
+.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
+.breakdown dd { color: #ccc; }
+.ref { color: #888; font-size: 14px; margin-top: 4px; }
+.ref a { color: #64ffda; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<span class="tag">PAGE 20 &mdash; SYNTHESIS</span>
+<h1>Complete Formula Reference Sheet</h1>
+<p class="subtitle">Every algorithm and formula from the entire course, organized by topic &mdash; the page to have open during final review</p>
+
+<div class="note">
+<strong>How to use:</strong> This is a pure reference. Minimal text, maximum formulas. Each box has the formula, a one-line reminder of what it does, and a link to the full explanation. If a formula seems unfamiliar, click the link to go back to the page where it was derived and explained with analogies.
+</div>
+
+<!-- ===================== PART A ===================== -->
+<h2>Part A: Gradient Descent &amp; Newton</h2>
+
+<div class="formula-box">
+<strong>Gradient Descent Update</strong>
+$$x_{k+1} = x_k - \alpha_k \nabla f(x_k)$$
+<em>Move in the steepest downhill direction, step size $\alpha_k$.</em>
+<p class="ref"><a href="cg-06-gradient-descent.html">Page 06</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Exact Step Size on Quadratic $f(x) = \frac{1}{2}x^T A x - b^T x$</strong>
+$$\alpha_k = \frac{g_k^T g_k}{g_k^T A g_k}$$
+<em>where $g_k = \nabla f(x_k) = Ax_k - b$. Minimizes $f$ exactly along the search direction.</em>
+<p class="ref"><a href="cg-06-gradient-descent.html">Page 06</a></p>
+</div>
+
+<div class="formula-box">
+<strong>GD Convergence Rate on Quadratics</strong>
+$$f(x_{k+1}) - f(x^*) \leq \left(\frac{\kappa - 1}{\kappa + 1}\right)^2 \left(f(x_k) - f(x^*)\right)$$
+<em>where $\kappa = \lambda_{\max}/\lambda_{\min}$ is the condition number. Large $\kappa$ = slow convergence.</em>
+<p class="ref"><a href="cg-06-gradient-descent.html">Page 06</a>, <a href="cg-01-math-foundations.html">Page 01</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Newton Step</strong>
+$$p_k = -[\nabla^2 f(x_k)]^{-1} \nabla f(x_k)$$
+<em>Jump to the minimum of the local quadratic model. In practice, solve $\nabla^2 f(x_k)\, p_k = -\nabla f(x_k)$.</em>
+<p class="ref"><a href="cg-07-newton-method.html">Page 07</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Newton Update</strong>
+$$x_{k+1} = x_k + \alpha_k p_k$$
+<em>Use $\alpha_k = 1$ for pure Newton. With line search, $\alpha_k$ satisfies Wolfe/Armijo conditions.</em>
+<p class="ref"><a href="cg-07-newton-method.html">Page 07</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Quadratic Model</strong>
+$$m_k(p) = f(x_k) + \nabla f(x_k)^T p + \frac{1}{2} p^T B_k p$$
+<em>Second-order Taylor approximation of $f$ at $x_k$. $B_k = \nabla^2 f(x_k)$ for Newton.</em>
+<p class="ref"><a href="cg-07-newton-method.html">Page 07</a>, <a href="cg-09-trust-region.html">Page 09</a></p>
+</div>
+
+<!-- ===================== PART B ===================== -->
+<h2>Part B: Line Search Conditions</h2>
+
+<div class="formula-box">
+<strong>Armijo Condition (Sufficient Decrease)</strong>
+$$f(x_k + \alpha p_k) \leq f(x_k) + c_1 \alpha \nabla f(x_k)^T p_k$$
+<em>The function must decrease by at least a fraction $c_1$ of what the linear model predicts. Typical $c_1 = 10^{-4}$.</em>
+<p class="ref"><a href="cg-08-line-search.html">Page 08</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Wolfe Curvature Condition</strong>
+$$\nabla f(x_k + \alpha p_k)^T p_k \geq c_2 \nabla f(x_k)^T p_k$$
+<em>The slope must flatten enough. Prevents stopping too early. Typical $c_2 = 0.9$ for Newton/quasi-Newton, $c_2 = 0.1$ for CG.</em>
+<p class="ref"><a href="cg-08-line-search.html">Page 08</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Strong Wolfe Curvature Condition</strong>
+$$|\nabla f(x_k + \alpha p_k)^T p_k| \leq c_2 |\nabla f(x_k)^T p_k|$$
+<em>Absolute value version &mdash; prevents going too far past the minimum. Required for nonlinear CG.</em>
+<p class="ref"><a href="cg-08-line-search.html">Page 08</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Backtracking Algorithm</strong>
+<ol style="margin-left: 24px; font-size: 16px;">
+  <li>Start with $\alpha = \bar{\alpha}$ (e.g., $\bar{\alpha} = 1$)</li>
+  <li>While Armijo condition is violated: $\alpha \leftarrow \rho \alpha$ (shrink by $\rho \in (0,1)$, typically $\rho = 0.5$)</li>
+  <li>Return $\alpha$</li>
+</ol>
+<em>Simple and effective. Only checks Armijo, not curvature. Use $\bar{\alpha} = 1$ for Newton/quasi-Newton.</em>
+<p class="ref"><a href="cg-08-line-search.html">Page 08</a></p>
+</div>
+
+<!-- ===================== PART C ===================== -->
+<h2>Part C: Trust Region</h2>
+
+<div class="formula-box">
+<strong>Trust-Region Subproblem</strong>
+$$\min_p \; m_k(p) = f_k + g_k^T p + \frac{1}{2} p^T B_k p \qquad \text{subject to } \|p\| \leq \Delta_k$$
+<em>Minimize the quadratic model inside a ball of radius $\Delta_k$.</em>
+<p class="ref"><a href="cg-09-trust-region.html">Page 09</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Trust-Region Ratio</strong>
+$$\rho_k = \frac{f(x_k) - f(x_k + p_k)}{m_k(0) - m_k(p_k)} = \frac{\text{actual reduction}}{\text{predicted reduction}}$$
+<em>Measures how well the model predicts reality. $\rho \approx 1$ = great model; $\rho < 0$ = model got it wrong.</em>
+<p class="ref"><a href="cg-09-trust-region.html">Page 09</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Radius Update Rules (typical)</strong>
+<ul style="margin-left: 20px; font-size: 16px;">
+  <li>If $\rho_k < 0.25$: shrink &mdash; $\Delta_{k+1} = 0.25\, \Delta_k$</li>
+  <li>If $\rho_k > 0.75$ and $\|p_k\| = \Delta_k$ (hit boundary): expand &mdash; $\Delta_{k+1} = \min(2\Delta_k, \Delta_{\max})$</li>
+  <li>Otherwise: keep &mdash; $\Delta_{k+1} = \Delta_k$</li>
+</ul>
+<em>Accept step if $\rho_k > \eta$ (e.g., $\eta = 0.25$). Reject step if $\rho_k \leq \eta$ (keep $x_k$, shrink $\Delta$).</em>
+<p class="ref"><a href="cg-09-trust-region.html">Page 09</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Cauchy Point</strong>
+$$p^C = -\tau_k \frac{\Delta_k}{\|g_k\|} g_k$$
+
+where $\tau_k = \begin{cases} 1 & \text{if } g_k^T B_k g_k \leq 0 \\ \min\left(\frac{\|g_k\|^3}{\Delta_k\, g_k^T B_k g_k},\; 1\right) & \text{otherwise} \end{cases}$
+
+<em>The steepest descent step capped to the trust region. Guarantees sufficient model decrease.</em>
+<p class="ref"><a href="cg-09-trust-region.html">Page 09</a></p>
+</div>
+
+<!-- ===================== PART D ===================== -->
+<h2>Part D: Conjugate Gradient</h2>
+
+<div class="formula-box">
+<strong>Linear CG Algorithm (for $Ax = b$ with SPD $A$)</strong>
+<ol style="margin-left: 24px; font-size: 16px; line-height: 2;">
+  <li><strong>Init:</strong> $r_0 = b - Ax_0$, $d_0 = r_0$</li>
+  <li><strong>Step size:</strong> $\alpha_k = \dfrac{r_k^T r_k}{d_k^T A d_k}$</li>
+  <li><strong>Update solution:</strong> $x_{k+1} = x_k + \alpha_k d_k$</li>
+  <li><strong>Update residual:</strong> $r_{k+1} = r_k - \alpha_k A d_k$</li>
+  <li><strong>Conjugacy param:</strong> $\beta_k = \dfrac{r_{k+1}^T r_{k+1}}{r_k^T r_k}$</li>
+  <li><strong>New direction:</strong> $d_{k+1} = r_{k+1} + \beta_k d_k$</li>
+</ol>
+<em>Converges in at most $n$ steps. Residuals are orthogonal ($r_i^T r_j = 0$). Directions are $A$-conjugate ($d_i^T A d_j = 0$).</em>
+<p class="ref"><a href="cg-10-conjugate-gradient.html">Page 10</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Fletcher-Reeves (Nonlinear CG)</strong>
+$$\beta_k^{FR} = \frac{\|\nabla f(x_{k+1})\|^2}{\|\nabla f(x_k)\|^2} = \frac{g_{k+1}^T g_{k+1}}{g_k^T g_k}$$
+<em>Same as linear CG formula. Simple, but may generate poor directions on non-quadratic problems.</em>
+<p class="ref"><a href="cg-11-nonlinear-cg.html">Page 11</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Polak-Ribi&egrave;re (Nonlinear CG)</strong>
+$$\beta_k^{PR} = \frac{g_{k+1}^T (g_{k+1} - g_k)}{g_k^T g_k} = \frac{g_{k+1}^T g_{k+1} - g_{k+1}^T g_k}{\|g_k\|^2}$$
+<em>Uses gradient difference. Automatically restarts (gives $\beta \approx 0$) when the gradient doesn't change direction much. Generally preferred over FR.</em>
+<p class="ref"><a href="cg-11-nonlinear-cg.html">Page 11</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Nonlinear CG Direction Update</strong>
+$$d_{k+1} = -g_{k+1} + \beta_k d_k$$
+<em>Start with steepest descent ($-g$), then add a fraction of the previous direction. Use Strong Wolfe line search.</em>
+<p class="ref"><a href="cg-11-nonlinear-cg.html">Page 11</a></p>
+</div>
+
+<!-- ===================== PART E ===================== -->
+<h2>Part E: Quasi-Newton Methods</h2>
+
+<div class="formula-box">
+<strong>Secant Condition</strong>
+$$B_{k+1} s_k = y_k \qquad \Longleftrightarrow \qquad H_{k+1} y_k = s_k$$
+<em>where $s_k = x_{k+1} - x_k$ (step) and $y_k = \nabla f(x_{k+1}) - \nabla f(x_k)$ (gradient change).</em><br>
+<em>The update must match the observed gradient change. This is the defining property of quasi-Newton methods.</em>
+<p class="ref"><a href="cg-12-bfgs.html">Page 12</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Curvature Condition</strong>
+$$s_k^T y_k > 0$$
+<em>Required for BFGS to maintain positive definiteness. Guaranteed by Wolfe line search.</em>
+<p class="ref"><a href="cg-12-bfgs.html">Page 12</a></p>
+</div>
+
+<div class="formula-box">
+<strong>BFGS Inverse Hessian Update</strong>
+$$H_{k+1} = (I - \rho_k s_k y_k^T)\, H_k\, (I - \rho_k y_k s_k^T) + \rho_k s_k s_k^T$$
+<em>where $\rho_k = \dfrac{1}{y_k^T s_k}$. Rank-2 update. Preserves PD if $s_k^T y_k > 0$.</em>
+<p class="ref"><a href="cg-12-bfgs.html">Page 12</a></p>
+</div>
+
+<div class="formula-box">
+<strong>BFGS Direct Hessian Update</strong>
+$$B_{k+1} = B_k - \frac{B_k s_k s_k^T B_k}{s_k^T B_k s_k} + \frac{y_k y_k^T}{y_k^T s_k}$$
+<em>Updates $B_k \approx \nabla^2 f$. Rank-2 correction: subtract a rank-1 term, add a rank-1 term.</em>
+<p class="ref"><a href="cg-12-bfgs.html">Page 12</a></p>
+</div>
+
+<div class="formula-box">
+<strong>SR1 Inverse Hessian Update</strong>
+$$H_{k+1} = H_k + \frac{(s_k - H_k y_k)(s_k - H_k y_k)^T}{(s_k - H_k y_k)^T y_k}$$
+<em>Rank-1 update. Can capture indefinite Hessians (unlike BFGS). Use with trust region.</em>
+<p class="ref"><a href="cg-13-sr1-dfp.html">Page 13</a></p>
+</div>
+
+<div class="formula-box">
+<strong>SR1 Direct Hessian Update</strong>
+$$B_{k+1} = B_k + \frac{(y_k - B_k s_k)(y_k - B_k s_k)^T}{(y_k - B_k s_k)^T s_k}$$
+<em>Rank-1 correction. Safeguard: skip update if $|(y_k - B_k s_k)^T s_k| < \epsilon \|s_k\| \|y_k - B_k s_k\|$.</em>
+<p class="ref"><a href="cg-13-sr1-dfp.html">Page 13</a></p>
+</div>
+
+<div class="formula-box">
+<strong>DFP Inverse Hessian Update</strong>
+$$H_{k+1} = H_k - \frac{H_k y_k y_k^T H_k}{y_k^T H_k y_k} + \frac{s_k s_k^T}{y_k^T s_k}$$
+<em>Dual of BFGS (swap $s \leftrightarrow y$, $H \leftrightarrow B$). BFGS generally preferred in practice.</em>
+<p class="ref"><a href="cg-13-sr1-dfp.html">Page 13</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Quasi-Newton Search Direction</strong>
+$$d_k = -H_k \nabla f(x_k)$$
+<em>Same form as Newton ($d_k = -[\nabla^2 f]^{-1} g_k$) but using the approximation $H_k$ instead of the true inverse Hessian.</em>
+<p class="ref"><a href="cg-12-bfgs.html">Page 12</a></p>
+</div>
+
+<!-- ===================== PART F ===================== -->
+<h2>Part F: Nonlinear Equations</h2>
+
+<div class="formula-box">
+<strong>Newton Step for Systems $r(x) = 0$</strong>
+$$J(x_k)\, p_k = -r(x_k), \qquad x_{k+1} = x_k + p_k$$
+<em>$J(x_k)$ is the Jacobian matrix. Solve the linear system for $p_k$. Locally quadratic convergence.</em>
+<p class="ref"><a href="cg-14-nonlinear-equations.html">Page 14</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Jacobian</strong>
+$$J(x) = \begin{bmatrix} \dfrac{\partial r_1}{\partial x_1} & \cdots & \dfrac{\partial r_1}{\partial x_n} \\[6px] \vdots & \ddots & \vdots \\[6px] \dfrac{\partial r_m}{\partial x_1} & \cdots & \dfrac{\partial r_m}{\partial x_n} \end{bmatrix}$$
+<em>Row $i$, column $j$ is $\partial r_i / \partial x_j$. For optimization, $r = \nabla f$ and $J = \nabla^2 f$.</em>
+<p class="ref"><a href="cg-02-multivariable-bridge.html">Page 02</a>, <a href="cg-14-nonlinear-equations.html">Page 14</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Broyden's Method (rank-1 Jacobian update)</strong>
+$$J_{k+1} = J_k + \frac{(y_k - J_k s_k)\, s_k^T}{s_k^T s_k}$$
+<em>where $s_k = x_{k+1} - x_k$ and $y_k = r(x_{k+1}) - r(x_k)$. Avoids recomputing Jacobian each step. Superlinear convergence.</em>
+<p class="ref"><a href="cg-14-nonlinear-equations.html">Page 14</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Scalar Newton (1D root finding)</strong>
+$$x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}$$
+<em>Find $x$ where $f(x) = 0$ using tangent line intersection. Special case of the vector version.</em>
+<p class="ref"><a href="cg-14-nonlinear-equations.html">Page 14</a></p>
+</div>
+
+<!-- ===================== PART G ===================== -->
+<h2>Part G: Constrained Optimization</h2>
+
+<div class="formula-box">
+<strong>Lagrangian (general)</strong>
+$$\mathcal{L}(x, \lambda, \mu) = f(x) - \sum_{i} \lambda_i c_i^{eq}(x) - \sum_{j} \mu_j c_j^{ineq}(x)$$
+<em>Combines objective and constraints into one function. $\lambda_i$ are equality multipliers, $\mu_j$ are inequality multipliers.</em>
+<p class="ref"><a href="cg-15-constrained.html">Page 15</a></p>
+</div>
+
+<div class="formula-box">
+<strong>KKT Conditions (for $\min f$ s.t. $c_i^{eq} = 0$, $c_j^{ineq} \geq 0$)</strong>
+<ol style="margin-left: 24px; font-size: 16px; line-height: 2;">
+  <li><strong>Stationarity:</strong> $\nabla f(x^*) = \sum_i \lambda_i \nabla c_i^{eq}(x^*) + \sum_j \mu_j \nabla c_j^{ineq}(x^*)$</li>
+  <li><strong>Primal feasibility:</strong> $c_i^{eq}(x^*) = 0$, $\;c_j^{ineq}(x^*) \geq 0$</li>
+  <li><strong>Dual feasibility:</strong> $\mu_j \geq 0$ for all inequality constraints</li>
+  <li><strong>Complementary slackness:</strong> $\mu_j \cdot c_j^{ineq}(x^*) = 0$ for each $j$</li>
+</ol>
+<em>Necessary conditions at any local min (under LICQ). For convex problems, also sufficient.</em>
+<p class="ref"><a href="cg-15-constrained.html">Page 15</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Linear Programming Standard Form</strong>
+$$\min\; c^T x \qquad \text{s.t.}\; Ax = b, \; x \geq 0$$
+<em>Objective is linear, constraints are linear. Optimal solution always at a vertex of the feasible region.</em>
+<p class="ref"><a href="cg-16-lp-interior-point.html">Page 16</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Barrier Function (Interior Point)</strong>
+$$\min_x \; c^T x - \mu \sum_{i=1}^{n} \ln(x_i) \qquad \text{s.t.}\; Ax = b$$
+<em>The $-\mu \ln(x_i)$ terms create a "repulsive force" near the boundaries $x_i = 0$. As $\mu \to 0$, the solution approaches the LP optimum.</em>
+<p class="ref"><a href="cg-16-lp-interior-point.html">Page 16</a></p>
+</div>
+
+<div class="formula-box">
+<strong>KKT for LP</strong>
+$$A^T \lambda + s = c, \qquad Ax = b, \qquad x \geq 0, \qquad s \geq 0, \qquad x_i s_i = 0$$
+<em>$s$ are slack variables for the dual. Complementary slackness: $x_i s_i = 0$ means at each variable, either $x_i = 0$ or $s_i = 0$ (or both).</em>
+<p class="ref"><a href="cg-16-lp-interior-point.html">Page 16</a></p>
+</div>
+
+<!-- ===================== PART H ===================== -->
+<h2>Part H: Key Definitions</h2>
+
+<div class="formula-box">
+<strong>Vector Norms</strong>
+$$\|x\|_1 = \sum_i |x_i|, \qquad \|x\|_2 = \sqrt{\sum_i x_i^2}, \qquad \|x\|_\infty = \max_i |x_i|$$
+<em>L1 = taxicab distance, L2 = straight-line distance, L-infinity = max component.</em>
+<p class="ref"><a href="cg-01-math-foundations.html">Page 01</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Condition Number</strong>
+$$\kappa(A) = \frac{\lambda_{\max}(A)}{\lambda_{\min}(A)}$$
+<em>Ratio of largest to smallest eigenvalue (for SPD $A$). Large $\kappa$ = ill-conditioned = GD is slow = elliptical contours.</em>
+<p class="ref"><a href="cg-01-math-foundations.html">Page 01</a>, <a href="cg-06-gradient-descent.html">Page 06</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Convergence Rates</strong>
+<ul style="margin-left: 20px; font-size: 16px; line-height: 2;">
+  <li><strong>Q-linear:</strong> $\|e_{k+1}\| \leq r \|e_k\|$ for some $r \in (0,1)$. Error shrinks by constant factor. (GD)</li>
+  <li><strong>Q-superlinear:</strong> $\|e_{k+1}\|/\|e_k\| \to 0$. Factor improves each step. (BFGS)</li>
+  <li><strong>Q-quadratic:</strong> $\|e_{k+1}\| \leq C \|e_k\|^2$. Error squares each step. (Newton)</li>
+</ul>
+<em>where $e_k = x_k - x^*$ is the error.</em>
+<p class="ref"><a href="cg-01-math-foundations.html">Page 01</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Positive Definite Matrix</strong>
+<ul style="margin-left: 20px; font-size: 16px; line-height: 2;">
+  <li>All eigenvalues $> 0$</li>
+  <li>Equivalently: $x^T A x > 0$ for all $x \neq 0$</li>
+  <li>Equivalently: all leading principal minors $> 0$</li>
+</ul>
+<em>PD Hessian = strict local minimum. PD matrix = CG works. PD $H_k$ = descent direction guaranteed.</em>
+<p class="ref"><a href="cg-03-linear-algebra.html">Page 03</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Convexity</strong>
+$$f(\alpha x + (1-\alpha)y) \leq \alpha f(x) + (1-\alpha) f(y) \quad \forall\, \alpha \in [0,1]$$
+<em>The function lies below the chord between any two points. Equivalently: $\nabla^2 f(x) \succeq 0$ everywhere (PSD Hessian). For convex functions, every local minimum is a global minimum.</em>
+<p class="ref"><a href="cg-05-convexity.html">Page 05</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Taylor Expansion (multivariable, to 2nd order)</strong>
+$$f(x + p) \approx f(x) + \nabla f(x)^T p + \frac{1}{2} p^T \nabla^2 f(x)\, p$$
+<em>The foundation of Newton's method and the quadratic model. First term = value, second = slope, third = curvature.</em>
+<p class="ref"><a href="cg-01-math-foundations.html">Page 01</a>, <a href="cg-07-newton-method.html">Page 07</a></p>
+</div>
+
+<div class="formula-box">
+<strong>$2 \times 2$ Matrix Inverse</strong>
+$$\begin{bmatrix}a & b\\c & d\end{bmatrix}^{-1} = \frac{1}{ad - bc}\begin{bmatrix}d & -b\\-c & a\end{bmatrix}$$
+<em>Swap diagonals, negate off-diagonals, divide by determinant. Essential for every exam computation.</em>
+<p class="ref"><a href="cg-03-linear-algebra.html">Page 03</a></p>
+</div>
+
+<div class="formula-box">
+<strong>$2 \times 2$ Eigenvalues</strong>
+$$\lambda = \frac{(a+d) \pm \sqrt{(a-d)^2 + 4bc}}{2} \qquad \text{for } A = \begin{bmatrix}a&b\\c&d\end{bmatrix}$$
+<em>From the characteristic equation $\det(A - \lambda I) = 0$. For symmetric matrices, eigenvalues are always real.</em>
+<p class="ref"><a href="cg-03-linear-algebra.html">Page 03</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Optimality Conditions Summary</strong>
+<table class="step-table" style="font-size: 14px; margin-top: 12px;">
+<tr><th>Condition</th><th>Statement</th><th>Type</th></tr>
+<tr><td style="text-align:left;">FONC</td><td style="text-align:left;">$\nabla f(x^*) = 0$</td><td>Necessary</td></tr>
+<tr><td style="text-align:left;">SONC</td><td style="text-align:left;">$\nabla^2 f(x^*) \succeq 0$ (PSD)</td><td>Necessary</td></tr>
+<tr><td style="text-align:left;">SOSC</td><td style="text-align:left;">$\nabla f(x^*)=0$ and $\nabla^2 f(x^*) \succ 0$ (PD)</td><td>Sufficient</td></tr>
+</table>
+<p class="ref"><a href="cg-04-optimality.html">Page 04</a></p>
+</div>
+
+<!-- ===================== NAV ===================== -->
+<div class="nav">
+  <p><a href="cg-19-exam-theory.html">&larr; Previous: Page 19 &mdash; Exam Theory</a></p>
+  <p style="margin-top: 8px;"><a href="index.html">Back to Index</a></p>
+</div>
+
+</div>
+</body>
+</html>

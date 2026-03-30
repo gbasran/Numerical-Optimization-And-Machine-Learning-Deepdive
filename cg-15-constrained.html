@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page 15 &mdash; Constrained Optimization &amp; KKT Conditions | MATH 3850 Course Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
+.container { max-width: 900px; margin: 0 auto; }
+h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
+.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
+h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
+.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
+.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
+.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
+.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
+.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
+.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
+.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
+.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
+.hand-calc .result { color: #64ffda; font-weight: bold; }
+.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
+.exam-flag { background: #2a1a1a; border: 2px solid #ff6b6b; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
+.exam-flag h4 { color: #ff6b6b; margin-bottom: 8px; }
+.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
+.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
+.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
+.step-table tr:nth-child(even) { background: #16213e; }
+.algo-box { border-left: 4px solid #64ffda; padding: 16px 20px; margin: 20px 0; background: #0f3460; border-radius: 0 12px 12px 0; }
+.algo-box .algo-title { color: #ffd93d; font-weight: bold; font-size: 18px; margin-bottom: 12px; }
+.algo-box .algo-line { padding: 6px 0; font-size: 16px; }
+.algo-box .algo-comment { color: #888; font-size: 14px; }
+.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
+.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
+.glossary dl { font-size: 15px; }
+.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
+.glossary dd { margin-left: 20px; color: #ccc; }
+.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
+.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
+.nav a:hover { text-decoration: underline; }
+.nav p { margin: 4px 0; }
+svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
+.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
+.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
+.breakdown dd { color: #ccc; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<span class="tag">PAGE 15 &mdash; POST-MIDTERM</span>
+<h1>Constrained Optimization &amp; KKT Conditions</h1>
+<p class="subtitle">When the global minimum is off-limits &mdash; finding the best point inside the fences</p>
+
+<!-- ===================== PART A ===================== -->
+<h2>Part A: The Idea &mdash; Optimization with Rules</h2>
+
+<div class="analogy">
+<strong>The Fenced Yard Analogy</strong><br><br>
+Up until now, every optimization method we studied &mdash; gradient descent (<a href="cg-06-gradient-descent.html">Page 06</a>), Newton (<a href="cg-07-newton-method.html">Page 07</a>), BFGS (<a href="cg-12-bfgs.html">Page 12</a>) &mdash; worked on <strong>unconstrained</strong> problems. You were free to wander anywhere across the entire landscape looking for the lowest point. No fences, no walls, no off-limits zones.<br><br>
+<strong>Constrained optimization adds FENCES.</strong> Picture a hilly landscape, and somewhere on it is a fenced yard &mdash; a region you are allowed to be in. Your job is to find the lowest point <strong>inside the fenced yard</strong>.<br><br>
+Here is the key challenge: the global minimum of the entire landscape might be <strong>outside the fence</strong>. If it is, you cant go there. The best you can do is press up against the fence as close to that forbidden low point as possible. The constrained optimum is either:<br><br>
+<strong>1. On the fence boundary</strong> (an "active constraint") &mdash; this happens when the unconstrained minimum is outside the fence. The fence is blocking you from going lower. The optimal point touches the fence.<br><br>
+<strong>2. Inside the yard</strong> (all constraints "inactive") &mdash; this happens when the unconstrained minimum happens to be inside the fence. Lucky! The constraints dont matter because you never touch them. The constrained and unconstrained solutions are the same.<br><br>
+The KKT conditions tell you EXACTLY which situation you are in and how to find the optimal point in either case.
+</div>
+
+<div class="formula-box">
+<strong>The General Constrained Optimization Problem</strong>
+$$\min_{x \in \mathbb{R}^n} f(x) \quad \text{subject to} \quad c_i(x) \leq 0, \; i = 1, \ldots, m \quad \text{and} \quad h_j(x) = 0, \; j = 1, \ldots, p$$
+<dl class="breakdown">
+  <dt>$f(x)$</dt><dd>the <strong>objective function</strong> &mdash; what we want to minimize (the "altitude" on our landscape)</dd>
+  <dt>$c_i(x) \leq 0$</dt><dd><strong>inequality constraints</strong> &mdash; the "fences." The feasible region is where ALL of these are satisfied.</dd>
+  <dt>$h_j(x) = 0$</dt><dd><strong>equality constraints</strong> &mdash; like being forced to stay on a specific path or surface, not just inside a region</dd>
+  <dt>$m$</dt><dd>the number of inequality constraints (fences)</dd>
+  <dt>$p$</dt><dd>the number of equality constraints (paths you must stay on)</dd>
+</dl>
+</div>
+
+<h2 style="font-size:19px; margin-top:30px;">Active vs. Inactive Constraints</h2>
+
+<div class="formula-box">
+<strong>Definitions</strong>
+<p>At a point $x^*$, an inequality constraint $c_i(x) \leq 0$ is:</p>
+<ul style="margin-left:20px; margin-top:10px;">
+  <li><strong style="color:#64ffda;">ACTIVE</strong> if $c_i(x^*) = 0$ &mdash; you are exactly ON the fence. The constraint is binding.</li>
+  <li><strong style="color:#888;">INACTIVE</strong> if $c_i(x^*) < 0$ &mdash; you are strictly INSIDE the fence, away from the wall. The constraint has "slack."</li>
+</ul>
+<p style="margin-top:12px;">The <strong>active set</strong> $\mathcal{A}(x^*) = \{i : c_i(x^*) = 0\}$ collects the indices of all active constraints.</p>
+</div>
+
+<div class="why-box">
+<h3>Why Only Active Constraints Matter</h3>
+<p>Inactive constraints are irrelevant for optimality conditions. Think about it physically: if you are standing in the middle of the yard, far from any fence, the fences have zero influence on where you are. They dont push or pull you. Only the fences you are actually touching (active constraints) affect the optimality conditions.</p>
+</div>
+
+<!-- ===================== PART B ===================== -->
+<h2>Part B: The Lagrangian &mdash; Combining Objective and Constraints</h2>
+
+<div class="analogy">
+<strong>The "Prices for Constraints" Analogy</strong><br><br>
+The Lagrangian is a brilliant trick: instead of solving a constrained problem directly (which is hard), we combine the objective and all constraints into a single unconstrained-looking function. Each constraint gets a "price" called a <strong>Lagrange multiplier</strong> $\lambda_i$.<br><br>
+Think of it this way. You want to find the lowest altitude (minimize $f$) inside the fenced yard. Each fence has a "toll" &mdash; the multiplier $\lambda_i$. If you are ON fence $i$ (active constraint, $c_i = 0$), the toll might be positive: there is a real cost to being blocked by that fence. The fence is preventing you from going lower, and $\lambda_i$ measures how much lower you COULD go if that fence were removed.<br><br>
+If you are AWAY from fence $i$ (inactive constraint, $c_i < 0$), the toll is zero: $\lambda_i = 0$. That fence does not affect you at all, so its price is zero.<br><br>
+The Lagrangian packages all of this into one expression.
+</div>
+
+<div class="formula-box">
+<strong>The Lagrangian Function</strong>
+$$\mathcal{L}(x, \lambda) = f(x) + \sum_{i=1}^{m} \lambda_i \, c_i(x)$$
+<dl class="breakdown">
+  <dt>$\mathcal{L}$</dt><dd>the Lagrangian &mdash; a single function that combines the objective with all constraints</dd>
+  <dt>$f(x)$</dt><dd>the original objective function (what we want to minimize)</dd>
+  <dt>$\lambda_i$</dt><dd>the Lagrange multiplier for constraint $i$ &mdash; the "price" of that constraint</dd>
+  <dt>$c_i(x)$</dt><dd>the $i$-th constraint function (recall: $c_i(x) \leq 0$ defines the feasible region)</dd>
+  <dt>$\lambda_i c_i(x)$</dt><dd>the penalty for constraint $i$: if $c_i = 0$ (active), this contributes $0$ regardless of $\lambda_i$; if $c_i < 0$ (inactive), then $\lambda_i = 0$ so this also contributes $0$</dd>
+</dl>
+</div>
+
+<div class="note">
+<strong>For equality constraints</strong> $h_j(x) = 0$, we add similar terms: $\mathcal{L}(x, \lambda, \mu) = f(x) + \sum \lambda_i c_i(x) + \sum \mu_j h_j(x)$. The multipliers $\mu_j$ for equality constraints can be any real number (positive or negative), unlike the $\lambda_i$ for inequalities which must be $\geq 0$.
+</div>
+
+<!-- ===================== PART C ===================== -->
+<h2>Part C: The KKT Conditions &mdash; The Four Rules</h2>
+
+<div class="exam-flag">
+<h4>EXAM ALERT: The Four KKT Conditions</h4>
+<p>You MUST know all four conditions by name, be able to state them, and be able to check them for a given point. Quiz 8 and the final exam will test this directly. Each condition has a physical meaning &mdash; learn the meaning and the formula becomes easy to remember.</p>
+</div>
+
+<p>The <strong>Karush-Kuhn-Tucker (KKT) conditions</strong> are necessary conditions for a point $x^*$ to be a local minimum of a constrained problem (under a regularity condition called LICQ, discussed below). They are the constrained analogue of "$\nabla f(x^*) = 0$" from unconstrained optimization (<a href="cg-04-optimality.html">Page 04</a>).</p>
+
+<!-- KKT 1: Stationarity -->
+<h2 style="font-size:19px; margin-top:36px; color:#ffd93d;">KKT Condition 1: Stationarity</h2>
+
+<div class="formula-box">
+$$\nabla_x \mathcal{L}(x^*, \lambda^*) = 0 \quad \Longleftrightarrow \quad \nabla f(x^*) + \sum_{i=1}^{m} \lambda_i^* \, \nabla c_i(x^*) = 0$$
+</div>
+
+<div class="analogy">
+<strong>Physical meaning:</strong> At the optimal point, the <strong>pull of the objective</strong> (the gradient $\nabla f$, which wants to go lower) is perfectly <strong>balanced</strong> by the <strong>push of the active constraints</strong> (the gradients $\lambda_i \nabla c_i$, which are the fences pushing back).<br><br>
+Imagine standing on a hillside pressed against a fence. Gravity pulls you downhill, but the fence pushes you back. At the optimal point, these forces are in perfect equilibrium &mdash; you cant move to reduce the objective without violating a constraint.<br><br>
+If no constraints are active ($\lambda_i = 0$ for all $i$), this reduces to $\nabla f(x^*) = 0$ &mdash; the unconstrained optimality condition. You are at a regular stationary point.
+</div>
+
+<div class="note">
+Recall that $\nabla f$ and $\nabla c_i$ are gradient vectors (see <a href="cg-02-multivariable-bridge.html">Page 02</a>). The stationarity condition says these vectors must form a specific linear combination that sums to zero.
+</div>
+
+<!-- KKT 2: Primal Feasibility -->
+<h2 style="font-size:19px; margin-top:36px; color:#ffd93d;">KKT Condition 2: Primal Feasibility</h2>
+
+<div class="formula-box">
+$$c_i(x^*) \leq 0 \quad \text{for all } i = 1, \ldots, m$$
+</div>
+
+<div class="analogy">
+<strong>Physical meaning:</strong> The point must be <strong>inside or on the fence</strong>. A point outside the feasible region is not allowed, no matter how good its objective value is. This is the most intuitive condition &mdash; it just says "obey the constraints."<br><br>
+You cant claim a point is optimal if it is illegal. If $c_i(x^*) > 0$ for any $i$, then $x^*$ is outside the fence and is not a valid solution.
+</div>
+
+<!-- KKT 3: Dual Feasibility -->
+<h2 style="font-size:19px; margin-top:36px; color:#ffd93d;">KKT Condition 3: Dual Feasibility</h2>
+
+<div class="formula-box">
+$$\lambda_i^* \geq 0 \quad \text{for all } i = 1, \ldots, m$$
+</div>
+
+<div class="analogy">
+<strong>Physical meaning:</strong> The multipliers must be <strong>non-negative</strong>. Why? Because constraints can only <strong>PUSH</strong> (prevent you from leaving the feasible region), they cannot <strong>PULL</strong> (attract you toward the boundary from inside).<br><br>
+Think about a physical fence. If you lean against it, it pushes back &mdash; that is a positive force (positive $\lambda_i$). A fence cannot reach out and pull you toward it. A negative multiplier would mean the constraint is pulling you toward the boundary, which makes no physical sense for an inequality constraint.<br><br>
+If $\lambda_i < 0$, it would mean that removing the constraint would make the objective <em>worse</em>, which contradicts the idea that constraints restrict you.
+</div>
+
+<!-- KKT 4: Complementary Slackness -->
+<h2 style="font-size:19px; margin-top:36px; color:#ffd93d;">KKT Condition 4: Complementary Slackness</h2>
+
+<div class="formula-box">
+$$\lambda_i^* \, c_i(x^*) = 0 \quad \text{for all } i = 1, \ldots, m$$
+</div>
+
+<div class="analogy">
+<strong>Physical meaning:</strong> For each constraint, there are only two possibilities:<br><br>
+<strong>Case 1:</strong> You are ON the fence ($c_i(x^*) = 0$, active) and the price might be positive ($\lambda_i^* \geq 0$). The product is $\lambda_i \cdot 0 = 0$. &checkmark;<br><br>
+<strong>Case 2:</strong> You are AWAY from the fence ($c_i(x^*) < 0$, inactive) and the price MUST be zero ($\lambda_i^* = 0$). The product is $0 \cdot c_i = 0$. &checkmark;<br><br>
+What is IMPOSSIBLE: being away from the fence ($c_i < 0$) while also having a positive price ($\lambda_i > 0$). That would mean a constraint that is not binding is somehow affecting the optimal solution, which makes no sense. If the fence is not touching you, it has no influence.<br><br>
+<strong>In practice:</strong> complementary slackness is the key tool for case analysis. For each constraint, either $\lambda_i = 0$ or $c_i = 0$ (or both). This dramatically reduces the number of equations you need to solve.
+</div>
+
+<div class="note">
+<strong>Summary of the four KKT conditions:</strong><br>
+1. <strong>Stationarity:</strong> Forces balance at the optimum ($\nabla \mathcal{L} = 0$)<br>
+2. <strong>Primal feasibility:</strong> The point is inside the fence ($c_i \leq 0$)<br>
+3. <strong>Dual feasibility:</strong> Multipliers are non-negative ($\lambda_i \geq 0$)<br>
+4. <strong>Complementary slackness:</strong> Inactive constraints have zero price ($\lambda_i c_i = 0$)<br><br>
+Together, these four conditions are <strong>necessary</strong> for optimality (under LICQ). They are the constrained version of "$\nabla f = 0$" from unconstrained optimization.
+</div>
+
+<!-- ===================== PART D ===================== -->
+<h2>Part D: LICQ &mdash; When Do KKT Conditions Apply?</h2>
+
+<div class="formula-box">
+<strong>Linear Independence Constraint Qualification (LICQ)</strong>
+<p>The gradients of all active constraints at $x^*$ must be <strong>linearly independent</strong>.</p>
+<p style="margin-top:8px;">That is, the set $\{\nabla c_i(x^*) : i \in \mathcal{A}(x^*)\}$ must be linearly independent (recall linear independence from <a href="cg-03-linear-algebra.html">Page 03</a>).</p>
+</div>
+
+<div class="analogy">
+<strong>Plain English:</strong> The active constraint boundaries must not be "stacked" or redundant at the optimal point. Each active fence must be pointing in a genuinely different direction. If two fences are parallel at $x^*$ (their gradients point the same way), LICQ fails.<br><br>
+For our exam problems, LICQ almost always holds. Linear constraints (like in LP problems) always satisfy LICQ as long as the active constraint gradients are not parallel.
+</div>
+
+<div class="why-box">
+<h3>Why LICQ Matters</h3>
+<p>Without LICQ, the KKT conditions might not be necessary &mdash; a local minimizer might exist that does not satisfy KKT. With LICQ, any local minimizer MUST satisfy KKT. So LICQ guarantees that checking KKT is a reliable test.</p>
+<p style="margin-top:8px;">For the exam: if asked whether KKT conditions apply, verify that the gradients of active constraints are linearly independent at the candidate point.</p>
+</div>
+
+<!-- ===================== PART E ===================== -->
+<h2>Part E: Full Hand Computation &mdash; Mirrors Quiz 8</h2>
+
+<div class="exam-flag">
+<h4>EXAM ALERT: Quiz 8 Problem Type</h4>
+<p>This is the exact type of computation from Quiz 8. You are given a constrained optimization problem and must: (1) rewrite constraints in standard form, (2) write the Lagrangian, (3) derive stationarity conditions, (4) enumerate cases using complementary slackness, (5) check all four KKT conditions for each case, (6) identify the optimal solution.</p>
+</div>
+
+<p><strong>The Problem:</strong></p>
+$$\min \; f(x_1, x_2) = -3x_1 - 2x_2$$
+<p>subject to:</p>
+$$x_1 + x_2 \leq 4, \quad x_1 + 3x_2 \leq 6, \quad x_1 \geq 0, \quad x_2 \geq 0$$
+
+<div class="hand-calc">
+<h3>Step 1: Rewrite in Standard Form $c_i(x) \leq 0$</h3>
+
+<div class="step">
+<span class="step-label">Convert each constraint to "$\leq 0$" form:</span><br>
+$$c_1(x) = x_1 + x_2 - 4 \leq 0 \quad \text{(from } x_1 + x_2 \leq 4 \text{)}$$
+$$c_2(x) = x_1 + 3x_2 - 6 \leq 0 \quad \text{(from } x_1 + 3x_2 \leq 6 \text{)}$$
+$$c_3(x) = -x_1 \leq 0 \quad \text{(from } x_1 \geq 0 \text{, flip the sign)}$$
+$$c_4(x) = -x_2 \leq 0 \quad \text{(from } x_2 \geq 0 \text{, flip the sign)}$$
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 2: Write the Lagrangian</h3>
+
+<div class="step">
+$$\mathcal{L}(x, \lambda) = f(x) + \sum_{i=1}^{4} \lambda_i c_i(x)$$
+$$= -3x_1 - 2x_2 + \lambda_1(x_1 + x_2 - 4) + \lambda_2(x_1 + 3x_2 - 6) + \lambda_3(-x_1) + \lambda_4(-x_2)$$
+<p>with $\lambda_1, \lambda_2, \lambda_3, \lambda_4 \geq 0$ (dual feasibility).</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 3: Stationarity Conditions</h3>
+
+<div class="step">
+<span class="step-label">Take partial derivatives of $\mathcal{L}$ and set to zero:</span><br><br>
+
+$$\frac{\partial \mathcal{L}}{\partial x_1} = -3 + \lambda_1 + \lambda_2 - \lambda_3 = 0 \quad \Longrightarrow \quad \lambda_1 + \lambda_2 - \lambda_3 = 3 \quad \ldots (S1)$$
+
+$$\frac{\partial \mathcal{L}}{\partial x_2} = -2 + \lambda_1 + 3\lambda_2 - \lambda_4 = 0 \quad \Longrightarrow \quad \lambda_1 + 3\lambda_2 - \lambda_4 = 2 \quad \ldots (S2)$$
+
+<p>Lets verify $(S1)$: The $x_1$ terms in $\mathcal{L}$ are: $-3x_1 + \lambda_1 x_1 + \lambda_2 x_1 - \lambda_3 x_1$. Differentiating: $-3 + \lambda_1 + \lambda_2 - \lambda_3$. &checkmark;</p>
+<p>Lets verify $(S2)$: The $x_2$ terms in $\mathcal{L}$ are: $-2x_2 + \lambda_1 x_2 + 3\lambda_2 x_2 - \lambda_4 x_2$. Differentiating: $-2 + \lambda_1 + 3\lambda_2 - \lambda_4$. &checkmark;</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 4: Enumerate Cases Using Complementary Slackness</h3>
+
+<p>Complementary slackness says $\lambda_i c_i = 0$ for each $i$. So for each constraint, either $\lambda_i = 0$ (constraint "priced at zero") or $c_i = 0$ (constraint active). We try combinations of active constraints and check all four KKT conditions.</p>
+
+<div class="step">
+<span class="step-label">Case A: $c_1$ and $c_2$ both active (on both non-trivial fences)</span><br>
+<p>Active: $c_1 = 0 \Rightarrow x_1 + x_2 = 4$ and $c_2 = 0 \Rightarrow x_1 + 3x_2 = 6$.</p>
+<p>Assume $c_3, c_4$ inactive, so $x_1 > 0, x_2 > 0$, meaning $\lambda_3 = 0, \lambda_4 = 0$ by comp. slackness.</p>
+
+<p><strong>Solve for $x$:</strong></p>
+<p>$x_1 + x_2 = 4$ and $x_1 + 3x_2 = 6$.</p>
+<p>Subtract: $2x_2 = 2 \Rightarrow x_2 = 1$.</p>
+<p>Then: $x_1 = 4 - 1 = 3$.</p>
+<p>Candidate: $(x_1, x_2) = (3, 1)$.</p>
+
+<p><strong>Check primal feasibility:</strong></p>
+<p>$c_1 = 3 + 1 - 4 = 0$ &checkmark;, $c_2 = 3 + 3 - 6 = 0$ &checkmark;, $c_3 = -3 < 0$ &checkmark;, $c_4 = -1 < 0$ &checkmark;.</p>
+
+<p><strong>Solve for $\lambda$ from stationarity (with $\lambda_3 = \lambda_4 = 0$):</strong></p>
+<p>$(S1): \lambda_1 + \lambda_2 = 3$</p>
+<p>$(S2): \lambda_1 + 3\lambda_2 = 2$</p>
+<p>Subtract: $2\lambda_2 = -1 \Rightarrow \lambda_2 = -\frac{1}{2}$</p>
+
+<p><strong style="color:#ff6b6b;">FAILS dual feasibility:</strong> $\lambda_2 = -\frac{1}{2} < 0$. NOT a KKT point.</p>
+</div>
+
+<div class="step">
+<span class="step-label">Case B: $c_1$ and $c_4$ both active ($x_1 + x_2 = 4$ and $x_2 = 0$)</span><br>
+<p>Active: $c_1 = 0 \Rightarrow x_1 + x_2 = 4$ and $c_4 = 0 \Rightarrow x_2 = 0$.</p>
+<p>So $x_1 = 4, \; x_2 = 0$.</p>
+
+<p><strong>Check primal feasibility:</strong></p>
+<p>$c_1 = 4 + 0 - 4 = 0$ &checkmark;, $c_2 = 4 + 0 - 6 = -2 < 0$ &checkmark;, $c_3 = -4 < 0$ &checkmark;, $c_4 = 0$ &checkmark;.</p>
+<p>All constraints satisfied. &checkmark;</p>
+
+<p><strong>Identify inactive constraints and their multipliers:</strong></p>
+<p>$c_2$ inactive ($c_2 = -2 < 0$) $\Rightarrow \lambda_2 = 0$ by comp. slackness.</p>
+<p>$c_3$ inactive ($c_3 = -4 < 0$) $\Rightarrow \lambda_3 = 0$ by comp. slackness.</p>
+
+<p><strong>Solve for $\lambda_1, \lambda_4$ from stationarity (with $\lambda_2 = \lambda_3 = 0$):</strong></p>
+<p>$(S1): \lambda_1 + 0 - 0 = 3 \Rightarrow \lambda_1 = 3$</p>
+<p>$(S2): \lambda_1 + 0 - \lambda_4 = 2 \Rightarrow 3 - \lambda_4 = 2 \Rightarrow \lambda_4 = 1$</p>
+
+<p><strong>Check dual feasibility:</strong></p>
+<p>$\lambda_1 = 3 \geq 0$ &checkmark;, $\lambda_2 = 0 \geq 0$ &checkmark;, $\lambda_3 = 0 \geq 0$ &checkmark;, $\lambda_4 = 1 \geq 0$ &checkmark;.</p>
+
+<p><strong>Check complementary slackness:</strong></p>
+<p>$\lambda_1 c_1 = 3 \cdot 0 = 0$ &checkmark;, $\lambda_2 c_2 = 0 \cdot (-2) = 0$ &checkmark;, $\lambda_3 c_3 = 0 \cdot (-4) = 0$ &checkmark;, $\lambda_4 c_4 = 1 \cdot 0 = 0$ &checkmark;.</p>
+
+<p class="result">ALL FOUR KKT CONDITIONS SATISFIED! This is a KKT point.</p>
+<p>Objective value: $f(4, 0) = -3(4) - 2(0) = -12$.</p>
+</div>
+
+<div class="step">
+<span class="step-label">Case C: $c_2$ and $c_4$ both active ($x_1 + 3x_2 = 6$ and $x_2 = 0$)</span><br>
+<p>Active: $c_2 = 0 \Rightarrow x_1 + 3(0) = 6 \Rightarrow x_1 = 6$ and $c_4 = 0 \Rightarrow x_2 = 0$.</p>
+<p>So $(x_1, x_2) = (6, 0)$.</p>
+
+<p><strong>Check primal feasibility:</strong></p>
+<p>$c_1 = 6 + 0 - 4 = 2 > 0$.</p>
+<p><strong style="color:#ff6b6b;">FAILS primal feasibility.</strong> The point $(6, 0)$ violates $x_1 + x_2 \leq 4$. Not feasible.</p>
+</div>
+
+<div class="step">
+<span class="step-label">Case D: $c_1$ and $c_3$ both active ($x_1 + x_2 = 4$ and $x_1 = 0$)</span><br>
+<p>Active: $c_1 = 0 \Rightarrow x_2 = 4$ and $c_3 = 0 \Rightarrow x_1 = 0$.</p>
+<p>So $(x_1, x_2) = (0, 4)$.</p>
+
+<p><strong>Check primal feasibility:</strong></p>
+<p>$c_2 = 0 + 12 - 6 = 6 > 0$.</p>
+<p><strong style="color:#ff6b6b;">FAILS primal feasibility.</strong> The point $(0, 4)$ violates $x_1 + 3x_2 \leq 6$. Not feasible.</p>
+</div>
+
+<div class="step">
+<span class="step-label">Case E: $c_2$ and $c_3$ both active ($x_1 + 3x_2 = 6$ and $x_1 = 0$)</span><br>
+<p>Active: $c_2 = 0 \Rightarrow 0 + 3x_2 = 6 \Rightarrow x_2 = 2$ and $c_3 = 0 \Rightarrow x_1 = 0$.</p>
+<p>So $(x_1, x_2) = (0, 2)$.</p>
+
+<p><strong>Check primal feasibility:</strong></p>
+<p>$c_1 = 0 + 2 - 4 = -2 \leq 0$ &checkmark;, $c_2 = 0$ &checkmark;, $c_3 = 0$ &checkmark;, $c_4 = -2 < 0$ &checkmark;.</p>
+<p>All constraints satisfied. &checkmark;</p>
+
+<p><strong>Identify inactive constraints:</strong></p>
+<p>$c_1$ inactive $\Rightarrow \lambda_1 = 0$. $c_4$ inactive $\Rightarrow \lambda_4 = 0$.</p>
+
+<p><strong>Solve from stationarity (with $\lambda_1 = \lambda_4 = 0$):</strong></p>
+<p>$(S1): \lambda_2 - \lambda_3 = 3$</p>
+<p>$(S2): 3\lambda_2 = 2 \Rightarrow \lambda_2 = \frac{2}{3}$</p>
+<p>From $(S1)$: $\lambda_3 = \frac{2}{3} - 3 = -\frac{7}{3}$</p>
+
+<p><strong style="color:#ff6b6b;">FAILS dual feasibility:</strong> $\lambda_3 = -\frac{7}{3} < 0$. NOT a KKT point.</p>
+</div>
+
+<div class="step">
+<span class="step-label">Case F: $c_3$ and $c_4$ both active ($x_1 = 0$ and $x_2 = 0$)</span><br>
+<p>So $(x_1, x_2) = (0, 0)$.</p>
+
+<p><strong>Check primal feasibility:</strong></p>
+<p>$c_1 = -4 \leq 0$ &checkmark;, $c_2 = -6 \leq 0$ &checkmark;, $c_3 = 0$ &checkmark;, $c_4 = 0$ &checkmark;. All good.</p>
+
+<p><strong>Inactive constraints:</strong> $c_1, c_2$ inactive $\Rightarrow \lambda_1 = \lambda_2 = 0$.</p>
+
+<p><strong>Stationarity:</strong></p>
+<p>$(S1): -\lambda_3 = 3 \Rightarrow \lambda_3 = -3$</p>
+<p><strong style="color:#ff6b6b;">FAILS dual feasibility:</strong> $\lambda_3 = -3 < 0$. NOT a KKT point.</p>
+</div>
+
+<div class="step">
+<span class="step-label">Case G: Only $c_1$ active ($x_1 + x_2 = 4$, all others inactive)</span><br>
+<p>Inactive: $c_2, c_3, c_4 \Rightarrow \lambda_2 = \lambda_3 = \lambda_4 = 0$.</p>
+
+<p><strong>Stationarity:</strong></p>
+<p>$(S1): \lambda_1 = 3$, $(S2): \lambda_1 = 2$. Contradiction! $3 \neq 2$.</p>
+<p><strong style="color:#ff6b6b;">No solution.</strong> Cannot have only $c_1$ active.</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 5: Conclusion</h3>
+
+<div class="step">
+<p>Out of all cases tested, <strong>only Case B satisfies all four KKT conditions</strong>:</p>
+<p class="result">Optimal solution: $x^* = (4, 0)$ with $f^* = -12$</p>
+<p>Active constraints: $c_1$ ($x_1 + x_2 = 4$) and $c_4$ ($x_2 = 0$).</p>
+<p>Multipliers: $\lambda_1 = 3$, $\lambda_2 = 0$, $\lambda_3 = 0$, $\lambda_4 = 1$.</p>
+</div>
+
+<p class="check"><strong>Interpretation:</strong> The optimal point sits at the corner where the fence $x_1 + x_2 = 4$ meets the $x_1$-axis ($x_2 = 0$). The multiplier $\lambda_1 = 3$ tells us that relaxing the first constraint (moving the fence from 4 to 5) would improve the objective by approximately 3 units. The multiplier $\lambda_4 = 1$ tells us that allowing $x_2$ to go slightly negative would improve the objective by approximately 1 unit.</p>
+</div>
+
+<p>Lets compare with Case A: $(3, 1)$ gives $f = -11$, which is worse (higher) than $f = -12$. And Case A failed KKT anyway because $\lambda_2 < 0$ &mdash; the dual feasibility check correctly rejected it.</p>
+
+<!-- ===================== PART F ===================== -->
+<h2>Part F: Geometric Interpretation</h2>
+
+<svg viewBox="0 0 500 500" style="width:100%;max-width:500px;display:block;margin:30px auto;">
+  <!-- axes -->
+  <line x1="50" y1="450" x2="480" y2="450" stroke="#555" stroke-width="1"/>
+  <line x1="50" y1="450" x2="50" y2="20" stroke="#555" stroke-width="1"/>
+  <text x="485" y="455" fill="#888" font-size="13">x1</text>
+  <text x="35" y="15" fill="#888" font-size="13">x2</text>
+
+  <!-- scale: 1 unit = 80px, origin at (50, 450) -->
+  <!-- tick marks -->
+  <text x="125" y="470" fill="#888" font-size="11">1</text>
+  <text x="205" y="470" fill="#888" font-size="11">2</text>
+  <text x="285" y="470" fill="#888" font-size="11">3</text>
+  <text x="365" y="470" fill="#888" font-size="11">4</text>
+  <text x="445" y="470" fill="#888" font-size="11">5</text>
+  <text x="30" y="375" fill="#888" font-size="11">1</text>
+  <text x="30" y="295" fill="#888" font-size="11">2</text>
+  <text x="30" y="215" fill="#888" font-size="11">3</text>
+  <text x="30" y="135" fill="#888" font-size="11">4</text>
+
+  <!-- feasible region (filled polygon) -->
+  <!-- vertices: (0,0)=(50,450), (4,0)=(370,450), (3,1)=(290,370), (0,2)=(50,290) -->
+  <polygon points="50,450 370,450 290,370 50,290" fill="#0a2e1a" fill-opacity="0.5" stroke="#64ffda" stroke-width="2"/>
+
+  <!-- constraint lines (extended) -->
+  <!-- c1: x1 + x2 = 4 -> (0,4)=(50,130) to (4,0)=(370,450) -->
+  <line x1="50" y1="130" x2="370" y2="450" stroke="#bb86fc" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="170" y="230" fill="#bb86fc" font-size="12" transform="rotate(-45,170,230)">x1 + x2 = 4</text>
+
+  <!-- c2: x1 + 3x2 = 6 -> (0,2)=(50,290) to (6,0)=(530,450) -->
+  <line x1="50" y1="290" x2="460" y2="450" stroke="#bb86fc" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="200" y="360" fill="#bb86fc" font-size="12" transform="rotate(-18.4,200,360)">x1 + 3x2 = 6</text>
+
+  <!-- vertices of feasible region -->
+  <circle cx="50" cy="450" r="4" fill="#888"/>
+  <text x="55" y="445" fill="#888" font-size="11">(0,0)</text>
+
+  <circle cx="50" cy="290" r="4" fill="#888"/>
+  <text x="58" y="288" fill="#888" font-size="11">(0,2)</text>
+
+  <circle cx="290" cy="370" r="4" fill="#888"/>
+  <text x="298" y="365" fill="#888" font-size="11">(3,1)</text>
+
+  <!-- optimal point (4,0) -->
+  <circle cx="370" cy="450" r="7" fill="#ff6b6b"/>
+  <text x="345" y="440" fill="#ff6b6b" font-size="13" font-weight="bold">OPTIMAL (4,0)</text>
+  <text x="345" y="425" fill="#ff6b6b" font-size="11">f = -12</text>
+
+  <!-- objective gradient arrow: nabla f = (-3, -2), pointing down-left -->
+  <!-- draw from center of feasible region ~(200, 380) -->
+  <defs>
+    <marker id="arrowR" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#ffd93d"/>
+    </marker>
+  </defs>
+  <line x1="250" y1="380" x2="175" y2="410" stroke="#ffd93d" stroke-width="2.5" marker-end="url(#arrowR)"/>
+  <text x="155" y="408" fill="#ffd93d" font-size="12">-nabla f</text>
+  <text x="155" y="422" fill="#ffd93d" font-size="11">(direction of decrease)</text>
+
+  <!-- f(3,1) label -->
+  <text x="298" y="385" fill="#ccc" font-size="11">f = -11</text>
+
+  <!-- feasible region label -->
+  <text x="130" y="400" fill="#0f6" font-size="13" fill-opacity="0.7">feasible region</text>
+</svg>
+
+<div class="note">
+<strong>Geometric interpretation:</strong> The feasible region is the green polygon. The objective $f = -3x_1 - 2x_2$ decreases as we move in the direction $(-\nabla f) = (3, 2)$ (toward larger $x_1$ and $x_2$). Following this direction from inside the feasible region, we hit the corner at $(4, 0)$ &mdash; thats the optimal vertex. The LP result from <a href="cg-16-lp-interior-point.html">Page 16</a> will confirm: for linear objectives on polyhedral feasible regions, the optimum is always at a vertex.
+</div>
+
+<!-- ===================== GLOSSARY ===================== -->
+<div class="glossary">
+<h3>Glossary</h3>
+<dl>
+  <dt>Constrained Optimization</dt>
+  <dd>Minimizing (or maximizing) an objective function $f(x)$ subject to constraints that restrict which points $x$ are allowed.</dd>
+
+  <dt>Feasible Region</dt>
+  <dd>The set of all points $x$ that satisfy every constraint. Denoted $\{x : c_i(x) \leq 0 \text{ for all } i\}$. You must stay inside this region.</dd>
+
+  <dt>Active Constraint</dt>
+  <dd>A constraint $c_i(x) \leq 0$ that is satisfied with equality at a point: $c_i(x^*) = 0$. You are on the fence.</dd>
+
+  <dt>Inactive Constraint</dt>
+  <dd>A constraint satisfied strictly: $c_i(x^*) < 0$. You are away from the fence; it has no influence on you.</dd>
+
+  <dt>Lagrangian $\mathcal{L}(x, \lambda)$</dt>
+  <dd>$f(x) + \sum \lambda_i c_i(x)$. Combines the objective and all constraints into one function using multipliers.</dd>
+
+  <dt>Lagrange Multiplier $\lambda_i$</dt>
+  <dd>The "price" of constraint $i$. Measures the sensitivity of the optimal objective to relaxing that constraint. $\lambda_i \geq 0$ for inequality constraints.</dd>
+
+  <dt>KKT Conditions</dt>
+  <dd>Karush-Kuhn-Tucker conditions: four necessary conditions for optimality in constrained problems. Stationarity, primal feasibility, dual feasibility, and complementary slackness.</dd>
+
+  <dt>Stationarity</dt>
+  <dd>$\nabla f + \sum \lambda_i \nabla c_i = 0$. The gradient of the objective is balanced by the weighted gradients of active constraints.</dd>
+
+  <dt>Primal Feasibility</dt>
+  <dd>$c_i(x^*) \leq 0$ for all $i$. The point satisfies all constraints.</dd>
+
+  <dt>Dual Feasibility</dt>
+  <dd>$\lambda_i \geq 0$ for all inequality constraints. Multipliers are non-negative.</dd>
+
+  <dt>Complementary Slackness</dt>
+  <dd>$\lambda_i c_i(x^*) = 0$ for all $i$. Either the constraint is active or its multiplier is zero (or both).</dd>
+
+  <dt>LICQ</dt>
+  <dd>Linear Independence Constraint Qualification. The gradients of all active constraints are linearly independent at $x^*$. Ensures KKT conditions are necessary.</dd>
+
+  <dt>Active Set $\mathcal{A}(x^*)$</dt>
+  <dd>The set of indices of active constraints at $x^*$: $\{i : c_i(x^*) = 0\}$.</dd>
+
+  <dt>Slack</dt>
+  <dd>For constraint $c_i \leq 0$, the slack is $-c_i(x) \geq 0$. Zero slack means active. Positive slack means inactive.</dd>
+</dl>
+</div>
+
+<!-- ===================== NAV ===================== -->
+<div class="nav">
+  <p><a href="cg-14-nonlinear-equations.html">&larr; Previous: Page 14 &mdash; Newton for Nonlinear Equations</a></p>
+  <p><a href="cg-16-lp-interior-point.html">Next: Page 16 &mdash; LP &amp; Interior Point Methods &rarr;</a></p>
+  <p><a href="index.html">Back to Index</a></p>
+</div>
+
+</div>
+</body>
+</html>

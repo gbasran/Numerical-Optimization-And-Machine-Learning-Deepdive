@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page 19 &mdash; Exam Theory | MATH 3850 Course Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
+.container { max-width: 900px; margin: 0 auto; }
+h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
+.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
+h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
+.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
+.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
+.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
+.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
+.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
+.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
+.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
+.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
+.hand-calc .result { color: #64ffda; font-weight: bold; }
+.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
+.exam-flag { background: #2a1a1a; border: 2px solid #ff6b6b; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
+.exam-flag h4 { color: #ff6b6b; margin-bottom: 8px; }
+.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
+.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
+.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
+.step-table tr:nth-child(even) { background: #16213e; }
+.algo-box { border-left: 4px solid #64ffda; padding: 16px 20px; margin: 20px 0; background: #0f3460; border-radius: 0 12px 12px 0; }
+.algo-box .algo-title { color: #ffd93d; font-weight: bold; font-size: 18px; margin-bottom: 12px; }
+.algo-box .algo-line { padding: 6px 0; font-size: 16px; }
+.algo-box .algo-comment { color: #888; font-size: 14px; }
+.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
+.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
+.glossary dl { font-size: 15px; }
+.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
+.glossary dd { margin-left: 20px; color: #ccc; }
+.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
+.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
+.nav a:hover { text-decoration: underline; }
+.nav p { margin: 4px 0; }
+svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
+.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
+.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
+.breakdown dd { color: #ccc; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<span class="tag">PAGE 19 &mdash; SYNTHESIS</span>
+<h1>Exam Prep: Key Theorems &amp; Concepts</h1>
+<p class="subtitle">Every key theorem stated formally, translated to plain English, conditions explained, common "why" questions answered, and pitfalls to avoid</p>
+
+<!-- ===================== PART A ===================== -->
+<h2>Part A: Theorems to Know</h2>
+
+<p>For each theorem below, we give: (1) the formal statement, (2) what it means in plain English, (3) what each condition requires and why it is there.</p>
+
+<!-- Theorem 1: FONC -->
+<div class="formula-box">
+<strong>Theorem: First-Order Necessary Condition (FONC)</strong><br><br>
+If $x^*$ is a local minimizer of $f$ and $f$ is continuously differentiable in a neighborhood of $x^*$, then:
+$$\nabla f(x^*) = 0$$
+</div>
+
+<div class="analogy">
+<strong>Plain English:</strong> If you are standing at the bottom of a valley, the ground must be flat in every direction right where you stand. If the ground slopes in any direction, you could walk downhill &mdash; so you are not at the bottom yet.<br><br>
+<strong>Key point:</strong> This is NECESSARY, not sufficient. A flat hilltop also has $\nabla f = 0$, but it is a maximum, not a minimum. A saddle point also has $\nabla f = 0$. That is why we need second-order conditions to distinguish.
+</div>
+
+<dl class="breakdown">
+<dt>"$f$ is $C^1$"</dt><dd>The function must be smooth enough to have a gradient. If $f$ has a kink (like $|x|$ at $x=0$), the theorem does not apply there.</dd>
+<dt>"$x^*$ is a local minimizer"</dt><dd>We only need $f(x^*) \leq f(x)$ for $x$ near $x^*$, not globally. Every local minimizer satisfies this condition.</dd>
+<dt>"$\nabla f(x^*) = 0$"</dt><dd>The gradient is the zero vector. All partial derivatives are zero. The function is "flat" at $x^*$.</dd>
+</dl>
+
+<!-- Theorem 2: SOSC -->
+<div class="formula-box">
+<strong>Theorem: Second-Order Sufficient Conditions (SOSC)</strong><br><br>
+If $\nabla f(x^*) = 0$ and $\nabla^2 f(x^*)$ is positive definite, then $x^*$ is a <strong>strict local minimizer</strong>.
+</div>
+
+<div class="analogy">
+<strong>Plain English:</strong> If the ground is flat where you stand (gradient zero) AND the ground curves upward in every direction (positive definite Hessian), then you are definitely at the bottom of a valley. Not just any valley &mdash; a strict one, meaning there is no other point nearby that is equally low.<br><br>
+<strong>Key point:</strong> This is SUFFICIENT but not necessary. A point can be a local minimizer with a positive <em>semidefinite</em> Hessian (some eigenvalues zero). For example, $f(x) = x^4$ has a minimum at $x=0$ with $f''(0) = 0$.
+</div>
+
+<dl class="breakdown">
+<dt>"$\nabla f(x^*) = 0$"</dt><dd>Must pass the first-order test first.</dd>
+<dt>"$\nabla^2 f(x^*)$ is PD"</dt><dd>All eigenvalues of the Hessian are strictly positive (<a href="cg-03-linear-algebra.html" style="color:#64ffda;">Page 03</a>). The function curves upward in every direction.</dd>
+<dt>"strict local min"</dt><dd>There is a neighborhood where $f(x) > f(x^*)$ for all $x \neq x^*$.</dd>
+</dl>
+
+<!-- Theorem 3: Newton convergence -->
+<div class="formula-box">
+<strong>Theorem 3.5 (Nocedal &amp; Wright): Newton's Local Quadratic Convergence</strong><br><br>
+Suppose $f$ is twice continuously differentiable, $\nabla^2 f$ is Lipschitz continuous near $x^*$, $\nabla f(x^*) = 0$, and $\nabla^2 f(x^*)$ is nonsingular. Then if $x_0$ is sufficiently close to $x^*$, Newton's method with unit step size converges quadratically:
+$$\|x_{k+1} - x^*\| \leq C \|x_k - x^*\|^2$$
+for some constant $C > 0$.
+</div>
+
+<div class="analogy">
+<strong>Plain English:</strong> If you start close enough to the answer, each Newton step roughly squares the error. If your error is $10^{-2}$ after one step, it will be about $10^{-4}$ after the next, then $10^{-8}$, then $10^{-16}$. The decimal digits of accuracy roughly double each step. This is spectacularly fast.<br><br>
+Full explanation on <a href="cg-07-newton-method.html" style="color:#64ffda;">Page 07</a>.
+</div>
+
+<dl class="breakdown">
+<dt>"$f \in C^2$"</dt><dd>Need a continuous Hessian for the quadratic model to be meaningful.</dd>
+<dt>"Lipschitz $\nabla^2 f$"</dt><dd>The Hessian doesn't change too wildly. This controls how well the quadratic model approximates $f$. Formally: $\|\nabla^2 f(x) - \nabla^2 f(y)\| \leq L\|x - y\|$ for some constant $L$.</dd>
+<dt>"$\nabla^2 f(x^*)$ nonsingular"</dt><dd>The Hessian at the solution is invertible. If it is singular, Newton's step $p = -[\nabla^2 f]^{-1}\nabla f$ is undefined.</dd>
+<dt>"sufficiently close"</dt><dd>This is the catch. The theorem only guarantees convergence locally. You need globalization (line search or trust region) to get into the "sufficiently close" zone from far away.</dd>
+</dl>
+
+<!-- Theorem 4: Trust region -->
+<div class="formula-box">
+<strong>Theorem: Trust-Region Global Convergence</strong><br><br>
+If the trust-region method uses the Cauchy point (or any step that provides at least as much reduction as the Cauchy point), and $f$ is bounded below, then:
+$$\lim_{k \to \infty} \|\nabla f(x_k)\| = 0$$
+</div>
+
+<div class="analogy">
+<strong>Plain English:</strong> The trust-region method with the Cauchy point guarantee will always eventually find a stationary point, no matter where you start. The Cauchy point is the "safety net" &mdash; it is the steepest descent step restricted to the trust region, and it always makes progress. As long as you do at least as well as the Cauchy point at each step, you will converge.<br><br>
+Full explanation on <a href="cg-09-trust-region.html" style="color:#64ffda;">Page 09</a>.
+</div>
+
+<dl class="breakdown">
+<dt>"Cauchy point guarantee"</dt><dd>At minimum, you must achieve the same function decrease as the Cauchy point. This is a lower bound on progress per step.</dd>
+<dt>"$f$ bounded below"</dt><dd>The function can't go to $-\infty$. Otherwise the algorithm could keep decreasing forever without converging.</dd>
+<dt>"$\|\nabla f(x_k)\| \to 0$"</dt><dd>You approach a stationary point. Note: this does not say you reach a minimizer &mdash; it could be a saddle point!</dd>
+</dl>
+
+<!-- Theorem 5: CG finite termination -->
+<div class="formula-box">
+<strong>Theorem: CG Finite Termination on Quadratics</strong><br><br>
+For a positive definite quadratic $f(x) = \frac{1}{2}x^T A x - b^T x$ with $A \in \mathbb{R}^{n \times n}$ SPD, the conjugate gradient method finds the exact minimizer in at most $n$ iterations.
+</div>
+
+<div class="analogy">
+<strong>Plain English:</strong> CG solves an $n$-dimensional problem in at most $n$ steps. Each step "finishes" one dimension &mdash; it finds the exact minimum along a new conjugate direction, and never needs to revisit that direction again. After $n$ steps, all dimensions are done. Compare this to gradient descent, which might take thousands of zigzag steps on the same problem.<br><br>
+Full explanation on <a href="cg-10-conjugate-gradient.html" style="color:#64ffda;">Page 10</a>.
+</div>
+
+<dl class="breakdown">
+<dt>"SPD $A$"</dt><dd>The matrix must be symmetric positive definite. CG is designed for SPD systems. If $A$ is not SPD, CG may not converge or may break down.</dd>
+<dt>"at most $n$ iterations"</dt><dd>In exact arithmetic. With floating-point rounding errors, CG may take a few more than $n$ steps, but it is still very fast.</dd>
+<dt>"exact minimizer"</dt><dd>For quadratics, the minimizer of $f$ is the solution to $Ax = b$. CG is simultaneously an optimization method and a linear solver.</dd>
+</dl>
+
+<!-- Theorem 6: BFGS superlinear -->
+<div class="formula-box">
+<strong>Theorem: BFGS Superlinear Convergence</strong><br><br>
+Under suitable conditions (strong convexity, Lipschitz gradient, Wolfe line search), the BFGS method converges superlinearly:
+$$\lim_{k \to \infty} \frac{\|x_{k+1} - x^*\|}{\|x_k - x^*\|} = 0$$
+</div>
+
+<div class="analogy">
+<strong>Plain English:</strong> BFGS gets faster and faster as it approaches the answer. The ratio of consecutive errors goes to zero. It is not as fast as Newton (quadratic), but it is faster than gradient descent (linear). The key insight: BFGS gradually learns the curvature of $f$ from gradient information, and its approximation $H_k$ converges to the true inverse Hessian along the directions that matter.<br><br>
+Full explanation on <a href="cg-12-bfgs.html" style="color:#64ffda;">Page 12</a>.
+</div>
+
+<dl class="breakdown">
+<dt>"Wolfe line search"</dt><dd>BFGS requires Wolfe conditions (not just Armijo) to guarantee $s_k^T y_k > 0$, which keeps $H_k$ positive definite.</dd>
+<dt>"superlinear"</dt><dd>Faster than linear ($\|e_{k+1}\|/\|e_k\| \to 0$) but not as fast as quadratic ($\|e_{k+1}\|/\|e_k\|^2 \leq C$).</dd>
+</dl>
+
+<!-- Theorem 7: KKT -->
+<div class="formula-box">
+<strong>Theorem: KKT Necessary Conditions (under LICQ)</strong><br><br>
+If $x^*$ is a local minimizer of $\min f(x)$ subject to $c_i(x) = 0$ (equality) and $c_j(x) \geq 0$ (inequality), and the LICQ holds at $x^*$, then there exist multipliers $\lambda_i, \mu_j$ such that:
+<ol style="margin: 12px 0 0 24px;">
+  <li><strong>Stationarity:</strong> $\nabla f(x^*) - \sum \lambda_i \nabla c_i^{eq}(x^*) - \sum \mu_j \nabla c_j^{ineq}(x^*) = 0$</li>
+  <li><strong>Primal feasibility:</strong> $c_i^{eq}(x^*) = 0$, $c_j^{ineq}(x^*) \geq 0$</li>
+  <li><strong>Dual feasibility:</strong> $\mu_j \geq 0$ for all inequality constraints</li>
+  <li><strong>Complementary slackness:</strong> $\mu_j c_j^{ineq}(x^*) = 0$ for each $j$</li>
+</ol>
+</div>
+
+<div class="analogy">
+<strong>Plain English:</strong> At a constrained optimum, the "pull" of the objective function must be exactly balanced by the "push" of the active constraints. The multipliers $\mu_j$ tell you how much each constraint is "pushing." An inactive constraint ($c_j > 0$, slack) has zero push ($\mu_j = 0$). An active constraint ($c_j = 0$, tight) can push ($\mu_j > 0$) but only inward.<br><br>
+Full explanation on <a href="cg-15-constrained.html" style="color:#64ffda;">Page 15</a>.
+</div>
+
+<dl class="breakdown">
+<dt>"LICQ"</dt><dd>Linear Independence Constraint Qualification: the gradients of the active constraints must be linearly independent at $x^*$. This ensures the multipliers are unique. Without LICQ, KKT conditions may not hold.</dd>
+<dt>"Necessary"</dt><dd>Every local minimizer satisfying LICQ must satisfy KKT. But a KKT point is not necessarily a minimizer (could be a saddle or max of the Lagrangian). Need second-order conditions for sufficiency.</dd>
+<dt>"Complementary slackness"</dt><dd>For each inequality: either the constraint is tight ($c_j = 0$) or the multiplier is zero ($\mu_j = 0$) or both. This is the "either/or" condition that makes enumeration possible on exams.</dd>
+</dl>
+
+<!-- ===================== PART B ===================== -->
+<h2>Part B: "Why" Questions and Answers</h2>
+
+<p>These are the conceptual questions that separate memorization from understanding. If the exam asks "explain why..." you need the reasoning, not just the formula.</p>
+
+<div class="why-box">
+<h3>Why does GD converge slowly on ill-conditioned problems?</h3>
+<p>The condition number $\kappa = \lambda_{\max}/\lambda_{\min}$ of the Hessian controls the convergence rate of gradient descent. On a well-conditioned problem ($\kappa \approx 1$), the contours are nearly circular and the gradient points roughly toward the minimum. On an ill-conditioned problem ($\kappa \gg 1$), the contours are extremely elongated ellipses. The gradient points perpendicular to the contour, which is nearly perpendicular to the direction toward the minimum.</p>
+<p style="margin-top: 8px;">The convergence rate is $\left(\frac{\kappa - 1}{\kappa + 1}\right)^2$. When $\kappa = 100$, this is $(99/101)^2 \approx 0.96$ &mdash; you only reduce the error by 4% each step. You need hundreds of zigzag steps to converge.</p>
+<p style="margin-top: 8px;">Full explanation with SVG diagrams: <a href="cg-06-gradient-descent.html" style="color:#64ffda;">Page 06</a>.</p>
+</div>
+
+<div class="why-box">
+<h3>Why does Newton converge quadratically?</h3>
+<p>Newton's method replaces $f$ with a quadratic model (Taylor expansion to second order) and jumps directly to the model's minimum. The error in this jump comes from the difference between $f$ and its quadratic model &mdash; which is the third-order Taylor remainder, proportional to $\|x_k - x^*\|^2$. So the error after one step is proportional to the square of the current error.</p>
+<p style="margin-top: 8px;">Think of it this way: if $f$ were exactly quadratic, Newton would solve it in one step (the model IS the function). The "leftover" error comes from the non-quadratic part of $f$, which gets smaller and smaller as you approach $x^*$.</p>
+<p style="margin-top: 8px;">Full explanation: <a href="cg-07-newton-method.html" style="color:#64ffda;">Page 07</a>.</p>
+</div>
+
+<div class="why-box">
+<h3>Why does BFGS need the curvature condition $s^T y > 0$?</h3>
+<p>The BFGS update is designed to maintain positive definiteness of the inverse Hessian approximation $H_k$. If $H_k$ is PD and $s_k^T y_k > 0$, then $H_{k+1}$ is guaranteed to be PD. This means the search direction $d_k = -H_k g_k$ is always a descent direction (you always go downhill).</p>
+<p style="margin-top: 8px;">If $s_k^T y_k \leq 0$, the update could produce an indefinite or negative definite $H_{k+1}$, which would give you an ascent direction instead of a descent direction. The Wolfe conditions (<a href="cg-08-line-search.html" style="color:#64ffda;">Page 08</a>) guarantee $s_k^T y_k > 0$, which is why BFGS requires Wolfe (not just Armijo).</p>
+<p style="margin-top: 8px;">Full explanation: <a href="cg-12-bfgs.html" style="color:#64ffda;">Page 12</a>.</p>
+</div>
+
+<div class="why-box">
+<h3>Why does the trust-region ratio test work?</h3>
+<p>The ratio $\rho_k = \frac{\text{actual reduction}}{\text{predicted reduction}} = \frac{f(x_k) - f(x_k + p_k)}{m_k(0) - m_k(p_k)}$ measures how well the quadratic model predicts the actual function behavior.</p>
+<ul style="margin: 12px 0 0 20px; line-height: 2;">
+  <li>$\rho_k \approx 1$: Model is accurate. Trust the model more &mdash; expand the radius.</li>
+  <li>$\rho_k$ small or negative: Model is inaccurate. Trust the model less &mdash; shrink the radius.</li>
+  <li>$\rho_k > \eta$ (e.g., $\eta = 0.25$): Good enough to accept the step.</li>
+</ul>
+<p style="margin-top: 8px;">Near $x^*$, the quadratic model becomes very accurate (since $f$ looks quadratic locally), so $\rho_k \to 1$ and the radius grows, recovering Newton's full step and quadratic convergence.</p>
+<p style="margin-top: 8px;">Full explanation: <a href="cg-09-trust-region.html" style="color:#64ffda;">Page 09</a>.</p>
+</div>
+
+<div class="why-box">
+<h3>Why are KKT conditions only necessary, not sufficient?</h3>
+<p>KKT conditions tell you that at any local minimum (satisfying LICQ), these conditions hold. But they also hold at saddle points and local maxima of the Lagrangian. A point can satisfy all four KKT conditions and still not be a minimizer if the problem is non-convex.</p>
+<p style="margin-top: 8px;">For <strong>convex</strong> problems (convex $f$, convex feasible region), KKT conditions are both necessary AND sufficient. This is one of the main reasons convexity is so important (<a href="cg-05-convexity.html" style="color:#64ffda;">Page 05</a>).</p>
+<p style="margin-top: 8px;">Full explanation: <a href="cg-15-constrained.html" style="color:#64ffda;">Page 15</a>.</p>
+</div>
+
+<!-- ===================== PART C ===================== -->
+<h2>Part C: Proof Sketches</h2>
+
+<p>These are the types of derivations/proofs that appear on assignments and could appear on the final. We show the key steps.</p>
+
+<!-- Proof 1: Exact step size -->
+<div class="hand-calc">
+<h3>Derivation: Exact Step Size for GD on Quadratics</h3>
+<p>Given $f(x) = \frac{1}{2}x^T A x - b^T x$ with SPD $A$, the GD update is $x_{k+1} = x_k - \alpha_k g_k$ where $g_k = Ax_k - b$. Find $\alpha_k$.</p>
+
+<div class="step">
+<div class="step-label">Step 1: Set up the 1D minimization</div>
+We want $\alpha_k = \arg\min_\alpha f(x_k - \alpha g_k)$.
+
+Define $\phi(\alpha) = f(x_k - \alpha g_k)$.
+</div>
+
+<div class="step">
+<div class="step-label">Step 2: Differentiate and set to zero</div>
+Using the chain rule: $\phi'(\alpha) = \nabla f(x_k - \alpha g_k)^T (-g_k) = -(A(x_k - \alpha g_k) - b)^T g_k$
+
+$$= -(g_k - \alpha A g_k)^T g_k = -g_k^T g_k + \alpha g_k^T A g_k$$
+
+Setting $\phi'(\alpha) = 0$:
+
+$$\alpha g_k^T A g_k = g_k^T g_k$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 3: Solve</div>
+
+<div class="result">$$\alpha_k = \frac{g_k^T g_k}{g_k^T A g_k}$$</div>
+
+<p class="check">This is the exact step size. Note: $g_k^T A g_k > 0$ since $A$ is PD and $g_k \neq 0$, so $\alpha_k > 0$. This formula only works for quadratics &mdash; for general $f$ we need line search conditions (<a href="cg-08-line-search.html" style="color:#64ffda;">Page 08</a>).</p>
+</div>
+</div>
+
+<!-- Proof 2: BFGS secant condition -->
+<div class="hand-calc">
+<h3>Proof: BFGS Inverse Update Satisfies the Secant Condition</h3>
+<p>Show that $H_{k+1}$ from the BFGS formula satisfies $H_{k+1} y_k = s_k$. (This is Assignment 2, Q1 style.)</p>
+
+<div class="step">
+<div class="step-label">Setup</div>
+The BFGS inverse update is:
+$$H_{k+1} = (I - \rho_k s_k y_k^T) H_k (I - \rho_k y_k s_k^T) + \rho_k s_k s_k^T$$
+where $\rho_k = 1/(y_k^T s_k)$.
+
+We need to show $H_{k+1} y_k = s_k$.
+</div>
+
+<div class="step">
+<div class="step-label">Step 1: Compute $(I - \rho_k y_k s_k^T) y_k$</div>
+
+$$= y_k - \rho_k y_k (s_k^T y_k) = y_k - \frac{s_k^T y_k}{y_k^T s_k} y_k = y_k - y_k = 0$$
+
+<p class="check">Key insight: $\rho_k (s_k^T y_k) = 1$, so this whole term vanishes!</p>
+</div>
+
+<div class="step">
+<div class="step-label">Step 2: Apply $H_{k+1}$ to $y_k$</div>
+
+$$H_{k+1} y_k = (I - \rho_k s_k y_k^T) H_k \underbrace{(I - \rho_k y_k s_k^T) y_k}_{= 0} + \rho_k s_k \underbrace{s_k^T y_k}_{= 1/\rho_k}$$
+
+The first term is zero (since we multiply $H_k$ by the zero vector from Step 1).
+
+The second term is: $\rho_k s_k \cdot (s_k^T y_k) = \rho_k \cdot (y_k^T s_k) \cdot s_k = 1 \cdot s_k = s_k$.
+</div>
+
+<div class="step">
+<div class="step-label">Conclusion</div>
+<div class="result">$H_{k+1} y_k = 0 + s_k = s_k$. The secant condition is satisfied.</div>
+
+<p class="check">Note how elegant this is: the BFGS update is specifically constructed so that the $(I - \rho y s^T)$ factor annihilates $y_k$, leaving only the rank-1 correction $\rho s s^T$ to produce $s_k$.</p>
+</div>
+</div>
+
+<!-- Proof 3: SR1 secant condition -->
+<div class="hand-calc">
+<h3>Proof: SR1 Update Satisfies the Secant Condition</h3>
+<p>Show that $H_{k+1}^{SR1} y_k = s_k$. (Assignment 2, Q2 style.)</p>
+
+<div class="step">
+<div class="step-label">Setup</div>
+The SR1 inverse update is:
+$$H_{k+1} = H_k + \frac{(s_k - H_k y_k)(s_k - H_k y_k)^T}{(s_k - H_k y_k)^T y_k}$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 1: Apply $H_{k+1}$ to $y_k$</div>
+
+$$H_{k+1} y_k = H_k y_k + \frac{(s_k - H_k y_k)(s_k - H_k y_k)^T y_k}{(s_k - H_k y_k)^T y_k}$$
+
+The scalar $(s_k - H_k y_k)^T y_k$ appears in both numerator and denominator, so they cancel:
+
+$$= H_k y_k + (s_k - H_k y_k) \cdot \frac{(s_k - H_k y_k)^T y_k}{(s_k - H_k y_k)^T y_k}$$
+
+$$= H_k y_k + (s_k - H_k y_k) \cdot 1$$
+
+$$= H_k y_k + s_k - H_k y_k = s_k$$
+</div>
+
+<div class="step">
+<div class="step-label">Conclusion</div>
+<div class="result">$H_{k+1} y_k = s_k$. The secant condition is satisfied.</div>
+
+<p class="check">The SR1 proof is even simpler than BFGS &mdash; the correction term is designed so that it exactly fills the gap $s_k - H_k y_k$. The denominator ensures the correction has the right magnitude. The key requirement is $(s_k - H_k y_k)^T y_k \neq 0$ (the safeguard condition, <a href="cg-13-sr1-dfp.html" style="color:#64ffda;">Page 13</a>).</p>
+</div>
+</div>
+
+<!-- ===================== PART D ===================== -->
+<h2>Part D: Common Pitfalls</h2>
+
+<p>These are the mistakes that cost marks on exams. Read them carefully before the final.</p>
+
+<div class="exam-flag">
+<h4>Pitfall 1: Confusing necessary vs sufficient conditions</h4>
+<p><strong>Wrong:</strong> "$\nabla f(x^*) = 0$ means $x^*$ is a minimum."<br>
+<strong>Right:</strong> "$\nabla f(x^*) = 0$ means $x^*$ is a <em>stationary point</em>. It could be a min, max, or saddle. You need SOSC (PD Hessian) to confirm it is a minimum."</p>
+<p>Remember: necessary = "every minimizer has this property" (like "every dog is an animal"). Sufficient = "this property guarantees a minimizer" (like "every golden retriever is a dog").</p>
+</div>
+
+<div class="exam-flag">
+<h4>Pitfall 2: Forgetting dual feasibility in KKT</h4>
+<p><strong>Wrong:</strong> Finding a KKT candidate and not checking $\lambda_i \geq 0$.<br>
+<strong>Right:</strong> After solving the stationarity and complementary slackness equations, always verify that every inequality multiplier is non-negative. A negative multiplier means that constraint is "pushing the wrong way" and the point is not a valid KKT point.</p>
+<p>See Part G of <a href="cg-18-exam-computations.html" style="color:#64ffda;">Page 18</a> for a worked example where this eliminates a candidate.</p>
+</div>
+
+<div class="exam-flag">
+<h4>Pitfall 3: Forgetting the curvature condition before BFGS update</h4>
+<p><strong>Wrong:</strong> Applying the BFGS update without checking $s_k^T y_k > 0$.<br>
+<strong>Right:</strong> Always verify $s_k^T y_k > 0$ before updating $H_k$. If this fails, the update could destroy positive definiteness. The Wolfe line search guarantees this automatically, but on exam problems with given data, you must check.</p>
+</div>
+
+<div class="exam-flag">
+<h4>Pitfall 4: Confusing A-conjugacy with orthogonality</h4>
+<p><strong>Wrong:</strong> Saying CG directions are "orthogonal."<br>
+<strong>Right:</strong> CG directions are <em>A-conjugate</em>: $d_i^T A d_j = 0$ for $i \neq j$. It is the <em>residuals</em> $r_i$ that are mutually orthogonal: $r_i^T r_j = 0$ for $i \neq j$. These are different properties! A-conjugacy depends on the matrix $A$; orthogonality does not.</p>
+<p>Full explanation: <a href="cg-10-conjugate-gradient.html" style="color:#64ffda;">Page 10</a>.</p>
+</div>
+
+<div class="exam-flag">
+<h4>Pitfall 5: Wrong sign on the gradient</h4>
+<p><strong>Wrong:</strong> Writing the search direction as $d_k = \nabla f(x_k)$ (going uphill!).<br>
+<strong>Right:</strong> $d_k = -\nabla f(x_k)$ for steepest descent. The gradient points uphill. To go downhill, negate it. Similarly, Newton's step is $p_k = -[\nabla^2 f]^{-1}\nabla f$, not positive.</p>
+</div>
+
+<div class="exam-flag">
+<h4>Pitfall 6: Not checking if Newton step is inside the trust region</h4>
+<p><strong>Wrong:</strong> Computing the Newton step and immediately accepting it in a trust-region problem.<br>
+<strong>Right:</strong> First compute $\|p^N\|$. If $\|p^N\| \leq \Delta_k$, accept the Newton step. If $\|p^N\| > \Delta_k$, you need the Cauchy point or a dogleg step restricted to the trust region. The whole point of trust region is that you might NOT take the Newton step.</p>
+</div>
+
+<div class="exam-flag">
+<h4>Pitfall 7: Forgetting to check complementary slackness cases systematically</h4>
+<p><strong>Wrong:</strong> Only checking one or two cases in a KKT problem.<br>
+<strong>Right:</strong> With $m$ inequality constraints, there are up to $2^m$ cases (each constraint active or inactive). For exam problems with 2-3 constraints, enumerate all cases. For each case, solve the resulting system, then check primal feasibility, dual feasibility, and compare function values.</p>
+</div>
+
+<div class="exam-flag">
+<h4>Pitfall 8: Mixing up $B_k$ and $H_k$ in quasi-Newton methods</h4>
+<p><strong>Wrong:</strong> Using the BFGS formula for $B_k$ (Hessian approximation) when the problem asks for $H_k$ (inverse Hessian approximation), or vice versa.<br>
+<strong>Right:</strong> $B_k \approx \nabla^2 f$ (direct Hessian approximation), $H_k \approx [\nabla^2 f]^{-1}$ (inverse Hessian approximation). The secant condition is $B_{k+1}s_k = y_k$ equivalently $H_{k+1}y_k = s_k$. Know which formula you are using.</p>
+</div>
+
+<!-- ===================== NAV ===================== -->
+<div class="nav">
+  <p><a href="cg-18-exam-computations.html">&larr; Previous: Page 18 &mdash; Exam Computations</a></p>
+  <p><a href="cg-20-formula-sheet.html">Next: Page 20 &mdash; Formula Sheet &rarr;</a></p>
+  <p style="margin-top: 8px;"><a href="index.html">Back to Index</a></p>
+</div>
+
+</div>
+</body>
+</html>

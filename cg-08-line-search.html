@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page 08 &mdash; Line Search Methods | MATH 3850 Course Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
+.container { max-width: 900px; margin: 0 auto; }
+h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
+.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
+h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
+.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
+.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
+.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
+.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
+.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
+.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
+.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
+.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
+.hand-calc .result { color: #64ffda; font-weight: bold; }
+.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
+.exam-flag { background: #2a1a1a; border: 2px solid #ff6b6b; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
+.exam-flag h4 { color: #ff6b6b; margin-bottom: 8px; }
+.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
+.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
+.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
+.step-table tr:nth-child(even) { background: #16213e; }
+.algo-box { border-left: 4px solid #64ffda; padding: 16px 20px; margin: 20px 0; background: #0f3460; border-radius: 0 12px 12px 0; }
+.algo-box .algo-title { color: #ffd93d; font-weight: bold; font-size: 18px; margin-bottom: 12px; }
+.algo-box .algo-line { padding: 6px 0; font-size: 16px; }
+.algo-box .algo-comment { color: #888; font-size: 14px; }
+.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
+.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
+.glossary dl { font-size: 15px; }
+.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
+.glossary dd { margin-left: 20px; color: #ccc; }
+.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
+.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
+.nav a:hover { text-decoration: underline; }
+.nav p { margin: 4px 0; }
+svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
+.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
+.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
+.breakdown dd { color: #ccc; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<span class="tag">PAGE 08 &mdash; POST-MIDTERM</span>
+<h1>Line Search Methods</h1>
+<p class="subtitle">You know which direction to walk &mdash; now figure out how far</p>
+
+<!-- ===================== PART A ===================== -->
+<h2>Part A: The Line Search Idea</h2>
+
+<div class="analogy">
+<strong>Physical analogy &mdash; "Which direction" is settled, now decide "how far."</strong><br><br>
+Imagine you are hiking and you have already decided which direction to walk. Maybe you decided to walk north (gradient descent chose the steepest downhill direction from <a href="cg-06-gradient-descent.html">Page 06</a>), or maybe a more sophisticated method chose a smarter direction (Newton from <a href="cg-07-newton-method.html">Page 07</a>, or CG from <a href="cg-10-conjugate-gradient.html">Page 10</a>). Either way, the direction $p_k$ is fixed.<br><br>
+Now the question is: how far should you walk in that direction? Take a tiny step? A huge leap? If you step too little, you waste time &mdash; you could have made more progress. If you step too far, you might overshoot the bottom and end up climbing uphill on the other side.<br><br>
+Finding the right step size $\alpha_k$ is the <strong>line search</strong> problem. It is called "line search" because you are searching along a <em>line</em> (the ray starting at $x_k$ pointing in direction $p_k$) for the best point. You have reduced the multi-dimensional optimization problem to a one-dimensional search along this line.<br><br>
+The beautiful insight: you do not need to find the PERFECT step size. You just need a step size that is "good enough" &mdash; one that guarantees sufficient progress without being too expensive to compute. That is what the Armijo and Wolfe conditions are about.
+</div>
+
+<div class="formula-box">
+<strong>The Line Search Framework</strong>
+
+<p>Given: current point $x_k$ and search direction $p_k$ (a descent direction, meaning $\nabla f(x_k)^T p_k < 0$).</p>
+<p>Find: step size $\alpha_k > 0$.</p>
+<p>Update: $x_{k+1} = x_k + \alpha_k p_k$.</p>
+
+<p style="margin-top:16px;">To analyze the step size, we define the <strong>one-dimensional slice</strong>:</p>
+$$\phi(\alpha) = f(x_k + \alpha p_k)$$
+
+<dl class="breakdown">
+  <dt>$\phi(\alpha)$</dt><dd>the function value as you walk a distance $\alpha$ in direction $p_k$. This converts the multi-dimensional problem into a 1D function of the single variable $\alpha$.</dd>
+  <dt>$\alpha = 0$</dt><dd>$\phi(0) = f(x_k)$, your current function value</dd>
+  <dt>$\alpha > 0$</dt><dd>walking forward along $p_k$</dd>
+  <dt>$\phi'(\alpha)$</dt><dd>$= \nabla f(x_k + \alpha p_k)^T p_k$ &mdash; the slope of $\phi$ at step size $\alpha$. By the chain rule.</dd>
+  <dt>$\phi'(0)$</dt><dd>$= \nabla f(x_k)^T p_k < 0$ &mdash; the initial slope is negative because $p_k$ is a descent direction. This guarantees $\phi$ is initially decreasing.</dd>
+</dl>
+</div>
+
+<svg viewBox="0 0 750 320" style="width:100%;max-width:750px;margin:24px auto;display:block;">
+  <!-- axes -->
+  <line x1="80" y1="270" x2="700" y2="270" stroke="#555" stroke-width="1.5"/>
+  <line x1="80" y1="270" x2="80" y2="30" stroke="#555" stroke-width="1.5"/>
+  <text x="700" y="290" fill="#888" font-size="14" text-anchor="end">alpha</text>
+  <text x="60" y="40" fill="#888" font-size="14" text-anchor="end">phi(alpha)</text>
+
+  <!-- phi curve: starts high, dips, comes back up -->
+  <path d="M80,80 Q200,260 350,200 Q500,130 680,100" fill="none" stroke="#64ffda" stroke-width="2.5"/>
+  <text x="690" y="95" fill="#64ffda" font-size="13">phi(alpha)</text>
+
+  <!-- phi(0) marker -->
+  <circle cx="80" cy="80" r="5" fill="#ffd93d"/>
+  <text x="88" y="75" fill="#ffd93d" font-size="13">phi(0) = f(x_k)</text>
+
+  <!-- tangent line at alpha=0 (negative slope) -->
+  <line x1="80" y1="80" x2="300" y2="210" stroke="#888" stroke-width="1" stroke-dasharray="6,4"/>
+  <text x="250" y="235" fill="#888" font-size="12">tangent at alpha=0</text>
+  <text x="250" y="250" fill="#888" font-size="12">slope = phi'(0) &lt; 0</text>
+
+  <!-- optimal alpha marker -->
+  <circle cx="335" cy="204" r="5" fill="#bb86fc"/>
+  <line x1="335" y1="204" x2="335" y2="270" stroke="#bb86fc" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="335" y="288" fill="#bb86fc" font-size="13" text-anchor="middle">alpha*</text>
+  <text x="380" y="220" fill="#bb86fc" font-size="12">exact minimum</text>
+
+  <!-- too small alpha -->
+  <circle cx="150" cy="153" r="4" fill="#ff6b6b"/>
+  <line x1="150" y1="153" x2="150" y2="270" stroke="#ff6b6b" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="150" y="288" fill="#ff6b6b" font-size="12" text-anchor="middle">too small</text>
+
+  <!-- too big alpha -->
+  <circle cx="580" cy="118" r="4" fill="#ff6b6b"/>
+  <line x1="580" y1="118" x2="580" y2="270" stroke="#ff6b6b" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="580" y="288" fill="#ff6b6b" font-size="12" text-anchor="middle">too big</text>
+</svg>
+
+<div class="note">
+<strong>Key insight:</strong> We almost never compute the exact minimizer $\alpha^*$ of $\phi(\alpha)$. That would require solving a 1D optimization problem exactly, which can be expensive and is usually unnecessary. Instead, we use <strong>inexact line search conditions</strong> that guarantee "enough progress" without too much computation. The two most important are the Armijo condition and the Wolfe conditions.
+</div>
+
+<!-- ===================== PART B ===================== -->
+<h2>Part B: Armijo Condition (Sufficient Decrease)</h2>
+
+<div class="analogy">
+<strong>Physical analogy &mdash; The progress bar.</strong><br><br>
+Imagine you have a progress bar for your descent. The progress bar sets a minimum standard: "I expect the function to decrease by at least THIS much." The expected decrease is based on a simple linear prediction: if the initial slope is $\phi'(0)$ and you walk a distance $\alpha$, a naive linear model predicts the function value drops by $|\phi'(0)| \cdot \alpha$. But you do not demand the full predicted decrease &mdash; that would be too strict. You only demand a fraction $c_1$ of the predicted decrease, where $c_1$ is a small number like $10^{-4}$.<br><br>
+If the actual decrease meets or exceeds this modest bar, the step passes. If not, the step was too ambitious &mdash; you probably overshot a minimum and ended up too high on the other side. In that case, shrink the step size and try again.<br><br>
+Why such a low bar ($c_1 = 10^{-4}$)? Because the Armijo condition's job is just to prevent catastrophically bad steps. It is saying "at least make <em>some</em> progress." The curvature condition (Part C) will handle the other extreme of steps that are too short.
+</div>
+
+<div class="formula-box">
+<strong>The Armijo Condition (Sufficient Decrease)</strong>
+
+$$f(x_k + \alpha p_k) \leq f(x_k) + c_1 \alpha \nabla f(x_k)^T p_k$$
+
+<p style="margin-top:12px;">Equivalently, in terms of $\phi$:</p>
+$$\phi(\alpha) \leq \phi(0) + c_1 \alpha \phi'(0)$$
+
+<dl class="breakdown">
+  <dt>Left side: $f(x_k + \alpha p_k)$</dt><dd>the <strong>actual</strong> function value after taking a step of size $\alpha$</dd>
+  <dt>$f(x_k)$</dt><dd>the current function value (before the step)</dd>
+  <dt>$c_1$</dt><dd>a small constant, typically $c_1 = 10^{-4}$. It controls how much decrease we demand. Must satisfy $0 < c_1 < 1$.</dd>
+  <dt>$\alpha$</dt><dd>the candidate step size we are testing</dd>
+  <dt>$\nabla f(x_k)^T p_k$</dt><dd>the directional derivative at $x_k$ in direction $p_k$. This is <strong>negative</strong> because $p_k$ is a descent direction. So $c_1 \alpha \nabla f(x_k)^T p_k$ is a negative number, making the right side <em>less</em> than $f(x_k)$.</dd>
+  <dt>$c_1 \alpha \nabla f(x_k)^T p_k$</dt><dd>the "minimum expected decrease." It is a fraction $c_1$ of what the linear model predicts.</dd>
+</dl>
+</div>
+
+<svg viewBox="0 0 750 320" style="width:100%;max-width:750px;margin:24px auto;display:block;">
+  <!-- axes -->
+  <line x1="80" y1="270" x2="700" y2="270" stroke="#555" stroke-width="1.5"/>
+  <line x1="80" y1="270" x2="80" y2="30" stroke="#555" stroke-width="1.5"/>
+  <text x="700" y="290" fill="#888" font-size="14" text-anchor="end">alpha</text>
+  <text x="60" y="40" fill="#888" font-size="14" text-anchor="end">phi(alpha)</text>
+
+  <!-- phi curve -->
+  <path d="M80,90 Q180,230 300,200 Q430,160 650,140" fill="none" stroke="#64ffda" stroke-width="2.5"/>
+  <text x="660" y="135" fill="#64ffda" font-size="13">phi(alpha)</text>
+
+  <!-- Armijo line: phi(0) + c1*alpha*phi'(0), which slopes down but not as steeply -->
+  <line x1="80" y1="90" x2="650" y2="180" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="8,4"/>
+  <text x="560" y="175" fill="#ff6b6b" font-size="13">Armijo line</text>
+  <text x="560" y="192" fill="#ff6b6b" font-size="11">l(alpha) = phi(0) + c1*alpha*phi'(0)</text>
+
+  <!-- acceptable region label -->
+  <rect x="85" y="42" width="160" height="24" rx="8" fill="#0a2e1a" stroke="#64ffda" stroke-width="1"/>
+  <text x="165" y="59" fill="#64ffda" font-size="13" text-anchor="middle">Acceptable region</text>
+
+  <!-- phi(0) marker -->
+  <circle cx="80" cy="90" r="5" fill="#ffd93d"/>
+  <text x="90" y="83" fill="#ffd93d" font-size="13">phi(0)</text>
+
+  <!-- point that passes Armijo (phi curve below Armijo line) -->
+  <circle cx="220" cy="213" r="6" fill="#64ffda"/>
+  <text x="230" y="237" fill="#64ffda" font-size="12">PASS: phi below line</text>
+
+  <!-- point that fails Armijo (phi curve above Armijo line) -->
+  <circle cx="530" cy="155" r="6" fill="#ff6b6b"/>
+  <text x="445" y="148" fill="#ff6b6b" font-size="12">FAIL: phi above line</text>
+
+  <!-- shade the acceptable region between alpha axis -->
+  <path d="M80,90 Q180,230 300,200 L300,178 L80,90 Z" fill="#0a2e1a" opacity="0.3"/>
+</svg>
+
+<div class="why-box">
+<h3>Why does Armijo alone have a problem?</h3>
+<p>The Armijo condition can be satisfied by extremely tiny step sizes. If $\alpha$ is tiny, then $\phi(\alpha) \approx \phi(0) + \alpha \phi'(0)$, which is less than $\phi(0) + c_1 \alpha \phi'(0)$ because $\phi'(0) < 0$ and $c_1 < 1$. So $\alpha = 10^{-100}$ would pass Armijo!</p>
+<p style="margin-top:8px;">Tiny steps make progress, technically, but they waste iterations. We need a second condition to prevent steps that are too short. That is the <strong>curvature condition</strong> (Wolfe).</p>
+</div>
+
+<!-- ===================== PART C ===================== -->
+<h2>Part C: Wolfe Conditions</h2>
+
+<div class="analogy">
+<strong>Physical analogy &mdash; "Don't stop on a steep downhill slope."</strong><br><br>
+The Armijo condition says "you must make enough progress" &mdash; it prevents steps that are too long (overshoot). But it allows steps that are too short. The curvature condition adds: "don't stop while you're still on a steep downhill slope &mdash; keep going until the slope flattens out."<br><br>
+Think of it this way. You are walking downhill. Armijo says "make sure you've actually gone downhill." Wolfe adds "don't stop while the ground is still steeply sloping &mdash; you're leaving easy progress on the table." Together, they bracket the step size into a "Goldilocks zone" &mdash; not too big, not too small.
+</div>
+
+<div class="formula-box">
+<strong>The Wolfe Conditions</strong>
+
+<p style="margin-bottom:12px;">A step size $\alpha_k$ satisfies the <strong>Wolfe conditions</strong> if BOTH hold:</p>
+
+<p><strong>1. Armijo (Sufficient Decrease):</strong></p>
+$$f(x_k + \alpha_k p_k) \leq f(x_k) + c_1 \alpha_k \nabla f(x_k)^T p_k$$
+
+<p><strong>2. Curvature Condition:</strong></p>
+$$\nabla f(x_k + \alpha_k p_k)^T p_k \geq c_2 \, \nabla f(x_k)^T p_k$$
+
+<p style="margin-top:12px;">where $0 < c_1 < c_2 < 1$. Typical values: $c_1 = 10^{-4}$, $c_2 = 0.9$ (for Newton/quasi-Newton) or $c_2 = 0.1$ (for CG).</p>
+
+<dl class="breakdown">
+  <dt>Left side of (2): $\nabla f(x_k + \alpha_k p_k)^T p_k$</dt><dd>the directional derivative (slope of $\phi$) <em>at the new point</em> $x_k + \alpha_k p_k$. This is $\phi'(\alpha_k)$.</dd>
+  <dt>Right side of (2): $c_2 \, \nabla f(x_k)^T p_k$</dt><dd>a fraction $c_2$ of the initial slope $\phi'(0)$. Since $\phi'(0) < 0$, this is a negative number.</dd>
+  <dt>The inequality $\phi'(\alpha_k) \geq c_2 \phi'(0)$</dt><dd>says the slope at the new point must be less steep (less negative) than $c_2$ times the initial slope. In other words: the slope must have flattened out at least somewhat.</dd>
+</dl>
+</div>
+
+<div class="note">
+<strong>Reading the curvature condition:</strong> Both sides are negative (for a descent direction before reaching a minimum). The right side is more negative (since $c_2 < 1$ and we are multiplying a negative number by a fraction less than 1, we get a number closer to zero than the original). So the condition says: the new slope $\phi'(\alpha)$ must be "closer to zero or positive" compared to $c_2 \phi'(0)$. Geometrically: you must have walked far enough that the slope has flattened.
+</div>
+
+<div class="formula-box">
+<strong>Strong Wolfe Conditions</strong>
+
+<p style="margin-bottom:12px;">Replace the curvature condition with an absolute value version:</p>
+
+<p><strong>1. Armijo (same):</strong></p>
+$$f(x_k + \alpha_k p_k) \leq f(x_k) + c_1 \alpha_k \nabla f(x_k)^T p_k$$
+
+<p><strong>2. Strong Curvature Condition:</strong></p>
+$$\bigl|\nabla f(x_k + \alpha_k p_k)^T p_k\bigr| \leq c_2 \bigl|\nabla f(x_k)^T p_k\bigr|$$
+
+<dl class="breakdown">
+  <dt>$|\phi'(\alpha_k)| \leq c_2 |\phi'(0)|$</dt><dd>The absolute value of the slope at the new point must be small relative to the initial slope. This prevents accepting a point where the slope is steep in EITHER direction (too steep downhill OR too steep uphill). The regular Wolfe condition allows steep uphill slopes.</dd>
+</dl>
+</div>
+
+<div class="why-box">
+<h3>Why does BFGS need the Strong Wolfe conditions?</h3>
+<p>The BFGS update formula (<a href="cg-12-bfgs.html">Page 12</a>) requires the <strong>curvature condition</strong> $s_k^T y_k > 0$, where $s_k = x_{k+1} - x_k$ and $y_k = \nabla f(x_{k+1}) - \nabla f(x_k)$.</p>
+<p style="margin-top:8px;">Writing this out: $s_k^T y_k = \alpha_k p_k^T (\nabla f(x_{k+1}) - \nabla f(x_k)) = \alpha_k (\phi'(\alpha_k) - \phi'(0))$. Since $\phi'(0) < 0$, the Wolfe curvature condition $\phi'(\alpha_k) \geq c_2 \phi'(0)$ (with $c_2 < 1$) implies $\phi'(\alpha_k) > \phi'(0)$, which gives $s_k^T y_k > 0$.</p>
+<p style="margin-top:8px;">The <strong>strong</strong> Wolfe condition additionally prevents $\phi'(\alpha_k)$ from being too large positive, which keeps the BFGS update well-behaved.</p>
+</div>
+
+<div class="formula-box">
+<strong>Goldstein Conditions (Brief)</strong>
+
+$$f(x_k) + (1 - c)\alpha \nabla f(x_k)^T p_k \leq f(x_k + \alpha p_k) \leq f(x_k) + c \, \alpha \nabla f(x_k)^T p_k$$
+
+<p style="margin-top:12px;">where $0 < c < 1/2$. This provides symmetric upper and lower bounds on the function value. The upper bound is the Armijo condition. The lower bound prevents too-short steps (the function cannot decrease TOO much, which happens when you use a step that is much larger than needed).</p>
+
+<dl class="breakdown">
+  <dt>Upper bound</dt><dd>Same as Armijo &mdash; prevents insufficient decrease (steps too long)</dd>
+  <dt>Lower bound</dt><dd>Prevents too much decrease &mdash; ensures step is not way past the minimum</dd>
+  <dt>$c$</dt><dd>Typically $c = 10^{-4}$. Must be less than $1/2$ for both bounds to be compatible.</dd>
+</dl>
+
+<p style="margin-top:12px; color:#aaa;">Goldstein conditions are simpler than Wolfe but less commonly used because they do not guarantee $s_k^T y_k > 0$, so they cannot be used with BFGS.</p>
+</div>
+
+<div class="exam-flag">
+<h4>Quiz 3 Connection: Comparing All Four Conditions</h4>
+<p>Quiz 3 asked you to compare Armijo, Goldstein, Wolfe, and Strong Wolfe on logistic regression. Key takeaways:</p>
+<ul style="margin-left:20px; margin-top:8px;">
+  <li><strong>Armijo alone:</strong> Allows too-short steps. Simple to implement. Used in backtracking.</li>
+  <li><strong>Goldstein:</strong> Symmetric bounds. Simple. But cannot guarantee $s_k^T y_k > 0$ for BFGS.</li>
+  <li><strong>Wolfe:</strong> Armijo + curvature. Guarantees $s_k^T y_k > 0$. Standard for quasi-Newton.</li>
+  <li><strong>Strong Wolfe:</strong> Wolfe with absolute value. Best for BFGS. Slightly harder to implement.</li>
+</ul>
+</div>
+
+<!-- ===================== PART D ===================== -->
+<h2>Part D: Backtracking Line Search Algorithm</h2>
+
+<div class="analogy">
+<strong>Physical analogy &mdash; "Start optimistic, shrink if needed."</strong><br><br>
+Backtracking is the simplest practical line search algorithm. The idea: start with an ambitious step size (like $\alpha = 1$), check if it satisfies the Armijo condition, and if not, shrink it by a fixed factor (multiply by $\rho$, say $\rho = 0.5$). Keep shrinking until Armijo is satisfied.<br><br>
+Why start with $\alpha = 1$? Because for Newton's method and quasi-Newton methods, $\alpha = 1$ is the "natural" step size &mdash; it corresponds to the full Newton step. Often $\alpha = 1$ works, and backtracking never shrinks at all. When it does shrink, it quickly finds an acceptable step size.
+</div>
+
+<div class="algo-box">
+<div class="algo-title">Algorithm: Backtracking Line Search</div>
+<div class="algo-line"><strong style="color:#64ffda;">Input:</strong> initial step size $\bar{\alpha} > 0$ (typically $\bar{\alpha} = 1$), shrink factor $\rho \in (0, 1)$ (typically $\rho = 0.5$ or $0.8$), Armijo parameter $c_1 \in (0, 1)$ (typically $c_1 = 10^{-4}$)</div>
+<div class="algo-line"><strong style="color:#64ffda;">Step 1:</strong> Set $\alpha \leftarrow \bar{\alpha}$</div>
+<div class="algo-line"><strong style="color:#64ffda;">Step 2:</strong> <strong>While</strong> $f(x_k + \alpha p_k) > f(x_k) + c_1 \alpha \nabla f(x_k)^T p_k$: <span class="algo-comment">&larr; Armijo fails?</span></div>
+<div class="algo-line" style="padding-left:40px;">$\alpha \leftarrow \rho \, \alpha$ <span class="algo-comment">&larr; shrink the step size</span></div>
+<div class="algo-line"><strong style="color:#64ffda;">Step 3:</strong> Return $\alpha_k = \alpha$</div>
+</div>
+
+<div class="note">
+<strong>Convergence guarantee:</strong> Backtracking always terminates (assuming $p_k$ is a descent direction). Since $\phi'(0) = \nabla f(x_k)^T p_k < 0$, there exists a sufficiently small $\alpha$ such that $\phi(\alpha) < \phi(0) + c_1 \alpha \phi'(0)$. As $\alpha \to 0$, the left side approaches $\phi(0)$ while the right side approaches $\phi(0)$ from below, but the left side approaches faster because $\phi(\alpha) \approx \phi(0) + \alpha \phi'(0)$ and $c_1 < 1$.
+</div>
+
+<div class="hand-calc">
+<h3>Worked Example: Backtracking Line Search</h3>
+<p>Suppose we are at $x_k$ with $f(x_k) = 10$, $\nabla f(x_k)^T p_k = -5$ (the directional derivative is $-5$, confirming $p_k$ is a descent direction).</p>
+<p>Parameters: $\bar{\alpha} = 1$, $\rho = 0.8$, $c_1 = 10^{-3}$.</p>
+<p style="margin-top:8px;">The Armijo condition says: accept $\alpha$ if $f(x_k + \alpha p_k) \leq 10 + 10^{-3} \cdot \alpha \cdot (-5) = 10 - 0.005\alpha$.</p>
+
+<div class="step">
+<span class="step-label">Trial 1: $\alpha = 1$</span><br>
+<p>Suppose $f(x_k + 1 \cdot p_k) = 12$. (The function went UP &mdash; we overshot.)</p>
+<p>Armijo threshold: $10 - 0.005(1) = 9.995$</p>
+<p style="color:#ff6b6b;">$12 > 9.995$? YES &rarr; FAIL. Shrink: $\alpha \leftarrow 0.8 \times 1 = 0.8$</p>
+</div>
+
+<div class="step">
+<span class="step-label">Trial 2: $\alpha = 0.8$</span><br>
+<p>Suppose $f(x_k + 0.8 \cdot p_k) = 10.5$. (Still went up, but less.)</p>
+<p>Armijo threshold: $10 - 0.005(0.8) = 9.996$</p>
+<p style="color:#ff6b6b;">$10.5 > 9.996$? YES &rarr; FAIL. Shrink: $\alpha \leftarrow 0.8 \times 0.8 = 0.64$</p>
+</div>
+
+<div class="step">
+<span class="step-label">Trial 3: $\alpha = 0.64$</span><br>
+<p>Suppose $f(x_k + 0.64 \cdot p_k) = 9.2$. (Now the function decreased.)</p>
+<p>Armijo threshold: $10 - 0.005(0.64) = 9.9968$</p>
+<p style="color:#64ffda;">$9.2 \leq 9.9968$? YES &rarr; PASS!</p>
+<p class="result">Accept $\alpha_k = 0.64$</p>
+</div>
+
+<div class="check">We evaluated $f$ three times. The backtracking algorithm found an acceptable step size without solving any optimization problem &mdash; just a few function evaluations and comparisons.</div>
+</div>
+
+<div class="hand-calc">
+<h3>Worked Example: Backtracking on a Concrete Function (Assignment 1 Style)</h3>
+<p>Let $f(x) = x^4 - 4x^2 + 4$ in one dimension. Start at $x_0 = 3$, search direction $p_0 = -f'(x_0)$.</p>
+<p>Parameters: $\bar{\alpha} = 1$, $\rho = 0.5$, $c_1 = 10^{-4}$.</p>
+
+<div class="step">
+<span class="step-label">Step 0: Compute gradient</span><br>
+$$f'(x) = 4x^3 - 8x$$
+$$f'(3) = 4(27) - 8(3) = 108 - 24 = 84$$
+<p>Search direction: $p_0 = -84$ (negative gradient = go left).</p>
+<p>Current value: $f(3) = 81 - 36 + 4 = 49$.</p>
+<p>Directional derivative: $\nabla f(x_0)^T p_0 = f'(3) \cdot p_0 = 84 \cdot (-84) = -7056$.</p>
+<p>Armijo condition: $f(x_0 + \alpha p_0) \leq 49 + 10^{-4} \cdot \alpha \cdot (-7056) = 49 - 0.7056\alpha$.</p>
+</div>
+
+<div class="step">
+<span class="step-label">Trial 1: $\alpha = 1$</span><br>
+<p>$x_0 + 1 \cdot p_0 = 3 + 1(-84) = -81$. That is way too far!</p>
+<p>$f(-81) = (-81)^4 - 4(-81)^2 + 4 = 43{,}046{,}721 - 26{,}244 + 4 = 43{,}020{,}481$</p>
+<p>Armijo threshold: $49 - 0.7056 = 48.29$</p>
+<p style="color:#ff6b6b;">$43{,}020{,}481 > 48.29$ &rarr; FAIL. $\alpha \leftarrow 0.5$</p>
+</div>
+
+<div class="step">
+<span class="step-label">Trial 2: $\alpha = 0.5$</span><br>
+<p>$x_0 + 0.5(-84) = 3 - 42 = -39$. Still too far.</p>
+<p>$f(-39) = 2{,}313{,}441 - 6{,}084 + 4 = 2{,}307{,}361$</p>
+<p style="color:#ff6b6b;">FAIL. $\alpha \leftarrow 0.25$</p>
+</div>
+
+<div class="step">
+<span class="step-label">Continuing to shrink...</span><br>
+<p>We keep halving. Let me skip ahead to where things get reasonable:</p>
+<p>At $\alpha = 0.5^k$, the new point is $3 - 84 \cdot 0.5^k$:</p>
+<table class="step-table" style="margin-top:8px;">
+<tr><th>$k$</th><th>$\alpha$</th><th>New $x$</th><th>$f$(new $x$)</th><th>Threshold</th><th>Pass?</th></tr>
+<tr><td>1</td><td>1</td><td>$-81$</td><td>huge</td><td>48.29</td><td style="color:#ff6b6b;">No</td></tr>
+<tr><td>2</td><td>0.5</td><td>$-39$</td><td>huge</td><td>48.65</td><td style="color:#ff6b6b;">No</td></tr>
+<tr><td>3</td><td>0.25</td><td>$-18$</td><td>$104{,}980$</td><td>48.82</td><td style="color:#ff6b6b;">No</td></tr>
+<tr><td>4</td><td>0.125</td><td>$-7.5$</td><td>$3{,}142$</td><td>48.91</td><td style="color:#ff6b6b;">No</td></tr>
+<tr><td>5</td><td>0.0625</td><td>$-2.25$</td><td>$5.63$</td><td>48.96</td><td style="color:#64ffda;">Yes</td></tr>
+</table>
+<p class="result">Accept $\alpha_k = 0.0625$. New point: $x_1 = -2.25$, $f(x_1) = 5.63$.</p>
+</div>
+
+<div class="check">The function dropped from 49 to 5.63 &mdash; a massive decrease! The backtracking needed 5 function evaluations, which is typical for steep starting points. The gradient was huge ($|f'| = 84$) so the initial step $\alpha = 1$ was wildly too large, but halving quickly brought it to a reasonable size.</div>
+</div>
+
+<!-- ===================== PART E ===================== -->
+<h2>Part E: When to Use Which Condition</h2>
+
+<table class="step-table">
+<tr>
+  <th>Condition</th>
+  <th>What It Guarantees</th>
+  <th>Typical Use</th>
+  <th>Guarantees $s_k^T y_k > 0$?</th>
+</tr>
+<tr>
+  <td style="text-align:left;"><strong>Armijo only</strong></td>
+  <td>Sufficient decrease</td>
+  <td>Backtracking with GD, trust region comparison</td>
+  <td>No</td>
+</tr>
+<tr>
+  <td style="text-align:left;"><strong>Goldstein</strong></td>
+  <td>Sufficient decrease + not too short</td>
+  <td>Newton's method (when no quasi-Newton update needed)</td>
+  <td>Not guaranteed</td>
+</tr>
+<tr>
+  <td style="text-align:left;"><strong>Wolfe</strong></td>
+  <td>Sufficient decrease + slope flattening</td>
+  <td>BFGS, L-BFGS, quasi-Newton methods</td>
+  <td style="color:#64ffda;">Yes</td>
+</tr>
+<tr>
+  <td style="text-align:left;"><strong>Strong Wolfe</strong></td>
+  <td>Wolfe + controlled uphill slope</td>
+  <td>BFGS (preferred), nonlinear CG</td>
+  <td style="color:#64ffda;">Yes</td>
+</tr>
+</table>
+
+<div class="why-box">
+<h3>Cost Comparison (from Quiz 3)</h3>
+<p><strong>Backtracking (Armijo):</strong> Only needs function evaluations. Cheapest per iteration. Typical: 1-5 function evaluations per line search.</p>
+<p style="margin-top:8px;"><strong>Wolfe line search:</strong> Needs both function and gradient evaluations. More expensive per call, but the stronger guarantee means the overall method converges in fewer outer iterations.</p>
+<p style="margin-top:8px;"><strong>Exact line search:</strong> Minimizes $\phi(\alpha)$ exactly. Most expensive per call, but sometimes available in closed form for quadratics (recall the formula $\alpha_k = g_k^Tg_k / (g_k^TAg_k)$ from <a href="cg-06-gradient-descent.html">Page 06</a>).</p>
+<p style="margin-top:8px;"><strong>Bottom line:</strong> For quasi-Newton methods (BFGS, L-BFGS), use <strong>Strong Wolfe</strong>. For steepest descent with backtracking, <strong>Armijo alone</strong> is fine. For CG, use Strong Wolfe with $c_2 = 0.1$.</p>
+</div>
+
+<div class="exam-flag">
+<h4>Key Relationships to Remember</h4>
+<ul style="margin-left:20px;">
+  <li>Strong Wolfe $\implies$ Wolfe $\implies$ Armijo. (Each condition is stricter than the previous.)</li>
+  <li>$c_1 < c_2$ is required (if $c_1 \geq c_2$, no step size could satisfy both conditions simultaneously).</li>
+  <li>Typical values: $c_1 = 10^{-4}$, $c_2 = 0.9$ (Newton/BFGS) or $c_2 = 0.1$ (CG).</li>
+  <li>For BFGS to work: need $s_k^T y_k > 0$ &rarr; need Wolfe conditions &rarr; use Strong Wolfe for safety.</li>
+  <li>Backtracking only checks Armijo, so it is not suitable for BFGS (unless you add a curvature check).</li>
+</ul>
+</div>
+
+<div class="formula-box">
+<strong>Summary: The Line Search Fits Into Every Method</strong>
+
+<p>Line search is not a standalone algorithm &mdash; it is a component used <em>inside</em> other methods:</p>
+
+<table class="step-table" style="margin-top:12px;">
+<tr><th>Method</th><th>Search Direction $p_k$</th><th>Typical Line Search</th></tr>
+<tr>
+  <td style="text-align:left;">Steepest Descent (<a href="cg-06-gradient-descent.html" style="color:#64ffda;">Page 06</a>)</td>
+  <td>$-\nabla f(x_k)$</td>
+  <td>Backtracking (Armijo) or exact</td>
+</tr>
+<tr>
+  <td style="text-align:left;">Newton (<a href="cg-07-newton-method.html" style="color:#64ffda;">Page 07</a>)</td>
+  <td>$-[\nabla^2 f]^{-1}\nabla f$</td>
+  <td>Backtracking, start $\alpha = 1$</td>
+</tr>
+<tr>
+  <td style="text-align:left;">CG (<a href="cg-10-conjugate-gradient.html" style="color:#64ffda;">Page 10</a>)</td>
+  <td>Conjugate direction</td>
+  <td>Strong Wolfe, $c_2 = 0.1$</td>
+</tr>
+<tr>
+  <td style="text-align:left;">BFGS (<a href="cg-12-bfgs.html" style="color:#64ffda;">Page 12</a>)</td>
+  <td>$-B_k^{-1}\nabla f$</td>
+  <td>Strong Wolfe, $c_2 = 0.9$, start $\alpha = 1$</td>
+</tr>
+</table>
+</div>
+
+<!-- ===================== GLOSSARY ===================== -->
+<div class="glossary">
+<h3>Glossary</h3>
+<dl>
+  <dt>Line Search</dt>
+  <dd>The process of finding a good step size $\alpha_k$ along a given search direction $p_k$. Reduces the multi-dimensional problem to a 1D search along the ray $x_k + \alpha p_k$.</dd>
+
+  <dt>$\phi(\alpha) = f(x_k + \alpha p_k)$</dt>
+  <dd>The one-dimensional slice of $f$ along the search direction. All line search conditions are expressed in terms of $\phi$.</dd>
+
+  <dt>Descent Direction</dt>
+  <dd>A direction $p_k$ such that $\nabla f(x_k)^T p_k < 0$, guaranteeing that small positive steps decrease $f$.</dd>
+
+  <dt>Armijo Condition (Sufficient Decrease)</dt>
+  <dd>$f(x_k + \alpha p_k) \leq f(x_k) + c_1 \alpha \nabla f(x_k)^T p_k$. Ensures the step makes at least a minimum amount of progress. Prevents too-long steps.</dd>
+
+  <dt>Wolfe Conditions</dt>
+  <dd>Armijo + curvature condition $\phi'(\alpha) \geq c_2 \phi'(0)$. Prevents both too-long and too-short steps. Required for BFGS.</dd>
+
+  <dt>Strong Wolfe Conditions</dt>
+  <dd>Armijo + $|\phi'(\alpha)| \leq c_2|\phi'(0)|$. Absolute-value version that also limits uphill slope at the new point. Preferred for BFGS and CG.</dd>
+
+  <dt>Goldstein Conditions</dt>
+  <dd>Symmetric bounds: $(1-c)\alpha\phi'(0) \leq \phi(\alpha) - \phi(0) \leq c\alpha\phi'(0)$. Simpler than Wolfe but less commonly used.</dd>
+
+  <dt>Backtracking</dt>
+  <dd>Start with $\alpha = \bar{\alpha}$, repeatedly multiply by $\rho \in (0,1)$ until Armijo is satisfied. Simple, cheap, always terminates.</dd>
+
+  <dt>$c_1$ (Armijo parameter)</dt>
+  <dd>Typically $10^{-4}$. Controls how much decrease is "sufficient." Small value = lenient (easy to satisfy).</dd>
+
+  <dt>$c_2$ (Curvature parameter)</dt>
+  <dd>Typically $0.9$ for Newton/BFGS, $0.1$ for CG. Controls how flat the slope must be. Must satisfy $c_1 < c_2 < 1$.</dd>
+
+  <dt>$\rho$ (Backtracking shrink factor)</dt>
+  <dd>Typically $0.5$ or $0.8$. Each failed trial multiplies $\alpha$ by $\rho$, shrinking the step.</dd>
+
+  <dt>$s_k^T y_k > 0$ (Curvature Condition for BFGS)</dt>
+  <dd>Required by the BFGS update formula. Guaranteed by the Wolfe conditions. This is WHY BFGS uses Wolfe line search.</dd>
+</dl>
+</div>
+
+<!-- ===================== NAV ===================== -->
+<div class="nav">
+  <p><a href="cg-07-newton-method.html">&larr; Previous: Page 07 &mdash; Newton's Method</a></p>
+  <p><a href="cg-09-trust-region.html">Next: Page 09 &mdash; Trust-Region Methods &rarr;</a></p>
+  <p><a href="index.html">Back to Index</a></p>
+</div>
+
+</div>
+</body>
+</html>

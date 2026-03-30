@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page 12 &mdash; BFGS Method | MATH 3850 Course Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 18px; line-height: 1.7; padding: 40px 20px; }
+.container { max-width: 900px; margin: 0 auto; }
+h1 { color: #64ffda; font-size: 28px; margin-bottom: 8px; }
+.subtitle { color: #888; font-size: 15px; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 16px; }
+h2 { color: #bb86fc; font-size: 22px; margin: 48px 0 16px 0; }
+.tag { display: inline-block; background: #bb86fc; color: #1a1a2e; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
+.analogy { background: #16213e; border-left: 4px solid #64ffda; padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; }
+.formula-box { background: #0f3460; border: 2px solid #bb86fc; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.note { background: #2d1b4e; border-left: 4px solid #bb86fc; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 16px; }
+.why-box { background: #0a2e1a; border: 2px solid #64ffda; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
+.why-box h3 { color: #64ffda; margin-bottom: 8px; font-size: 18px; }
+.hand-calc { background: #1e1e3a; border: 2px solid #ffd93d; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.hand-calc h3 { color: #ffd93d; margin-bottom: 12px; font-size: 18px; }
+.hand-calc .step { margin: 12px 0; padding-left: 16px; border-left: 2px solid #444; }
+.hand-calc .step-label { color: #bb86fc; font-weight: bold; font-size: 16px; }
+.hand-calc .result { color: #64ffda; font-weight: bold; }
+.hand-calc .check { color: #ffd93d; font-style: italic; margin-top: 8px; }
+.exam-flag { background: #2a1a1a; border: 2px solid #ff6b6b; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
+.exam-flag h4 { color: #ff6b6b; margin-bottom: 8px; }
+.step-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
+.step-table th { background: #0f3460; color: #64ffda; padding: 8px 10px; text-align: center; border-bottom: 2px solid #bb86fc; }
+.step-table td { padding: 6px 10px; border-bottom: 1px solid #333; text-align: center; }
+.step-table tr:nth-child(even) { background: #16213e; }
+.algo-box { border-left: 4px solid #64ffda; padding: 16px 20px; margin: 20px 0; background: #0f3460; border-radius: 0 12px 12px 0; }
+.algo-box .algo-title { color: #ffd93d; font-weight: bold; font-size: 18px; margin-bottom: 12px; }
+.algo-box .algo-line { padding: 6px 0; font-size: 16px; }
+.algo-box .algo-comment { color: #888; font-size: 14px; }
+.glossary { background: #16213e; border-radius: 12px; padding: 20px 24px; margin: 30px 0; }
+.glossary h3 { color: #ffd93d; margin-bottom: 12px; }
+.glossary dl { font-size: 15px; }
+.glossary dt { color: #64ffda; font-weight: bold; margin-top: 10px; }
+.glossary dd { margin-left: 20px; color: #ccc; }
+.nav { margin-top: 40px; padding: 20px; background: #0f3460; border-radius: 12px; text-align: center; }
+.nav a { color: #64ffda; text-decoration: none; font-weight: bold; }
+.nav a:hover { text-decoration: underline; }
+.nav p { margin: 4px 0; }
+svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
+.breakdown { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 16px 0; font-size: 16px; }
+.breakdown dt { color: #64ffda; text-align: right; font-weight: bold; }
+.breakdown dd { color: #ccc; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<span class="tag">PAGE 12</span>
+<h1>BFGS Method</h1>
+<p class="subtitle">The king of quasi-Newton methods &mdash; learn curvature from gradient history, converge like Newton without computing the Hessian</p>
+
+<!-- ===================== PART A ===================== -->
+<h2>Part A: The Idea &mdash; Learn Curvature from Gradient History</h2>
+
+<div class="analogy">
+<strong>Physical analogy &mdash; the self-learning mountain map.</strong><br><br>
+Imagine you are hiking down a mountain in thick fog. You have three options:
+<ul style="margin: 12px 0 12px 20px;">
+  <li><strong>Gradient descent</strong> (<a href="cg-06-gradient-descent.html" style="color:#64ffda;">Page 06</a>): Just feel the slope under your feet and walk downhill. Simple but slow &mdash; you zigzag a lot because you have no idea about the overall shape of the mountain.</li>
+  <li><strong>Newton's method</strong> (<a href="cg-07-newton-method.html" style="color:#64ffda;">Page 07</a>): Before each step, you pull out fancy surveying equipment and measure the complete curvature of the mountain in every direction. Then you compute the ideal step. Extremely effective, but the survey takes forever (computing the full Hessian is $O(n^3)$).</li>
+  <li><strong>BFGS</strong>: You start with a rough map (the identity matrix &mdash; "assume the mountain is a uniform bowl"). Each time you take a step, you measure how the slope changed from your old position to your new position. From that one measurement, you update your map to be a little more accurate. After enough steps, your map becomes a very good approximation of the true mountain shape, and you get Newton-like convergence without ever doing a full survey.</li>
+</ul>
+<p style="margin-top:8px;">The genius of BFGS is that <strong>every step teaches you something about the curvature</strong>. The gradient tells you the slope. The <em>change</em> in gradient tells you how the slope varies &mdash; which IS curvature. BFGS systematically accumulates this curvature information into a matrix $H_k$ that gets better and better over time.</p>
+</div>
+
+<div class="formula-box">
+<strong>The Secant Condition &mdash; the foundation of all quasi-Newton methods</strong>
+
+$$B_{k+1} s_k = y_k$$
+
+<p style="margin-top:8px;">This says: "The new Hessian approximation $B_{k+1}$ must correctly predict how the gradient changed on the last step."</p>
+
+<dl class="breakdown">
+  <dt>$B_{k+1}$</dt><dd>our approximation of the Hessian $\nabla^2 f$ at $x_{k+1}$ &mdash; the "curvature map"</dd>
+  <dt>$s_k = x_{k+1} - x_k$</dt><dd>the step we just took &mdash; the displacement from old point to new point</dd>
+  <dt>$y_k = \nabla f(x_{k+1}) - \nabla f(x_k) = g_{k+1} - g_k$</dt><dd>the change in gradient &mdash; how the slope shifted because of our step</dd>
+</dl>
+
+<p style="margin-top:12px;"><strong>Where does this come from?</strong> Think about a Taylor expansion of $\nabla f$ around $x_{k+1}$:</p>
+$$\nabla f(x_k) \approx \nabla f(x_{k+1}) + \nabla^2 f(x_{k+1})(x_k - x_{k+1})$$
+<p>Rearranging: $\nabla f(x_{k+1}) - \nabla f(x_k) \approx \nabla^2 f(x_{k+1})(x_{k+1} - x_k)$, which gives us $y_k \approx \nabla^2 f(x_{k+1}) \, s_k$. Replacing the true Hessian $\nabla^2 f(x_{k+1})$ with our approximation $B_{k+1}$ gives the secant condition.</p>
+</div>
+
+
+<!-- ===================== PART B ===================== -->
+<h2>Part B: The Curvature Condition</h2>
+
+<div class="formula-box">
+<strong>Curvature condition:</strong>
+
+$$s_k^T y_k > 0$$
+
+<dl class="breakdown">
+  <dt>$s_k^T y_k$</dt><dd>the dot product of the step with the gradient change &mdash; must be positive</dd>
+</dl>
+</div>
+
+<div class="why-box">
+<h3>Why Must $s_k^T y_k > 0$?</h3>
+<p>We need $B_{k+1}$ to be <strong>positive definite</strong> (bowl-shaped &mdash; recall from <a href="cg-03-linear-algebra.html" style="color:#64ffda;">Page 03</a>). A positive definite matrix $B$ has the property that $v^T B v > 0$ for any nonzero vector $v$. The BFGS update formula is designed to preserve positive definiteness, but it can only do so if $s_k^T y_k > 0$.</p>
+<p style="margin-top:8px;">Think of it this way: $s_k^T y_k > 0$ means the gradient changed in a way consistent with "bowl-shaped curvature." If you walk in direction $s_k$ and the gradient change $y_k$ has a positive component along $s_k$, the terrain is curving upward &mdash; like the bottom of a bowl. If $s_k^T y_k \leq 0$, the terrain is flat or curving the wrong way, and the update would break the bowl-shape assumption.</p>
+</div>
+
+<div class="note">
+<strong>The beautiful connection to line search:</strong> If you use the <strong>Wolfe conditions</strong> from <a href="cg-08-line-search.html" style="color:#64ffda;">Page 08</a> to choose $\alpha_k$, the curvature condition $s_k^T y_k > 0$ is <strong>automatically guaranteed</strong>. Specifically, the second Wolfe condition (curvature condition) says $\nabla f(x_{k+1})^T p_k \geq c_2 \nabla f(x_k)^T p_k$, and since $s_k = \alpha_k p_k$ with $\alpha_k > 0$, this implies $s_k^T y_k > 0$. So as long as you do a proper Wolfe line search, you never have to explicitly check the curvature condition &mdash; it holds for free.
+</div>
+
+
+<!-- ===================== PART C ===================== -->
+<h2>Part C: The BFGS Update Formulas</h2>
+
+<p>There are two equivalent ways to write the BFGS update: one for the <em>direct</em> Hessian approximation $B_k$ and one for the <em>inverse</em> Hessian approximation $H_k = B_k^{-1}$.</p>
+
+<div class="formula-box">
+<strong>Direct BFGS update (updating $B_k$):</strong>
+
+$$B_{k+1} = B_k - \frac{B_k s_k s_k^T B_k}{s_k^T B_k s_k} + \frac{y_k y_k^T}{y_k^T s_k}$$
+
+<dl class="breakdown">
+  <dt>$B_k$</dt><dd>current Hessian approximation (an $n \times n$ matrix)</dd>
+  <dt>$B_{k+1}$</dt><dd>updated Hessian approximation (also $n \times n$)</dd>
+  <dt>$s_k s_k^T$</dt><dd><strong>outer product</strong> of the step with itself &mdash; an $n \times n$ matrix of rank 1 (recall outer products from <a href="cg-03-linear-algebra.html" style="color:#64ffda;">Page 03</a>)</dd>
+  <dt>$y_k y_k^T$</dt><dd>outer product of the gradient change with itself &mdash; also rank 1</dd>
+  <dt>$B_k s_k$</dt><dd>matrix-vector product: $B_k$ times the step vector</dd>
+  <dt>$s_k^T B_k s_k$</dt><dd>a scalar: the step vector's "energy" under the Hessian approximation</dd>
+  <dt>$y_k^T s_k$</dt><dd>a scalar: equals $s_k^T y_k$ &mdash; the curvature condition value (must be $> 0$)</dd>
+</dl>
+
+<p style="margin-top:12px;">This is a <strong>rank-2 update</strong>: we subtract one rank-1 matrix ($\frac{B_k s_k s_k^T B_k}{s_k^T B_k s_k}$) and add another ($\frac{y_k y_k^T}{y_k^T s_k}$). So $B_{k+1}$ differs from $B_k$ by a matrix of rank at most 2.</p>
+</div>
+
+<div class="formula-box">
+<strong>Inverse BFGS update (updating $H_k = B_k^{-1}$):</strong>
+
+$$H_{k+1} = \left(I - \rho_k s_k y_k^T\right) H_k \left(I - \rho_k y_k s_k^T\right) + \rho_k s_k s_k^T$$
+
+<p style="margin-top:4px;">where:</p>
+$$\rho_k = \frac{1}{y_k^T s_k}$$
+
+<dl class="breakdown">
+  <dt>$H_k$</dt><dd>current <em>inverse</em> Hessian approximation (an $n \times n$ matrix)</dd>
+  <dt>$H_{k+1}$</dt><dd>updated inverse Hessian approximation</dd>
+  <dt>$I$</dt><dd>the $n \times n$ identity matrix</dd>
+  <dt>$\rho_k$</dt><dd>a scalar: $1/(y_k^T s_k)$. Since $y_k^T s_k > 0$ (curvature condition), this is well-defined and positive.</dd>
+  <dt>$s_k y_k^T$</dt><dd>outer product: an $n \times n$ matrix (note the order: $s$ first, then $y^T$)</dd>
+  <dt>$y_k s_k^T$</dt><dd>outer product: an $n \times n$ matrix (note the order: $y$ first, then $s^T$)</dd>
+  <dt>$s_k s_k^T$</dt><dd>outer product of the step with itself</dd>
+  <dt>$I - \rho_k s_k y_k^T$</dt><dd>a "correction matrix" &mdash; call it $V_k^T$ for short</dd>
+  <dt>$I - \rho_k y_k s_k^T$</dt><dd>its transpose &mdash; call it $V_k$</dd>
+</dl>
+</div>
+
+<div class="why-box">
+<h3>Why Use the Inverse Update?</h3>
+<p>With the <strong>direct update</strong> ($B_k$), the search direction requires solving a linear system: $B_k p_k = -g_k$. This costs $O(n^3)$ with a general solver or $O(n^2)$ with a Cholesky factorization.</p>
+<p style="margin-top:8px;">With the <strong>inverse update</strong> ($H_k$), the search direction is simply a matrix-vector multiply: $p_k = -H_k g_k$. This costs only $O(n^2)$, and no linear system needs to be solved.</p>
+<p style="margin-top:8px;">Since the whole point of BFGS is to <em>avoid</em> the expensive operations of Newton's method, the inverse update is the standard choice in practice.</p>
+</div>
+
+
+<!-- ===================== PART D ===================== -->
+<h2>Part D: The Full BFGS Algorithm</h2>
+
+<div class="algo-box">
+<div class="algo-title">Algorithm: BFGS (Inverse Hessian Form)</div>
+
+<div class="algo-line"><strong>Input:</strong> Starting point $x_0$, function $f$, gradient $\nabla f$, tolerance $\epsilon$</div>
+
+<div class="algo-line" style="margin-top:12px;"><strong>Step 0:</strong> Set $H_0 = I$ (identity matrix), compute $g_0 = \nabla f(x_0)$</div>
+<div class="algo-comment">&emsp; Start with the simplest approximation: "assume the Hessian inverse is the identity" (uniform curvature in all directions).</div>
+
+<div class="algo-line" style="margin-top:12px;"><strong>For $k = 0, 1, 2, \ldots$ repeat:</strong></div>
+
+<div class="algo-line" style="padding-left:24px;"><strong>Step 1:</strong> $p_k = -H_k g_k$ <span style="color:#888;">&emsp;// search direction</span></div>
+<div class="algo-comment" style="padding-left:24px;">&emsp; Multiply inverse Hessian approx by negative gradient. This is the "quasi-Newton direction."</div>
+
+<div class="algo-line" style="padding-left:24px;"><strong>Step 2:</strong> Find $\alpha_k$ via line search satisfying <strong>Wolfe conditions</strong> (<a href="cg-08-line-search.html" style="color:#64ffda;">Page 08</a>)</div>
+<div class="algo-comment" style="padding-left:24px;">&emsp; How far to walk. Wolfe conditions guarantee $s_k^Ty_k > 0$ automatically.</div>
+
+<div class="algo-line" style="padding-left:24px;"><strong>Step 3:</strong> $x_{k+1} = x_k + \alpha_k p_k$ <span style="color:#888;">&emsp;// take the step</span></div>
+
+<div class="algo-line" style="padding-left:24px;"><strong>Step 4:</strong> $g_{k+1} = \nabla f(x_{k+1})$ <span style="color:#888;">&emsp;// gradient at new point</span></div>
+
+<div class="algo-line" style="padding-left:24px;"><strong>Step 5:</strong> If $\|g_{k+1}\| < \epsilon$: <strong>STOP</strong> &mdash; converged.</div>
+
+<div class="algo-line" style="padding-left:24px;"><strong>Step 6:</strong> $s_k = x_{k+1} - x_k = \alpha_k p_k$ <span style="color:#888;">&emsp;// step taken</span></div>
+
+<div class="algo-line" style="padding-left:24px;"><strong>Step 7:</strong> $y_k = g_{k+1} - g_k$ <span style="color:#888;">&emsp;// gradient change</span></div>
+
+<div class="algo-line" style="padding-left:24px;"><strong>Step 8:</strong> $\rho_k = \dfrac{1}{y_k^T s_k}$ <span style="color:#888;">&emsp;// curvature scaling factor</span></div>
+<div class="algo-comment" style="padding-left:24px;">&emsp; Since Wolfe guarantees $y_k^Ts_k > 0$, this is safe to compute.</div>
+
+<div class="algo-line" style="padding-left:24px;"><strong>Step 9:</strong> $H_{k+1} = (I - \rho_k s_k y_k^T)\,H_k\,(I - \rho_k y_k s_k^T) + \rho_k s_k s_k^T$</div>
+<div class="algo-comment" style="padding-left:24px;">&emsp; The BFGS update: fold the new curvature information into the inverse Hessian approximation.</div>
+</div>
+
+
+<!-- ===================== PART E ===================== -->
+<h2>Part E: Full Hand Computation &mdash; Mirrors Quiz 6</h2>
+
+<div class="exam-flag">
+<h4>EXAM ALERT</h4>
+<p>This is the exact type of problem from <strong>Quiz 6</strong>. You will be given a quadratic function, a starting point, $H_0 = I$, and asked to compute one full BFGS iteration: find the search direction, step size, new point, $s_k$, $y_k$, $\rho_k$, and the updated $H_1$. Every matrix multiplication is shown below.</p>
+</div>
+
+<div class="hand-calc">
+<h3>BFGS on $f(x) = \frac{1}{2}x^T Q x$ with $Q = \begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}$, $x_0 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$, $H_0 = I$</h3>
+
+<p>Note: Since $f(x) = \frac{1}{2}x^TQx$, the gradient is $\nabla f(x) = Qx$ and the minimum is at $x^* = [0, 0]^T$.</p>
+
+<div class="step">
+<p class="step-label">Step 1: Compute $g_0 = \nabla f(x_0) = Qx_0$</p>
+$$g_0 = \begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}\begin{bmatrix} 1 \\ 1 \end{bmatrix} = \begin{bmatrix} 2 \\ 3 \end{bmatrix}$$
+</div>
+
+<div class="step">
+<p class="step-label">Step 2: Search direction $p_0 = -H_0 g_0$</p>
+$$p_0 = -I \begin{bmatrix} 2 \\ 3 \end{bmatrix} = \begin{bmatrix} -2 \\ -3 \end{bmatrix}$$
+<p>Since $H_0 = I$, the first step is just steepest descent.</p>
+</div>
+
+<div class="step">
+<p class="step-label">Step 3: Exact line search for $\alpha_0$</p>
+<p>For a quadratic $f(x) = \frac{1}{2}x^TQx$, the exact line search formula is:</p>
+$$\alpha_k = -\frac{g_k^T p_k}{p_k^T Q p_k}$$
+
+<p style="margin-top:8px;"><strong>Numerator:</strong> $g_0^T p_0$</p>
+$$g_0^T p_0 = (2)(-2) + (3)(-3) = -4 - 9 = -13$$
+
+<p><strong>Denominator:</strong> $p_0^T Q p_0$</p>
+<p>First compute $Qp_0$:</p>
+$$Qp_0 = \begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}\begin{bmatrix} -2 \\ -3 \end{bmatrix} = \begin{bmatrix} (2)(-2) + (0)(-3) \\ (0)(-2) + (3)(-3) \end{bmatrix} = \begin{bmatrix} -4 \\ -9 \end{bmatrix}$$
+
+<p>Then:</p>
+$$p_0^T Q p_0 = (-2)(-4) + (-3)(-9) = 8 + 27 = 35$$
+
+<p><strong>Result:</strong></p>
+$$\alpha_0 = -\frac{-13}{35} = \frac{13}{35}$$
+</div>
+
+<div class="step">
+<p class="step-label">Step 4: New point $x_1 = x_0 + \alpha_0 p_0$</p>
+$$x_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix} + \frac{13}{35}\begin{bmatrix} -2 \\ -3 \end{bmatrix} = \begin{bmatrix} 1 - \frac{26}{35} \\ 1 - \frac{39}{35} \end{bmatrix} = \begin{bmatrix} \frac{35 - 26}{35} \\ \frac{35 - 39}{35} \end{bmatrix} = \begin{bmatrix} \frac{9}{35} \\ -\frac{4}{35} \end{bmatrix}$$
+</div>
+
+<div class="step">
+<p class="step-label">Step 5: Gradient at new point $g_1 = Qx_1$</p>
+$$g_1 = \begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}\begin{bmatrix} 9/35 \\ -4/35 \end{bmatrix} = \begin{bmatrix} 18/35 \\ -12/35 \end{bmatrix}$$
+</div>
+
+<div class="step">
+<p class="step-label">Step 6: Compute $s_0 = x_1 - x_0$</p>
+$$s_0 = \begin{bmatrix} 9/35 \\ -4/35 \end{bmatrix} - \begin{bmatrix} 1 \\ 1 \end{bmatrix} = \begin{bmatrix} 9/35 - 35/35 \\ -4/35 - 35/35 \end{bmatrix} = \begin{bmatrix} -26/35 \\ -39/35 \end{bmatrix}$$
+
+<p class="check">Sanity check: $s_0 = \alpha_0 p_0 = \frac{13}{35}\begin{bmatrix} -2 \\ -3 \end{bmatrix} = \begin{bmatrix} -26/35 \\ -39/35 \end{bmatrix}$ &#10003;</p>
+</div>
+
+<div class="step">
+<p class="step-label">Step 7: Compute $y_0 = g_1 - g_0$</p>
+$$y_0 = \begin{bmatrix} 18/35 \\ -12/35 \end{bmatrix} - \begin{bmatrix} 2 \\ 3 \end{bmatrix} = \begin{bmatrix} 18/35 - 70/35 \\ -12/35 - 105/35 \end{bmatrix} = \begin{bmatrix} -52/35 \\ -117/35 \end{bmatrix}$$
+</div>
+
+<div class="step">
+<p class="step-label">Step 8: Check curvature condition $s_0^T y_0 > 0$</p>
+$$s_0^T y_0 = \left(-\frac{26}{35}\right)\left(-\frac{52}{35}\right) + \left(-\frac{39}{35}\right)\left(-\frac{117}{35}\right)$$
+
+$$= \frac{26 \times 52}{35^2} + \frac{39 \times 117}{35^2} = \frac{1352}{1225} + \frac{4563}{1225} = \frac{5915}{1225}$$
+
+<p>Simplify: $\gcd(5915, 1225) = 35$, so $\frac{5915}{1225} = \frac{169}{35}$.</p>
+
+<p class="result">$s_0^T y_0 = \frac{169}{35} > 0$ &#10003; &mdash; Curvature condition satisfied!</p>
+</div>
+
+<div class="step">
+<p class="step-label">Step 9: Compute $\rho_0 = \frac{1}{y_0^T s_0}$</p>
+$$\rho_0 = \frac{1}{169/35} = \frac{35}{169}$$
+</div>
+
+<div class="step">
+<p class="step-label">Step 10: Build $H_1$ using the BFGS inverse update formula</p>
+<p>We need to compute:</p>
+$$H_1 = (I - \rho_0 s_0 y_0^T)\, H_0 \,(I - \rho_0 y_0 s_0^T) + \rho_0 s_0 s_0^T$$
+
+<p>Since $H_0 = I$, this simplifies to:</p>
+$$H_1 = (I - \rho_0 s_0 y_0^T)(I - \rho_0 y_0 s_0^T) + \rho_0 s_0 s_0^T$$
+
+<p>Lets define $V_0 = I - \rho_0 y_0 s_0^T$ and note $V_0^T = I - \rho_0 s_0 y_0^T$, so $H_1 = V_0^T V_0 + \rho_0 s_0 s_0^T$.</p>
+
+<p style="margin-top:12px;"><strong>Sub-step 10a: Compute the outer product $s_0 y_0^T$</strong></p>
+$$s_0 y_0^T = \begin{bmatrix} -26/35 \\ -39/35 \end{bmatrix} \begin{bmatrix} -52/35 & -117/35 \end{bmatrix}$$
+
+$$= \frac{1}{1225}\begin{bmatrix} (-26)(-52) & (-26)(-117) \\ (-39)(-52) & (-39)(-117) \end{bmatrix} = \frac{1}{1225}\begin{bmatrix} 1352 & 3042 \\ 2028 & 4563 \end{bmatrix}$$
+
+<p style="margin-top:12px;"><strong>Sub-step 10b: Compute $\rho_0 \, s_0 y_0^T$</strong></p>
+$$\rho_0 \, s_0 y_0^T = \frac{35}{169} \cdot \frac{1}{1225}\begin{bmatrix} 1352 & 3042 \\ 2028 & 4563 \end{bmatrix} = \frac{1}{5915}\begin{bmatrix} 1352 & 3042 \\ 2028 & 4563 \end{bmatrix}$$
+
+<p>Simplify each entry (divide by common factors with 5915 = $5 \times 7 \times 169$):</p>
+$$= \begin{bmatrix} 1352/5915 & 3042/5915 \\ 2028/5915 & 4563/5915 \end{bmatrix} = \begin{bmatrix} 104/455 & 234/455 \\ 156/455 & 351/455 \end{bmatrix} = \begin{bmatrix} 8/35 & 18/35 \\ 12/35 & 27/35 \end{bmatrix}$$
+
+<p style="margin-top:12px;"><strong>Sub-step 10c: Compute $V_0^T = I - \rho_0 s_0 y_0^T$</strong></p>
+$$V_0^T = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} - \begin{bmatrix} 8/35 & 18/35 \\ 12/35 & 27/35 \end{bmatrix} = \begin{bmatrix} 27/35 & -18/35 \\ -12/35 & 8/35 \end{bmatrix}$$
+
+<p style="margin-top:12px;"><strong>Sub-step 10d: Compute $\rho_0 y_0 s_0^T$ (transpose of $\rho_0 s_0 y_0^T$)</strong></p>
+$$\rho_0 y_0 s_0^T = (\rho_0 s_0 y_0^T)^T = \begin{bmatrix} 8/35 & 12/35 \\ 18/35 & 27/35 \end{bmatrix}$$
+
+<p style="margin-top:12px;"><strong>Sub-step 10e: Compute $V_0 = I - \rho_0 y_0 s_0^T$</strong></p>
+$$V_0 = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} - \begin{bmatrix} 8/35 & 12/35 \\ 18/35 & 27/35 \end{bmatrix} = \begin{bmatrix} 27/35 & -12/35 \\ -18/35 & 8/35 \end{bmatrix}$$
+
+<p style="margin-top:12px;"><strong>Sub-step 10f: Compute $V_0^T V_0$ (since $H_0 = I$)</strong></p>
+$$V_0^T V_0 = \begin{bmatrix} 27/35 & -18/35 \\ -12/35 & 8/35 \end{bmatrix} \begin{bmatrix} 27/35 & -12/35 \\ -18/35 & 8/35 \end{bmatrix}$$
+
+<p>Entry $(1,1)$: $\frac{27}{35}\cdot\frac{27}{35} + \frac{-18}{35}\cdot\frac{-18}{35} = \frac{729 + 324}{1225} = \frac{1053}{1225}$</p>
+
+<p>Entry $(1,2)$: $\frac{27}{35}\cdot\frac{-12}{35} + \frac{-18}{35}\cdot\frac{8}{35} = \frac{-324 - 144}{1225} = \frac{-468}{1225}$</p>
+
+<p>Entry $(2,1)$: $\frac{-12}{35}\cdot\frac{27}{35} + \frac{8}{35}\cdot\frac{-18}{35} = \frac{-324 - 144}{1225} = \frac{-468}{1225}$</p>
+
+<p>Entry $(2,2)$: $\frac{-12}{35}\cdot\frac{-12}{35} + \frac{8}{35}\cdot\frac{8}{35} = \frac{144 + 64}{1225} = \frac{208}{1225}$</p>
+
+$$V_0^T V_0 = \frac{1}{1225}\begin{bmatrix} 1053 & -468 \\ -468 & 208 \end{bmatrix}$$
+
+<p style="margin-top:12px;"><strong>Sub-step 10g: Compute $\rho_0 \, s_0 s_0^T$</strong></p>
+$$s_0 s_0^T = \begin{bmatrix} -26/35 \\ -39/35 \end{bmatrix}\begin{bmatrix} -26/35 & -39/35 \end{bmatrix} = \frac{1}{1225}\begin{bmatrix} 676 & 1014 \\ 1014 & 1521 \end{bmatrix}$$
+
+$$\rho_0 \, s_0 s_0^T = \frac{35}{169} \cdot \frac{1}{1225}\begin{bmatrix} 676 & 1014 \\ 1014 & 1521 \end{bmatrix} = \frac{1}{5915}\begin{bmatrix} 676 & 1014 \\ 1014 & 1521 \end{bmatrix}$$
+
+<p>Simplify: $676 = 4 \times 169$, $1014 = 6 \times 169$, $1521 = 9 \times 169$, and $5915 = 35 \times 169$:</p>
+$$= \frac{1}{35}\begin{bmatrix} 4 & 6 \\ 6 & 9 \end{bmatrix} = \begin{bmatrix} 4/35 & 6/35 \\ 6/35 & 9/35 \end{bmatrix}$$
+
+<p>Convert to denominator 1225: $\frac{1}{1225}\begin{bmatrix} 140 & 210 \\ 210 & 315 \end{bmatrix}$</p>
+
+<p style="margin-top:12px;"><strong>Sub-step 10h: Final result $H_1 = V_0^T V_0 + \rho_0 s_0 s_0^T$</strong></p>
+
+$$H_1 = \frac{1}{1225}\begin{bmatrix} 1053 & -468 \\ -468 & 208 \end{bmatrix} + \frac{1}{1225}\begin{bmatrix} 140 & 210 \\ 210 & 315 \end{bmatrix}$$
+
+$$= \frac{1}{1225}\begin{bmatrix} 1053 + 140 & -468 + 210 \\ -468 + 210 & 208 + 315 \end{bmatrix} = \frac{1}{1225}\begin{bmatrix} 1193 & -258 \\ -258 & 523 \end{bmatrix}$$
+
+<p class="result">$$\boxed{H_1 = \begin{bmatrix} 1193/1225 & -258/1225 \\ -258/1225 & 523/1225 \end{bmatrix}}$$</p>
+
+<p class="check">Sanity check: The true inverse Hessian is $Q^{-1} = \begin{bmatrix} 1/2 & 0 \\ 0 & 1/3 \end{bmatrix} = \begin{bmatrix} 612.5/1225 & 0 \\ 0 & 408.3/1225 \end{bmatrix}$. Our $H_1$ is not equal to $Q^{-1}$ yet (BFGS needs more iterations to converge on the true inverse Hessian), but it is already closer than $H_0 = I$ was. The diagonal entries (1193/1225 $\approx$ 0.974 and 523/1225 $\approx$ 0.427) are moving toward $1/2 = 0.5$ and $1/3 \approx 0.333$.</p>
+</div>
+
+</div>
+
+<div class="note">
+<strong>What happens next:</strong> Using $H_1$ and $g_1$, the next search direction $p_1 = -H_1 g_1$ will be much better than steepest descent. For a 2D quadratic, BFGS typically converges in 2-3 iterations. After $n$ iterations on an $n$-dimensional quadratic with exact line search, BFGS recovers $H_n = Q^{-1}$ exactly &mdash; similar to how SR1 can recover $Q^{-1}$ (see <a href="cg-13-sr1-dfp.html" style="color:#64ffda;">Page 13</a>).
+</div>
+
+
+<!-- ===================== PART F ===================== -->
+<h2>Part F: Properties and Comparison</h2>
+
+<div class="formula-box">
+<strong>BFGS convergence rate:</strong> Q-superlinear<br><br>
+<p>This means: faster than gradient descent (which is Q-linear), but not quite as fast as Newton (which is Q-quadratic). More precisely, the error ratio $\frac{\|x_{k+1} - x^*\|}{\|x_k - x^*\|}$ goes to zero as $k \to \infty$ &mdash; each step becomes proportionally better than the last.</p>
+<p style="margin-top:8px;">Recall convergence rates from <a href="cg-01-math-foundations.html" style="color:#64ffda;">Page 01</a>:</p>
+<ul style="margin-top:8px; margin-left:20px;">
+  <li><strong>Q-linear</strong> (GD): error shrinks by a constant factor each step</li>
+  <li><strong>Q-superlinear</strong> (BFGS): the factor itself shrinks &mdash; acceleration</li>
+  <li><strong>Q-quadratic</strong> (Newton): error squared each step &mdash; explosive convergence near the solution</li>
+</ul>
+</div>
+
+<table class="step-table">
+<tr>
+  <th>Property</th>
+  <th>Gradient Descent</th>
+  <th>CG</th>
+  <th>BFGS</th>
+  <th>Newton</th>
+</tr>
+<tr>
+  <td style="text-align:left; color:#64ffda;">Cost per step</td>
+  <td>$O(n)$</td>
+  <td>$O(n)$</td>
+  <td>$O(n^2)$</td>
+  <td>$O(n^3)$</td>
+</tr>
+<tr>
+  <td style="text-align:left; color:#64ffda;">Storage</td>
+  <td>$O(n)$</td>
+  <td>$O(n)$</td>
+  <td>$O(n^2)$</td>
+  <td>$O(n^2)$</td>
+</tr>
+<tr>
+  <td style="text-align:left; color:#64ffda;">Convergence rate</td>
+  <td>Q-linear</td>
+  <td>Q-linear (on quadratics: $n$ steps)</td>
+  <td>Q-superlinear</td>
+  <td>Q-quadratic</td>
+</tr>
+<tr>
+  <td style="text-align:left; color:#64ffda;">Needs Hessian?</td>
+  <td>No</td>
+  <td>No</td>
+  <td>No (builds approximation)</td>
+  <td>Yes</td>
+</tr>
+<tr>
+  <td style="text-align:left; color:#64ffda;">Best for</td>
+  <td>Very large $n$, simple problems</td>
+  <td>Large $n$, memory limited</td>
+  <td>Medium $n$ (up to ~thousands)</td>
+  <td>Small $n$, fast convergence needed</td>
+</tr>
+<tr>
+  <td style="text-align:left; color:#64ffda;">Robustness</td>
+  <td>Very robust (always descends)</td>
+  <td>Good (with restarts)</td>
+  <td>Very good (with Wolfe line search)</td>
+  <td>Fragile (needs good starting point)</td>
+</tr>
+</table>
+
+<div class="why-box">
+<h3>When to Use BFGS</h3>
+<p><strong>BFGS is the default choice</strong> for medium-sized smooth optimization problems (up to a few thousand variables). It gives you Newton-like speed without computing the Hessian. The $O(n^2)$ cost per iteration and $O(n^2)$ storage for the matrix $H_k$ are the limiting factors &mdash; for very large problems ($n > 10{,}000$), use CG (<a href="cg-11-nonlinear-cg.html" style="color:#64ffda;">Page 11</a>) or L-BFGS (a limited-memory version that only stores a few vectors instead of the full matrix).</p>
+</div>
+
+
+<!-- ===================== GLOSSARY ===================== -->
+<div class="glossary">
+<h3>Glossary</h3>
+<dl>
+  <dt>Quasi-Newton method</dt>
+  <dd>Any method that approximates the Hessian (or its inverse) and updates the approximation iteratively, rather than computing it fresh each step. BFGS, SR1, and DFP are all quasi-Newton methods.</dd>
+
+  <dt>Secant condition</dt>
+  <dd>$B_{k+1}s_k = y_k$ &mdash; the requirement that the Hessian approximation correctly predicts the most recent gradient change.</dd>
+
+  <dt>$s_k$</dt>
+  <dd>Step vector: $s_k = x_{k+1} - x_k$. The displacement from old point to new point.</dd>
+
+  <dt>$y_k$</dt>
+  <dd>Gradient change vector: $y_k = g_{k+1} - g_k$. How the gradient shifted because of the step.</dd>
+
+  <dt>Curvature condition</dt>
+  <dd>$s_k^Ty_k > 0$. Required for the BFGS update to maintain positive definiteness. Guaranteed by Wolfe line search.</dd>
+
+  <dt>$\rho_k$</dt>
+  <dd>$\rho_k = 1/(y_k^Ts_k)$. A scaling factor used in the inverse BFGS update formula.</dd>
+
+  <dt>$H_k$</dt>
+  <dd>Inverse Hessian approximation at step $k$. Used to compute the search direction: $p_k = -H_k g_k$.</dd>
+
+  <dt>$B_k$</dt>
+  <dd>Direct Hessian approximation at step $k$. Related to $H_k$ by $B_k = H_k^{-1}$.</dd>
+
+  <dt>Rank-2 update</dt>
+  <dd>The BFGS update changes the matrix by adding a correction of rank at most 2. This means only 2 "directions" of the matrix change per iteration.</dd>
+
+  <dt>Q-superlinear convergence</dt>
+  <dd>The error ratio $\|x_{k+1} - x^*\| / \|x_k - x^*\| \to 0$. Faster than linear, slower than quadratic. The hallmark of BFGS.</dd>
+
+  <dt>L-BFGS</dt>
+  <dd>Limited-memory BFGS. Stores only the last $m$ pairs $(s_k, y_k)$ instead of the full $n\times n$ matrix. Reduces storage from $O(n^2)$ to $O(mn)$. Used for very large problems.</dd>
+</dl>
+</div>
+
+
+<!-- ===================== NAV ===================== -->
+<div class="nav">
+  <p><a href="cg-11-nonlinear-cg.html">&larr; Previous: Page 11 &mdash; Nonlinear Conjugate Gradient</a></p>
+  <p><a href="cg-13-sr1-dfp.html">Next: Page 13 &mdash; SR1 and DFP Methods &rarr;</a></p>
+  <p style="margin-top:8px;"><a href="index.html">Back to Index</a></p>
+</div>
+
+</div>
+</body>
+</html>
