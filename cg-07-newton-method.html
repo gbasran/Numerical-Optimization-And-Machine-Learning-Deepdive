@@ -28,6 +28,54 @@ Once you have this bowl model, you know exactly where the bottom of the bowl is.
 That is Newton's method: measure both slope (gradient) and curvature (Hessian), build a quadratic bowl model, jump to its bottom. The key insight is that Newton uses <strong>second-order information</strong> (the Hessian = curvature), while gradient descent only uses <strong>first-order information</strong> (the gradient = slope). This extra information is what makes Newton so much faster; but also more expensive and sometimes unreliable far from the solution.
 </div>
 
+<svg viewBox="0 0 680 340" style="max-width:100%; margin:24px auto; display:block;" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="nw-arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="#c9a84c" fill="#c9a84c" d="M0,0 L8,3 L0,6 Z"/>
+    </marker>
+  </defs>
+  <rect width="680" height="340" rx="12" fill="#1a1a2e"/>
+  <text x="340" y="28" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="15" font-weight="bold" fill="#e0dcd4">Newton's Method: Build a Bowl, Jump to Its Bottom</text>
+
+  <!-- True function curve -->
+  <path d="M60,260 C120,250 160,180 220,100 C260,50 320,30 370,60 C420,90 460,160 520,220 C560,260 600,270 640,265" fill="none" stroke="#6b8fbd" stroke-width="2.5"/>
+  <text x="635" y="255" font-family="'Inter', system-ui, sans-serif" font-size="12" fill="#6b8fbd" text-anchor="end">f(x)</text>
+
+  <!-- Current point xk -->
+  <circle cx="220" cy="100" r="6" fill="#d4956a"/>
+  <text x="220" y="88" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="bold" fill="#d4956a">x_k</text>
+
+  <!-- Quadratic model (parabola) fitted at xk -->
+  <path d="M100,280 C140,200 180,130 220,100 C260,70 300,75 340,110 C380,150 420,230 450,300" fill="none" stroke="#c9a84c" stroke-width="2" stroke-dasharray="8,4"/>
+  <text x="430" y="290" font-family="'Inter', system-ui, sans-serif" font-size="12" fill="#c9a84c">m_k(p) quadratic model</text>
+
+  <!-- Bottom of the parabola (Newton step target) -->
+  <circle cx="280" cy="78" r="6" fill="#6aab8e"/>
+  <text x="280" y="68" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="bold" fill="#6aab8e">x_{k+1}</text>
+
+  <!-- Newton step arrow -->
+  <line x1="226" y1="100" x2="272" y2="80" stroke="#c9a84c" stroke-width="2.5" marker-end="url(#nw-arrow)"/>
+  <text x="250" y="110" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#c9a84c">p_k (Newton step)</text>
+
+  <!-- Tangent line at xk to show slope -->
+  <line x1="170" y1="135" x2="270" y2="65" stroke="#d4956a" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+
+  <!-- Annotations -->
+  <rect x="30" y="295" width="14" height="14" rx="2" fill="none" stroke="#6b8fbd" stroke-width="2"/>
+  <text x="50" y="307" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">True function f(x)</text>
+
+  <rect x="200" y="295" width="14" height="14" rx="2" fill="none" stroke="#c9a84c" stroke-width="2" stroke-dasharray="4,2"/>
+  <text x="220" y="307" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">Quadratic model at x_k</text>
+
+  <rect x="420" y="295" width="14" height="14" rx="2" fill="none" stroke="#c9a84c" stroke-width="2"/>
+  <text x="440" y="307" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">Jump to bottom of model</text>
+
+  <!-- Brace/annotation for curvature -->
+  <text x="540" y="140" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#9b89b6">The model matches</text>
+  <text x="540" y="155" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#9b89b6">slope + curvature</text>
+  <text x="540" y="170" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#9b89b6">at x_k</text>
+</svg>
+
 <div class="formula-box">
 <strong>The Quadratic Model at Point $x_k$</strong>
 
@@ -238,6 +286,60 @@ $$\|x_{k+1} - x^*\| \leq C \|x_k - x^*\|^2$$
  <li><strong>Newton:</strong> $\|e_{k+1}\| \leq C \|e_k\|^2$. Error gets squared each step. Very few iterations for high precision, but only works near the solution and costs more per iteration.</li>
 </ul>
 </div>
+
+<svg viewBox="0 0 700 380" style="max-width:100%; margin:24px auto; display:block;" xmlns="http://www.w3.org/2000/svg">
+  <rect width="700" height="380" rx="12" fill="#1a1a2e"/>
+  <text x="350" y="28" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="15" font-weight="bold" fill="#e0dcd4">Gradient Descent vs Newton on an Elongated Quadratic</text>
+
+  <!-- Left panel: GD -->
+  <rect x="20" y="40" width="320" height="300" rx="8" fill="#12122a" stroke="#333" stroke-width="1"/>
+  <text x="180" y="62" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="bold" fill="#c47070">Gradient Descent (many zigzag steps)</text>
+
+  <!-- Elliptical contours for GD side -->
+  <ellipse cx="180" cy="210" rx="130" ry="40" fill="none" stroke="#444" stroke-width="1"/>
+  <ellipse cx="180" cy="210" rx="100" ry="30" fill="none" stroke="#444" stroke-width="1"/>
+  <ellipse cx="180" cy="210" rx="70" ry="22" fill="none" stroke="#444" stroke-width="1"/>
+  <ellipse cx="180" cy="210" rx="40" ry="13" fill="none" stroke="#444" stroke-width="1"/>
+  <ellipse cx="180" cy="210" rx="12" ry="5" fill="none" stroke="#444" stroke-width="1"/>
+
+  <!-- GD zigzag path -->
+  <polyline points="300,180 240,230 270,195 220,225 250,205 210,218 230,208 195,214 210,210 185,212 195,210 180,210"
+            fill="none" stroke="#c47070" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="300" cy="180" r="4" fill="#c47070"/>
+  <text x="305" y="175" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#c47070">x_0</text>
+  <circle cx="180" cy="210" r="4" fill="#6aab8e"/>
+  <text x="180" y="250" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#6aab8e">x*</text>
+
+  <!-- Step count label -->
+  <text x="180" y="320" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="12" fill="#a8a49c">~10+ steps, zigzagging along</text>
+  <text x="180" y="334" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="12" fill="#a8a49c">the narrow valley</text>
+
+  <!-- Right panel: Newton -->
+  <rect x="360" y="40" width="320" height="300" rx="8" fill="#12122a" stroke="#333" stroke-width="1"/>
+  <text x="520" y="62" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="bold" fill="#6aab8e">Newton's Method (direct path)</text>
+
+  <!-- Elliptical contours for Newton side -->
+  <ellipse cx="520" cy="210" rx="130" ry="40" fill="none" stroke="#444" stroke-width="1"/>
+  <ellipse cx="520" cy="210" rx="100" ry="30" fill="none" stroke="#444" stroke-width="1"/>
+  <ellipse cx="520" cy="210" rx="70" ry="22" fill="none" stroke="#444" stroke-width="1"/>
+  <ellipse cx="520" cy="210" rx="40" ry="13" fill="none" stroke="#444" stroke-width="1"/>
+  <ellipse cx="520" cy="210" rx="12" ry="5" fill="none" stroke="#444" stroke-width="1"/>
+
+  <!-- Newton direct path (1 step for quadratic) -->
+  <line x1="640" y1="180" x2="524" y2="210" stroke="#6aab8e" stroke-width="2.5"/>
+  <polygon points="524,210 532,205 530,213" fill="#6aab8e"/>
+  <circle cx="640" cy="180" r="4" fill="#c47070"/>
+  <text x="645" y="175" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#c47070">x_0</text>
+  <circle cx="520" cy="210" r="4" fill="#6aab8e"/>
+  <text x="520" y="250" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#6aab8e">x*</text>
+
+  <!-- Step count label -->
+  <text x="520" y="320" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="12" fill="#a8a49c">1 step on a quadratic!</text>
+  <text x="520" y="334" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="12" fill="#a8a49c">Hessian rescales the gradient</text>
+
+  <!-- Bottom annotation -->
+  <text x="350" y="370" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#9b89b6">Contours show an elongated bowl (eigenvalues differ). GD follows the gradient, Newton follows the Hessian-adjusted direction.</text>
+</svg>
 
 <!-- ===================== PART D ===================== -->
 <h2>Part D: Newton on a General (Non-Quadratic) Function</h2>

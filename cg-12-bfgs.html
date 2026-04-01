@@ -49,6 +49,75 @@ $$\nabla f(x_k) \approx \nabla f(x_{k+1}) + \nabla^2 f(x_{k+1})(x_k - x_{k+1})$$
 <p>Rearranging: $\nabla f(x_{k+1}) - \nabla f(x_k) \approx \nabla^2 f(x_{k+1})(x_{k+1} - x_k)$, which gives us $y_k \approx \nabla^2 f(x_{k+1}) \, s_k$. Replacing the true Hessian $\nabla^2 f(x_{k+1})$ with our approximation $B_{k+1}$ gives the secant condition.</p>
 </div>
 
+<svg viewBox="0 0 700 320" style="max-width:100%; margin:24px auto; display:block;" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="bfgs-arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#c9a84c"/>
+    </marker>
+    <marker id="bfgs-arrow-blue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#6b8fbd"/>
+    </marker>
+  </defs>
+  <rect width="700" height="320" rx="12" fill="#1a1a2e"/>
+  <text x="350" y="28" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="15" font-weight="bold" fill="#e0dcd4">BFGS Dataflow: One Iteration</text>
+
+  <!-- Box 1: Gradients -->
+  <rect x="30" y="60" width="120" height="55" rx="8" fill="#1e2a3a" stroke="#6b8fbd" stroke-width="1.5"/>
+  <text x="90" y="82" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="12" font-weight="bold" fill="#6b8fbd">Gradients</text>
+  <text x="90" y="100" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">g_k, g_{k+1}</text>
+
+  <!-- Arrow 1 -> 2 -->
+  <line x1="150" y1="87" x2="185" y2="87" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#bfgs-arrow)"/>
+
+  <!-- Box 2: Compute s_k, y_k -->
+  <rect x="190" y="60" width="120" height="55" rx="8" fill="#1e2a3a" stroke="#d4956a" stroke-width="1.5"/>
+  <text x="250" y="80" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="12" font-weight="bold" fill="#d4956a">Compute</text>
+  <text x="250" y="96" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">s_k = x_{k+1} - x_k</text>
+  <text x="250" y="110" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">y_k = g_{k+1} - g_k</text>
+
+  <!-- Arrow 2 -> 3 -->
+  <line x1="310" y1="87" x2="345" y2="87" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#bfgs-arrow)"/>
+
+  <!-- Box 3: Update H_k -->
+  <rect x="350" y="60" width="130" height="55" rx="8" fill="#1e2a3a" stroke="#6aab8e" stroke-width="1.5"/>
+  <text x="415" y="80" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="12" font-weight="bold" fill="#6aab8e">Update H_k</text>
+  <text x="415" y="98" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">BFGS formula</text>
+  <text x="415" y="110" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="10" fill="#666">secant condition</text>
+
+  <!-- Arrow 3 -> 4 -->
+  <line x1="480" y1="87" x2="515" y2="87" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#bfgs-arrow)"/>
+
+  <!-- Box 4: Search direction -->
+  <rect x="520" y="60" width="150" height="55" rx="8" fill="#1e2a3a" stroke="#c9a84c" stroke-width="1.5"/>
+  <text x="595" y="80" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="12" font-weight="bold" fill="#c9a84c">Search Direction</text>
+  <text x="595" y="100" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">p_k = -H_k g_k</text>
+
+  <!-- Arrow 4 down to 5 -->
+  <line x1="595" y1="115" x2="595" y2="155" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#bfgs-arrow)"/>
+
+  <!-- Box 5: Line search -->
+  <rect x="520" y="160" width="150" height="55" rx="8" fill="#1e2a3a" stroke="#9b89b6" stroke-width="1.5"/>
+  <text x="595" y="182" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="12" font-weight="bold" fill="#9b89b6">Line Search</text>
+  <text x="595" y="200" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">Find alpha_k (Wolfe)</text>
+
+  <!-- Arrow 5 down to 6 -->
+  <line x1="595" y1="215" x2="595" y2="252" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#bfgs-arrow)"/>
+
+  <!-- Box 6: New point -->
+  <rect x="520" y="258" width="150" height="45" rx="8" fill="#1e2a3a" stroke="#c47070" stroke-width="1.5"/>
+  <text x="595" y="278" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="12" font-weight="bold" fill="#c47070">New Point</text>
+  <text x="595" y="294" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">x_{k+1} = x_k + alpha_k p_k</text>
+
+  <!-- Feedback loop arrow: from box 6 back to box 1 -->
+  <path d="M520,280 L90,280 L90,120" fill="none" stroke="#6b8fbd" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#bfgs-arrow-blue)"/>
+  <text x="300" y="270" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#6b8fbd">Evaluate gradient at x_{k+1}, repeat</text>
+
+  <!-- Annotation -->
+  <text x="250" y="170" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#9b89b6">Each iteration, the gradient change</text>
+  <text x="250" y="185" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#9b89b6">teaches H_k about the curvature.</text>
+  <text x="250" y="200" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#9b89b6">Wolfe conditions guarantee s_k^T y_k > 0.</text>
+</svg>
+
 
 <!-- ===================== PART B ===================== -->
 <h2>Part B: The Curvature Condition</h2>
@@ -385,6 +454,68 @@ $$= \frac{1}{1225}\begin{bmatrix} 1053 + 140 & -468 + 210 \\ -468 + 210 & 208 + 
 <h3>When to Use BFGS</h3>
 <p><strong>BFGS is the default choice</strong> for medium-sized smooth optimization problems (up to a few thousand variables). It gives you Newton-like speed without computing the Hessian. The $O(n^2)$ cost per iteration and $O(n^2)$ storage for the matrix $H_k$ are the limiting factors; for very large problems ($n \gt  10{,}000$), use CG (<a href="cg-11-nonlinear-cg.html" style="color:#d4956a;">Page 11</a>) or L-BFGS (a limited-memory version that only stores a few vectors instead of the full matrix).</p>
 </div>
+
+<svg viewBox="0 0 720 300" style="max-width:100%; margin:24px auto; display:block;" xmlns="http://www.w3.org/2000/svg">
+  <rect width="720" height="300" rx="12" fill="#1a1a2e"/>
+  <text x="360" y="28" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="15" font-weight="bold" fill="#e0dcd4">Curvature Information: GD vs BFGS vs Newton</text>
+
+  <!-- Column 1: GD -->
+  <rect x="20" y="50" width="210" height="230" rx="8" fill="#12122a" stroke="#c47070" stroke-width="1.5"/>
+  <text x="125" y="74" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="bold" fill="#c47070">Gradient Descent</text>
+  <text x="125" y="94" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">No curvature info</text>
+
+  <!-- GD: identity matrix visual -->
+  <rect x="65" y="110" width="120" height="60" rx="4" fill="#1e2a3a" stroke="#555" stroke-width="1"/>
+  <text x="125" y="128" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#c47070">H_k = alpha * I</text>
+  <text x="125" y="148" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="20" fill="#555">[ 1  0 ]</text>
+  <text x="125" y="165" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="20" fill="#555">[ 0  1 ]</text>
+
+  <text x="125" y="195" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">Same step size</text>
+  <text x="125" y="210" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">in every direction</text>
+  <text x="125" y="235" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#c47070">Cost: O(n)</text>
+  <text x="125" y="252" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#c47070">Convergence: linear</text>
+  <text x="125" y="269" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="10" fill="#666">zigzags on elongated bowls</text>
+
+  <!-- Column 2: BFGS -->
+  <rect x="255" y="50" width="210" height="230" rx="8" fill="#12122a" stroke="#6aab8e" stroke-width="1.5"/>
+  <text x="360" y="74" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="bold" fill="#6aab8e">BFGS</text>
+  <text x="360" y="94" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">Learns curvature from history</text>
+
+  <!-- BFGS: approximate matrix visual -->
+  <rect x="300" y="110" width="120" height="60" rx="4" fill="#1e2a3a" stroke="#6aab8e" stroke-width="1"/>
+  <text x="360" y="128" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#6aab8e">H_k ~ Q^{-1}</text>
+  <text x="360" y="148" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="20" fill="#6aab8e">[ a  b ]</text>
+  <text x="360" y="165" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="20" fill="#6aab8e">[ b  c ]</text>
+
+  <text x="360" y="195" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">Adapts step size</text>
+  <text x="360" y="210" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">per direction, improving</text>
+  <text x="360" y="235" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#6aab8e">Cost: O(n^2)</text>
+  <text x="360" y="252" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#6aab8e">Convergence: superlinear</text>
+  <text x="360" y="269" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="10" fill="#666">best cost/speed trade-off</text>
+
+  <!-- Column 3: Newton -->
+  <rect x="490" y="50" width="210" height="230" rx="8" fill="#12122a" stroke="#c9a84c" stroke-width="1.5"/>
+  <text x="595" y="74" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="bold" fill="#c9a84c">Newton</text>
+  <text x="595" y="94" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">Full Hessian (exact curvature)</text>
+
+  <!-- Newton: exact matrix visual -->
+  <rect x="535" y="110" width="120" height="60" rx="4" fill="#1e2a3a" stroke="#c9a84c" stroke-width="1"/>
+  <text x="595" y="128" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#c9a84c">H_k = [nabla^2 f]^{-1}</text>
+  <text x="595" y="148" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="20" fill="#c9a84c">[ *  * ]</text>
+  <text x="595" y="165" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="20" fill="#c9a84c">[ *  * ]</text>
+
+  <text x="595" y="195" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">Perfect step size</text>
+  <text x="595" y="210" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#a8a49c">in every direction</text>
+  <text x="595" y="235" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#c9a84c">Cost: O(n^3)</text>
+  <text x="595" y="252" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" fill="#c9a84c">Convergence: quadratic</text>
+  <text x="595" y="269" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="10" fill="#666">fastest but most expensive</text>
+
+  <!-- Arrows between columns -->
+  <text x="237" y="145" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="20" fill="#555">&rarr;</text>
+  <text x="472" y="145" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="20" fill="#555">&rarr;</text>
+  <text x="237" y="165" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="10" fill="#9b89b6">more info</text>
+  <text x="472" y="165" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="10" fill="#9b89b6">more info</text>
+</svg>
 
 
 <!-- ===================== GLOSSARY ===================== -->

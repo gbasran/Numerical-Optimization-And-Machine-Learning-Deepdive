@@ -308,6 +308,41 @@ $$W_1 H_1 = \begin{bmatrix} 1.333 \\ 0.667 \end{bmatrix}\begin{bmatrix} 3 & 4.5 
 </div>
 </div>
 
+<div class="note">
+<strong>Scaling ambiguity in NMF:</strong> If $(W, H)$ is a solution, then so is $(WD, D^{-1}H)$ for any positive diagonal matrix $D$. This is because $WD \cdot D^{-1}H = WH$. To remove this ambiguity, a common convention is to normalize each column of $W$ to have unit norm ($\|W_{:,a}\|_2 = 1$) and absorb the scaling into $H$.
+</div>
+
+<div class="why-box">
+<h3>Dimension Check: Why Does Everything Line Up?</h3>
+<p>Let us verify every matrix product in the $H$-update has the right dimensions:</p>
+<ul style="margin: 8px 0 8px 20px;">
+ <li>$W^T V$: $(k \times n)(n \times m) = k \times m$ (same shape as $H$).</li>
+ <li>$W^T W$: $(k \times n)(n \times k) = k \times k$ (a small square matrix).</li>
+ <li>$W^T W H$: $(k \times k)(k \times m) = k \times m$ (same shape as $H$).</li>
+</ul>
+<p style="margin-top:8px;">And for the $W$-update:</p>
+<ul style="margin: 8px 0 8px 20px;">
+ <li>$V H^T$: $(n \times m)(m \times k) = n \times k$ (same shape as $W$).</li>
+ <li>$H H^T$: $(k \times m)(m \times k) = k \times k$ (a small square matrix).</li>
+ <li>$W H H^T$: $(n \times k)(k \times k) = n \times k$ (same shape as $W$).</li>
+</ul>
+<p>Both ratios are element-wise divisions of same-shaped matrices, so the updates are well-defined.</p>
+</div>
+
+<h3>Application Examples Beyond Faces</h3>
+
+<div class="note">
+<strong>Text mining (topic modeling):</strong> Let $V$ be a term-document matrix where $V_{ij}$ counts how many times word $i$ appears in document $j$. NMF with $k$ components finds $k$ "topics" (columns of $W$, each a distribution over words) and for each document, a mixture of topics (columns of $H$). Since word counts are non-negative, NMF is a natural fit. Each topic is interpretable: you can read the high-weight words and identify the theme.
+</div>
+
+<div class="note">
+<strong>Audio source separation:</strong> Record a cocktail party with a single microphone. Compute the spectrogram (a matrix of time-frequency magnitudes, all non-negative). Apply NMF: each column of $W$ becomes a "spectral template" (one speaker's voice pattern), and $H$ tells when each speaker is active. This is the computational version of the "cocktail party problem."
+</div>
+
+<div class="note">
+<strong>Recommender systems:</strong> Let $V$ be a user-item rating matrix (e.g., movie ratings). NMF finds $k$ latent factors: $W$ encodes user preferences, $H$ encodes item characteristics. The predicted rating for user $i$ on item $j$ is $(WH)_{ij}$. Non-negativity means all preferences and characteristics are "positive affinities" rather than abstract signed dimensions.
+</div>
+
 
 <!-- ===================== PART E ===================== -->
 <h2>Part E: Alternating Least Squares (ALS) Method</h2>
@@ -403,6 +438,22 @@ $$(W^*, H^*) = \arg\min_{r \in \{1, \ldots, R\}} \|V - W^{(r)}H^{(r)}\|_F^2$$
 </dl>
 
 <p style="margin-top:8px;">Common initialization strategies: random uniform entries in $[0, 1]$, random entries sampled from the data distribution, or SVD-based initialization (take the absolute values of the SVD factors).</p>
+</div>
+
+<h3>Alternative Objective: KL Divergence</h3>
+<div class="formula-box">
+<strong>Generalized KL Divergence Objective</strong>
+
+<p>The Frobenius norm is not the only choice. For data that represents counts or probabilities, the generalized Kullback-Leibler divergence is often more appropriate:</p>
+
+$$D_{KL}(V \| WH) = \sum_{i,j} \left( V_{ij} \log \frac{V_{ij}}{(WH)_{ij}} - V_{ij} + (WH)_{ij} \right)$$
+
+<dl class="breakdown">
+ <dt>$D_{KL}$</dt><dd>generalized KL divergence; measures how different the reconstruction $WH$ is from the data $V$. Equals 0 when $WH = V$ exactly.</dd>
+ <dt>$V_{ij} \log \frac{V_{ij}}{(WH)_{ij}}$</dt><dd>the "surprise" term; large when the data and reconstruction differ significantly at position $(i,j)$.</dd>
+</dl>
+
+<p style="margin-top:8px;">Lee and Seung also derived multiplicative update rules for the KL divergence objective. The Frobenius norm treats all errors equally; the KL divergence penalizes relative errors, which is better when small entries matter as much as large ones.</p>
 </div>
 
 <h3>Choosing $k$ (the Rank)</h3>
