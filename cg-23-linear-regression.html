@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page 23 : Linear Regression as Optimization | MATH 3850 Course Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+ onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<span class="tag">PAGE 23; POST-MIDTERM</span>
+<h1>Linear Regression as an Optimization Problem</h1>
+<p class="subtitle">The fundamental least-squares problem solved three ways: normal equations, gradient descent, and Newton's method; every tool from this course converging on one application</p>
+
+<!-- ==================== PART A ==================== -->
+<span class="tag">PART A</span>
+<h2>The Problem: Finding the Best-Fit Line</h2>
+
+<div class="analogy">
+<p><strong>Analogy: Positioning a ruler on a scatter plot.</strong> You have a scatter plot of data points on graph paper. You want to position a ruler (a straight line) so that it comes as close as possible to every point at the same time. Of course, the line probably will not pass through any single point exactly. There will be gaps, little vertical distances between where each point actually sits and where the ruler says it "should" be. These gaps are called <strong>residuals</strong>.</p>
+<p style="margin-top:12px;">The question is: what does "closest" mean? You could try to minimize the largest gap (minimax), or the sum of all gaps (L1), but the overwhelmingly standard choice is to minimize the <strong>sum of squared gaps</strong>. Why squared? Because squaring does three things at once: it makes all gaps positive (so an overshoot does not cancel out an undershoot), it penalizes big gaps much more than small ones (a gap of 10 contributes 100, not 10), and, crucially for this course, it produces a smooth, differentiable function that we can optimize with every method we have learned. Gradient descent, Newton's method, or just setting the gradient to zero; they all apply directly. This is the <strong>least-squares problem</strong>, and it is the single most important optimization problem in applied mathematics.</p>
+<p style="margin-top:12px;">Here is the beautiful fact: least-squares produces a <strong>quadratic</strong> objective function. And quadratics are the "nicest" possible optimization problems. We know exactly how gradient descent, Newton's method, and conjugate gradient behave on quadratics (recall from <a href="cg-05-convexity.html">Page 05</a>, <a href="cg-06-gradient-descent.html">Page 06</a>, <a href="cg-07-newton-method.html">Page 07</a>, and <a href="cg-10-conjugate-gradient.html">Page 10</a>). So linear regression is not just an application of optimization; it is the <em>cleanest possible</em> application, the one where every piece of theory works at its absolute best.</p>
+</div>
+
+<p>We are given a dataset of $n$ observations. Each observation has $d$ features (input variables) and one target value (output). We stack everything into matrices:</p>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">The Least-Squares Problem</p>
+$$\min_{x \in \mathbb{R}^d} \; f(x) = \|Ax - b\|^2$$
+<dl class="breakdown">
+ <dt>$A \in \mathbb{R}^{n \times d}$</dt>
+ <dd>The <strong>data matrix</strong> (also called the design matrix). Each row is one data point; each column is one feature. There are $n$ samples and $d$ features. If we want a bias (intercept) term, we add a column of ones to $A$.</dd>
+ <dt>$b \in \mathbb{R}^n$</dt>
+ <dd>The <strong>target vector</strong>. The $i$-th entry $b_i$ is the observed value for the $i$-th data point; the thing we are trying to predict.</dd>
+ <dt>$x \in \mathbb{R}^d$</dt>
+ <dd>The <strong>parameter vector</strong> (also called weights). These are the unknowns we are solving for. They define the best-fit line (or hyperplane in higher dimensions).</dd>
+ <dt>$Ax - b$</dt>
+ <dd>The <strong>residual vector</strong>. The $i$-th entry $(Ax - b)_i$ is the difference between our prediction $a_i^T x$ and the true value $b_i$. We want all residuals to be small.</dd>
+ <dt>$\|\cdot\|^2$</dt>
+ <dd>The squared Euclidean norm. $\|v\|^2 = v^T v = \sum_i v_i^2$. Squaring the residuals penalizes large errors more heavily.</dd>
+</dl>
+</div>
+
+<p>Let us expand this objective by writing out the squared norm:</p>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Expanding the Objective</p>
+$$f(x) = (Ax - b)^T(Ax - b)$$
+$$= x^TA^TAx - 2b^TAx + b^Tb$$
+<dl class="breakdown">
+ <dt>$x^TA^TAx$</dt>
+ <dd>A quadratic term in $x$. The matrix $A^TA$ plays the role of the "curvature matrix" (recall from <a href="cg-03-linear-algebra.html">Page 03</a>: $A^TA$ is always symmetric and positive semidefinite).</dd>
+ <dt>$-2b^TAx$</dt>
+ <dd>A linear term in $x$. This is $-2(A^Tb)^Tx$, so the vector $-2A^Tb$ acts as the linear coefficient.</dd>
+ <dt>$b^Tb$</dt>
+ <dd>A constant (does not depend on $x$). This is the squared norm of the target vector. It shifts the function value but does not affect where the minimum is.</dd>
+</dl>
+</div>
+
+<div class="note">
+<p><strong>Connection to quadratics from Page 05:</strong> This is exactly the form $f(x) = \frac{1}{2}x^TQx + c^Tx + \text{const}$ with $Q = 2A^TA$ and $c = -2A^Tb$. From <a href="cg-05-convexity.html">Page 05</a>, we know that a quadratic function has a unique minimum if and only if $Q$ is positive definite. So least-squares has a unique solution if and only if $A^TA$ is positive definite. And $A^TA$ is positive definite exactly when $A$ has <strong>full column rank</strong> (all $d$ columns are linearly independent).</p>
+</div>
+
+<!-- SVG: Scatter plot with best-fit line -->
+<div style="text-align: center; margin: 30px 0;">
+<svg viewBox="0 0 420 300" width="420" style="max-width: 100%;">
+ <!-- axes -->
+ <line x1="50" y1="260" x2="390" y2="260" stroke="#555" stroke-width="1"/>
+ <line x1="50" y1="260" x2="50" y2="20" stroke="#555" stroke-width="1"/>
+ <text x="395" y="265" fill="#a8a49c" font-size="13">feature</text>
+ <text x="25" y="15" fill="#a8a49c" font-size="13">target</text>
+
+ <!-- best-fit line -->
+ <line x1="60" y1="228" x2="380" y2="68" stroke="#c9a84c" stroke-width="2.5" stroke-dasharray="6,3"/>
+
+ <!-- data points -->
+ <circle cx="110" cy="210" r="6" fill="#d4956a"/>
+ <circle cx="160" cy="170" r="6" fill="#d4956a"/>
+ <circle cx="210" cy="120" r="6" fill="#d4956a"/>
+ <circle cx="260" cy="140" r="6" fill="#d4956a"/>
+ <circle cx="310" cy="80" r="6" fill="#d4956a"/>
+
+ <!-- residual lines -->
+ <line x1="110" y1="210" x2="110" y2="203" stroke="#c47070" stroke-width="1.5" stroke-dasharray="3,2"/>
+ <line x1="160" y1="170" x2="160" y2="178" stroke="#c47070" stroke-width="1.5" stroke-dasharray="3,2"/>
+ <line x1="210" y1="120" x2="210" y2="148" stroke="#c47070" stroke-width="1.5" stroke-dasharray="3,2"/>
+ <line x1="260" y1="140" x2="260" y2="123" stroke="#c47070" stroke-width="1.5" stroke-dasharray="3,2"/>
+ <line x1="310" y1="80" x2="310" y2="98" stroke="#c47070" stroke-width="1.5" stroke-dasharray="3,2"/>
+
+ <!-- labels -->
+ <text x="200" y="55" fill="#c9a84c" font-size="13" font-weight="bold" text-anchor="middle">Best-fit line</text>
+ <text x="330" y="130" fill="#c47070" font-size="11">residuals</text>
+ <text x="85" y="235" fill="#d4956a" font-size="11">(1,2)</text>
+ <text x="140" y="163" fill="#d4956a" font-size="11">(2,3)</text>
+ <text x="215" y="115" fill="#d4956a" font-size="11">(3,5)</text>
+ <text x="265" y="155" fill="#d4956a" font-size="11">(4,4)</text>
+ <text x="315" y="75" fill="#d4956a" font-size="11">(5,6)</text>
+</svg>
+</div>
+
+
+<!-- ==================== PART B ==================== -->
+<span class="tag">PART B</span>
+<h2>Gradient and Hessian of the Least-Squares Objective</h2>
+
+<div class="analogy">
+<p><strong>Analogy: Surveying the terrain of a quadratic bowl.</strong> Before we can use any optimization method, we need to know the slope (gradient) and curvature (Hessian) of our objective function. For least-squares, computing these is a direct application of the matrix calculus rules from <a href="cg-02-multivariable-bridge.html">Page 02</a>. The remarkable outcome is that the Hessian turns out to be constant: it does not change as we move through parameter space. Imagine hiking on a perfectly shaped paraboloid bowl. No matter where you stand on the surface, the curvature under your feet is exactly the same. The walls curve upward at the same rate everywhere. This constancy is what makes least-squares so tractable: the curvature information you compute once is valid for the entire domain.</p>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Gradient of $f(x) = \|Ax - b\|^2$</p>
+$$\nabla f(x) = 2A^T(Ax - b)$$
+<dl class="breakdown">
+ <dt>$A^T$</dt>
+ <dd>The transpose of the data matrix ($d \times n$). It "projects" the $n$-dimensional residual back into the $d$-dimensional parameter space.</dd>
+ <dt>$Ax - b$</dt>
+ <dd>The residual vector. It measures the error of the current parameters $x$.</dd>
+ <dt>$2$</dt>
+ <dd>Comes from differentiating the squared term. Recall that $\frac{d}{dx}x^2 = 2x$; the same factor appears in the matrix version.</dd>
+</dl>
+</div>
+
+<p><strong>Full derivation:</strong> We differentiate $f(x) = x^TA^TAx - 2b^TAx + b^Tb$ term by term (recall the matrix calculus rules from <a href="cg-02-multivariable-bridge.html">Page 02</a>):</p>
+
+<div class="formula-box">
+<p style="color: #6b8fbd; font-weight: bold; margin-bottom: 12px;">Derivation: term-by-term differentiation</p>
+$$\nabla_x(x^TA^TAx) = 2A^TAx \quad \text{(gradient of a quadratic form } x^TMx \text{ is } 2Mx \text{ when } M \text{ is symmetric)}$$
+$$\nabla_x(-2b^TAx) = -2A^Tb \quad \text{(gradient of a linear form } c^Tx \text{ is } c\text{)}$$
+$$\nabla_x(b^Tb) = 0 \quad \text{(constant has zero gradient)}$$
+<p style="margin-top: 12px;">Adding these together:</p>
+$$\nabla f(x) = 2A^TAx - 2A^Tb = 2A^T(Ax - b)$$
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Hessian of $f(x) = \|Ax - b\|^2$</p>
+$$\nabla^2 f(x) = 2A^TA$$
+<dl class="breakdown">
+ <dt>$A^TA$</dt>
+ <dd>A $d \times d$ symmetric matrix. It captures all the curvature information of the least-squares problem. Note: it is constructed purely from the data; the target vector $b$ does not appear.</dd>
+ <dt>$2$</dt>
+ <dd>The same factor of 2 from the quadratic expansion.</dd>
+</dl>
+</div>
+
+<div class="why-box">
+<h3>Why the constant Hessian is so important</h3>
+<p>The Hessian $\nabla^2 f(x) = 2A^TA$ does <strong>not depend on $x$</strong>. This means the curvature of the objective function is exactly the same at every point in parameter space. Compare this with a general nonlinear function where the Hessian changes at every point, making optimization much harder.</p>
+<p style="margin-top: 12px;">A constant Hessian means the function is a <strong>perfect quadratic</strong>: no cubic terms, no quartic terms, nothing beyond degree two. This has profound implications for optimization:</p>
+<ul style="margin-top: 8px;">
+<li>Newton's method converges in <strong>exactly one step</strong> (Part E below)</li>
+<li>Conjugate gradient converges in at most $d$ steps (recall from <a href="cg-10-conjugate-gradient.html">Page 10</a>)</li>
+<li>The quadratic model used by trust regions (recall from <a href="cg-09-trust-region.html">Page 09</a>) is <em>exact</em>, not an approximation</li>
+<li>Gradient descent converges linearly with a rate determined by the condition number of $A^TA$</li>
+</ul>
+</div>
+
+<div class="note">
+<p><strong>When is $A^TA$ positive definite?</strong> When $A$ has <strong>full column rank</strong>, meaning all $d$ columns of $A$ are linearly independent. This requires $n \geq d$ (at least as many data points as features). When $A^TA$ is positive definite, $f$ is <strong>strictly convex</strong> (recall from <a href="cg-05-convexity.html">Page 05</a>), and the least-squares problem has a unique global minimum. If $A$ does not have full column rank (e.g., some features are redundant), then $A^TA$ is only positive semidefinite, and there are infinitely many minimizers.</p>
+</div>
+
+
+<!-- ==================== PART C ==================== -->
+<span class="tag">PART C</span>
+<h2>Normal Equations: The Closed-Form Solution</h2>
+
+<div class="analogy">
+<p><strong>Analogy: Solving a puzzle with a formula instead of trial and error.</strong> Most optimization problems require iterative methods: you start somewhere, compute a direction, take a step, repeat. But least-squares is special. Because the objective is quadratic, the gradient is linear in $x$. Setting a linear equation to zero and solving it is something we learned in basic linear algebra. So instead of iterating, we can just <em>solve</em>. One matrix equation, one answer, done. This is the "just solve it" approach, and it gives the exact answer in a single computation. No initial guess, no step sizes, no convergence criteria. Just algebra.</p>
+<p style="margin-top:12px;">The catch? It requires forming and inverting a $d \times d$ matrix, which costs $O(nd^2 + d^3)$ operations. When $d$ is small (tens or hundreds of features), this is fast and practical. When $d$ is very large (millions of features, as in modern machine learning), iterative methods become necessary.</p>
+</div>
+
+<p>We set the gradient to zero and solve:</p>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">The Normal Equations</p>
+$$\nabla f(x) = 0 \;\Rightarrow\; 2A^T(Ax - b) = 0 \;\Rightarrow\; A^TAx = A^Tb$$
+<p style="margin-top: 12px;">If $A^TA$ is invertible (i.e., $A$ has full column rank), the unique solution is:</p>
+$$x^* = (A^TA)^{-1}A^Tb$$
+<dl class="breakdown">
+ <dt>$A^TA$</dt>
+ <dd>The $d \times d$ <strong>Gram matrix</strong>. Encodes the inner products between all pairs of feature columns. Must be invertible for the normal equations to have a unique solution.</dd>
+ <dt>$A^Tb$</dt>
+ <dd>The $d \times 1$ vector of inner products between each feature column and the target. Encodes how each feature correlates with the target.</dd>
+ <dt>$(A^TA)^{-1}A^T$</dt>
+ <dd>The <strong>pseudoinverse</strong> of $A$, often written $A^\dagger$. It is the "best possible inverse" for a non-square matrix.</dd>
+</dl>
+</div>
+
+<div class="note">
+<p><strong>Why "normal" equations?</strong> The residual $r = Ax^* - b$ at the optimal solution satisfies $A^Tr = 0$, meaning $r$ is <strong>orthogonal (normal) to the column space of $A$</strong>. Geometrically, $Ax^*$ is the projection of $b$ onto the column space of $A$, and the residual is the perpendicular component. This is the same "closest point on a subspace" idea from linear algebra.</p>
+</div>
+
+<div class="why-box">
+<h3>When NOT to use normal equations</h3>
+<p>Normal equations are fast when $d$ is small, but they have two weaknesses:</p>
+<ul style="margin-top: 8px;">
+<li><strong>Cost:</strong> Forming $A^TA$ costs $O(nd^2)$ and solving the $d \times d$ system costs $O(d^3)$. If $d$ is very large, this is prohibitive.</li>
+<li><strong>Numerical stability:</strong> Computing $A^TA$ squares the condition number of $A$. If $\kappa(A) = 10^4$, then $\kappa(A^TA) = 10^8$, which can cause serious floating-point errors. In practice, a QR factorization of $A$ is often preferred for numerical stability.</li>
+</ul>
+</div>
+
+<!-- Hand computation -->
+<div class="formula-box" style="border-left-color: #c9a84c;">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Hand Computation: Normal Equations on 5 Data Points</p>
+<p>Dataset: $(1,2),\; (2,3),\; (3,5),\; (4,4),\; (5,6)$</p>
+<p style="margin-top: 12px;">We fit the model $\hat{b} = w \cdot t + c$ (slope $w$, intercept $c$). We add a column of ones for the intercept:</p>
+
+$$A = \begin{pmatrix} 1 & 1 \\ 2 & 1 \\ 3 & 1 \\ 4 & 1 \\ 5 & 1 \end{pmatrix}, \quad b = \begin{pmatrix} 2 \\ 3 \\ 5 \\ 4 \\ 6 \end{pmatrix}, \quad x = \begin{pmatrix} w \\ c \end{pmatrix}$$
+
+<p style="margin-top: 16px;"><strong>Step 1: Compute $A^TA$</strong></p>
+$$A^TA = \begin{pmatrix} 1 & 2 & 3 & 4 & 5 \\ 1 & 1 & 1 & 1 & 1 \end{pmatrix} \begin{pmatrix} 1 & 1 \\ 2 & 1 \\ 3 & 1 \\ 4 & 1 \\ 5 & 1 \end{pmatrix} = \begin{pmatrix} 1^2+2^2+3^2+4^2+5^2 & 1+2+3+4+5 \\ 1+2+3+4+5 & 5 \end{pmatrix} = \begin{pmatrix} 55 & 15 \\ 15 & 5 \end{pmatrix}$$
+
+<p style="margin-top: 16px;"><strong>Step 2: Compute $A^Tb$</strong></p>
+$$A^Tb = \begin{pmatrix} 1 & 2 & 3 & 4 & 5 \\ 1 & 1 & 1 & 1 & 1 \end{pmatrix} \begin{pmatrix} 2 \\ 3 \\ 5 \\ 4 \\ 6 \end{pmatrix} = \begin{pmatrix} 1(2)+2(3)+3(5)+4(4)+5(6) \\ 2+3+5+4+6 \end{pmatrix} = \begin{pmatrix} 69 \\ 20 \end{pmatrix}$$
+
+<p style="margin-top: 16px;"><strong>Step 3: Solve $A^TAx = A^Tb$</strong></p>
+<p>We need the inverse of $A^TA$. For a $2 \times 2$ matrix $\begin{pmatrix} a & b \\ c & d \end{pmatrix}$, the inverse is $\frac{1}{ad-bc}\begin{pmatrix} d & -b \\ -c & a \end{pmatrix}$ (recall from <a href="cg-03-linear-algebra.html">Page 03</a>):</p>
+$$\det(A^TA) = 55(5) - 15(15) = 275 - 225 = 50$$
+$$(A^TA)^{-1} = \frac{1}{50}\begin{pmatrix} 5 & -15 \\ -15 & 55 \end{pmatrix} = \begin{pmatrix} 0.1 & -0.3 \\ -0.3 & 1.1 \end{pmatrix}$$
+
+<p style="margin-top: 16px;"><strong>Step 4: Compute $x^* = (A^TA)^{-1}A^Tb$</strong></p>
+$$x^* = \begin{pmatrix} 0.1 & -0.3 \\ -0.3 & 1.1 \end{pmatrix} \begin{pmatrix} 69 \\ 20 \end{pmatrix} = \begin{pmatrix} 0.1(69) + (-0.3)(20) \\ (-0.3)(69) + 1.1(20) \end{pmatrix} = \begin{pmatrix} 6.9 - 6.0 \\ -20.7 + 22.0 \end{pmatrix} = \begin{pmatrix} 0.9 \\ 1.3 \end{pmatrix}$$
+
+<p style="margin-top: 16px; color: #6aab8e; font-weight: bold;">Result: The best-fit line is $\hat{b} = 0.9t + 1.3$</p>
+<p style="font-size: 15px; color: #b8b4ac;">Slope $w = 0.9$: for each unit increase in the input, the predicted output increases by $0.9$. Intercept $c = 1.3$: when the input is zero, the predicted output is $1.3$.</p>
+</div>
+
+<p>Let us verify by computing the residuals and the objective value at $x^*$:</p>
+
+<div class="formula-box">
+<p style="color: #6b8fbd; font-weight: bold; margin-bottom: 12px;">Verification: residuals at $x^* = (0.9, 1.3)^T$</p>
+<table style="width: 100%; border-collapse: collapse; margin-top: 8px;">
+<tr style="border-bottom: 1px solid #3a3a46;">
+ <th style="text-align: center; padding: 6px; color: #a8a49c;">$t_i$</th>
+ <th style="text-align: center; padding: 6px; color: #a8a49c;">$b_i$ (actual)</th>
+ <th style="text-align: center; padding: 6px; color: #a8a49c;">$\hat{b}_i = 0.9t_i + 1.3$</th>
+ <th style="text-align: center; padding: 6px; color: #a8a49c;">residual $r_i$</th>
+ <th style="text-align: center; padding: 6px; color: #a8a49c;">$r_i^2$</th>
+</tr>
+<tr>
+ <td style="text-align: center; padding: 6px;">1</td>
+ <td style="text-align: center; padding: 6px;">2</td>
+ <td style="text-align: center; padding: 6px;">2.2</td>
+ <td style="text-align: center; padding: 6px;">$-0.2$</td>
+ <td style="text-align: center; padding: 6px;">0.04</td>
+</tr>
+<tr>
+ <td style="text-align: center; padding: 6px;">2</td>
+ <td style="text-align: center; padding: 6px;">3</td>
+ <td style="text-align: center; padding: 6px;">3.1</td>
+ <td style="text-align: center; padding: 6px;">$-0.1$</td>
+ <td style="text-align: center; padding: 6px;">0.01</td>
+</tr>
+<tr>
+ <td style="text-align: center; padding: 6px;">3</td>
+ <td style="text-align: center; padding: 6px;">5</td>
+ <td style="text-align: center; padding: 6px;">4.0</td>
+ <td style="text-align: center; padding: 6px;">$1.0$</td>
+ <td style="text-align: center; padding: 6px;">1.00</td>
+</tr>
+<tr>
+ <td style="text-align: center; padding: 6px;">4</td>
+ <td style="text-align: center; padding: 6px;">4</td>
+ <td style="text-align: center; padding: 6px;">4.9</td>
+ <td style="text-align: center; padding: 6px;">$-0.9$</td>
+ <td style="text-align: center; padding: 6px;">0.81</td>
+</tr>
+<tr style="border-bottom: 1px solid #3a3a46;">
+ <td style="text-align: center; padding: 6px;">5</td>
+ <td style="text-align: center; padding: 6px;">6</td>
+ <td style="text-align: center; padding: 6px;">5.8</td>
+ <td style="text-align: center; padding: 6px;">$0.2$</td>
+ <td style="text-align: center; padding: 6px;">0.04</td>
+</tr>
+<tr style="font-weight: bold; color: #c9a84c;">
+ <td colspan="4" style="text-align: right; padding: 6px;">$f(x^*) = \sum r_i^2 =$</td>
+ <td style="text-align: center; padding: 6px;">1.90</td>
+</tr>
+</table>
+</div>
+
+
+<!-- ==================== PART D ==================== -->
+<span class="tag">PART D</span>
+<h2>Gradient Descent for Regression</h2>
+
+<div class="analogy">
+<p><strong>Analogy: Adjusting the ruler by feel.</strong> Instead of solving for the exact best position in one shot (as the normal equations do), gradient descent adjusts the ruler gradually. At each step, you measure how "wrong" the current line is (that is the residual $Ax_k - b$), project that error back onto the parameter directions (multiply by $A^T$), and nudge the parameters in the direction that reduces the total squared error. It is like turning two knobs (slope and intercept) a little bit at a time, always in the direction that improves the fit most steeply. Eventually, after enough small adjustments, you converge to the same answer the normal equations give instantly.</p>
+<p style="margin-top:12px;">Why bother, then, if normal equations give the exact answer? Because gradient descent scales to problems with millions of features and billions of data points, where forming $A^TA$ and inverting it is completely infeasible. Gradient descent only needs matrix-vector products ($Ax$ and $A^Tv$), which are much cheaper.</p>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Gradient Descent Update for Least-Squares</p>
+$$x_{k+1} = x_k - \alpha \cdot 2A^T(Ax_k - b)$$
+<dl class="breakdown">
+ <dt>$x_k$</dt>
+ <dd>Current parameter estimate at iteration $k$.</dd>
+ <dt>$\alpha$</dt>
+ <dd>The <strong>step size</strong> (learning rate). Must be chosen carefully; recall from <a href="cg-06-gradient-descent.html">Page 06</a> that too large causes divergence, too small causes slow convergence.</dd>
+ <dt>$2A^T(Ax_k - b)$</dt>
+ <dd>The gradient at $x_k$. Points in the direction of steepest increase; we move in the opposite direction.</dd>
+</dl>
+</div>
+
+<div class="note">
+<p><strong>Step size choice:</strong> For the quadratic $f(x) = x^TA^TAx - 2b^TAx + b^Tb$, the optimal constant step size is $\alpha = \frac{1}{\lambda_{\max}(2A^TA)}$ where $\lambda_{\max}$ is the largest eigenvalue of $2A^TA$. The convergence rate depends on the <strong>condition number</strong> $\kappa = \lambda_{\max}(A^TA) / \lambda_{\min}(A^TA)$ (recall from <a href="cg-01-math-foundations.html">Page 01</a>): the convergence factor per iteration is $\frac{\kappa - 1}{\kappa + 1}$. Small $\kappa$ (well-conditioned) gives fast convergence; large $\kappa$ (ill-conditioned) gives slow, zigzagging convergence.</p>
+</div>
+
+<!-- Hand computation: GD iterations -->
+<div class="formula-box" style="border-left-color: #c9a84c;">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Hand Computation: 3 Gradient Descent Iterations</p>
+<p>Same dataset, $A$ and $b$ as before. Start from $x_0 = (0, 0)^T$, step size $\alpha = 0.01$.</p>
+
+<p style="margin-top: 16px;"><strong>Precomputation (reuse each iteration):</strong></p>
+$$A^TA = \begin{pmatrix} 55 & 15 \\ 15 & 5 \end{pmatrix}, \quad A^Tb = \begin{pmatrix} 69 \\ 20 \end{pmatrix}$$
+
+<p style="margin-top: 16px; color: #d4956a; font-weight: bold;">Iteration 1: $x_0 = (0, 0)^T$</p>
+$$Ax_0 - b = \begin{pmatrix} 0 \\ 0 \\ 0 \\ 0 \\ 0 \end{pmatrix} - \begin{pmatrix} 2 \\ 3 \\ 5 \\ 4 \\ 6 \end{pmatrix} = \begin{pmatrix} -2 \\ -3 \\ -5 \\ -4 \\ -6 \end{pmatrix}$$
+$$\nabla f(x_0) = 2A^T(Ax_0 - b) = 2\begin{pmatrix} 69 \\ 20 \end{pmatrix} \cdot (-1) = 2(-A^Tb) = \begin{pmatrix} -138 \\ -40 \end{pmatrix}$$
+$$x_1 = x_0 - 0.01 \cdot \begin{pmatrix} -138 \\ -40 \end{pmatrix} = \begin{pmatrix} 1.38 \\ 0.40 \end{pmatrix}$$
+$$f(x_1) = \|Ax_1 - b\|^2: \quad Ax_1 = \begin{pmatrix} 1.78 \\ 3.16 \\ 4.54 \\ 5.92 \\ 7.30 \end{pmatrix}, \quad Ax_1 - b = \begin{pmatrix} -0.22 \\ 0.16 \\ -0.46 \\ 1.92 \\ 1.30 \end{pmatrix}$$
+$$f(x_1) = 0.0484 + 0.0256 + 0.2116 + 3.6864 + 1.6900 = 5.6620$$
+
+<p style="margin-top: 16px; color: #d4956a; font-weight: bold;">Iteration 2: $x_1 = (1.38, 0.40)^T$</p>
+$$\nabla f(x_1) = 2A^T(Ax_1 - b) = 2\begin{pmatrix} 1(-0.22)+2(0.16)+3(-0.46)+4(1.92)+5(1.30) \\ (-0.22)+(0.16)+(-0.46)+(1.92)+(1.30) \end{pmatrix}$$
+$$= 2\begin{pmatrix} -0.22 + 0.32 - 1.38 + 7.68 + 6.50 \\ 2.70 \end{pmatrix} = 2\begin{pmatrix} 12.90 \\ 2.70 \end{pmatrix} = \begin{pmatrix} 25.80 \\ 5.40 \end{pmatrix}$$
+$$x_2 = x_1 - 0.01 \cdot \begin{pmatrix} 25.80 \\ 5.40 \end{pmatrix} = \begin{pmatrix} 1.38 - 0.258 \\ 0.40 - 0.054 \end{pmatrix} = \begin{pmatrix} 1.122 \\ 0.346 \end{pmatrix}$$
+
+<p style="margin-top: 16px; color: #d4956a; font-weight: bold;">Iteration 3: $x_2 = (1.122, 0.346)^T$</p>
+$$Ax_2 = \begin{pmatrix} 1.468 \\ 2.590 \\ 3.712 \\ 4.834 \\ 5.956 \end{pmatrix}, \quad Ax_2 - b = \begin{pmatrix} -0.532 \\ -0.410 \\ -1.288 \\ 0.834 \\ -0.044 \end{pmatrix}$$
+$$\nabla f(x_2) = 2A^T(Ax_2 - b) = 2\begin{pmatrix} -0.532 - 0.820 - 3.864 + 3.336 - 0.220 \\ -0.532 - 0.410 - 1.288 + 0.834 - 0.044 \end{pmatrix} = 2\begin{pmatrix} -2.100 \\ -1.440 \end{pmatrix} = \begin{pmatrix} -4.200 \\ -2.880 \end{pmatrix}$$
+$$x_3 = x_2 - 0.01 \cdot \begin{pmatrix} -4.200 \\ -2.880 \end{pmatrix} = \begin{pmatrix} 1.122 + 0.042 \\ 0.346 + 0.0288 \end{pmatrix} = \begin{pmatrix} 1.164 \\ 0.375 \end{pmatrix}$$
+$$f(x_3) = \|Ax_3 - b\|^2 = 0.283 + 0.168 + 1.659 + 0.696 + 0.002 = 2.808$$
+</div>
+
+<p>Here is the iteration progress in table form:</p>
+
+<div class="formula-box">
+<p style="color: #6b8fbd; font-weight: bold; margin-bottom: 12px;">Step Table: GD Convergence</p>
+<table style="width: 100%; border-collapse: collapse; margin-top: 8px;">
+<tr style="border-bottom: 1px solid #3a3a46;">
+ <th style="text-align: center; padding: 6px; color: #a8a49c;">$k$</th>
+ <th style="text-align: center; padding: 6px; color: #a8a49c;">$w_k$</th>
+ <th style="text-align: center; padding: 6px; color: #a8a49c;">$c_k$</th>
+ <th style="text-align: center; padding: 6px; color: #a8a49c;">$f(x_k)$</th>
+ <th style="text-align: center; padding: 6px; color: #a8a49c;">$\|\nabla f\|$</th>
+</tr>
+<tr>
+ <td style="text-align: center; padding: 6px;">0</td>
+ <td style="text-align: center; padding: 6px;">0.000</td>
+ <td style="text-align: center; padding: 6px;">0.000</td>
+ <td style="text-align: center; padding: 6px;">90.00</td>
+ <td style="text-align: center; padding: 6px;">143.69</td>
+</tr>
+<tr>
+ <td style="text-align: center; padding: 6px;">1</td>
+ <td style="text-align: center; padding: 6px;">1.380</td>
+ <td style="text-align: center; padding: 6px;">0.400</td>
+ <td style="text-align: center; padding: 6px;">5.66</td>
+ <td style="text-align: center; padding: 6px;">26.36</td>
+</tr>
+<tr>
+ <td style="text-align: center; padding: 6px;">2</td>
+ <td style="text-align: center; padding: 6px;">1.122</td>
+ <td style="text-align: center; padding: 6px;">0.346</td>
+ <td style="text-align: center; padding: 6px;">2.81</td>
+ <td style="text-align: center; padding: 6px;">5.09</td>
+</tr>
+<tr>
+ <td style="text-align: center; padding: 6px;">3</td>
+ <td style="text-align: center; padding: 6px;">1.164</td>
+ <td style="text-align: center; padding: 6px;">0.375</td>
+ <td style="text-align: center; padding: 6px;">2.81</td>
+ <td style="text-align: center; padding: 6px;">5.09</td>
+</tr>
+<tr style="color: #6aab8e; font-style: italic;">
+ <td style="text-align: center; padding: 6px;">$\infty$</td>
+ <td style="text-align: center; padding: 6px;">0.900</td>
+ <td style="text-align: center; padding: 6px;">1.300</td>
+ <td style="text-align: center; padding: 6px;">1.90</td>
+ <td style="text-align: center; padding: 6px;">0.00</td>
+</tr>
+</table>
+<p style="font-size: 15px; color: #b8b4ac; margin-top: 8px;">Notice: after just one iteration, $f$ dropped from 90.00 to 5.66 (a 94% reduction). But convergence slows down as we approach the optimum; the gradient gets smaller, so the steps get smaller. GD is making progress, but it takes many iterations to reach the exact answer $(0.9, 1.3)$.</p>
+</div>
+
+
+<!-- ==================== PART E ==================== -->
+<span class="tag">PART E</span>
+<h2>Newton's Method for Regression: One-Step Convergence</h2>
+
+<div class="analogy">
+<p><strong>Analogy: A master carpenter measuring once.</strong> Gradient descent is like adjusting the ruler by feel, nudging it a little at a time. Newton's method is like a master carpenter who takes precise measurements of both the slope AND the curvature of the error surface, builds a perfect mental model of the entire landscape, and places the ruler exactly where it needs to be on the first try.</p>
+<p style="margin-top:12px;">Normally, Newton's method builds a <em>local</em> quadratic model of the function and minimizes that model. The model is only an approximation, so you have to repeat the process. But for least-squares, the function IS already a quadratic. The local quadratic model is not an approximation; it is the function itself, perfectly, everywhere. So minimizing the model gives you the exact minimizer of the true function. One step. Done. This is the deepest reason Newton's method is so powerful on quadratics: it "sees" the entire function, not just a local patch.</p>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Newton Step for Least-Squares</p>
+<p>Recall Newton's update from <a href="cg-07-newton-method.html">Page 07</a>:</p>
+$$x_{k+1} = x_k - (\nabla^2 f(x_k))^{-1} \nabla f(x_k)$$
+<p style="margin-top: 12px;">Substituting the gradient and Hessian for least-squares:</p>
+$$x_{k+1} = x_k - (2A^TA)^{-1} \cdot 2A^T(Ax_k - b)$$
+$$= x_k - (A^TA)^{-1}A^T(Ax_k - b)$$
+<dl class="breakdown">
+ <dt>$(2A^TA)^{-1}$</dt>
+ <dd>The inverse Hessian. Since the Hessian is constant ($2A^TA$), this is the same matrix at every iteration.</dd>
+ <dt>$2A^T(Ax_k - b)$</dt>
+ <dd>The gradient at $x_k$.</dd>
+ <dt>$(A^TA)^{-1}A^T(Ax_k - b)$</dt>
+ <dd>The Newton direction. Note the factor of 2 cancels between the Hessian inverse and the gradient.</dd>
+</dl>
+</div>
+
+<p>Now the key algebraic proof that Newton converges in <strong>exactly one step</strong>:</p>
+
+<div class="formula-box" style="border-left-color: #6aab8e;">
+<p style="color: #6aab8e; font-weight: bold; margin-bottom: 12px;">Proof: One-Step Convergence</p>
+<p>Starting from any $x_0$:</p>
+$$x_1 = x_0 - (A^TA)^{-1}A^T(Ax_0 - b)$$
+<p style="margin-top: 8px;">Distribute the matrix product:</p>
+$$x_1 = x_0 - (A^TA)^{-1}A^TAx_0 + (A^TA)^{-1}A^Tb$$
+<p style="margin-top: 8px;">The term $(A^TA)^{-1}A^TA = I$ (the identity matrix), so:</p>
+$$x_1 = x_0 - Ix_0 + (A^TA)^{-1}A^Tb$$
+$$x_1 = x_0 - x_0 + x^*$$
+$$\boxed{x_1 = x^* = (A^TA)^{-1}A^Tb}$$
+<p style="margin-top: 12px; color: #b8b4ac;">The starting point $x_0$ cancels completely. <strong>No matter where you start</strong>, one Newton step lands exactly on the optimal solution $x^*$. This works because the quadratic model that Newton builds is identical to the true function.</p>
+</div>
+
+<div class="why-box">
+<h3>Why does one-step convergence happen?</h3>
+<p>Newton's method works by building a <strong>quadratic approximation</strong> (the Taylor expansion up to second order) of the objective function and minimizing that approximation. For a general nonlinear function, this approximation has error proportional to the cubic and higher terms, so you need to iterate. But for least-squares, the objective IS a quadratic. There are no cubic terms, no quartic terms, nothing higher. So Newton's quadratic approximation is exact, with zero error. Minimizing the model gives the exact minimizer of the true function.</p>
+<p style="margin-top: 12px;">This is the same phenomenon observed on <a href="cg-07-newton-method.html">Page 07</a> for general quadratics: Newton's method always converges in one step on any purely quadratic function, regardless of dimension.</p>
+</div>
+
+<!-- Hand computation: Newton -->
+<div class="formula-box" style="border-left-color: #c9a84c;">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Hand Computation: Newton's Method from $x_0 = (0, 0)^T$</p>
+$$\nabla f(x_0) = 2A^T(Ax_0 - b) = -2A^Tb = \begin{pmatrix} -138 \\ -40 \end{pmatrix}$$
+$$(\nabla^2 f)^{-1} = (2A^TA)^{-1} = \frac{1}{2}(A^TA)^{-1} = \frac{1}{2}\begin{pmatrix} 0.1 & -0.3 \\ -0.3 & 1.1 \end{pmatrix} = \begin{pmatrix} 0.05 & -0.15 \\ -0.15 & 0.55 \end{pmatrix}$$
+$$x_1 = x_0 - (\nabla^2 f)^{-1}\nabla f(x_0) = \begin{pmatrix} 0 \\ 0 \end{pmatrix} - \begin{pmatrix} 0.05 & -0.15 \\ -0.15 & 0.55 \end{pmatrix}\begin{pmatrix} -138 \\ -40 \end{pmatrix}$$
+$$= -\begin{pmatrix} 0.05(-138) + (-0.15)(-40) \\ (-0.15)(-138) + 0.55(-40) \end{pmatrix} = -\begin{pmatrix} -6.9 + 6.0 \\ 20.7 - 22.0 \end{pmatrix} = -\begin{pmatrix} -0.9 \\ -1.3 \end{pmatrix} = \begin{pmatrix} 0.9 \\ 1.3 \end{pmatrix}$$
+<p style="margin-top: 12px; color: #6aab8e; font-weight: bold;">One step, exact answer: $x_1 = x^* = (0.9, 1.3)^T$.</p>
+<p style="font-size: 15px; color: #b8b4ac;">Compare with gradient descent, which was still far from $(0.9, 1.3)$ after 3 iterations.</p>
+</div>
+
+
+<!-- ==================== PART F ==================== -->
+<span class="tag">PART F</span>
+<h2>Method Comparison: Which to Use When</h2>
+
+<div class="analogy">
+<p><strong>Analogy: Three ways to hang a picture.</strong> You want a picture frame perfectly level on a wall. Method 1 (normal equations): use a laser level, measure exactly, drill once. Perfect, but you need to own a laser level (the computational equivalent: you need enough memory and time to form and invert $A^TA$). Method 2 (gradient descent): eyeball it, tap the nail, step back, adjust, repeat. Works with no tools at all, just patience. Method 3 (Newton's method): borrow the laser level, make one measurement, drill once. Same result as Method 1, same cost as Method 1, but it proves that Method 1 was not a shortcut; it was actually the principled optimization approach yielding a one-step solution.</p>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Comparison Table: Three Methods for Least-Squares</p>
+<table style="width: 100%; border-collapse: collapse; margin-top: 8px;">
+<tr style="border-bottom: 2px solid #3a3a46;">
+ <th style="text-align: left; padding: 8px; color: #a8a49c;"></th>
+ <th style="text-align: center; padding: 8px; color: #d4956a;">Normal Equations</th>
+ <th style="text-align: center; padding: 8px; color: #6b8fbd;">Gradient Descent</th>
+ <th style="text-align: center; padding: 8px; color: #9b89b6;">Newton's Method</th>
+</tr>
+<tr style="border-bottom: 1px solid #2e2e38;">
+ <td style="padding: 8px; color: #a8a49c;">Type</td>
+ <td style="text-align: center; padding: 8px;">Direct (closed-form)</td>
+ <td style="text-align: center; padding: 8px;">Iterative</td>
+ <td style="text-align: center; padding: 8px;">Iterative (1 step)</td>
+</tr>
+<tr style="border-bottom: 1px solid #2e2e38;">
+ <td style="padding: 8px; color: #a8a49c;">Iterations</td>
+ <td style="text-align: center; padding: 8px;">0 (exact formula)</td>
+ <td style="text-align: center; padding: 8px;">Many (depends on $\kappa$)</td>
+ <td style="text-align: center; padding: 8px;">Exactly 1</td>
+</tr>
+<tr style="border-bottom: 1px solid #2e2e38;">
+ <td style="padding: 8px; color: #a8a49c;">Cost</td>
+ <td style="text-align: center; padding: 8px;">$O(nd^2 + d^3)$</td>
+ <td style="text-align: center; padding: 8px;">$O(nd)$ per step</td>
+ <td style="text-align: center; padding: 8px;">$O(nd^2 + d^3)$</td>
+</tr>
+<tr style="border-bottom: 1px solid #2e2e38;">
+ <td style="padding: 8px; color: #a8a49c;">Needs $A^TA$?</td>
+ <td style="text-align: center; padding: 8px;">Yes (form and invert)</td>
+ <td style="text-align: center; padding: 8px;">No (only $Ax$ and $A^Tv$)</td>
+ <td style="text-align: center; padding: 8px;">Yes (form and invert)</td>
+</tr>
+<tr style="border-bottom: 1px solid #2e2e38;">
+ <td style="padding: 8px; color: #a8a49c;">Step size?</td>
+ <td style="text-align: center; padding: 8px;">Not applicable</td>
+ <td style="text-align: center; padding: 8px;">Yes (critical choice)</td>
+ <td style="text-align: center; padding: 8px;">Not needed (always 1)</td>
+</tr>
+<tr style="border-bottom: 1px solid #2e2e38;">
+ <td style="padding: 8px; color: #a8a49c;">Best for</td>
+ <td style="text-align: center; padding: 8px;">Small to medium $d$</td>
+ <td style="text-align: center; padding: 8px;">Very large $n$ and $d$</td>
+ <td style="text-align: center; padding: 8px;">Proving theory</td>
+</tr>
+<tr>
+ <td style="padding: 8px; color: #a8a49c;">Convergence</td>
+ <td style="text-align: center; padding: 8px;">Exact (no iteration)</td>
+ <td style="text-align: center; padding: 8px;">Linear: $\left(\frac{\kappa-1}{\kappa+1}\right)^k$</td>
+ <td style="text-align: center; padding: 8px;">Exact in 1 step</td>
+</tr>
+</table>
+</div>
+
+<div class="note">
+<p><strong>The deep connection:</strong> Normal equations and Newton's method produce <em>exactly the same computation</em>. Both require forming $A^TA$ and $A^Tb$, then solving the linear system $A^TAx = A^Tb$. The only difference is the derivation: normal equations come from setting $\nabla f = 0$ directly, while Newton comes from the iterative framework $x_{k+1} = x_k - H^{-1}g_k$. They arrive at the same place because the quadratic model IS the function.</p>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">GD Convergence Rate for Least-Squares</p>
+$$\frac{f(x_k) - f(x^*)}{f(x_0) - f(x^*)} \leq \left(\frac{\kappa - 1}{\kappa + 1}\right)^{2k}$$
+<dl class="breakdown">
+ <dt>$\kappa = \lambda_{\max}(A^TA) / \lambda_{\min}(A^TA)$</dt>
+ <dd>The <strong>condition number</strong> of $A^TA$. It measures how "stretched" the contours of $f$ are. $\kappa = 1$ means perfectly circular contours (fastest GD convergence). Large $\kappa$ means highly elongated contours (slow, zigzagging GD convergence).</dd>
+ <dt>$\left(\frac{\kappa-1}{\kappa+1}\right)$</dt>
+ <dd>The convergence factor per iteration. For $\kappa = 10$: factor $= 9/11 \approx 0.818$, so each iteration reduces the error by about 18%. For $\kappa = 100$: factor $= 99/101 \approx 0.980$, so each iteration only reduces the error by 2%.</dd>
+</dl>
+</div>
+
+<div class="why-box">
+<h3>Why does the condition number control GD speed?</h3>
+<p>The condition number measures the ratio of the steepest curvature to the shallowest curvature. When $\kappa$ is large, the objective function looks like a long, narrow valley (recall the bathtub analogy from <a href="cg-06-gradient-descent.html">Page 06</a>). The gradient points across the valley (the steep direction), not along it (the shallow direction toward the minimum). So GD zigzags back and forth across the narrow valley, making very slow progress along it. Newton's method avoids this entirely because the Hessian rescales the gradient, accounting for the different curvatures in different directions.</p>
+</div>
+
+<!-- SVG: GD vs Newton on contour plot -->
+<div style="text-align: center; margin: 30px 0;">
+<svg viewBox="0 0 420 320" width="420" style="max-width: 100%;">
+ <!-- contour ellipses (elongated for ill-conditioned problem) -->
+ <ellipse cx="210" cy="160" rx="180" ry="70" fill="none" stroke="#2e2e38" stroke-width="1.5" transform="rotate(-15 210 160)"/>
+ <ellipse cx="210" cy="160" rx="140" ry="55" fill="none" stroke="#2e2e38" stroke-width="1.5" transform="rotate(-15 210 160)"/>
+ <ellipse cx="210" cy="160" rx="100" ry="40" fill="none" stroke="#2e2e38" stroke-width="1.5" transform="rotate(-15 210 160)"/>
+ <ellipse cx="210" cy="160" rx="60" ry="25" fill="none" stroke="#2e2e38" stroke-width="1.5" transform="rotate(-15 210 160)"/>
+ <ellipse cx="210" cy="160" rx="20" ry="10" fill="none" stroke="#2e2e38" stroke-width="1.5" transform="rotate(-15 210 160)"/>
+
+ <!-- optimal point -->
+ <circle cx="210" cy="160" r="5" fill="#6aab8e"/>
+ <text x="220" y="155" fill="#6aab8e" font-size="12" font-weight="bold">$x^*$</text>
+
+ <!-- GD path (zigzag) -->
+ <polyline points="60,60 260,200 140,130 240,180 180,150 220,165" fill="none" stroke="#6b8fbd" stroke-width="2"/>
+ <circle cx="60" cy="60" r="4" fill="#6b8fbd"/>
+ <text x="35" y="50" fill="#6b8fbd" font-size="12">GD start</text>
+ <text x="35" y="65" fill="#6b8fbd" font-size="11">(zigzags)</text>
+
+ <!-- Newton path (straight line) -->
+ <defs><marker id="newt-arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#9b89b6"/></marker></defs>
+ <line x1="350" y1="80" x2="215" y2="158" stroke="#9b89b6" stroke-width="2.5" marker-end="url(#newt-arr)"/>
+ <circle cx="350" cy="80" r="4" fill="#9b89b6"/>
+ <text x="340" y="70" fill="#9b89b6" font-size="12">Newton</text>
+ <text x="340" y="55" fill="#9b89b6" font-size="11">(1 step)</text>
+
+ <!-- labels -->
+ <text x="130" y="290" fill="#a8a49c" font-size="13">Contours of $f(x) = \|Ax - b\|^2$</text>
+</svg>
+</div>
+
+
+<!-- ==================== GLOSSARY ==================== -->
+<span class="tag">GLOSSARY</span>
+<h2>Key Terms</h2>
+
+<div class="glossary">
+<dl>
+ <dt>Least Squares</dt>
+ <dd>The optimization problem of minimizing $\|Ax - b\|^2$, the sum of squared residuals. The most common approach to fitting a model to data. Produces a quadratic objective, making it one of the most well-behaved optimization problems.</dd>
+
+ <dt>Normal Equations</dt>
+ <dd>The linear system $A^TAx = A^Tb$ obtained by setting the gradient of the least-squares objective to zero. Provides a closed-form solution $x^* = (A^TA)^{-1}A^Tb$ when $A$ has full column rank. Named because the residual at the solution is "normal" (perpendicular) to the column space of $A$.</dd>
+
+ <dt>Pseudoinverse</dt>
+ <dd>The matrix $A^\dagger = (A^TA)^{-1}A^T$, also called the Moore-Penrose pseudoinverse (for full column rank $A$). It is the "best inverse" for a non-square matrix: $A^\dagger b$ gives the least-squares solution. Satisfies $A^\dagger A = I$ but $AA^\dagger \neq I$ in general.</dd>
+
+ <dt>Residual</dt>
+ <dd>The vector $r = Ax - b$. The $i$-th component $r_i$ is the difference between the model prediction and the actual observation for the $i$-th data point. At the optimal solution, $r$ is orthogonal to the column space of $A$.</dd>
+
+ <dt>Frobenius Norm</dt>
+ <dd>For a matrix $M$, the Frobenius norm is $\|M\|_F = \sqrt{\sum_{i,j} m_{ij}^2}$, the square root of the sum of all squared entries. It generalizes the Euclidean vector norm to matrices. The least-squares objective $\|Ax - b\|^2$ uses the vector 2-norm, but the Frobenius norm appears when extending to matrix least-squares problems.</dd>
+
+ <dt>Full Column Rank</dt>
+ <dd>A matrix $A \in \mathbb{R}^{n \times d}$ has full column rank if all $d$ columns are linearly independent, meaning $\text{rank}(A) = d$. This requires $n \geq d$ (at least as many rows as columns). Full column rank guarantees that $A^TA$ is positive definite and the least-squares problem has a unique solution.</dd>
+
+ <dt>Condition Number (of $A^TA$)</dt>
+ <dd>The ratio $\kappa(A^TA) = \lambda_{\max}(A^TA) / \lambda_{\min}(A^TA)$. Controls the convergence rate of gradient descent on the least-squares problem: the GD error decreases by a factor of $(\kappa - 1)/(\kappa + 1)$ per iteration. A condition number close to 1 means fast convergence; a large condition number means slow convergence with zigzagging behavior. Note: $\kappa(A^TA) = \kappa(A)^2$, so forming $A^TA$ squares the condition number, which can cause numerical instability.</dd>
+</dl>
+</div>
+
+<!-- ==================== NAV ==================== -->
+</div>
+
+<div class="bottom-nav">
+  <div class="bottom-nav-row">
+    <a class="bottom-nav-btn prev" href="cg-22.html">&larr; 22. Previous Page</a>
+    <a class="bottom-nav-btn next" href="cg-17-method-map.html">17. Method Map &rarr;</a>
+  </div>
+  <a class="bottom-nav-index" href="index.html">Back to Index</a>
+</div>
+
+<script src="sidebar.js"></script>
+</body>
+</html>

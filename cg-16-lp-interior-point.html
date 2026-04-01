@@ -149,8 +149,137 @@ $$\mathcal{L}(x, \lambda, \mu) = c^T x - \lambda^T(Ax - b) - \mu^T x$$
 </div>
 
 
-<!-- ==================== PART C ==================== -->
+<!-- ==================== NEW: LP SOLUTION TYPES ==================== -->
 <span class="tag">PART C</span>
+<h2>Types of LP Solutions</h2>
+
+<div class="analogy">
+<p><strong>Not every LP has a nice answer.</strong> Before solving an LP, it helps to know what kinds of outcomes are possible. Think of it like planning a road trip: sometimes there is a best route (bounded optimal), sometimes there is no route at all (infeasible), sometimes you can drive forever and keep improving (unbounded), and sometimes multiple routes are equally good (multiple optimal).</p>
+</div>
+
+<div class="formula-box">
+<p style="color: var(--accent-gold); font-weight: bold; margin-bottom: 16px;">Five Possible Outcomes for an LP</p>
+
+<p><strong style="color: var(--accent-sage);">1. Feasible Solution</strong></p>
+<p>A point $x$ satisfying all constraints ($Ax \leq b$, $x \geq 0$). The set of all such points is the feasible region, which is always convex (recall from <a href="cg-05-convexity.html">Page 05</a>).</p>
+
+<p style="margin-top: 16px;"><strong style="color: var(--accent-rose);">2. Infeasible Problem</strong></p>
+<p>No point satisfies all constraints simultaneously. Example: $x_1 \geq 2$ and $x_1 \leq 1$ cannot both hold. The feasible region is empty.</p>
+
+<p style="margin-top: 16px;"><strong style="color: var(--accent-sage);">3. Bounded Optimal Solution</strong></p>
+<p>The feasible region is non-empty and the objective reaches a finite optimum. For LP, this optimum always occurs at a vertex (corner point) of the feasible region.</p>
+
+<p style="margin-top: 16px;"><strong style="color: var(--accent-rose);">4. Unbounded Problem</strong></p>
+<p>The objective can decrease (or increase) indefinitely within the feasible region. Example: $\max x_1$ subject to $x_1 \geq 0$ has no finite optimum.</p>
+
+<p style="margin-top: 16px;"><strong style="color: var(--accent-warm);">5. Multiple Optimal Solutions</strong></p>
+<p>The objective is parallel to a constraint face, so an entire edge (or face) of the feasible region achieves the same optimal value. Example: $\max x_1 + x_2$ subject to $x_1 + x_2 \leq 2$ is optimal along the entire line $x_1 + x_2 = 2$.</p>
+</div>
+
+<!-- ==================== NEW: LP DUALITY ==================== -->
+<span class="tag">PART D</span>
+<h2>Duality in Linear Programming</h2>
+
+<div class="analogy">
+<p><strong>Analogy: Every optimization problem has a mirror image.</strong> Imagine you are a buyer trying to minimize the cost of a purchase (the primal problem). There is always a corresponding seller who is trying to maximize the price they can charge (the dual problem). The remarkable theorem of LP duality says: when both the buyer and seller reach their best deals, they agree on the SAME price. The buyer's minimum cost equals the seller's maximum revenue. This is called strong duality, and it is one of the most powerful results in optimization.</p>
+<p style="margin-top: 12px;">More concretely: every LP has a "shadow" LP called the dual. The dual has a different objective and different constraints, but it uses the same data ($A$, $b$, $c$). Solving one automatically gives you information about the other.</p>
+</div>
+
+<div class="formula-box">
+<p style="color: var(--accent-gold); font-weight: bold; margin-bottom: 12px;">Primal and Dual Problems</p>
+
+<p><strong>Primal (minimization form):</strong></p>
+$$\min \; c^T x \quad \text{subject to} \quad Ax = b, \quad x \geq 0$$
+
+<p style="margin-top: 16px;"><strong>Dual:</strong></p>
+$$\max \; b^T \lambda \quad \text{subject to} \quad A^T \lambda + s = c, \quad s \geq 0$$
+
+<dl class="breakdown">
+  <dt>$\lambda \in \mathbb{R}^m$</dt>
+  <dd>The dual variables (one per primal constraint). These are the Lagrange multipliers from <a href="cg-15-constrained.html">Page 15</a>.</dd>
+  <dt>$s \in \mathbb{R}^n$</dt>
+  <dd>Dual slack variables (one per primal variable). $s \geq 0$ corresponds to $x \geq 0$ in the primal.</dd>
+  <dt>$b^T \lambda$</dt>
+  <dd>The dual objective. The dual tries to MAXIMIZE this while the primal MINIMIZES $c^T x$.</dd>
+</dl>
+</div>
+
+<div class="note">
+<p><strong>How to construct the dual:</strong> Given a primal LP, the dual is built systematically:</p>
+<ul style="margin: 8px 0 0 20px;">
+  <li>Each primal constraint becomes a dual variable</li>
+  <li>Each primal variable becomes a dual constraint</li>
+  <li>$\leq$ constraint → dual variable $\geq 0$; $\geq$ constraint → dual variable $\leq 0$; $=$ constraint → dual variable is free</li>
+  <li>Primal variable $\geq 0$ → dual constraint $\leq$; free primal variable → dual constraint $=$</li>
+  <li>Min becomes Max; $b$ and $c$ swap roles</li>
+</ul>
+</div>
+
+<div class="formula-box">
+<p style="color: var(--accent-gold); font-weight: bold; margin-bottom: 12px;">Theorem 13.1: Strong Duality</p>
+<p><strong>(i)</strong> If either the primal or dual has a finite optimal solution, then so does the other, and their optimal values are equal:</p>
+$$c^T x^* = b^T \lambda^*$$
+<p><strong>(ii)</strong> If either problem is unbounded, the other is infeasible.</p>
+</div>
+
+<div class="why-box">
+<h3>Why strong duality matters</h3>
+<p>Strong duality gives you a free "certificate of optimality." If you find a primal feasible $x$ and a dual feasible $(\lambda, s)$ with $c^T x = b^T \lambda$, then $x$ is provably optimal, no further computation needed. Interior point methods (next section) exploit this by solving primal and dual simultaneously and checking when the gap $c^Tx - b^T\lambda$ reaches zero.</p>
+</div>
+
+<div class="hand-calc">
+<h3>Worked Example: Primal-Dual Pair (from lecture notebook)</h3>
+
+<div class="step">
+<p class="step-label">Primal problem:</p>
+<p>$\max \; z = 3x_1 + 2x_2$ subject to $x_1 + x_2 \leq 4$, $x_1 + 3x_2 \leq 6$, $x_1, x_2 \geq 0$</p>
+</div>
+
+<div class="step">
+<p class="step-label">Evaluate at corner points:</p>
+<p>$(0, 0) \to z = 0$</p>
+<p>$(4, 0) \to z = 12$</p>
+<p>$(0, 2) \to z = 4$</p>
+<p>$(3, 1) \to z = 11$</p>
+<p class="result">Primal optimal: $x^* = (4, 0)$, $z^* = 12$</p>
+</div>
+
+<div class="step">
+<p class="step-label">Construct the dual:</p>
+<p>Since the primal is a max with $\leq$ constraints and $x \geq 0$:</p>
+<p>$\min \; w = 4y_1 + 6y_2$ subject to $y_1 + y_2 \geq 3$, $y_1 + 3y_2 \geq 2$, $y_1, y_2 \geq 0$</p>
+</div>
+
+<div class="step">
+<p class="step-label">Solve the dual:</p>
+<p>Try $y_2 = 0$: then $y_1 \geq 3$ and $y_1 \geq 2$, so $y_1 = 3$.</p>
+<p>Check feasibility: $3 + 3(0) = 3 \geq 2$. Yes.</p>
+<p>Dual objective: $w = 4(3) + 6(0) = 12$.</p>
+<p class="result">Dual optimal: $y^* = (3, 0)$, $w^* = 12$</p>
+</div>
+
+<div class="step">
+<p class="step-label">Verify strong duality:</p>
+<p class="result">$z^* = w^* = 12$. Strong duality confirmed.</p>
+</div>
+</div>
+
+<div class="formula-box">
+<p style="color: var(--accent-gold); font-weight: bold; margin-bottom: 12px;">Primal-Dual Relationships (5 Cases)</p>
+<table class="step-table">
+<tr><th>Case</th><th>Primal</th><th>Dual</th></tr>
+<tr><td>1</td><td>Has optimal solution</td><td>Has optimal solution (same value)</td></tr>
+<tr><td>2</td><td>Unbounded</td><td>Infeasible</td></tr>
+<tr><td>3</td><td>Infeasible</td><td>Unbounded</td></tr>
+<tr><td>4</td><td>Infeasible</td><td>Infeasible or unbounded</td></tr>
+<tr><td>5</td><td>Infeasible or unbounded</td><td>Infeasible</td></tr>
+</table>
+<p style="font-size: 0.9rem; color: var(--text-secondary);">Key insight: if one side is unbounded, the other MUST be infeasible. But both can be infeasible simultaneously.</p>
+</div>
+
+
+<!-- ==================== ORIGINAL PART C (now PART E) ==================== -->
+<span class="tag">PART E</span>
 <h2>Interior Point Methods; Going Through the Middle</h2>
 
 <div class="analogy">
@@ -182,8 +311,8 @@ $$\min_x \; c^T x \;-\; \mu \sum_{i=1}^{n} \ln(x_i) \quad \text{subject to} \qua
 <p>We could use any function that blows up as $x_i \to 0$, but the logarithm has special properties that make Newton's method (recall from <a href="cg-07-newton-method.html">Page 07</a>) work beautifully on the barrier problem. The Hessian of $-\sum \ln(x_i)$ is the diagonal matrix $\text{diag}(1/x_i^2)$, which is always positive definite (recall from <a href="cg-03-linear-algebra.html">Page 03</a>: diagonal matrix with positive entries is PD). This means the barrier problem is always well-conditioned for Newton's method.</p>
 </div>
 
-<!-- ==================== PART D ==================== -->
-<span class="tag">PART D</span>
+<!-- ==================== PART F ==================== -->
+<span class="tag">PART F</span>
 <h2>The Central Path; A Highway to the Optimum</h2>
 
 <div class="analogy">
@@ -229,8 +358,8 @@ $$\{x(\mu) : \mu \gt  0\}$$
 
 <p>The interior point algorithm works by approximately following the central path. At each step, it uses Newton's method to solve the barrier problem for the current $\mu$, then reduces $\mu$ by a fixed factor (typically $\mu_{\text{new}} = 0.1 \cdot \mu_{\text{old}}$).</p>
 
-<!-- ==================== PART E ==================== -->
-<span class="tag">PART E</span>
+<!-- ==================== PART G ==================== -->
+<span class="tag">PART G</span>
 <h2>Modified KKT: Relaxed Complementarity</h2>
 
 <div class="analogy">
@@ -256,8 +385,8 @@ $$\{x(\mu) : \mu \gt  0\}$$
 <p>Exact complementary slackness ($\mu_i x_i = 0$) is hard because it has a combinatorial structure: for each $i$, you must decide which of $\mu_i$ or $x_i$ is zero. With $n$ variables, there are $2^n$ possible combinations to check. The relaxed version ($\mu_i x_i = \sigma$) is a smooth system of equations that Newton's method can solve efficiently. As we decrease $\sigma$ toward zero, the solution of the relaxed system converges to the solution of the original LP.</p>
 </div>
 
-<!-- ==================== PART F ==================== -->
-<span class="tag">PART F</span>
+<!-- ==================== PART H ==================== -->
+<span class="tag">PART H</span>
 <h2>The Interior Point Algorithm</h2>
 
 <div class="algo-box">
@@ -304,8 +433,8 @@ $$\{x(\mu) : \mu \gt  0\}$$
 </div>
 
 
-<!-- ==================== PART G ==================== -->
-<span class="tag">PART G</span>
+<!-- ==================== PART I ==================== -->
+<span class="tag">PART I</span>
 <h2>Simplex vs Interior Point; Two Philosophies</h2>
 
 <table class="step-table">
@@ -357,8 +486,8 @@ $$\{x(\mu) : \mu \gt  0\}$$
 </div>
 
 
-<!-- ==================== PART H ==================== -->
-<span class="tag">PART H</span>
+<!-- ==================== PART J ==================== -->
+<span class="tag">PART J</span>
 <h2>How Everything Connects</h2>
 
 <div class="analogy">
@@ -421,7 +550,7 @@ $$\{x(\mu) : \mu \gt  0\}$$
 <div class="bottom-nav">
   <div class="bottom-nav-row">
     <a class="bottom-nav-btn prev" href="cg-15-constrained.html">&larr; 15. Constrained & KKT</a>
-    <a class="bottom-nav-btn next" href="cg-17-method-map.html">17. Method Map &rarr;</a>
+    <a class="bottom-nav-btn next" href="cg-21-primal-dual-interior-point.html">21. Primal-Dual Interior Point &rarr;</a>
   </div>
   <a class="bottom-nav-index" href="index.html">Back to Index</a>
 </div>

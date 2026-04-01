@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page 22 : Non-negative Matrix Factorization | MATH 3850 Course Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+ onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<span class="tag">PAGE 22; SUPPLEMENTARY</span>
+<h1>Non-negative Matrix Factorization (NMF)</h1>
+<p class="subtitle">Decompose a data matrix into additive, interpretable parts; supplementary lecture material not in Nocedal &amp; Wright</p>
+
+<div class="note">
+<strong>Why NMF in an optimization course?</strong> NMF is a beautiful application of the optimization techniques we have studied: gradient descent (<a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>), convexity analysis (<a href="cg-05-convexity.html" style="color:#d4956a;">Page 05</a>), and least-squares problems. It shows how a simple non-negativity constraint transforms the problem and demands creative algorithmic solutions.
+</div>
+
+
+<!-- ===================== PART A ===================== -->
+<h2>Part A: What is NMF?</h2>
+
+<div class="analogy">
+<strong>Physical analogy: the recipe book for faces.</strong><br><br>
+Imagine you have a collection of photographs of faces. Each photo is a mixture of features: a nose shape, an eye shape, a jawline, lighting from the left, lighting from the right. Every face you have ever seen is some combination of these basic parts.<br><br>
+NMF says: break each photo into a small set of "building block" images (the basis faces stored in $W$), and for each photo, find the recipe (the weights stored in $H$) that combines those building blocks to reconstruct the original. Think of $W$ as a cookbook of ingredient images, and $H$ as the recipe card for each photo telling you how much of each ingredient to use.<br><br>
+The crucial constraint is that <strong>all building blocks and all weights must be non-negative</strong>. You cannot have "negative light" or an "anti-nose." Every ingredient contributes positively or not at all. This is what makes NMF fundamentally different from methods like PCA or SVD, which allow negative components. The non-negativity forces the parts to be additive and directly interpretable: each basis image looks like a recognizable facial feature, not an abstract oscillation pattern.<br><br>
+This constraint mirrors how things work in the physical world. When you mix paint colors, you add pigments; you never subtract red to get blue. When you combine audio sources, each microphone captures a sum of sound sources; no source contributes "negative sound." NMF respects this physical reality, and that is what makes its decompositions meaningful.
+</div>
+
+<div class="formula-box">
+<strong>The NMF Problem Statement</strong>
+
+<p>Given a non-negative data matrix $V$, find non-negative factor matrices $W$ and $H$ such that:</p>
+
+$$V \approx WH$$
+
+<p style="margin-top:8px;">where all three matrices have only non-negative entries.</p>
+
+<dl class="breakdown">
+ <dt>$V \in \mathbb{R}^{n \times m}_{\geq 0}$</dt><dd>the data matrix; $n$ features (e.g., pixels) by $m$ samples (e.g., images). Every entry $V_{ij} \geq 0$.</dd>
+ <dt>$W \in \mathbb{R}^{n \times k}_{\geq 0}$</dt><dd>the <strong>basis matrix</strong> (or "parts matrix"); $n$ features by $k$ components. Each column of $W$ is one building block.</dd>
+ <dt>$H \in \mathbb{R}^{k \times m}_{\geq 0}$</dt><dd>the <strong>coefficient matrix</strong> (or "weight/encoding matrix"); $k$ components by $m$ samples. Each column of $H$ tells how to combine the building blocks for one sample.</dd>
+ <dt>$k$</dt><dd>the <strong>rank</strong> (number of components); a hyperparameter chosen by the user. Typically $k \ll \min(n, m)$, so the factorization compresses the data.</dd>
+</dl>
+</div>
+
+<div class="note">
+<strong>Dimensions check:</strong> $V$ is $n \times m$. $W$ is $n \times k$, $H$ is $k \times m$. The product $WH$ is $n \times m$; same shape as $V$. Each column of $V$ (one data sample) is approximated as $V_{:,j} \approx W \cdot H_{:,j}$; a linear combination of the $k$ columns of $W$, weighted by the $j$-th column of $H$.
+</div>
+
+<!-- SVG diagram: face decomposition -->
+<svg viewBox="0 0 880 260" style="width:100%;max-width:880px;margin:24px auto;display:block;">
+ <!-- V matrix -->
+ <rect x="20" y="40" width="120" height="160" rx="6" fill="#23232e" stroke="#d4956a" stroke-width="2"/>
+ <text x="80" y="30" fill="#d4956a" font-size="15" text-anchor="middle" font-weight="bold">V</text>
+ <text x="80" y="110" fill="#a8a49c" font-size="13" text-anchor="middle">n x m</text>
+ <text x="80" y="130" fill="#666" font-size="11" text-anchor="middle">data matrix</text>
+ <text x="80" y="148" fill="#666" font-size="11" text-anchor="middle">(e.g., face images)</text>
+ <!-- approx sign -->
+ <text x="170" y="125" fill="#c9a84c" font-size="24" text-anchor="middle" font-weight="bold">&asymp;</text>
+ <!-- W matrix -->
+ <rect x="210" y="40" width="80" height="160" rx="6" fill="#23232e" stroke="#5b9bd5" stroke-width="2"/>
+ <text x="250" y="30" fill="#5b9bd5" font-size="15" text-anchor="middle" font-weight="bold">W</text>
+ <text x="250" y="110" fill="#a8a49c" font-size="13" text-anchor="middle">n x k</text>
+ <text x="250" y="130" fill="#666" font-size="11" text-anchor="middle">basis</text>
+ <text x="250" y="148" fill="#666" font-size="11" text-anchor="middle">(parts)</text>
+ <!-- times -->
+ <text x="315" y="125" fill="#c9a84c" font-size="20" text-anchor="middle" font-weight="bold">&times;</text>
+ <!-- H matrix -->
+ <rect x="345" y="70" width="120" height="80" rx="6" fill="#23232e" stroke="#70c470" stroke-width="2"/>
+ <text x="405" y="60" fill="#70c470" font-size="15" text-anchor="middle" font-weight="bold">H</text>
+ <text x="405" y="110" fill="#a8a49c" font-size="13" text-anchor="middle">k x m</text>
+ <text x="405" y="128" fill="#666" font-size="11" text-anchor="middle">weights</text>
+
+ <!-- Arrow to expansion -->
+ <line x1="490" y1="110" x2="520" y2="110" stroke="#666" stroke-width="1.5" marker-end="url(#arrowhead-nmf)"/>
+ <defs><marker id="arrowhead-nmf" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#666"/></marker></defs>
+
+ <!-- Expanded view: basis faces -->
+ <rect x="535" y="30" width="60" height="60" rx="4" fill="#1a1a24" stroke="#5b9bd5" stroke-width="1.5"/>
+ <text x="565" y="60" fill="#5b9bd5" font-size="10" text-anchor="middle">basis 1</text>
+ <text x="565" y="74" fill="#5b9bd5" font-size="10" text-anchor="middle">(eyes)</text>
+ <text x="607" y="65" fill="#c9a84c" font-size="16" text-anchor="middle">+</text>
+ <rect x="620" y="30" width="60" height="60" rx="4" fill="#1a1a24" stroke="#5b9bd5" stroke-width="1.5"/>
+ <text x="650" y="60" fill="#5b9bd5" font-size="10" text-anchor="middle">basis 2</text>
+ <text x="650" y="74" fill="#5b9bd5" font-size="10" text-anchor="middle">(nose)</text>
+ <text x="692" y="65" fill="#c9a84c" font-size="16" text-anchor="middle">+</text>
+ <rect x="705" y="30" width="60" height="60" rx="4" fill="#1a1a24" stroke="#5b9bd5" stroke-width="1.5"/>
+ <text x="735" y="60" fill="#5b9bd5" font-size="10" text-anchor="middle">basis 3</text>
+ <text x="735" y="74" fill="#5b9bd5" font-size="10" text-anchor="middle">(jaw)</text>
+ <text x="779" y="65" fill="#c9a84c" font-size="16" text-anchor="middle">=</text>
+ <rect x="795" y="30" width="60" height="60" rx="4" fill="#1a1a24" stroke="#d4956a" stroke-width="2"/>
+ <text x="825" y="60" fill="#d4956a" font-size="10" text-anchor="middle">face j</text>
+ <text x="825" y="74" fill="#d4956a" font-size="10" text-anchor="middle">(recon.)</text>
+
+ <!-- Weight labels under basis faces -->
+ <text x="565" y="106" fill="#70c470" font-size="11" text-anchor="middle">h&#x2081;&#x2C7C; = 0.8</text>
+ <text x="650" y="106" fill="#70c470" font-size="11" text-anchor="middle">h&#x2082;&#x2C7C; = 0.3</text>
+ <text x="735" y="106" fill="#70c470" font-size="11" text-anchor="middle">h&#x2083;&#x2C7C; = 0.6</text>
+
+ <!-- Key constraint label -->
+ <rect x="540" y="150" width="310" height="50" rx="6" fill="#2a2a36" stroke="#c9a84c" stroke-width="1.5"/>
+ <text x="695" y="170" fill="#c9a84c" font-size="13" text-anchor="middle" font-weight="bold">Key constraint: all entries in W and H are &ge; 0</text>
+ <text x="695" y="188" fill="#a8a49c" font-size="12" text-anchor="middle">No "negative light" or "anti-nose" allowed</text>
+</svg>
+
+
+<!-- ===================== PART B ===================== -->
+<h2>Part B: The Objective Function and Gradients</h2>
+
+<div class="analogy">
+<strong>Physical analogy: total pixel error as a quality score.</strong><br><br>
+Think of each entry $V_{ij}$ as the brightness of one pixel in one image. The reconstruction $WH$ produces predicted brightnesses $(WH)_{ij}$ for every pixel. The objective function measures total reconstruction quality: for every pixel in every image, compute how far off the predicted brightness is from the actual brightness, square that error (so overshooting and undershooting both count as bad), and add everything up. This is exactly like the sum-of-squared-errors you would use in linear regression, except now we have a matrix of data instead of a single vector. A perfect reconstruction gives $F = 0$; the worse the approximation, the larger $F$ gets.
+</div>
+
+<div class="formula-box">
+<strong>The Frobenius Norm Objective</strong>
+
+$$F(W, H) = \|V - WH\|_F^2 = \sum_{i=1}^{n} \sum_{j=1}^{m} \left(V_{ij} - (WH)_{ij}\right)^2$$
+
+<dl class="breakdown">
+ <dt>$F(W, H)$</dt><dd>the objective function; a scalar measuring total reconstruction error. We want to minimize this.</dd>
+ <dt>$\|\cdot\|_F$</dt><dd>the Frobenius norm of a matrix; the square root of the sum of all squared entries. $\|A\|_F = \sqrt{\sum_{i,j} A_{ij}^2}$.</dd>
+ <dt>$V - WH$</dt><dd>the residual matrix; each entry $(V - WH)_{ij}$ is the error at position $(i, j)$.</dd>
+ <dt>$(WH)_{ij}$</dt><dd>the $(i,j)$ entry of the reconstruction: $(WH)_{ij} = \sum_{a=1}^{k} W_{ia} H_{aj}$.</dd>
+</dl>
+
+<p style="margin-top:12px;">The Frobenius norm squared can also be written using the trace:</p>
+$$\|V - WH\|_F^2 = \text{tr}\left((V - WH)^T(V - WH)\right)$$
+</div>
+
+<div class="formula-box">
+<strong>Gradients of the Objective</strong>
+
+<p>To apply gradient-based optimization (recall from <a href="cg-02-multivariable-bridge.html" style="color:#d4956a;">Page 02</a> and <a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>), we need the gradients with respect to $H$ and $W$ separately:</p>
+
+$$\nabla_H F = W^T(WH - V)$$
+
+$$\nabla_W F = (WH - V)H^T$$
+
+<dl class="breakdown">
+ <dt>$\nabla_H F$</dt><dd>the gradient with respect to $H$; a $k \times m$ matrix (same shape as $H$). Points in the direction of steepest increase of $F$ in $H$-space.</dd>
+ <dt>$\nabla_W F$</dt><dd>the gradient with respect to $W$; an $n \times k$ matrix (same shape as $W$). Points in the direction of steepest increase of $F$ in $W$-space.</dd>
+ <dt>$W^T$</dt><dd>the transpose of $W$; a $k \times n$ matrix.</dd>
+ <dt>$WH - V$</dt><dd>the residual matrix (reconstruction minus data); an $n \times m$ matrix.</dd>
+ <dt>$H^T$</dt><dd>the transpose of $H$; an $m \times k$ matrix.</dd>
+</dl>
+</div>
+
+<div class="why-box">
+<h3>Why Not Just Use Gradient Descent?</h3>
+<p>In principle, we could apply standard gradient descent from <a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>:</p>
+$$H \leftarrow H - \alpha \nabla_H F = H - \alpha\, W^T(WH - V)$$
+$$W \leftarrow W - \alpha \nabla_W F = W - \alpha\, (WH - V)H^T$$
+<p style="margin-top:8px;">The problem: after subtracting a gradient term, some entries of $H$ or $W$ might become <strong>negative</strong>. We would need to "project" back to the non-negative orthant (clamp negative entries to zero). This works but is crude; it can slow convergence and cause the solution to get stuck on the boundary. The Lee-Seung multiplicative updates in Part C offer a much more elegant alternative.</p>
+</div>
+
+
+<!-- ===================== PART C ===================== -->
+<h2>Part C: Lee-Seung Multiplicative Update Rules</h2>
+
+<div class="analogy">
+<strong>Physical analogy: self-correcting scaling dials.</strong><br><br>
+Imagine each entry of $H$ is a volume dial on a mixing board. Standard gradient descent says "turn the dial left or right by a fixed amount," which might push it below zero (you cannot have negative volume). The Lee-Seung trick is different: instead of adding or subtracting, you <strong>multiply</strong> the current dial position by a correction factor. If the factor is greater than 1, the dial goes up. If the factor is between 0 and 1, the dial goes down. But since you are multiplying a non-negative number by a non-negative ratio, the result is always non-negative. The dial can get very close to zero but never cross into negative territory. It is like a dimmer switch that can only dim or brighten; it cannot produce "anti-light."<br><br>
+The cleverness is in choosing exactly the right correction factor so that the objective function $F$ decreases (or stays the same) at every step. Lee and Seung proved that if you set the factor to be the ratio of a "pull toward data" term to a "pull toward current reconstruction" term, this guarantee holds. When the reconstruction is already good at position $(a, j)$, the ratio is close to 1 (no change needed). When the reconstruction is too large, the ratio is less than 1 (scale down). When it is too small, the ratio is greater than 1 (scale up).
+</div>
+
+<div class="formula-box">
+<strong>Derivation from Gradient Descent</strong>
+
+<p>Start with the gradient descent update for $H$, but allow an <strong>element-wise step size</strong> $\eta_{aj}$ that can differ for each entry:</p>
+
+$$H_{aj} \leftarrow H_{aj} - \eta_{aj} \left[\nabla_H F\right]_{aj}$$
+
+<p style="margin-top:8px;">Expand the gradient: $\nabla_H F = W^TWH - W^TV$, so:</p>
+
+$$H_{aj} \leftarrow H_{aj} - \eta_{aj} \left[(W^TWH)_{aj} - (W^TV)_{aj}\right]$$
+
+<dl class="breakdown">
+ <dt>$H_{aj}$</dt><dd>the entry in row $a$, column $j$ of the coefficient matrix $H$.</dd>
+ <dt>$\eta_{aj}$</dt><dd>the element-wise step size; a different learning rate for each entry.</dd>
+ <dt>$(W^TWH)_{aj}$</dt><dd>the $(a,j)$ entry of $W^TWH$; the "reconstruction push" term.</dd>
+ <dt>$(W^TV)_{aj}$</dt><dd>the $(a,j)$ entry of $W^TV$; the "data pull" term.</dd>
+</dl>
+</div>
+
+<div class="formula-box">
+<strong>The Key Trick: Choose the Step Size to Make It Multiplicative</strong>
+
+<p>Set the element-wise step size to:</p>
+
+$$\eta_{aj} = \frac{H_{aj}}{(W^TWH)_{aj}}$$
+
+<p style="margin-top:8px;">Substitute back:</p>
+
+$$H_{aj} \leftarrow H_{aj} - \frac{H_{aj}}{(W^TWH)_{aj}} \left[(W^TWH)_{aj} - (W^TV)_{aj}\right]$$
+
+$$= H_{aj} \left[1 - \frac{(W^TWH)_{aj} - (W^TV)_{aj}}{(W^TWH)_{aj}}\right]$$
+
+$$= H_{aj} \cdot \frac{(W^TV)_{aj}}{(W^TWH)_{aj}}$$
+
+<dl class="breakdown">
+ <dt>$\frac{H_{aj}}{(W^TWH)_{aj}}$</dt><dd>the carefully chosen step size; makes the update multiplicative rather than additive.</dd>
+ <dt>$\frac{(W^TV)_{aj}}{(W^TWH)_{aj}}$</dt><dd>the correction ratio; data-pull divided by reconstruction-push. Greater than 1 when the reconstruction underestimates the data at position $(a,j)$; less than 1 when it overestimates.</dd>
+</dl>
+</div>
+
+<div class="formula-box">
+<strong>Lee-Seung Multiplicative Update Rules (Final Form)</strong>
+
+<p><strong>Update for $H$ (coefficient matrix):</strong></p>
+$$\boxed{H_{aj} \leftarrow H_{aj} \cdot \frac{(W^TV)_{aj}}{(W^TWH)_{aj}}}$$
+
+<p style="margin-top:12px;"><strong>Update for $W$ (basis matrix):</strong></p>
+$$\boxed{W_{ia} \leftarrow W_{ia} \cdot \frac{(VH^T)_{ia}}{(WHH^T)_{ia}}}$$
+
+<dl class="breakdown">
+ <dt>$W^TV$</dt><dd>$k \times m$ matrix; captures how well each basis aligns with the raw data.</dd>
+ <dt>$W^TWH$</dt><dd>$k \times m$ matrix; captures how well each basis aligns with the current reconstruction.</dd>
+ <dt>$VH^T$</dt><dd>$n \times k$ matrix; how the data projects onto the current coefficients.</dd>
+ <dt>$WHH^T$</dt><dd>$n \times k$ matrix; how the reconstruction projects onto the current coefficients.</dd>
+</dl>
+</div>
+
+<div class="why-box">
+<h3>Why Non-negativity is Automatically Preserved</h3>
+<p>Consider the $H$ update: $H_{aj} \leftarrow H_{aj} \cdot \frac{(W^TV)_{aj}}{(W^TWH)_{aj}}$.</p>
+<ul style="margin: 8px 0 8px 20px;">
+ <li>$H_{aj} \geq 0$ by assumption (we start with non-negative initialization).</li>
+ <li>$(W^TV)_{aj} = \sum_i W_{ia} V_{ij} \geq 0$ because $W \geq 0$ and $V \geq 0$; a sum of products of non-negative numbers.</li>
+ <li>$(W^TWH)_{aj} = \sum_i (W^T)_{ai} (WH)_{ij} \geq 0$ for the same reason.</li>
+</ul>
+<p>A non-negative number times a non-negative ratio is non-negative. No projection step needed! The update stays in the feasible region by construction. This is the elegance of the multiplicative approach.</p>
+</div>
+
+<div class="algo-box">
+<div class="algo-title">Algorithm: Lee-Seung Multiplicative Update NMF</div>
+<div class="algo-line"><strong style="color:#d4956a;">Input:</strong> data matrix $V \geq 0$ (size $n \times m$), rank $k$, tolerance $\epsilon \gt 0$, max iterations $T$</div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 0:</strong> Initialize $W_0 \geq 0$ (size $n \times k$) and $H_0 \geq 0$ (size $k \times m$) randomly (positive entries)</div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 1:</strong> For $t = 0, 1, 2, \ldots, T$:</div>
+<div class="algo-line" style="padding-left:36px;"><strong style="color:#d4956a;">1a.</strong> Update $H$: for every entry $(a, j)$, set $H_{aj} \leftarrow H_{aj} \cdot \frac{(W^TV)_{aj}}{(W^TWH)_{aj}}$ <span class="algo-comment">&larr; fix $W$, improve $H$</span></div>
+<div class="algo-line" style="padding-left:36px;"><strong style="color:#d4956a;">1b.</strong> Update $W$: for every entry $(i, a)$, set $W_{ia} \leftarrow W_{ia} \cdot \frac{(VH^T)_{ia}}{(WHH^T)_{ia}}$ <span class="algo-comment">&larr; fix $H$, improve $W$</span></div>
+<div class="algo-line" style="padding-left:36px;"><strong style="color:#d4956a;">1c.</strong> Compute error: $F_t = \|V - WH\|_F^2$ <span class="algo-comment">&larr; optional; for convergence monitoring</span></div>
+<div class="algo-line" style="padding-left:36px;"><strong style="color:#d4956a;">1d.</strong> If $|F_t - F_{t-1}| / F_0 \lt \epsilon$, STOP <span class="algo-comment">&larr; relative change is small enough</span></div>
+<div class="algo-line"><strong style="color:#d4956a;">Output:</strong> $W$, $H$ such that $V \approx WH$ with all entries non-negative</div>
+</div>
+
+
+<!-- ===================== PART D ===================== -->
+<h2>Part D: Hand Computation (One Full Iteration)</h2>
+
+<div class="analogy">
+<strong>Physical analogy: tuning a two-knob synthesizer.</strong><br><br>
+We have a tiny $2 \times 2$ data matrix, and we want to approximate it using rank $k = 1$. This means $W$ is a single column vector (one "building block") and $H$ is a single row vector (one set of weights). The product $WH$ is a rank-1 outer product. Think of it like having one waveform shape ($W$) and one set of amplitude settings ($H$), and you are trying to match a target sound ($V$) by adjusting both. We will walk through one complete iteration of the multiplicative updates, showing every intermediate matrix multiplication.
+</div>
+
+<div class="hand-calc">
+<h3>Worked Example: One Iteration of NMF Multiplicative Updates</h3>
+
+<p>Data matrix, initial factors, and target rank:</p>
+$$V = \begin{bmatrix} 4 & 6 \\ 2 & 3 \end{bmatrix}, \quad W_0 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}, \quad H_0 = \begin{bmatrix} 1 & 1 \end{bmatrix}, \quad k = 1$$
+
+<p style="margin-top:8px;">Initial reconstruction and error:</p>
+$$W_0 H_0 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}\begin{bmatrix} 1 & 1 \end{bmatrix} = \begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix}$$
+$$F_0 = \|V - W_0 H_0\|_F^2 = (4-1)^2 + (6-1)^2 + (2-1)^2 + (3-1)^2 = 9 + 25 + 1 + 4 = 39$$
+
+<div class="step">
+<span class="step-label">Step 1: Update $H$ (fix $W_0$, improve $H$)</span><br>
+<p>Compute $W_0^T V$ (the "data pull" for $H$):</p>
+$$W_0^T V = \begin{bmatrix} 1 & 1 \end{bmatrix} \begin{bmatrix} 4 & 6 \\ 2 & 3 \end{bmatrix} = \begin{bmatrix} 6 & 9 \end{bmatrix}$$
+
+<p style="margin-top:8px;">Compute $W_0^T W_0 H_0$ (the "reconstruction push" for $H$):</p>
+$$W_0^T W_0 = \begin{bmatrix} 1 & 1 \end{bmatrix}\begin{bmatrix} 1 \\ 1 \end{bmatrix} = [2]$$
+$$W_0^T W_0 H_0 = [2] \begin{bmatrix} 1 & 1 \end{bmatrix} = \begin{bmatrix} 2 & 2 \end{bmatrix}$$
+
+<p style="margin-top:8px;">Apply the multiplicative update element-wise:</p>
+$$H_1 = H_0 \odot \frac{W_0^T V}{W_0^T W_0 H_0} = \begin{bmatrix} 1 & 1 \end{bmatrix} \odot \frac{\begin{bmatrix} 6 & 9 \end{bmatrix}}{\begin{bmatrix} 2 & 2 \end{bmatrix}} = \begin{bmatrix} 1 \cdot \frac{6}{2} & 1 \cdot \frac{9}{2} \end{bmatrix} = \begin{bmatrix} 3 & 4.5 \end{bmatrix}$$
+</div>
+
+<div class="step">
+<span class="step-label">Step 2: Update $W$ (fix $H_1$, improve $W$)</span><br>
+<p>Compute $V H_1^T$ (the "data pull" for $W$):</p>
+$$V H_1^T = \begin{bmatrix} 4 & 6 \\ 2 & 3 \end{bmatrix}\begin{bmatrix} 3 \\ 4.5 \end{bmatrix} = \begin{bmatrix} 4(3) + 6(4.5) \\ 2(3) + 3(4.5) \end{bmatrix} = \begin{bmatrix} 39 \\ 19.5 \end{bmatrix}$$
+
+<p style="margin-top:8px;">Compute $W_0 H_1 H_1^T$ (the "reconstruction push" for $W$):</p>
+$$H_1 H_1^T = \begin{bmatrix} 3 & 4.5 \end{bmatrix}\begin{bmatrix} 3 \\ 4.5 \end{bmatrix} = [9 + 20.25] = [29.25]$$
+$$W_0 H_1 H_1^T = \begin{bmatrix} 1 \\ 1 \end{bmatrix} [29.25] = \begin{bmatrix} 29.25 \\ 29.25 \end{bmatrix}$$
+
+<p style="margin-top:8px;">Apply the multiplicative update element-wise:</p>
+$$W_1 = W_0 \odot \frac{VH_1^T}{W_0 H_1 H_1^T} = \begin{bmatrix} 1 \\ 1 \end{bmatrix} \odot \frac{\begin{bmatrix} 39 \\ 19.5 \end{bmatrix}}{\begin{bmatrix} 29.25 \\ 29.25 \end{bmatrix}} = \begin{bmatrix} \frac{39}{29.25} \\ \frac{19.5}{29.25} \end{bmatrix} \approx \begin{bmatrix} 1.333 \\ 0.667 \end{bmatrix}$$
+</div>
+
+<div class="step">
+<span class="step-label">Step 3: Verify the reconstruction after one iteration</span><br>
+$$W_1 H_1 = \begin{bmatrix} 1.333 \\ 0.667 \end{bmatrix}\begin{bmatrix} 3 & 4.5 \end{bmatrix} = \begin{bmatrix} 4.0 & 6.0 \\ 2.0 & 3.0 \end{bmatrix}$$
+
+<p class="result">The reconstruction after just one iteration is $W_1 H_1 = \begin{bmatrix} 4.0 & 6.0 \\ 2.0 & 3.0 \end{bmatrix}$, which exactly equals $V$! The error $F_1 = 0$.</p>
+</div>
+
+<div class="check">
+<strong>Why did we get exact recovery?</strong> The data matrix $V = \begin{bmatrix} 4 & 6 \\ 2 & 3 \end{bmatrix}$ has rank 1: the second row is exactly half the first row. So $V = \begin{bmatrix} 2 \\ 1 \end{bmatrix}\begin{bmatrix} 2 & 3 \end{bmatrix}$, and our rank-1 NMF found the equivalent factorization $W_1 H_1 = \begin{bmatrix} 1.333 \\ 0.667 \end{bmatrix}\begin{bmatrix} 3 & 4.5 \end{bmatrix}$. Both are valid because NMF is not unique; you can scale $W$ by any positive constant and divide $H$ by the same constant without changing the product.
+</div>
+</div>
+
+
+<!-- ===================== PART E ===================== -->
+<h2>Part E: Alternating Least Squares (ALS) Method</h2>
+
+<div class="analogy">
+<strong>Physical analogy: alternating lock adjustments.</strong><br><br>
+Imagine a combination lock with two separate dials, $W$ and $H$. You cannot turn both dials simultaneously because the interaction between them makes it impossible to predict the outcome. Instead, you use a simpler strategy: hold one dial fixed and turn the other to its best position. Then hold that dial fixed and turn the first one to its best position. Keep alternating.<br><br>
+Each time you fix one dial, the problem of optimizing the other becomes a standard least-squares problem (recall normal equations from linear regression). This is a problem we know how to solve exactly. The catch is that after solving for the optimal $H$ given fixed $W$, we need to clamp any negative entries to zero (to maintain non-negativity). This "project and solve" approach is less elegant than the multiplicative updates but is often faster in practice because each subproblem has a closed-form solution.
+</div>
+
+<div class="formula-box">
+<strong>ALS Subproblem 1: Fix $W$, Solve for $H$</strong>
+
+<p>With $W$ fixed, the objective $\|V - WH\|_F^2$ is a <strong>least-squares problem</strong> in $H$. Setting $\nabla_H F = 0$:</p>
+
+$$W^T W H = W^T V$$
+
+<p style="margin-top:8px;">If $W^TW$ is invertible:</p>
+$$H^* = (W^TW)^{-1} W^T V$$
+
+<p style="margin-top:8px;">Then project to non-negative: $H \leftarrow \max(0, H^*)$, applied element-wise.</p>
+
+<dl class="breakdown">
+ <dt>$W^TW$</dt><dd>a $k \times k$ matrix (small!). Called the <strong>Gram matrix</strong> of $W$.</dd>
+ <dt>$(W^TW)^{-1}$</dt><dd>the inverse of the Gram matrix; exists when the columns of $W$ are linearly independent.</dd>
+ <dt>$(W^TW)^{-1}W^T$</dt><dd>the <strong>pseudoinverse</strong> of $W$; the same expression used in ordinary least-squares regression.</dd>
+ <dt>$\max(0, H^*)$</dt><dd>element-wise clamping; replace any negative entry with 0 to enforce non-negativity.</dd>
+</dl>
+</div>
+
+<div class="formula-box">
+<strong>ALS Subproblem 2: Fix $H$, Solve for $W$</strong>
+
+<p>With $H$ fixed, the objective $\|V - WH\|_F^2$ is a least-squares problem in $W$. Transposing the problem:</p>
+
+$$\|V^T - H^T W^T\|_F^2$$
+
+<p style="margin-top:8px;">This gives:</p>
+$$W^* = V H^T (H H^T)^{-1}$$
+
+<p style="margin-top:8px;">Then project: $W \leftarrow \max(0, W^*)$, applied element-wise.</p>
+
+<dl class="breakdown">
+ <dt>$HH^T$</dt><dd>a $k \times k$ Gram matrix of $H$.</dd>
+ <dt>$(HH^T)^{-1}$</dt><dd>its inverse; exists when the rows of $H$ are linearly independent.</dd>
+ <dt>$VH^T(HH^T)^{-1}$</dt><dd>the least-squares solution for $W$ ignoring the non-negativity constraint.</dd>
+</dl>
+</div>
+
+<div class="why-box">
+<h3>Why is Each Subproblem Convex but the Joint Problem is Not?</h3>
+<p>When $W$ is fixed, $F(W, H) = \|V - WH\|_F^2$ is a quadratic function of the entries of $H$ alone. A quadratic with a positive semi-definite Hessian is convex (recall from <a href="cg-05-convexity.html" style="color:#d4956a;">Page 05</a>), so each subproblem has a unique global minimum (ignoring the non-negativity constraint).</p>
+<p style="margin-top:8px;">However, the joint problem in $(W, H)$ is <strong>not convex</strong>. The term $WH$ is bilinear: it is linear in $W$ for fixed $H$ and linear in $H$ for fixed $W$, but not linear (or convex) in $(W, H)$ jointly. The product of two variables ($W_{ia} \cdot H_{aj}$) is not a convex function.</p>
+<p style="margin-top:8px;">This means NMF can get stuck in <strong>local minima</strong>. Different random initializations will generally produce different factorizations, and there is no guarantee that any of them is globally optimal.</p>
+</div>
+
+<div class="algo-box">
+<div class="algo-title">Algorithm: Alternating Least Squares (ALS) for NMF</div>
+<div class="algo-line"><strong style="color:#d4956a;">Input:</strong> data matrix $V \geq 0$ (size $n \times m$), rank $k$, tolerance $\epsilon \gt 0$, max iterations $T$</div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 0:</strong> Initialize $W_0 \geq 0$ (size $n \times k$) and $H_0 \geq 0$ (size $k \times m$) randomly</div>
+<div class="algo-line"><strong style="color:#d4956a;">Step 1:</strong> For $t = 0, 1, 2, \ldots, T$:</div>
+<div class="algo-line" style="padding-left:36px;"><strong style="color:#d4956a;">1a.</strong> Fix $W_t$, solve: $H_{t+1} = \max\!\big(0,\; (W_t^T W_t)^{-1} W_t^T V\big)$ <span class="algo-comment">&larr; least squares + clamp</span></div>
+<div class="algo-line" style="padding-left:36px;"><strong style="color:#d4956a;">1b.</strong> Fix $H_{t+1}$, solve: $W_{t+1} = \max\!\big(0,\; V H_{t+1}^T (H_{t+1} H_{t+1}^T)^{-1}\big)$ <span class="algo-comment">&larr; least squares + clamp</span></div>
+<div class="algo-line" style="padding-left:36px;"><strong style="color:#d4956a;">1c.</strong> Compute error: $F_t = \|V - W_{t+1}H_{t+1}\|_F^2$</div>
+<div class="algo-line" style="padding-left:36px;"><strong style="color:#d4956a;">1d.</strong> If $|F_t - F_{t-1}| / F_0 \lt \epsilon$, STOP</div>
+<div class="algo-line"><strong style="color:#d4956a;">Output:</strong> $W$, $H$ with $V \approx WH$, all entries non-negative</div>
+</div>
+
+<div class="note">
+<strong>Practical tip:</strong> ALS often converges faster than multiplicative updates in terms of wall-clock time because it solves a linear system at each step rather than doing element-wise scaling. However, the clamping $\max(0, \cdot)$ means the solution to each subproblem is not exact (it is the closest non-negative matrix to the unconstrained solution), so convergence can be irregular.
+</div>
+
+
+<!-- ===================== PART F ===================== -->
+<h2>Part F: Challenges and Variants</h2>
+
+<div class="analogy">
+<strong>Physical analogy: the landscape of solutions.</strong><br><br>
+Because NMF is a non-convex problem, imagine its objective function as a hilly landscape with many valleys. Each valley is a local minimum; a factorization that is locally optimal but not necessarily the global best. Different starting points (random initializations) will lead the algorithm to roll into different valleys. Unlike the smooth single-bowl landscapes of convex problems from <a href="cg-05-convexity.html" style="color:#d4956a;">Page 05</a>, the NMF landscape has many comparable valleys, and the algorithm has no way to tell whether the valley it found is the deepest one. The practical remedy is to run NMF multiple times with different initializations and keep the best result.
+</div>
+
+<h3>Non-convexity and Initialization</h3>
+<div class="formula-box">
+<strong>Multiple Restarts Strategy</strong>
+
+<p>Run NMF $R$ times with different random initializations $(W_0^{(r)}, H_0^{(r)})$ for $r = 1, \ldots, R$. Keep the result with the smallest final error:</p>
+
+$$(W^*, H^*) = \arg\min_{r \in \{1, \ldots, R\}} \|V - W^{(r)}H^{(r)}\|_F^2$$
+
+<dl class="breakdown">
+ <dt>$R$</dt><dd>number of random restarts; typical values: 10 to 50.</dd>
+ <dt>$(W^{(r)}, H^{(r)})$</dt><dd>the factorization found from the $r$-th initialization.</dd>
+</dl>
+
+<p style="margin-top:8px;">Common initialization strategies: random uniform entries in $[0, 1]$, random entries sampled from the data distribution, or SVD-based initialization (take the absolute values of the SVD factors).</p>
+</div>
+
+<h3>Choosing $k$ (the Rank)</h3>
+<div class="formula-box">
+<strong>The Rank Selection Trade-off</strong>
+
+<p>The rank $k$ controls the complexity of the factorization:</p>
+
+<ul style="margin: 8px 0 8px 20px;">
+ <li><strong>$k$ too small:</strong> underfitting. The model cannot capture enough structure in the data. High reconstruction error.</li>
+ <li><strong>$k$ too large:</strong> overfitting. The model memorizes noise. Poor generalization to new data. Also: larger $k$ means more parameters ($nk + km$ entries in $W$ and $H$) and slower computation.</li>
+ <li><strong>$k$ just right:</strong> captures the meaningful structure without fitting noise.</li>
+</ul>
+
+<dl class="breakdown">
+ <dt>$k$</dt><dd>rank; the number of basis components. Must satisfy $k \leq \min(n, m)$.</dd>
+ <dt>Parameters</dt><dd>$W$ has $nk$ entries, $H$ has $km$ entries; total = $k(n + m)$. Compare to $V$ which has $nm$ entries. Compression requires $k(n + m) \lt nm$, i.e., $k \lt \frac{nm}{n + m}$.</dd>
+</dl>
+</div>
+
+<h3>Sparse NMF</h3>
+<div class="formula-box">
+<strong>Sparsity-Regularized Objective</strong>
+
+<p>Add an $L_1$ penalty on $H$ to encourage sparsity (many zero entries in the coefficient matrix):</p>
+
+$$F_{\text{sparse}}(W, H) = \|V - WH\|_F^2 + \lambda \sum_{a,j} |H_{aj}|$$
+
+<p style="margin-top:8px;">Since $H \geq 0$, the absolute values simplify: $|H_{aj}| = H_{aj}$, so:</p>
+
+$$F_{\text{sparse}}(W, H) = \|V - WH\|_F^2 + \lambda \|H\|_1$$
+
+<dl class="breakdown">
+ <dt>$\lambda$</dt><dd>the sparsity parameter; larger $\lambda$ forces more entries of $H$ to zero.</dd>
+ <dt>$\|H\|_1$</dt><dd>the $L_1$ norm (sum of all entries); promotes sparsity because minimizing the sum of entries pushes small entries to zero.</dd>
+</dl>
+
+<p style="margin-top:8px;">Sparse NMF finds "parts" that are more localized and interpretable. In the face example, sparse $H$ means each face uses only a few building blocks, not all of them.</p>
+</div>
+
+<h3>Orthogonal NMF</h3>
+<div class="formula-box">
+<strong>Orthogonal NMF: Connection to Clustering</strong>
+
+<p>Add the constraint $H H^T = I$ (orthogonality of rows of $H$):</p>
+
+$$\min_{W \geq 0,\, H \geq 0} \|V - WH\|_F^2 \quad \text{subject to} \quad HH^T = I_k$$
+
+<dl class="breakdown">
+ <dt>$HH^T = I_k$</dt><dd>each row of $H$ is a unit vector and different rows are orthogonal. Combined with $H \geq 0$, this forces each column of $H$ to have at most one nonzero entry.</dd>
+</dl>
+
+<p style="margin-top:8px;">This is equivalent to <strong>K-means clustering</strong>: each data point (column of $V$) is assigned to exactly one cluster, and $W$ contains the cluster centroids. The orthogonality constraint transforms the soft mixing of standard NMF into a hard assignment.</p>
+</div>
+
+<h3>Comparison: Lee-Seung vs ALS</h3>
+<table>
+<tr>
+ <th style="text-align:left;">Property</th>
+ <th>Lee-Seung (Multiplicative)</th>
+ <th>ALS</th>
+</tr>
+<tr>
+ <td style="text-align:left; color:#d4956a;">Update type</td>
+ <td>Element-wise multiplication</td>
+ <td>Solve linear system + clamp</td>
+</tr>
+<tr>
+ <td style="text-align:left; color:#d4956a;">Non-negativity</td>
+ <td>Automatic (built into updates)</td>
+ <td>Enforced by projection ($\max(0, \cdot)$)</td>
+</tr>
+<tr>
+ <td style="text-align:left; color:#d4956a;">Convergence guarantee</td>
+ <td>Monotonically non-increasing $F$</td>
+ <td>Monotonically non-increasing $F$</td>
+</tr>
+<tr>
+ <td style="text-align:left; color:#d4956a;">Speed per iteration</td>
+ <td>Fast (matrix multiplications only)</td>
+ <td>Moderate (requires solving $k \times k$ system)</td>
+</tr>
+<tr>
+ <td style="text-align:left; color:#d4956a;">Convergence speed</td>
+ <td>Slow (many iterations)</td>
+ <td>Faster (fewer iterations, each more expensive)</td>
+</tr>
+<tr>
+ <td style="text-align:left; color:#d4956a;">Implementation</td>
+ <td>Very simple; a few lines of code</td>
+ <td>Moderate; needs matrix inversion</td>
+</tr>
+<tr>
+ <td style="text-align:left; color:#d4956a;">Handles zeros</td>
+ <td>Zeros in $W$ or $H$ stay zero forever</td>
+ <td>Can escape from zero (via unconstrained solve + clamp)</td>
+</tr>
+<tr>
+ <td style="text-align:left; color:#d4956a;">Best for</td>
+ <td>Simplicity, guaranteed non-negativity</td>
+ <td>Faster convergence, larger problems</td>
+</tr>
+</table>
+
+<div class="note">
+<strong>Convergence caveat for both methods:</strong> Both Lee-Seung and ALS guarantee that the objective $F$ is non-increasing at each step, but neither guarantees convergence to a <strong>stationary point</strong> (recall from <a href="cg-04-optimality.html" style="color:#d4956a;">Page 04</a>). In practice, both methods work well, but neither comes with the strong convergence guarantees of methods like BFGS (<a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>) on smooth unconstrained problems.
+</div>
+
+
+<!-- ===================== GLOSSARY ===================== -->
+<div class="glossary">
+<h3>Glossary</h3>
+<dl>
+ <dt>Non-negative Matrix Factorization (NMF)</dt>
+ <dd>A matrix decomposition method that factors a non-negative data matrix $V$ into two non-negative matrices $W$ and $H$ such that $V \approx WH$. The non-negativity constraint produces additive, interpretable parts.</dd>
+
+ <dt>Frobenius norm</dt>
+ <dd>$\|A\|_F = \sqrt{\sum_{i,j} A_{ij}^2}$. The "total error" measure for matrices; analogous to the Euclidean norm for vectors. Used as the standard NMF objective.</dd>
+
+ <dt>Basis matrix ($W$)</dt>
+ <dd>The $n \times k$ non-negative matrix whose columns represent the "building blocks" or "parts" of the data. In the face example, each column of $W$ is a basis face.</dd>
+
+ <dt>Coefficient matrix ($H$)</dt>
+ <dd>The $k \times m$ non-negative matrix whose columns give the "recipes" for reconstructing each data sample. $H_{aj}$ is how much of the $a$-th basis component appears in the $j$-th sample.</dd>
+
+ <dt>Rank ($k$)</dt>
+ <dd>The number of basis components used in the factorization. A hyperparameter chosen by the user; controls the trade-off between compression and reconstruction quality.</dd>
+
+ <dt>Multiplicative update</dt>
+ <dd>The Lee-Seung update rule that multiplies each entry by a non-negative correction ratio, automatically preserving non-negativity. Derived by choosing an element-wise step size that transforms additive gradient descent into multiplicative scaling.</dd>
+
+ <dt>Alternating Least Squares (ALS)</dt>
+ <dd>An NMF algorithm that alternates between fixing $W$ and solving for $H$ (via least squares + clamping) and fixing $H$ and solving for $W$. Each subproblem is convex; the joint problem is not.</dd>
+
+ <dt>Non-convexity</dt>
+ <dd>The NMF objective is non-convex in $(W, H)$ jointly because of the bilinear term $WH$. This means the optimization landscape has multiple local minima, and different initializations may yield different solutions.</dd>
+
+ <dt>Sparsity</dt>
+ <dd>A property of a matrix (or vector) in which most entries are zero or near-zero. Sparse NMF adds an $L_1$ penalty to encourage this, producing more interpretable and localized decompositions.</dd>
+</dl>
+</div>
+
+
+<!-- ===================== NAV ===================== -->
+</div>
+
+<div class="bottom-nav">
+  <div class="bottom-nav-row">
+    <a class="bottom-nav-btn prev" href="cg-21.html">&larr; 21. Previous</a>
+    <a class="bottom-nav-btn next" href="cg-23.html">23. Next &rarr;</a>
+  </div>
+  <a class="bottom-nav-index" href="index.html">Back to Index</a>
+</div>
+
+<script src="sidebar.js"></script>
+</body>
+</html>

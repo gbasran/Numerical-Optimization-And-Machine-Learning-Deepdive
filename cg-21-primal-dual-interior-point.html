@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page 21 : Primal-Dual Interior Point Method | MATH 3850 Course Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+ onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<span class="tag">PAGE 21; POST-MIDTERM</span>
+<h1>Primal-Dual Interior Point Method</h1>
+<p class="subtitle">The detailed mechanics of how interior point methods actually work; solving primal and dual simultaneously along the central path (Nocedal &amp; Wright Ch 14.1, Framework 14.1)</p>
+
+<!-- ==================== PART A ==================== -->
+<span class="tag">PART A</span>
+<h2>The Primal-Dual Framework</h2>
+
+<div class="analogy">
+<p><strong>Analogy: Negotiating a deal between buyer and seller.</strong></p>
+<p style="margin-top:12px;">On <a href="cg-16-lp-interior-point.html">Page 16</a>, we introduced the idea of a repulsive force field keeping you away from the walls of the feasible region. We learned that interior point methods stay in the interior, use a log barrier to avoid boundaries, and follow a central path to the optimum. But we left the HOW deliberately vague. Now we get specific about the actual machinery.</p>
+<p style="margin-top:12px;">The key insight of the primal-dual approach is this: instead of solving just the primal problem (the "buyer" trying to minimize cost), we solve the primal AND dual problems simultaneously. Think of it like a negotiation between a buyer and a seller. The buyer (primal) proposes a solution $x$ and tries to push the price $c^T x$ as LOW as possible. The seller (dual) proposes multipliers $\lambda$ and tries to push the value $b^T \lambda$ as HIGH as possible. Strong duality (a theorem from LP theory) guarantees that at the optimum, the buyer and seller agree: the two objective values are equal.</p>
+<p style="margin-top:12px;">The "gap" between their current offers is the <strong>duality measure</strong> $\mu$. When the buyer proposes $x$ and the seller proposes $(\lambda, s)$, the gap $\mu = x^T s / n$ measures how far apart they are. The algorithm drives this gap to zero, at which point the negotiation is settled: we have the optimal solution. Each iteration of the algorithm is like a round of negotiation where both sides adjust their positions, guided by Newton's method (<a href="cg-07-newton-method.html">Page 07</a>), to close the gap a little further.</p>
+<p style="margin-top:12px;">Why solve both simultaneously? Because the primal variables $x$ and the dual variables $(\lambda, s)$ are coupled through the KKT conditions (<a href="cg-15-constrained.html">Page 15</a>). Updating one side without the other is like a buyer adjusting their offer without knowing what the seller is asking; you waste rounds of negotiation. The primal-dual approach updates everything together, which is why it converges so fast in practice.</p>
+</div>
+
+<p>We work with a linear program in <strong>standard equality form</strong> (recall from <a href="cg-16-lp-interior-point.html">Page 16</a> how to convert inequality constraints to equalities using slack variables).</p>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">The Primal Problem</p>
+$$\min \; c^T x \quad \text{subject to} \quad Ax = b, \quad x \geq 0$$
+<dl class="breakdown">
+ <dt>$c \in \mathbb{R}^n$</dt>
+ <dd>The <strong>cost vector</strong>; coefficients of the objective function. Defines the "tilt" of the linear objective surface.</dd>
+ <dt>$x \in \mathbb{R}^n$</dt>
+ <dd>The <strong>primal decision variables</strong>; what we are choosing. Must be non-negative.</dd>
+ <dt>$A \in \mathbb{R}^{m \times n}$</dt>
+ <dd>The <strong>constraint matrix</strong>; $m$ equality constraints on $n$ variables. We assume $A$ has full row rank ($\text{rank}(A) = m$).</dd>
+ <dt>$b \in \mathbb{R}^m$</dt>
+ <dd>The <strong>right-hand side</strong> of the equality constraints.</dd>
+</dl>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">The Dual Problem</p>
+$$\max \; b^T \lambda \quad \text{subject to} \quad A^T \lambda + s = c, \quad s \geq 0$$
+<dl class="breakdown">
+ <dt>$\lambda \in \mathbb{R}^m$</dt>
+ <dd>The <strong>dual variables</strong> (also called Lagrange multipliers for the equality constraints $Ax = b$). No sign restriction on $\lambda$.</dd>
+ <dt>$s \in \mathbb{R}^n$</dt>
+ <dd>The <strong>dual slacks</strong>; the gap between $c$ and $A^T \lambda$. Must be non-negative ($s \geq 0$). These play the role of the Lagrange multipliers for the bound constraint $x \geq 0$.</dd>
+ <dt>$A^T \lambda + s = c$</dt>
+ <dd>The <strong>dual feasibility</strong> condition; this is the stationarity condition from the KKT system.</dd>
+ <dt>$b^T \lambda$</dt>
+ <dd>The <strong>dual objective</strong>; the seller's valuation. At optimality, $c^T x^* = b^T \lambda^*$ (strong duality).</dd>
+</dl>
+</div>
+
+<div class="why-box">
+<h3>Why solve the dual too?</h3>
+<p>Weak duality says $b^T \lambda \leq c^T x$ for any feasible primal-dual pair. Strong duality (which holds for LP) says that at optimality, $b^T \lambda^* = c^T x^*$. This means the gap $c^T x - b^T \lambda$ is a certificate of how far we are from optimal. If the gap is $10^{-8}$, we know the primal objective is within $10^{-8}$ of optimal; no need to keep iterating. The dual gives us a free optimality certificate at every step.</p>
+</div>
+
+<p>Now, the primal and dual together must satisfy the KKT conditions. For LP, these conditions are both necessary and sufficient (because LP is convex; recall <a href="cg-05-convexity.html">Page 05</a>). We rewrite the entire KKT system as a single vector equation $F = 0$:</p>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">KKT System as $F(x, \lambda, s) = 0$</p>
+$$F(x, \lambda, s) = \begin{bmatrix} A^T \lambda + s - c \\ Ax - b \\ XSe \end{bmatrix} = \mathbf{0}$$
+<p style="margin-top: 10px; font-size: 16px; color: #b8b4ac;">with the additional requirement $(x, s) \geq 0$.</p>
+<dl class="breakdown">
+ <dt>$A^T \lambda + s - c$</dt>
+ <dd><strong>Dual feasibility / stationarity</strong> (row 1): the dual constraint must hold. This is $\nabla_x \mathcal{L} = 0$ from the Lagrangian, identical to what we derived on <a href="cg-15-constrained.html">Page 15</a>.</dd>
+ <dt>$Ax - b$</dt>
+ <dd><strong>Primal feasibility</strong> (row 2): the equality constraints must be satisfied.</dd>
+ <dt>$XSe$</dt>
+ <dd><strong>Complementary slackness</strong> (row 3): the product $x_i s_i = 0$ for every $i$. At least one of $x_i$ or $s_i$ must be zero. This is the hardest condition to satisfy; it has a combinatorial flavor.</dd>
+ <dt>$X = \text{diag}(x_1, \ldots, x_n)$</dt>
+ <dd>The diagonal matrix with the primal variables on the diagonal. So $X$ is $n \times n$ with $(X)_{ii} = x_i$.</dd>
+ <dt>$S = \text{diag}(s_1, \ldots, s_n)$</dt>
+ <dd>The diagonal matrix with the dual slacks on the diagonal. So $S$ is $n \times n$ with $(S)_{ii} = s_i$.</dd>
+ <dt>$e = (1, 1, \ldots, 1)^T$</dt>
+ <dd>The vector of all ones in $\mathbb{R}^n$. So $XSe$ is the vector with entries $x_i s_i$.</dd>
+ <dt>$\mathbf{0}$</dt>
+ <dd>The zero vector; all three blocks must equal zero simultaneously.</dd>
+</dl>
+</div>
+
+<div class="why-box">
+<h3>Why rewrite KKT this way?</h3>
+<p>This is the same KKT system from <a href="cg-15-constrained.html">Page 15</a>, but rewritten in a compact form that Newton's method (<a href="cg-07-newton-method.html">Page 07</a>, <a href="cg-14-nonlinear-equations.html">Page 14</a>) can solve directly. We have $F : \mathbb{R}^{2n+m} \to \mathbb{R}^{2n+m}$; a system of $2n + m$ nonlinear equations in $2n + m$ unknowns ($x$, $\lambda$, $s$). The only nonlinearity is in the third block: $x_i s_i$ is a product of two unknowns. The first two blocks are entirely linear.</p>
+</div>
+
+<div class="exam-flag">
+<h4>Exam Alert: Writing the KKT System</h4>
+<p>Be able to write down the three-block KKT system $F(x, \lambda, s) = 0$ from scratch for a given LP. Know what each row represents: dual feasibility (row 1), primal feasibility (row 2), complementary slackness (row 3). Know the dimensions: row 1 is $n$ equations, row 2 is $m$ equations, row 3 is $n$ equations; total $2n + m$.</p>
+</div>
+
+
+<!-- ==================== PART B ==================== -->
+<span class="tag">PART B</span>
+<h2>The Duality Measure and Central Path</h2>
+
+<div class="analogy">
+<p><strong>Analogy: A thermometer for the negotiation.</strong></p>
+<p style="margin-top:12px;">Imagine the buyer and seller from Part A are in a negotiation room, and on the wall there is a thermometer. This thermometer does not measure temperature; it measures how far apart the two sides are. When the thermometer reads a high number, the buyer and seller are far from agreement. When it reads zero, the deal is done.</p>
+<p style="margin-top:12px;">That thermometer is the <strong>duality measure</strong> $\mu$. It is computed as the average of all the products $x_i s_i$. In the exact KKT solution, every $x_i s_i = 0$ (complementary slackness), so $\mu = 0$. But during the algorithm, the iterates have $x_i s_i \gt 0$ (because we stay strictly interior), and $\mu$ measures the average violation of complementary slackness.</p>
+<p style="margin-top:12px;">The <strong>central path</strong> is the path you follow when you keep all the products $x_i s_i$ perfectly balanced; every $x_i s_i$ equals exactly $\mu$, not just on average but individually. As you decrease $\mu$ from a large value toward zero, you slide along this perfectly balanced path toward the optimal solution. The central path is "central" because it stays as far from the boundary as possible for a given level of $\mu$; it threads through the middle of the feasible region. This connects directly to the central path concept introduced on <a href="cg-16-lp-interior-point.html">Page 16</a>, but now we see it through the primal-dual lens.</p>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">The Duality Measure</p>
+$$\mu = \frac{x^T s}{n} = \frac{1}{n} \sum_{i=1}^{n} x_i s_i$$
+<dl class="breakdown">
+ <dt>$x^T s$</dt>
+ <dd>The <strong>duality gap</strong>; the total sum of all complementarity products $x_i s_i$. For feasible points, this equals $c^T x - b^T \lambda$ (the gap between primal and dual objectives).</dd>
+ <dt>$n$</dt>
+ <dd>The number of primal variables (and dual slacks); we divide by $n$ to get the <strong>average</strong> complementarity product.</dd>
+ <dt>$\mu = 0$</dt>
+ <dd>At the optimum: every $x_i s_i = 0$, so $\mu = 0$. Complementary slackness holds exactly.</dd>
+ <dt>$\mu \gt 0$</dt>
+ <dd>During the algorithm: we have $x_i, s_i \gt 0$ (strictly interior), so $\mu \gt 0$. The algorithm drives $\mu \to 0$.</dd>
+</dl>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">The Central Path</p>
+<p>The central path is defined by modifying the complementarity condition from $XSe = 0$ to:</p>
+$$XSe = \mu e \quad \Longleftrightarrow \quad x_i s_i = \mu \quad \text{for all } i = 1, \ldots, n$$
+<p style="margin-top: 12px;">Together with primal and dual feasibility ($Ax = b$, $A^T \lambda + s = c$, $x \gt 0$, $s \gt 0$), this defines a unique point $(x(\mu), \lambda(\mu), s(\mu))$ for each $\mu \gt 0$.</p>
+<dl class="breakdown">
+ <dt>$XSe = \mu e$</dt>
+ <dd>Every complementarity product $x_i s_i$ is exactly $\mu$, not zero. This is a <strong>relaxed</strong> version of complementary slackness. Instead of demanding one of $x_i, s_i$ be zero, we demand their product be a fixed positive value $\mu$.</dd>
+ <dt>$\mu \to 0$</dt>
+ <dd>As $\mu$ decreases toward zero, the central path point approaches the LP optimal solution $x^*$.</dd>
+ <dt>$\mu \to \infty$</dt>
+ <dd>As $\mu$ becomes very large, the central path point moves toward the "analytic center" of the feasible region; the point farthest from all boundaries.</dd>
+</dl>
+</div>
+
+<div class="note">
+<p><strong>Why "central"?</strong> Along the central path, all products $x_i s_i$ are equal. No single variable is "more complementary" than another; the violation of complementary slackness is spread evenly. This balanced condition keeps the iterates well away from the boundary, avoiding numerical difficulties. If some $x_i s_i$ were much larger than others, the iterate would be dangerously close to a boundary in some directions while far away in others, causing the Newton system to become ill-conditioned.</p>
+</div>
+
+<!-- SVG: Primal-dual central path -->
+<div style="text-align: center; margin: 30px 0;">
+<svg viewBox="0 0 440 320" width="440" style="max-width: 100%;">
+ <!-- feasible region -->
+ <polygon points="60,280 360,280 360,100 240,40 60,100" fill="#25252e" fill-opacity="0.5" stroke="#d4956a" stroke-width="2"/>
+
+ <!-- central path (curved) -->
+ <path d="M 200,175 Q 215,140 225,105 Q 232,78 240,45" fill="none" stroke="#c9a84c" stroke-width="3" stroke-dasharray="8,4"/>
+
+ <!-- points along path with mu labels -->
+ <circle cx="200" cy="175" r="5" fill="#c9a84c"/>
+ <text x="132" y="180" fill="#c9a84c" font-size="11">$\mu = 10$ (large gap)</text>
+
+ <circle cx="218" cy="130" r="5" fill="#c9a84c"/>
+ <text x="228" y="135" fill="#c9a84c" font-size="11">$\mu = 1$</text>
+
+ <circle cx="228" cy="90" r="5" fill="#c9a84c"/>
+ <text x="238" y="95" fill="#c9a84c" font-size="11">$\mu = 0.1$</text>
+
+ <circle cx="235" cy="60" r="5" fill="#c9a84c"/>
+ <text x="245" y="65" fill="#c9a84c" font-size="11">$\mu = 0.01$</text>
+
+ <!-- optimal vertex -->
+ <circle cx="240" cy="40" r="8" fill="none" stroke="#c47070" stroke-width="2"/>
+ <circle cx="240" cy="40" r="3" fill="#c47070"/>
+ <text x="255" y="38" fill="#c47070" font-size="12" font-weight="bold">$x^*$ ($\mu = 0$)</text>
+
+ <!-- labels -->
+ <text x="140" y="210" fill="#c9a84c" font-size="13" font-weight="bold">Central Path</text>
+ <text x="175" y="260" fill="#d4956a" font-size="14">Feasible Region</text>
+
+ <!-- annotation arrow -->
+ <defs><marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#9b89b6"/></marker></defs>
+ <line x1="200" y1="200" x2="220" y2="165" stroke="#9b89b6" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+ <text x="140" y="220" fill="#9b89b6" font-size="11">Algorithm follows this path,</text>
+ <text x="140" y="233" fill="#9b89b6" font-size="11">decreasing $\mu$ each iteration</text>
+</svg>
+</div>
+
+<div class="exam-flag">
+<h4>Exam Alert: Duality Measure</h4>
+<p>Know the formula $\mu = x^T s / n$ and what it measures. Understand that $\mu = 0$ corresponds to exact complementary slackness (optimality), and $\mu \gt 0$ is the average violation. On the central path, each individual product $x_i s_i = \mu$ (not just the average).</p>
+</div>
+
+
+<!-- ==================== PART C ==================== -->
+<span class="tag">PART C</span>
+<h2>The Newton System</h2>
+
+<div class="analogy">
+<p><strong>Analogy: Newton as the negotiation mediator.</strong></p>
+<p style="margin-top:12px;">We have the system $F(x, \lambda, s) = 0$: the three KKT conditions that must hold at the optimum. This is a system of nonlinear equations (because of the $x_i s_i$ products in the complementarity block). On <a href="cg-14-nonlinear-equations.html">Page 14</a>, we learned that Newton's method is the gold standard for solving nonlinear systems: linearize $F$ at the current point, solve the linear system, take a step.</p>
+<p style="margin-top:12px;">Think of Newton's method here as a skilled mediator in the buyer-seller negotiation. At each round, the mediator looks at the current positions of both sides ($x$, $\lambda$, $s$), examines the gap ($\mu$), and computes the best simultaneous adjustment $(\Delta x, \Delta \lambda, \Delta s)$ that would close the gap. The mediator does this by solving a system of linear equations; the Jacobian system from Newton's method. This is a single linear solve, not a complicated nonlinear search, which is why each iteration of the interior point method is so efficient.</p>
+<p style="margin-top:12px;">But there is a twist: the mediator does not aim for $\mu = 0$ in one step (that would be too aggressive and might push $x$ or $s$ to negative values, violating the interior point requirement). Instead, the mediator aims for a <strong>reduced but positive</strong> target: $\mu_{\text{new}} = \sigma \mu$ where $\sigma \in (0,1)$. This is the <strong>centering parameter</strong>. It controls how aggressive vs. cautious each step is.</p>
+</div>
+
+<p>We apply Newton's method to the modified system $F(x, \lambda, s) = 0$ where the complementarity block is perturbed to $XSe - \sigma \mu e$ (aiming for the central path at parameter $\sigma \mu$ rather than for $\mu = 0$). The Jacobian of $F$ gives us the Newton system:</p>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">The Newton System (Primal-Dual Step)</p>
+$$\begin{bmatrix} 0 & A^T & I \\ A & 0 & 0 \\ S & 0 & X \end{bmatrix} \begin{bmatrix} \Delta x \\ \Delta \lambda \\ \Delta s \end{bmatrix} = \begin{bmatrix} -r_c \\ -r_b \\ -XSe + \sigma \mu e \end{bmatrix}$$
+<dl class="breakdown">
+ <dt>$r_c = A^T \lambda + s - c$</dt>
+ <dd>The <strong>dual residual</strong> (how far we are from dual feasibility). At a dual-feasible point, $r_c = 0$.</dd>
+ <dt>$r_b = Ax - b$</dt>
+ <dd>The <strong>primal residual</strong> (how far we are from primal feasibility). At a primal-feasible point, $r_b = 0$.</dd>
+ <dt>$-XSe + \sigma \mu e$</dt>
+ <dd>The <strong>complementarity residual</strong> with centering. This aims the step toward the central path at parameter $\sigma \mu$, not toward complementary slackness ($XSe = 0$).</dd>
+ <dt>$\Delta x, \Delta \lambda, \Delta s$</dt>
+ <dd>The <strong>search direction</strong>; the adjustments we make to $x$, $\lambda$, and $s$.</dd>
+ <dt>$\sigma \in [0, 1]$</dt>
+ <dd>The <strong>centering parameter</strong>; controls the tradeoff between progress toward optimality and staying near the central path.</dd>
+ <dt>$\mu = x^T s / n$</dt>
+ <dd>The current duality measure (average complementarity product).</dd>
+</dl>
+</div>
+
+<div class="note">
+<p><strong>Understanding the 3x3 block matrix (the Jacobian of $F$):</strong></p>
+<ul style="margin-left: 20px; margin-top: 10px;">
+ <li><strong>Row 1</strong> $(0, A^T, I)$: The Jacobian of the dual feasibility equation $A^T \lambda + s - c$ with respect to $(x, \lambda, s)$. Derivative w.r.t. $x$ is $0$, w.r.t. $\lambda$ is $A^T$, w.r.t. $s$ is $I$.</li>
+ <li><strong>Row 2</strong> $(A, 0, 0)$: The Jacobian of the primal feasibility equation $Ax - b$ with respect to $(x, \lambda, s)$. Derivative w.r.t. $x$ is $A$, the rest are zero.</li>
+ <li><strong>Row 3</strong> $(S, 0, X)$: The Jacobian of $XSe$ with respect to $(x, \lambda, s)$. The product $x_i s_i$ has derivative $s_i$ w.r.t. $x_i$ and $x_i$ w.r.t. $s_i$, giving diagonal matrices $S$ and $X$.</li>
+</ul>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">The Centering Parameter $\sigma$: The Aggression Dial</p>
+<p>The centering parameter $\sigma$ controls the character of the Newton step:</p>
+
+<p style="margin: 12px 0;"><span style="color: #d4956a; font-weight: bold;">$\sigma = 0$: Pure Newton (affine-scaling) step.</span></p>
+<p style="font-size: 15px; color: #b8b4ac; margin-left: 20px;">The right-hand side becomes $-XSe$ with no centering correction. This aims directly at $XSe = 0$ (exact complementary slackness). Most aggressive; makes maximum progress toward optimality but might push iterates close to the boundary where $x_i \approx 0$ or $s_i \approx 0$.</p>
+
+<p style="margin: 12px 0;"><span style="color: #d4956a; font-weight: bold;">$\sigma = 1$: Pure centering step.</span></p>
+<p style="font-size: 15px; color: #b8b4ac; margin-left: 20px;">The right-hand side becomes $-XSe + \mu e$. This aims for the point on the central path with the SAME $\mu$; it does not reduce the duality gap at all, only re-centers the iterate closer to the central path. Most cautious; zero progress toward optimality.</p>
+
+<p style="margin: 12px 0;"><span style="color: #d4956a; font-weight: bold;">$\sigma \in (0, 0.5)$: Typical range in practice.</span></p>
+<p style="font-size: 15px; color: #b8b4ac; margin-left: 20px;">A compromise: make significant progress toward optimality while maintaining reasonable centering. Common choices: $\sigma = 0.1$ to $\sigma = 0.3$. The Mehrotra predictor-corrector method adaptively chooses $\sigma$ at each iteration based on how well the affine step performs.</p>
+</div>
+
+<div class="why-box">
+<h3>Why centering matters</h3>
+<p>Without centering ($\sigma = 0$), the Newton step might reduce some $x_i s_i$ products to near zero while others remain large. This creates an imbalanced iterate that is dangerously close to the boundary in some directions. The step length must then be very short (to keep $x, s \gt 0$), so progress is slow. With centering ($\sigma \gt 0$), the step aims for balanced products $x_i s_i \approx \sigma \mu$, keeping the iterate "centered" and allowing longer step lengths. The paradox: by aiming for a less ambitious target ($\sigma \mu$ instead of $0$), you can take bigger steps and converge faster overall.</p>
+</div>
+
+<div class="exam-flag">
+<h4>Exam Alert: The Newton System</h4>
+<p>Be able to write down the $3 \times 3$ block Newton system. Know the residuals $r_c$ and $r_b$. Understand that $\sigma = 0$ gives a pure Newton step (aggressive) and $\sigma = 1$ gives pure centering (cautious). The typical practical range is $\sigma \in (0, 0.5)$.</p>
+</div>
+
+
+<!-- ==================== PART D ==================== -->
+<span class="tag">PART D</span>
+<h2>The Path-Following Algorithm (Framework 14.1)</h2>
+
+<div class="analogy">
+<p><strong>Analogy: Following a GPS route that recalculates at every turn.</strong></p>
+<p style="margin-top:12px;">Imagine you are driving to a destination (the optimal solution). Your GPS (the algorithm) has plotted a smooth route (the central path). At each intersection (each iteration), the GPS checks your current position ($x^k, \lambda^k, s^k$), sees how far you are from the destination (checks $\mu_k$), computes the best direction to drive ($\Delta x, \Delta \lambda, \Delta s$ from the Newton system), figures out how far you can safely go without driving off the road (the step length $\alpha_k$ that keeps $x, s \gt 0$), and then tells you to drive that distance. At the next intersection, it recalculates.</p>
+<p style="margin-top:12px;">The step length $\alpha_k$ is critical: you must stay on the road ($x \gt 0, s \gt 0$). If the Newton step would make any component of $x$ or $s$ negative, you shorten the step. A common rule is to take the longest step such that the new $x$ and $s$ remain at least a fraction $\tau \in [0.95, 0.9995]$ of the way to zero: $\alpha_k = \tau \cdot \max\{\alpha : x^k + \alpha \Delta x^k \geq 0, \; s^k + \alpha \Delta s^k \geq 0\}$.</p>
+</div>
+
+<div class="algo-box">
+<p class="algo-title">Primal-Dual Path-Following Method (Framework 14.1)</p>
+<div class="algo-line"><strong>Given:</strong> $(x^0, \lambda^0, s^0)$ with $x^0 \gt 0$, $s^0 \gt 0$ <span class="algo-comment">&larr; strictly feasible starting point</span></div>
+<div class="algo-line"><strong>Parameters:</strong> tolerance $\epsilon \gt 0$, fraction-to-boundary $\tau \in [0.95, 0.9995]$</div>
+<div class="algo-line">&nbsp;</div>
+<div class="algo-line"><strong>for</strong> $k = 0, 1, 2, \ldots$:</div>
+<div class="algo-line" style="padding-left: 24px;">1. Compute duality measure: $\mu_k = (x^k)^T s^k \,/\, n$ <span class="algo-comment">&larr; how far from optimal?</span></div>
+<div class="algo-line" style="padding-left: 24px;">2. <strong>if</strong> $\mu_k \lt \epsilon$: <strong>STOP</strong>; return $(x^k, \lambda^k, s^k)$ <span class="algo-comment">&larr; close enough to optimal</span></div>
+<div class="algo-line" style="padding-left: 24px;">3. Choose centering parameter $\sigma_k \in [0, 1]$ <span class="algo-comment">&larr; aggression dial (typically $0.1$ to $0.3$)</span></div>
+<div class="algo-line" style="padding-left: 24px;">4. Compute residuals: $r_b = Ax^k - b$, $r_c = A^T \lambda^k + s^k - c$ <span class="algo-comment">&larr; feasibility violations</span></div>
+<div class="algo-line" style="padding-left: 24px;">5. Solve the Newton system for $(\Delta x^k, \Delta \lambda^k, \Delta s^k)$: <span class="algo-comment">&larr; the core computation</span></div>
+<div class="algo-line" style="padding-left: 40px;">$\begin{bmatrix} 0 & A^T & I \\ A & 0 & 0 \\ S^k & 0 & X^k \end{bmatrix} \begin{bmatrix} \Delta x^k \\ \Delta \lambda^k \\ \Delta s^k \end{bmatrix} = \begin{bmatrix} -r_c \\ -r_b \\ -X^k S^k e + \sigma_k \mu_k e \end{bmatrix}$</div>
+<div class="algo-line" style="padding-left: 24px;">6. Choose step length $\alpha_k$ so that $(x^{k+1}, s^{k+1}) \gt 0$: <span class="algo-comment">&larr; stay strictly positive</span></div>
+<div class="algo-line" style="padding-left: 40px;">$\alpha_k^{\max} = \max\{\alpha \in [0,1] : x^k + \alpha \Delta x^k \geq 0, \; s^k + \alpha \Delta s^k \geq 0\}$</div>
+<div class="algo-line" style="padding-left: 40px;">$\alpha_k = \tau \cdot \alpha_k^{\max}$ <span class="algo-comment">&larr; back off slightly from the boundary</span></div>
+<div class="algo-line" style="padding-left: 24px;">7. Update all variables:</div>
+<div class="algo-line" style="padding-left: 40px;">$x^{k+1} = x^k + \alpha_k \Delta x^k$</div>
+<div class="algo-line" style="padding-left: 40px;">$\lambda^{k+1} = \lambda^k + \alpha_k \Delta \lambda^k$</div>
+<div class="algo-line" style="padding-left: 40px;">$s^{k+1} = s^k + \alpha_k \Delta s^k$</div>
+</div>
+
+<div class="note">
+<p><strong>Computing $\alpha_k^{\max}$:</strong> For each component $i$ where $\Delta x_i^k \lt 0$ (the step wants to decrease $x_i$), compute $-x_i^k / \Delta x_i^k$ (the step length that would drive $x_i$ to zero). Take the minimum over all such components. Do the same for $s$. Then $\alpha_k^{\max}$ is the minimum of the two. Multiply by $\tau \lt 1$ to stay strictly away from zero.</p>
+</div>
+
+<div class="why-box">
+<h3>Why this converges quickly</h3>
+<p>Each iteration reduces $\mu$ by roughly a factor of $(1 - \sigma)$. After $k$ iterations, $\mu_k \approx (1 - \sigma)^k \mu_0$. To reduce $\mu$ from $\mu_0$ to $\epsilon$, we need roughly $k \approx \ln(\mu_0 / \epsilon) / \ln(1/(1-\sigma))$ iterations. For typical values ($\sigma = 0.2$, $\mu_0 = 100$, $\epsilon = 10^{-8}$), this gives around $100$ iterations. In practice, with Mehrotra's predictor-corrector (which adaptively chooses $\sigma$), only <strong>20 to 50 iterations</strong> are needed regardless of problem size. This near-constant iteration count is the remarkable property of interior point methods.</p>
+</div>
+
+<div class="exam-flag">
+<h4>Exam Alert: Algorithm Steps</h4>
+<p>Be able to list the steps of Framework 14.1 in order. Key details: (1) compute $\mu$, (2) check convergence, (3) choose $\sigma$, (4) solve Newton system, (5) compute step length to stay feasible, (6) update. The step length computation is what distinguishes this from a standard Newton method; we cannot take a full Newton step because it might leave the feasible region.</p>
+</div>
+
+
+<!-- ==================== PART E ==================== -->
+<span class="tag">PART E</span>
+<h2>Worked Example: One Iteration of Primal-Dual IPM</h2>
+
+<div class="analogy">
+<p><strong>Setting up the problem.</strong></p>
+<p style="margin-top:12px;">We will work through one full iteration of the primal-dual method on a small LP. The point is not to memorize the arithmetic but to see how the abstract algorithm from Part D translates into concrete matrix computations. Each step corresponds directly to a step in Framework 14.1.</p>
+</div>
+
+<div class="hand-calc">
+<h3>LP: $\min -x_1 - x_2$ subject to $x_1 + x_2 \leq 1$, $x_1, x_2 \geq 0$</h3>
+
+<div class="step">
+<p class="step-label">Step 0: Convert to standard form</p>
+<p>Add slack variable $x_3 \geq 0$ to convert the inequality to equality:</p>
+<p>$\min -x_1 - x_2$ subject to $x_1 + x_2 + x_3 = 1$, $x_1, x_2, x_3 \geq 0$</p>
+<p style="margin-top:8px;">So we have:</p>
+<p>$c = \begin{bmatrix} -1 \\ -1 \\ 0 \end{bmatrix}$, $A = \begin{bmatrix} 1 & 1 & 1 \end{bmatrix}$, $b = [1]$, $n = 3$, $m = 1$</p>
+</div>
+
+<div class="step">
+<p class="step-label">Step 1: Choose initial strictly feasible point</p>
+<p>We need $(x^0, \lambda^0, s^0)$ with $x^0 \gt 0$, $s^0 \gt 0$.</p>
+<p>Let $x^0 = \begin{bmatrix} 1/3 \\ 1/3 \\ 1/3 \end{bmatrix}$ (satisfies $Ax = 1$ and $x \gt 0$).</p>
+<p>Let $\lambda^0 = [0]$.</p>
+<p>Compute $s^0 = c - A^T \lambda^0 = \begin{bmatrix} -1 \\ -1 \\ 0 \end{bmatrix} - \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix} = \begin{bmatrix} -1 \\ -1 \\ 0 \end{bmatrix}$.</p>
+<p style="color: #c47070;">Problem: $s^0$ has non-positive entries! We need $s \gt 0$.</p>
+<p style="margin-top:8px;">Adjust: Let $\lambda^0 = [-2]$, then $s^0 = c - A^T \lambda^0 = \begin{bmatrix} -1 \\ -1 \\ 0 \end{bmatrix} - \begin{bmatrix} -2 \\ -2 \\ -2 \end{bmatrix} = \begin{bmatrix} 1 \\ 1 \\ 2 \end{bmatrix} \gt 0$. Good.</p>
+</div>
+
+<div class="step">
+<p class="step-label">Step 2: Compute duality measure</p>
+<p>$\mu_0 = \frac{(x^0)^T s^0}{n} = \frac{(1/3)(1) + (1/3)(1) + (1/3)(2)}{3} = \frac{1/3 + 1/3 + 2/3}{3} = \frac{4/3}{3} = \frac{4}{9} \approx 0.444$</p>
+</div>
+
+<div class="step">
+<p class="step-label">Step 3: Compute residuals</p>
+<p>$r_b = Ax^0 - b = [1/3 + 1/3 + 1/3] - [1] = [0]$ (primal feasible, good!)</p>
+<p>$r_c = A^T \lambda^0 + s^0 - c = \begin{bmatrix} -2 \\ -2 \\ -2 \end{bmatrix} + \begin{bmatrix} 1 \\ 1 \\ 2 \end{bmatrix} - \begin{bmatrix} -1 \\ -1 \\ 0 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}$ (dual feasible, good!)</p>
+<p style="margin-top:8px; color: #b8b4ac;">Both residuals are zero because we chose a feasible starting point. In practice, starting points might be infeasible and the algorithm handles that by driving $r_b, r_c \to 0$ as well.</p>
+</div>
+
+<div class="step">
+<p class="step-label">Step 4: Choose centering parameter and build the Newton system</p>
+<p>Choose $\sigma = 0.2$. The target is $\sigma \mu_0 = 0.2 \times 4/9 = 8/90 \approx 0.0889$.</p>
+<p style="margin-top:8px;">Build the diagonal matrices:</p>
+<p>$X = \text{diag}(1/3, 1/3, 1/3)$, $S = \text{diag}(1, 1, 2)$</p>
+<p style="margin-top:8px;">The right-hand side, third block:</p>
+<p>$-XSe + \sigma \mu e = -\begin{bmatrix} 1/3 \\ 1/3 \\ 2/3 \end{bmatrix} + \begin{bmatrix} 8/90 \\ 8/90 \\ 8/90 \end{bmatrix} = \begin{bmatrix} -30/90 + 8/90 \\ -30/90 + 8/90 \\ -60/90 + 8/90 \end{bmatrix} = \begin{bmatrix} -22/90 \\ -22/90 \\ -52/90 \end{bmatrix}$</p>
+<p style="margin-top:8px;">The full Newton system:</p>
+<p>$$\begin{bmatrix} 0 & 0 & 0 & 1 & 1 & 0 & 0 \\ 0 & 0 & 0 & 1 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 & 0 & 0 & 1 \\ 1 & 1 & 1 & 0 & 0 & 0 & 0 \\ 1 & 0 & 0 & 0 & 1/3 & 0 & 0 \\ 0 & 1 & 0 & 0 & 0 & 1/3 & 0 \\ 0 & 0 & 2 & 0 & 0 & 0 & 1/3 \end{bmatrix} \begin{bmatrix} \Delta x_1 \\ \Delta x_2 \\ \Delta x_3 \\ \Delta \lambda \\ \Delta s_1 \\ \Delta s_2 \\ \Delta s_3 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ 0 \\ 0 \\ -22/90 \\ -22/90 \\ -52/90 \end{bmatrix}$$</p>
+</div>
+
+<div class="step">
+<p class="step-label">Step 5: Simplify using the reduced system</p>
+<p>Rather than solving the full $7 \times 7$ system, we can eliminate $\Delta s$ from the third block equation. From row 3: $S \Delta x + X \Delta s = -XSe + \sigma \mu e$, so:</p>
+<p>$\Delta s = X^{-1}(-XSe + \sigma \mu e - S \Delta x) = -Se + \sigma \mu X^{-1} e - X^{-1} S \Delta x$</p>
+<p style="margin-top:8px;">Substituting into row 1 ($A^T \Delta \lambda + \Delta s = -r_c = 0$):</p>
+<p>$A^T \Delta \lambda - Se + \sigma \mu X^{-1} e - X^{-1} S \Delta x = 0$</p>
+<p style="margin-top:8px;">Combined with row 2 ($A \Delta x = -r_b = 0$), we get a reduced system in $(\Delta x, \Delta \lambda)$ only. This elimination technique is standard in IPM implementations.</p>
+</div>
+
+<div class="step">
+<p class="step-label">Step 6: Compute step length</p>
+<p>Suppose solving gives us $\Delta x = (0.12, 0.12, -0.24)^T$ and $\Delta s = (-0.5, -0.5, -0.8)^T$ (approximate values for illustration).</p>
+<p style="margin-top:8px;">For $\Delta x$: only $\Delta x_3 = -0.24 \lt 0$. The max step before $x_3$ hits zero: $\alpha_x = x_3 / |\Delta x_3| = (1/3) / 0.24 \approx 1.39$.</p>
+<p style="margin-top:8px;">For $\Delta s$: all components are negative. The tightest: $\alpha_s = \min(s_1/|\Delta s_1|, s_2/|\Delta s_2|, s_3/|\Delta s_3|) = \min(1/0.5, 1/0.5, 2/0.8) = \min(2, 2, 2.5) = 2$.</p>
+<p style="margin-top:8px;">So $\alpha^{\max} = \min(1.39, 2) = 1.39$. But we also cap at $\alpha \leq 1$ (we are solving a Newton system, so $\alpha \gt 1$ is unusual). With $\tau = 0.95$: $\alpha = 0.95 \times 1.0 = 0.95$.</p>
+</div>
+
+<div class="step">
+<p class="step-label">Step 7: Update and check progress</p>
+<p>$x^1 = x^0 + \alpha \Delta x = (1/3 + 0.95 \times 0.12, \; 1/3 + 0.95 \times 0.12, \; 1/3 + 0.95 \times (-0.24))$</p>
+<p>$x^1 \approx (0.447, \; 0.447, \; 0.105)$</p>
+<p style="margin-top:8px;">Notice: $x_1$ and $x_2$ are moving toward $0.5$ (the optimal values), and $x_3$ is shrinking toward $0$ (the slack vanishes at the optimum). All components remain strictly positive.</p>
+<p style="margin-top:8px;">The new duality measure: $\mu_1 = (x^1)^T s^1 / 3$. Since we aimed for $\sigma \mu_0 = 0.089$, we expect $\mu_1$ to be substantially smaller than $\mu_0 = 0.444$. After a few more iterations, $\mu_k \lt \epsilon$ and we stop.</p>
+<p class="result" style="margin-top:12px;">The optimal solution is $x^* = (1/2, 1/2, 0)$ with $c^T x^* = -1$. The algorithm converges toward this point, with $\mu_k \to 0$ and $x_3 \to 0$ (the slack variable vanishes because the constraint $x_1 + x_2 \leq 1$ is active at the optimum).</p>
+</div>
+
+<div class="step">
+<p class="step-label">Iteration Summary</p>
+<table class="step-table" style="margin-top: 8px;">
+<tr>
+ <th>Iteration</th>
+ <th>$\mu_k$</th>
+ <th>$x_1$</th>
+ <th>$x_2$</th>
+ <th>$x_3$ (slack)</th>
+ <th>Status</th>
+</tr>
+<tr>
+ <td>0</td>
+ <td>0.444</td>
+ <td>0.333</td>
+ <td>0.333</td>
+ <td>0.333</td>
+ <td>Initial (centered)</td>
+</tr>
+<tr>
+ <td>1</td>
+ <td>$\approx 0.09$</td>
+ <td>$\approx 0.45$</td>
+ <td>$\approx 0.45$</td>
+ <td>$\approx 0.10$</td>
+ <td>Gap reduced 5x</td>
+</tr>
+<tr>
+ <td>2</td>
+ <td>$\approx 0.01$</td>
+ <td>$\approx 0.49$</td>
+ <td>$\approx 0.49$</td>
+ <td>$\approx 0.02$</td>
+ <td>Nearly optimal</td>
+</tr>
+<tr>
+ <td>$\vdots$</td>
+ <td>$\to 0$</td>
+ <td>$\to 0.5$</td>
+ <td>$\to 0.5$</td>
+ <td>$\to 0$</td>
+ <td>Converged</td>
+</tr>
+</table>
+<p class="check" style="margin-top:8px;">Check: the optimal objective is $c^T x^* = (-1)(0.5) + (-1)(0.5) + (0)(0) = -1$. The dual optimal is $\lambda^* = -1$, $s^* = (0, 0, 1)$, giving $b^T \lambda^* = (1)(-1) = -1$. Strong duality holds: primal = dual = $-1$.</p>
+</div>
+</div>
+
+<div class="note">
+<p><strong>What the example reveals:</strong> Even for this tiny problem ($n = 3$, $m = 1$), the Newton system is a $7 \times 7$ linear system. For real-world problems with millions of variables, this system is enormous; but it is also very <strong>sparse</strong> (lots of zeros), and specialized linear algebra techniques (like Cholesky factorization of the reduced "normal equations") exploit this sparsity to solve it efficiently.</p>
+</div>
+
+
+<!-- ==================== PART F ==================== -->
+<span class="tag">PART F</span>
+<h2>Connections and Practical Notes</h2>
+
+<div class="analogy">
+<p><strong>Seeing the full picture.</strong></p>
+<p style="margin-top:12px;">The primal-dual interior point method sits at the intersection of nearly everything we have studied in this course. It uses the KKT conditions from constrained optimization (<a href="cg-15-constrained.html">Page 15</a>) as its foundation: the system $F = 0$ IS the KKT system. It uses Newton's method for nonlinear systems (<a href="cg-14-nonlinear-equations.html">Page 14</a>) as its engine: each iteration linearizes and solves. It uses the barrier concept from <a href="cg-16-lp-interior-point.html">Page 16</a> as its guiding philosophy: stay interior, follow the central path. And the positive definiteness checks from <a href="cg-03-linear-algebra.html">Page 03</a> ensure the Newton system is well-conditioned.</p>
+<p style="margin-top:12px;">This is a beautiful synthesis. If you understand how the pieces connect, the primal-dual method feels natural rather than mysterious: it is just Newton's method applied to the KKT conditions with a centering modification to stay away from boundaries.</p>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Connection Map</p>
+<table class="step-table" style="margin-top: 12px;">
+<tr>
+ <th>Concept</th>
+ <th>From Page</th>
+ <th>Role in Primal-Dual IPM</th>
+</tr>
+<tr>
+ <td style="text-align: left; color: #d4956a;">KKT conditions</td>
+ <td><a href="cg-15-constrained.html">15</a></td>
+ <td style="text-align: left;">The system $F = 0$ that we solve</td>
+</tr>
+<tr>
+ <td style="text-align: left; color: #d4956a;">Newton for systems</td>
+ <td><a href="cg-14-nonlinear-equations.html">14</a></td>
+ <td style="text-align: left;">The method we use to solve $F = 0$</td>
+</tr>
+<tr>
+ <td style="text-align: left; color: #d4956a;">Newton's method</td>
+ <td><a href="cg-07-newton-method.html">07</a></td>
+ <td style="text-align: left;">Foundation: linearize and solve</td>
+</tr>
+<tr>
+ <td style="text-align: left; color: #d4956a;">Barrier / central path</td>
+ <td><a href="cg-16-lp-interior-point.html">16</a></td>
+ <td style="text-align: left;">Why we use $\sigma \mu$ centering</td>
+</tr>
+<tr>
+ <td style="text-align: left; color: #d4956a;">Positive definiteness</td>
+ <td><a href="cg-03-linear-algebra.html">03</a></td>
+ <td style="text-align: left;">Ensures Newton system is solvable</td>
+</tr>
+<tr>
+ <td style="text-align: left; color: #d4956a;">Convexity</td>
+ <td><a href="cg-05-convexity.html">05</a></td>
+ <td style="text-align: left;">LP is convex: KKT conditions are sufficient</td>
+</tr>
+<tr>
+ <td style="text-align: left; color: #d4956a;">Complementary slackness</td>
+ <td><a href="cg-15-constrained.html">15</a></td>
+ <td style="text-align: left;">What $\mu \to 0$ enforces</td>
+</tr>
+</table>
+</div>
+
+<div class="why-box">
+<h3>Why IPM is polynomial time vs. simplex worst-case exponential</h3>
+<p>The simplex method walks along edges of the feasible polyhedron. A polyhedron with $n$ variables and $m$ constraints can have up to $\binom{n}{m}$ vertices. In the worst case (the Klee-Minty cube is the classic example), simplex visits every single vertex, giving exponential running time. Interior point methods bypass this entirely: they move through the interior, never visiting vertices or edges. The central path is a smooth curve, not a combinatorial structure. The convergence analysis shows that $\mu$ decreases by a fixed fraction at each iteration, giving $O(\sqrt{n} \ln(1/\epsilon))$ iterations. Each iteration costs $O(n^3)$ for the Newton solve, so the total complexity is $O(n^{3.5} \ln(1/\epsilon))$; strictly polynomial.</p>
+</div>
+
+<div class="note">
+<p><strong>Practical notes from Nocedal &amp; Wright:</strong></p>
+<ul style="margin-left: 20px; margin-top: 10px;">
+ <li><strong>Iteration count:</strong> In practice, IPM takes 20 to 50 iterations regardless of problem size. A problem with 100 variables and a problem with 10 million variables might both converge in 30 iterations. The cost per iteration grows with problem size, but the number of iterations barely changes.</li>
+ <li><strong>Mehrotra predictor-corrector:</strong> The most widely used variant. First compute the "affine" step ($\sigma = 0$), see how well it does, then choose $\sigma$ adaptively and compute a corrected step. This nearly doubles the effectiveness of each iteration.</li>
+ <li><strong>Warm starting:</strong> One weakness of IPM vs. simplex. If you solve a problem and then slightly change the data, simplex can "warm start" from the previous solution (usually needing very few additional pivots). IPM cannot easily warm start because the interior is different for different problems. This makes simplex preferred for problems solved repeatedly with small changes (like re-optimization in branch-and-bound for integer programming).</li>
+ <li><strong>Sparse linear algebra:</strong> The bottleneck of each iteration is solving the Newton system. For large sparse problems, Cholesky factorization of a reduced system (the "normal equations") is used, exploiting sparsity patterns. The efficiency of this factorization determines the practical speed of the entire algorithm.</li>
+</ul>
+</div>
+
+<div class="exam-flag">
+<h4>Exam Alert: Big Picture Questions</h4>
+<p>Be prepared for questions like: "Explain why interior point methods are polynomial time while simplex is exponential in the worst case." Answer: IPM goes through the interior (smooth central path, $O(\sqrt{n})$ iterations guaranteed) while simplex walks on edges (can visit exponentially many vertices). Also be ready to explain the role of the centering parameter $\sigma$, the duality measure $\mu$, and why we need step length control ($\alpha \lt 1$) to keep iterates strictly positive.</p>
+</div>
+
+
+<!-- ==================== GLOSSARY ==================== -->
+<div class="glossary">
+<h3>Glossary</h3>
+<dl>
+ <dt>Primal Problem</dt>
+ <dd>The original LP: $\min c^T x$ subject to $Ax = b$, $x \geq 0$. The "buyer" in our negotiation analogy. The primal variables $x$ represent the decisions we are trying to optimize.</dd>
+
+ <dt>Dual Problem</dt>
+ <dd>The mirror LP: $\max b^T \lambda$ subject to $A^T \lambda + s = c$, $s \geq 0$. The "seller" in our negotiation analogy. The dual variables $(\lambda, s)$ provide optimality certificates and sensitivity information. Strong duality guarantees that at the optimum, $c^T x^* = b^T \lambda^*$.</dd>
+
+ <dt>Duality Measure ($\mu$)</dt>
+ <dd>The average complementarity product: $\mu = x^T s / n = (1/n) \sum x_i s_i$. Measures how far the current iterate is from satisfying complementary slackness. Equals zero at the optimum. The algorithm drives $\mu \to 0$. Acts as a "thermometer" for convergence.</dd>
+
+ <dt>Central Path</dt>
+ <dd>The set of points $(x(\mu), \lambda(\mu), s(\mu))$ satisfying $Ax = b$, $A^T \lambda + s = c$, $XSe = \mu e$, with $x, s \gt 0$. As $\mu \to 0$, the central path converges to the LP optimal solution. Interior point methods approximately follow this path.</dd>
+
+ <dt>Centering Parameter ($\sigma$)</dt>
+ <dd>A value in $[0, 1]$ that controls the tradeoff between progress toward optimality and staying near the central path. $\sigma = 0$ gives a pure Newton step (aggressive), $\sigma = 1$ gives pure centering (cautious). Typical practical values: $\sigma \in (0.1, 0.3)$.</dd>
+
+ <dt>Newton System (Primal-Dual)</dt>
+ <dd>The $3 \times 3$ block linear system solved at each iteration. Obtained by applying Newton's method to the KKT conditions $F(x, \lambda, s) = 0$. The matrix is the Jacobian of $F$; the right-hand side encodes the current residuals plus the centering correction.</dd>
+
+ <dt>Primal Residual ($r_b$)</dt>
+ <dd>$r_b = Ax - b$. Measures how far the current iterate is from satisfying primal feasibility ($Ax = b$). Zero when the iterate is primal-feasible.</dd>
+
+ <dt>Dual Residual ($r_c$)</dt>
+ <dd>$r_c = A^T \lambda + s - c$. Measures how far the current iterate is from satisfying dual feasibility ($A^T \lambda + s = c$). Zero when the iterate is dual-feasible.</dd>
+
+ <dt>Step Length ($\alpha_k$)</dt>
+ <dd>The fraction of the Newton direction we actually take. Must be chosen so that $x^{k+1} = x^k + \alpha_k \Delta x^k \gt 0$ and $s^{k+1} = s^k + \alpha_k \Delta s^k \gt 0$. Unlike unconstrained Newton (where $\alpha = 1$ is common), interior point methods almost always need $\alpha \lt 1$ to stay strictly feasible.</dd>
+
+ <dt>Fraction-to-Boundary Rule</dt>
+ <dd>The rule $\alpha_k = \tau \cdot \alpha_k^{\max}$ where $\tau \in [0.95, 0.9995]$. We compute the maximum step $\alpha^{\max}$ that would drive some $x_i$ or $s_i$ to zero, then back off slightly. This ensures strict positivity ($x, s \gt 0$) with a comfortable margin.</dd>
+
+ <dt>Mehrotra Predictor-Corrector</dt>
+ <dd>The most popular practical variant of the primal-dual method (Nocedal &amp; Wright Algorithm 14.3). First solves with $\sigma = 0$ (the "predictor" step), then uses information from that step to choose $\sigma$ adaptively and compute a "corrector." This roughly doubles the effectiveness of each iteration and is the default in essentially all modern LP solvers.</dd>
+
+ <dt>Polynomial-Time Algorithm</dt>
+ <dd>An algorithm whose worst-case running time is bounded by a polynomial in the input size. Interior point methods for LP are polynomial: $O(n^{3.5} \ln(1/\epsilon))$ operations. The simplex method is NOT polynomial in the worst case (exponential on Klee-Minty cubes), though it is usually fast in practice.</dd>
+
+ <dt>Complementary Slackness</dt>
+ <dd>The condition $x_i s_i = 0$ for all $i$. At the optimum, for each variable, either $x_i = 0$ (the variable is at its lower bound) or $s_i = 0$ (the reduced cost is zero). The primal-dual method relaxes this to $x_i s_i = \mu$ and gradually drives $\mu \to 0$.</dd>
+</dl>
+</div>
+
+<!-- ==================== NAV ==================== -->
+</div>
+
+<div class="bottom-nav">
+  <div class="bottom-nav-row">
+    <a class="bottom-nav-btn prev" href="cg-16-lp-interior-point.html">&larr; 16. LP &amp; Interior Point</a>
+    <a class="bottom-nav-btn next" href="cg-22.html">22. Next Topic &rarr;</a>
+  </div>
+  <a class="bottom-nav-index" href="index.html">Back to Index</a>
+</div>
+
+<script src="sidebar.js"></script>
+</body>
+</html>
