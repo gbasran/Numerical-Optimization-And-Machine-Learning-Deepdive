@@ -8,9 +8,9 @@
     { num: "03", file: "cg-03-linear-algebra.html", title: "Linear Algebra Essentials" },
     { num: "04", file: "cg-04-optimality.html", title: "Optimality Conditions" },
     { num: "05", file: "cg-05-convexity.html", title: "Convexity" },
-    { num: "06", file: "cg-06-gradient-descent.html", title: "Gradient Descent", core: true },
-    { num: "07", file: "cg-07-newton-method.html", title: "Newton's Method", core: true },
-    { num: "08", file: "cg-08-line-search.html", title: "Line Search Methods", core: true },
+    { num: "06", file: "cg-06-gradient-descent.html", title: "Gradient Descent" },
+    { num: "07", file: "cg-07-newton-method.html", title: "Newton's Method" },
+    { num: "08", file: "cg-08-line-search.html", title: "Line Search Methods" },
     { num: "09", file: "cg-09-trust-region.html", title: "Trust-Region Methods", core: true },
     { num: "10", file: "cg-10-conjugate-gradient.html", title: "Conjugate Gradient", core: true },
     { num: "11", file: "cg-11-nonlinear-cg.html", title: "Nonlinear CG", core: true },
@@ -30,13 +30,13 @@
   /* Build sidebar HTML */
   var html = '<div class="sidebar" id="sidebar">';
   html += '<div class="sidebar-header"><a href="index.html">MATH 3850</a></div>';
-  html += '<div class="sidebar-section">Foundations</div>';
+  html += '<div class="sidebar-section">Pre-Midterm</div>';
 
   for (var i = 0; i < pages.length; i++) {
     var p = pages[i];
 
     /* Section dividers */
-    if (p.num === "06") html += '<div class="sidebar-section">Post-Midterm</div>';
+    if (p.num === "09") html += '<div class="sidebar-section">Post-Midterm</div>';
     if (p.num === "17") html += '<div class="sidebar-section">Exam Prep</div>';
 
     var active = (currentFile === p.file) ? " active" : "";
