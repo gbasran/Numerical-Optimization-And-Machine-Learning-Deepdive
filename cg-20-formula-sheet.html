@@ -101,6 +101,13 @@ $$|\nabla f(x_k + \alpha p_k)^T p_k| \leq c_2 |\nabla f(x_k)^T p_k|$$
 <p class="ref"><a href="cg-08-line-search.html">Page 08</a></p>
 </div>
 
+<div class="formula-box">
+<strong>Goldstein Conditions</strong>
+$$f(x_k) + (1-c)\alpha_k \nabla f_k^T p_k \leq f(x_k + \alpha_k p_k) \leq f(x_k) + c\alpha_k \nabla f_k^T p_k$$
+<em>where $0 \lt c \lt \frac{1}{2}$. Upper bound = Armijo (sufficient decrease). Lower bound prevents excessively short steps. Similar convergence to Wolfe but cannot guarantee $s_k^T y_k \gt 0$, so unsuitable for BFGS.</em>
+<p class="ref"><a href="cg-08-line-search.html">Page 08</a></p>
+</div>
+
 <!-- ===================== PART C ===================== -->
 <h2>Part C: Trust Region</h2>
 
@@ -311,6 +318,20 @@ $$A^T \lambda + s = c, \qquad Ax = b, \qquad x \geq 0, \qquad s \geq 0, \qquad x
 <p class="ref"><a href="cg-16-lp-interior-point.html">Page 16</a></p>
 </div>
 
+<div class="formula-box">
+<strong>Primal-Dual Interior Point: Central Path Conditions</strong>
+$$A^T \lambda + s = c, \quad Ax = b, \quad X S e = \mu e, \quad (x, s) \gt 0$$
+<em>where $X = \text{diag}(x)$, $S = \text{diag}(s)$, $e = [1,\ldots,1]^T$, $\mu \gt 0$ is the barrier parameter. As $\mu \to 0$, the solution approaches the LP optimum.</em>
+<p class="ref"><a href="cg-21-primal-dual-interior-point.html">Page 21</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Primal-Dual Newton Step</strong>
+$$\begin{bmatrix} 0 & A^T & I \\ A & 0 & 0 \\ S & 0 & X \end{bmatrix} \begin{bmatrix} \Delta x \\ \Delta \lambda \\ \Delta s \end{bmatrix} = \begin{bmatrix} c - A^T\lambda - s \\ b - Ax \\ \mu e - XSe \end{bmatrix}$$
+<em>Linearization of the central path conditions. Solve for search direction, then take a step with $\alpha$ chosen to maintain $(x, s) \gt 0$.</em>
+<p class="ref"><a href="cg-21-primal-dual-interior-point.html">Page 21</a></p>
+</div>
+
 <!-- ===================== PART H ===================== -->
 <h2>Part H: Key Definitions</h2>
 
@@ -501,6 +522,58 @@ $$\nabla_{W_1} J = [W_2^T \delta^{(2)} \odot \sigma'(z^{(1)})] x^T \qquad \text{
 $$W \leftarrow W - \eta \nabla_W J$$
 <em>Same gradient descent update from <a href="cg-06-gradient-descent.html">Page 06</a>, applied to each weight matrix independently. $\eta$ is the learning rate.</em>
 <p class="ref"><a href="cg-26-mlp.html">Page 26</a>, <a href="cg-06-gradient-descent.html">Page 06</a></p>
+</div>
+
+<!-- ===================== PART L ===================== -->
+<h2>Part L: Non-negative Matrix Factorization (NMF)</h2>
+
+<div class="formula-box">
+<strong>NMF Problem</strong>
+$$\min_{W \geq 0,\, H \geq 0} \|V - WH\|_F^2$$
+<em>where $V \in \mathbb{R}^{n \times m}$ is the data, $W \in \mathbb{R}^{n \times k}$ is the basis matrix, $H \in \mathbb{R}^{k \times m}$ is the coefficient matrix, and $k$ is the chosen rank.</em>
+<p class="ref"><a href="cg-22-nmf.html">Page 22</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Lee-Seung Multiplicative Updates</strong>
+$$H_{ij} \leftarrow H_{ij} \frac{(W^T V)_{ij}}{(W^T W H)_{ij}}, \qquad W_{ij} \leftarrow W_{ij} \frac{(V H^T)_{ij}}{(W H H^T)_{ij}}$$
+<em>Element-wise updates. Guaranteed non-negative (numerator and denominator are both non-negative). Monotonically decreases the objective.</em>
+<p class="ref"><a href="cg-22-nmf.html">Page 22</a></p>
+</div>
+
+<div class="formula-box">
+<strong>ALS (Alternating Least Squares) for NMF</strong>
+<ol style="margin-left: 24px; font-size: 16px; line-height: 2;">
+ <li>Fix $W$, solve $H \leftarrow \max(0,\; (W^T W)^{-1} W^T V)$</li>
+ <li>Fix $H$, solve $W \leftarrow \max(0,\; V H^T (H H^T)^{-1})$</li>
+ <li>Repeat until convergence</li>
+</ol>
+<em>Each subproblem is a standard least-squares problem. Clamp negative entries to zero. Often faster than multiplicative updates in wall-clock time.</em>
+<p class="ref"><a href="cg-22-nmf.html">Page 22</a></p>
+</div>
+
+<!-- ===================== PART M ===================== -->
+<h2>Part M: Linear Regression</h2>
+
+<div class="formula-box">
+<strong>Least-Squares Objective</strong>
+$$f(x) = \|Ax - b\|^2 = x^T A^T A x - 2b^T A x + b^T b$$
+<em>Quadratic in $x$. $A \in \mathbb{R}^{n \times d}$ is the data matrix, $b \in \mathbb{R}^n$ is the target, $x \in \mathbb{R}^d$ is the parameter vector.</em>
+<p class="ref"><a href="cg-23-linear-regression.html">Page 23</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Gradient and Hessian</strong>
+$$\nabla f(x) = 2A^T(Ax - b), \qquad \nabla^2 f(x) = 2A^T A$$
+<em>Gradient is zero at the solution. Hessian is constant (does not depend on $x$) because $f$ is quadratic.</em>
+<p class="ref"><a href="cg-23-linear-regression.html">Page 23</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Normal Equations (Closed-Form Solution)</strong>
+$$A^T A x^* = A^T b \qquad \Longrightarrow \qquad x^* = (A^T A)^{-1} A^T b$$
+<em>Set gradient to zero and solve. Requires $A^T A$ invertible (i.e., $A$ has full column rank). Direct computation; no iteration needed.</em>
+<p class="ref"><a href="cg-23-linear-regression.html">Page 23</a></p>
 </div>
 
 <!-- ===================== NAV ===================== -->

@@ -375,6 +375,42 @@ When a car won't start, a good mechanic doesn't randomly try parts. They follow 
  <td>Non-convex function approximation</td>
  <td><a href="cg-26-mlp.html" style="color:#9b89b6;">26</a></td>
 </tr>
+<tr style="border-top: 2px solid #c9a84c;">
+ <td style="color:#d4956a; font-weight:bold;">Broyden</td>
+ <td>$r(x)$, $J(x)$ approx</td>
+ <td>$O(n^2)$ per step</td>
+ <td>Superlinear</td>
+ <td>Damping</td>
+ <td>Nonlinear systems, Jacobian expensive</td>
+ <td><a href="cg-14-nonlinear-equations.html" style="color:#d4956a;">14</a></td>
+</tr>
+<tr>
+ <td style="color:#d4956a; font-weight:bold;">Primal-Dual IPM</td>
+ <td>$f$, $c$, $\nabla f$, $\nabla c$</td>
+ <td>$O(n^3)$ per step</td>
+ <td>Polynomial</td>
+ <td>N/A (path-following)</td>
+ <td>Linear programming</td>
+ <td><a href="cg-16-lp-interior-point.html" style="color:#d4956a;">21</a></td>
+</tr>
+<tr>
+ <td style="color:#d4956a; font-weight:bold;">NMF (Lee-Seung)</td>
+ <td>$V$, $W$, $H$</td>
+ <td>$O(nmk)$ per step</td>
+ <td>Monotone decrease</td>
+ <td>N/A</td>
+ <td>Non-negative factorization</td>
+ <td><a href="cg-22-nmf.html" style="color:#d4956a;">22</a></td>
+</tr>
+<tr>
+ <td style="color:#d4956a; font-weight:bold;">Linear Regression</td>
+ <td>$A$, $b$</td>
+ <td>$O(d^3)$ or $O(nd)$</td>
+ <td>Closed-form or method-dependent</td>
+ <td>Depends on solver</td>
+ <td>Least-squares</td>
+ <td><a href="cg-23-linear-regression.html" style="color:#d4956a;">23</a></td>
+</tr>
 </table>
 </div>
 
@@ -608,6 +644,18 @@ Think of optimization as hiking down a mountain to the valley floor:<br><br>
 <div class="analogy">
 <strong>Physical analogy; three different uses of the same toolbox.</strong><br><br>
 Think of the optimization methods from this course as a set of power tools. Logistic regression is like using those tools to build a straight fence (convex, well-behaved; the tools work perfectly). SVM is like building a fence with property-line constraints (you need to respect boundaries; KKT conditions enforce them). Neural networks are like sculpting a complex shape (the surface has bumps and valleys everywhere; you do your best with gradient descent, but there is no guarantee you found the absolute best shape).
+</div>
+
+<!-- ===================== STOPPING CRITERIA ===================== -->
+<div class="note" style="border-left: 3px solid #c9a84c; margin-top: 30px;">
+<strong style="color:#c9a84c;">Practical consideration: Stopping criteria for all iterative methods</strong><br><br>
+Every iterative method in the table above needs a rule for when to stop. In practice, you check three conditions and stop when any one is satisfied:
+<ol style="margin: 12px 0 0 20px; line-height: 2;">
+ <li><strong>Gradient norm:</strong> $\|\nabla f(x_k)\| \lt \epsilon_g$. The first-order optimality condition says $\nabla f(x^*) = 0$, so a tiny gradient means you are near a stationary point.</li>
+ <li><strong>Step size:</strong> $\|x_{k+1} - x_k\| \lt \epsilon_x$. If the iterates are barely moving, further steps are unlikely to make meaningful progress.</li>
+ <li><strong>Function value change:</strong> $|f(x_{k+1}) - f(x_k)| \lt \epsilon_f$. If the objective is no longer decreasing appreciably, you have effectively converged.</li>
+</ol>
+<p style="margin-top: 10px;">A robust implementation checks all three. Relying on only one can be misleading; for example, the gradient can be small on a flat plateau far from the solution, and the function value can stall temporarily near a saddle point.</p>
 </div>
 
 <!-- ===================== NAV ===================== -->

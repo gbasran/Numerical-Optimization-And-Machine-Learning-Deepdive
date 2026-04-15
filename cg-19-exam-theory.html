@@ -129,6 +129,26 @@ Full explanation on <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>
 <dt>"superlinear"</dt><dd>Faster than linear ($\|e_{k+1}\|/\|e_k\| \to 0$) but not as fast as quadratic ($\|e_{k+1}\|/\|e_k\|^2 \leq C$).</dd>
 </dl>
 
+<!-- Theorem 6b: Zoutendijk -->
+<div class="formula-box">
+<strong>Theorem: Zoutendijk's Condition (Global Convergence of Line Search Methods)</strong><br><br>
+Suppose $f$ is bounded below, $\nabla f$ is Lipschitz continuous, $p_k$ is a descent direction, and $\alpha_k$ satisfies the Wolfe conditions. Then:
+$$\sum_{k=0}^{\infty} \cos^2 \theta_k \, \|\nabla f_k\|^2 \lt \infty$$
+where $\theta_k$ is the angle between $p_k$ and $-\nabla f_k$.
+</div>
+
+<div class="analogy">
+<strong>Plain English:</strong> If you keep using a descent direction that makes a reasonable angle with the negative gradient (so $\cos\theta_k$ does not go to zero), then the gradient norms must eventually go to zero. The series converges, which forces $\|\nabla f_k\| \to 0$. This is the master convergence theorem for line search methods; it applies to steepest descent, BFGS, and CG as long as the search directions stay "descent-like."<br><br>
+<strong>Key implication:</strong> If the search directions satisfy $\cos\theta_k \geq \delta \gt 0$ for some constant $\delta$ (i.e., they never become perpendicular to the gradient), then the sum can only converge if $\|\nabla f_k\|^2 \to 0$. For steepest descent, $\cos\theta_k = 1$ always (angle is zero), so convergence is automatic. For BFGS and CG, the challenge is proving that $\cos\theta_k$ stays bounded away from zero.
+</div>
+
+<dl class="breakdown">
+<dt>"$f$ bounded below"</dt><dd>Without a lower bound, the function could decrease forever without the gradient shrinking.</dd>
+<dt>"Lipschitz $\nabla f$"</dt><dd>Needed to bound how fast the gradient changes. This makes the Wolfe conditions achievable.</dd>
+<dt>"Wolfe conditions"</dt><dd>Both sufficient decrease (Armijo) and curvature condition. Together they prevent the step size from being too large or too small.</dd>
+<dt>"$\cos\theta_k$"</dt><dd>Measures how "descent-like" the search direction is. $\cos\theta_k = 1$ for steepest descent. $\cos\theta_k \gt 0$ for any descent direction.</dd>
+</dl>
+
 <!-- Theorem 7: KKT -->
 <div class="formula-box">
 <strong>Theorem: KKT Necessary Conditions (under LICQ)</strong><br><br>
@@ -227,6 +247,17 @@ Full explanation on <a href="cg-25-svm.html" style="color:#d4956a;">Page 25</a>,
 <p style="margin-top: 8px;">$$\sum_{i} \alpha_i - \frac{1}{2}\sum_{i}\sum_{j} \alpha_i \alpha_j y_i y_j (x_i^T x_j)$$</p>
 <p style="margin-top: 8px;">Only dot products $x_i^T x_j$ remain. This is significant because it enables the <strong>kernel trick</strong>: replace $x_i^T x_j$ with a kernel function $K(x_i, x_j)$ to classify data in higher-dimensional spaces without ever computing the transformation explicitly. The dual formulation makes SVM far more powerful than the primal alone suggests.</p>
 <p style="margin-top: 8px;">Full explanation: <a href="cg-25-svm.html" style="color:#d4956a;">Page 25</a>, <a href="cg-15-constrained.html" style="color:#d4956a;">Page 15</a>.</p>
+</div>
+
+<div class="why-box">
+<h3>What are the standard stopping criteria for optimization algorithms?</h3>
+<p>In theory, algorithms converge to a stationary point ($\nabla f = 0$). In practice, we stop when we are "close enough." The three standard criteria are:</p>
+<ol style="margin: 12px 0 0 20px; line-height: 2;">
+ <li><strong>Gradient norm:</strong> $\|\nabla f(x_k)\| \leq \epsilon_g$. The most principled; directly tests the FONC.</li>
+ <li><strong>Step size:</strong> $\|x_{k+1} - x_k\| \leq \epsilon_x$. The iterates have stopped moving.</li>
+ <li><strong>Function value change:</strong> $|f(x_{k+1}) - f(x_k)| \leq \epsilon_f$. The objective has stopped decreasing.</li>
+</ol>
+<p style="margin-top: 12px;">Typical tolerances: $\epsilon \sim 10^{-6}$ to $10^{-8}$. Use relative versions for scale-invariance (e.g., $\|\nabla f_k\|/\max(1, \|x_k\|) \leq \epsilon$). The gradient criterion is preferred because it directly measures optimality. The step and function criteria can be fooled by slow convergence near a saddle point.</p>
 </div>
 
 <div class="why-box">
