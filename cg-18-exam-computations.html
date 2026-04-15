@@ -631,6 +631,232 @@ Comparing KKT points:
 </div>
 </div>
 
+<!-- ===================== PART H ===================== -->
+<h2>Part H: Logistic Regression Gradient Step</h2>
+<p><em>Classification method from <a href="cg-24-logistic-regression.html" style="color:#d4956a;">Page 24</a>. Uses gradient descent from <a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>.</em></p>
+
+<div class="formula-box">
+<strong>Problem:</strong> Given data matrix $A = \begin{bmatrix}1 & 0 \\ 0 & 1 \\ 1 & 1\end{bmatrix}$ (rows are data points $x_i^T$), labels $y = \begin{bmatrix}1 \\ -1 \\ 1\end{bmatrix}$, current weights $\theta = \begin{bmatrix}0 \\ 0\end{bmatrix}$, learning rate $\eta = 0.5$. Compute <strong>one gradient descent step</strong> on the logistic loss:
+
+$$f(\theta) = \frac{1}{3}\sum_{i=1}^{3} \log(1 + e^{-y_i \theta^T x_i})$$
+</div>
+
+<div class="hand-calc">
+<h3>Full Worked Solution</h3>
+
+<div class="step">
+<div class="step-label">Step 1: Compute the margin $z_i = y_i \theta^T x_i$ for each point</div>
+At $\theta = \begin{bmatrix}0\\0\end{bmatrix}$, the dot product $\theta^T x_i = 0$ for every point:
+
+$$z_1 = y_1 \theta^T x_1 = (1)(0) = 0$$
+$$z_2 = y_2 \theta^T x_2 = (-1)(0) = 0$$
+$$z_3 = y_3 \theta^T x_3 = (1)(0) = 0$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 2: Write the gradient formula and evaluate the common factor</div>
+The gradient of the logistic loss is:
+
+$$\nabla f(\theta) = -\frac{1}{3}\sum_{i=1}^{3} \frac{y_i x_i}{1 + e^{z_i}}$$
+
+Since all $z_i = 0$ and $e^0 = 1$, each denominator is $1 + 1 = 2$:
+
+$$\frac{1}{1 + e^{z_i}} = \frac{1}{2} \quad \text{for all } i$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 3: Compute the gradient</div>
+
+$$\nabla f = -\frac{1}{3} \cdot \frac{1}{2}\left[y_1 x_1 + y_2 x_2 + y_3 x_3\right]$$
+
+$$= -\frac{1}{6}\left[(1)\begin{bmatrix}1\\0\end{bmatrix} + (-1)\begin{bmatrix}0\\1\end{bmatrix} + (1)\begin{bmatrix}1\\1\end{bmatrix}\right]$$
+
+$$= -\frac{1}{6}\left[\begin{bmatrix}1\\0\end{bmatrix} + \begin{bmatrix}0\\-1\end{bmatrix} + \begin{bmatrix}1\\1\end{bmatrix}\right] = -\frac{1}{6}\begin{bmatrix}2\\0\end{bmatrix} = \begin{bmatrix}-1/3\\0\end{bmatrix}$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 4: Update the weights</div>
+
+$$\theta_1 = \theta_0 - \eta \nabla f = \begin{bmatrix}0\\0\end{bmatrix} - 0.5\begin{bmatrix}-1/3\\0\end{bmatrix} = \begin{bmatrix}0 + 1/6\\0\end{bmatrix} = \begin{bmatrix}1/6\\0\end{bmatrix}$$
+
+<div class="result">
+$$\theta_1 = \begin{bmatrix}1/6\\0\end{bmatrix} \approx \begin{bmatrix}0.167\\0\end{bmatrix}$$
+</div>
+</div>
+
+<div class="step">
+<div class="step-label">Step 5: Verify; the update makes sense</div>
+
+<p class="check">The first component moved positive, which makes sense: $x_1 = (1,0)$ has label $+1$ and $x_3 = (1,1)$ has label $+1$; both have a positive first component. The second component stayed at zero because the positive label point $x_3$ and negative label point $x_2$ cancel out in that coordinate. The decision boundary $\theta^T x = 0$ is now the line $x_1 = 0$ (vertical), which correctly puts $x_1$ and $x_3$ on the positive side.</p>
+</div>
+</div>
+
+<!-- ===================== PART I ===================== -->
+<h2>Part I: SVM Dual Setup</h2>
+<p><em>Constrained optimization from <a href="cg-25-svm.html" style="color:#d4956a;">Page 25</a>. Uses KKT from <a href="cg-15-constrained.html" style="color:#d4956a;">Page 15</a>.</em></p>
+
+<div class="formula-box">
+<strong>Problem:</strong> Given 3 data points in 2D:
+<ul style="margin: 8px 0 0 20px;">
+<li>$x_1 = (1,1)$, $y_1 = +1$</li>
+<li>$x_2 = (-1,-1)$, $y_2 = -1$</li>
+<li>$x_3 = (2,0)$, $y_3 = +1$</li>
+</ul>
+Write out the Wolfe dual objective and identify all constraints.
+</div>
+
+<div class="hand-calc">
+<h3>Full Worked Solution</h3>
+
+<div class="step">
+<div class="step-label">Step 1: Compute all dot products $x_i^T x_j$</div>
+
+$$x_1^T x_1 = 1(1) + 1(1) = 2$$
+$$x_1^T x_2 = 1(-1) + 1(-1) = -2$$
+$$x_1^T x_3 = 1(2) + 1(0) = 2$$
+$$x_2^T x_2 = (-1)(-1) + (-1)(-1) = 2$$
+$$x_2^T x_3 = (-1)(2) + (-1)(0) = -2$$
+$$x_3^T x_3 = 2(2) + 0(0) = 4$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 2: Compute the $y_i y_j (x_i^T x_j)$ matrix entries</div>
+The dual objective involves $y_i y_j (x_i^T x_j)$. Using $y_1 = +1, y_2 = -1, y_3 = +1$:
+
+<table class="step-table" style="font-size: 14px; margin-top: 12px;">
+<tr><th>$(i,j)$</th><th>$y_i y_j$</th><th>$x_i^T x_j$</th><th>$y_i y_j (x_i^T x_j)$</th></tr>
+<tr><td>(1,1)</td><td>$+1$</td><td>$2$</td><td>$2$</td></tr>
+<tr><td>(1,2)</td><td>$-1$</td><td>$-2$</td><td>$2$</td></tr>
+<tr><td>(1,3)</td><td>$+1$</td><td>$2$</td><td>$2$</td></tr>
+<tr><td>(2,2)</td><td>$+1$</td><td>$2$</td><td>$2$</td></tr>
+<tr><td>(2,3)</td><td>$-1$</td><td>$-2$</td><td>$2$</td></tr>
+<tr><td>(3,3)</td><td>$+1$</td><td>$4$</td><td>$4$</td></tr>
+</table>
+</div>
+
+<div class="step">
+<div class="step-label">Step 3: Write the dual objective</div>
+The Wolfe dual is $\max_\alpha Q(\alpha) = \sum_i \alpha_i - \frac{1}{2}\sum_i\sum_j \alpha_i \alpha_j y_i y_j (x_i^T x_j)$.
+
+Expanding the double sum (using symmetry: cross terms appear twice):
+
+$$Q(\alpha) = \alpha_1 + \alpha_2 + \alpha_3 - \frac{1}{2}\Big[2\alpha_1^2 + 2\alpha_2^2 + 4\alpha_3^2 + 2(2)\alpha_1\alpha_2 + 2(2)\alpha_1\alpha_3 + 2(2)\alpha_2\alpha_3\Big]$$
+
+$$= \alpha_1 + \alpha_2 + \alpha_3 - \frac{1}{2}\Big[2\alpha_1^2 + 2\alpha_2^2 + 4\alpha_3^2 + 4\alpha_1\alpha_2 + 4\alpha_1\alpha_3 + 4\alpha_2\alpha_3\Big]$$
+
+<div class="result">
+$$Q(\alpha) = \alpha_1 + \alpha_2 + \alpha_3 - \alpha_1^2 - \alpha_2^2 - 2\alpha_3^2 - 2\alpha_1\alpha_2 - 2\alpha_1\alpha_3 - 2\alpha_2\alpha_3$$
+</div>
+</div>
+
+<div class="step">
+<div class="step-label">Step 4: Write the constraints</div>
+<strong>Non-negativity:</strong> $\alpha_1 \geq 0, \; \alpha_2 \geq 0, \; \alpha_3 \geq 0$
+
+<strong>Equality constraint</strong> (from $\sum \alpha_i y_i = 0$):
+$$\alpha_1 y_1 + \alpha_2 y_2 + \alpha_3 y_3 = 0$$
+$$(+1)\alpha_1 + (-1)\alpha_2 + (+1)\alpha_3 = 0$$
+
+<div class="result">
+$$\alpha_1 - \alpha_2 + \alpha_3 = 0, \qquad \alpha_i \geq 0$$
+</div>
+
+<p class="check">The equality constraint says $\alpha_2 = \alpha_1 + \alpha_3$: the total "weight" on the negative class must equal the total weight on the positive class. This ensures $\sum \alpha_i y_i = 0$, which came from $\partial L / \partial b = 0$ in the stationarity conditions.</p>
+</div>
+</div>
+
+<!-- ===================== PART J ===================== -->
+<h2>Part J: MLP Forward and Backward Pass</h2>
+<p><em>Neural network from <a href="cg-26-mlp.html" style="color:#d4956a;">Page 26</a>. Uses gradient descent from <a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>.</em></p>
+
+<div class="formula-box">
+<strong>Problem:</strong> Perform one gradient descent step for a simple MLP with:
+<ul style="margin: 8px 0 0 20px;">
+<li>Input $x = [1, \; 0.5]^T$, target $y = 1$</li>
+<li>$W_1 = \begin{bmatrix}0.2 & 0.3\\0.1 & 0.4\end{bmatrix}$, $W_2 = [0.5, \; 0.6]$</li>
+<li>All biases $= 0$, linear activation, learning rate $\eta = 0.1$</li>
+</ul>
+</div>
+
+<div class="hand-calc">
+<h3>Full Worked Solution</h3>
+
+<div class="step">
+<div class="step-label">Step 1: Forward pass; compute hidden layer</div>
+
+$$z^{(1)} = W_1 x = \begin{bmatrix}0.2 & 0.3\\0.1 & 0.4\end{bmatrix}\begin{bmatrix}1\\0.5\end{bmatrix} = \begin{bmatrix}0.2(1) + 0.3(0.5)\\0.1(1) + 0.4(0.5)\end{bmatrix} = \begin{bmatrix}0.35\\0.3\end{bmatrix}$$
+
+Since activation is linear: $a^{(1)} = z^{(1)} = \begin{bmatrix}0.35\\0.3\end{bmatrix}$
+</div>
+
+<div class="step">
+<div class="step-label">Step 2: Forward pass; compute output</div>
+
+$$\hat{y} = W_2 a^{(1)} = [0.5, \; 0.6]\begin{bmatrix}0.35\\0.3\end{bmatrix} = 0.5(0.35) + 0.6(0.3) = 0.175 + 0.18 = 0.355$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 3: Compute the loss</div>
+
+$$J = \frac{1}{2}(y - \hat{y})^2 = \frac{1}{2}(1 - 0.355)^2 = \frac{1}{2}(0.645)^2 = \frac{1}{2}(0.416025) \approx 0.208$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 4: Backward pass; output error</div>
+
+$$\delta^{(2)} = -(y - \hat{y}) = -(1 - 0.355) = -0.645$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 5: Gradient with respect to $W_2$</div>
+
+$$\nabla_{W_2} J = \delta^{(2)} \cdot (a^{(1)})^T = (-0.645) \cdot [0.35, \; 0.3] = [-0.2258, \; -0.1935]$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 6: Backward pass; propagate error to hidden layer</div>
+
+$$W_2^T \delta^{(2)} = \begin{bmatrix}0.5\\0.6\end{bmatrix}(-0.645) = \begin{bmatrix}-0.3225\\-0.387\end{bmatrix}$$
+
+Since activation is linear ($\sigma'(z) = 1$), the hidden error is just $W_2^T \delta^{(2)}$.
+</div>
+
+<div class="step">
+<div class="step-label">Step 7: Gradient with respect to $W_1$</div>
+
+$$\nabla_{W_1} J = [W_2^T \delta^{(2)}] \cdot x^T = \begin{bmatrix}-0.3225\\-0.387\end{bmatrix}[1, \; 0.5] = \begin{bmatrix}-0.3225 & -0.1613\\-0.387 & -0.1935\end{bmatrix}$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 8: Update $W_2$</div>
+
+$$W_2^{\text{new}} = W_2 - \eta \nabla_{W_2} J = [0.5, \; 0.6] - 0.1[-0.2258, \; -0.1935]$$
+$$= [0.5 + 0.0226, \; 0.6 + 0.0194] = [0.5226, \; 0.6194]$$
+
+<div class="result">
+$$W_2^{\text{new}} = [0.5226, \; 0.6194]$$
+</div>
+</div>
+
+<div class="step">
+<div class="step-label">Step 9: Update $W_1$</div>
+
+$$W_1^{\text{new}} = W_1 - \eta \nabla_{W_1} J = \begin{bmatrix}0.2 & 0.3\\0.1 & 0.4\end{bmatrix} - 0.1\begin{bmatrix}-0.3225 & -0.1613\\-0.387 & -0.1935\end{bmatrix}$$
+
+$$= \begin{bmatrix}0.2 + 0.0323 & 0.3 + 0.0161\\0.1 + 0.0387 & 0.4 + 0.0194\end{bmatrix} = \begin{bmatrix}0.2323 & 0.3161\\0.1387 & 0.4194\end{bmatrix}$$
+
+<div class="result">
+$$W_1^{\text{new}} = \begin{bmatrix}0.2323 & 0.3161\\0.1387 & 0.4194\end{bmatrix}$$
+</div>
+</div>
+
+<div class="step">
+<div class="step-label">Step 10: Verify; weights moved in the right direction</div>
+
+<p class="check">All weights increased because the network under-predicted ($\hat{y} = 0.355 \lt 1 = y$). The gradients are negative (pointing toward decreasing loss), so subtracting $\eta \cdot \nabla$ makes each weight larger, which increases $\hat{y}$ toward the target. The output weights $W_2$ changed more where the hidden activation was larger ($a_1 = 0.35 \gt a_2 = 0.3$), matching the chain rule weighting.</p>
+</div>
+</div>
+
 <!-- ===================== NAV ===================== -->
 </div>
 

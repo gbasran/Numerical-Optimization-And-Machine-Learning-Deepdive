@@ -248,7 +248,12 @@ But if you are out in the countryside, far from the city, the GPS might give non
 <p>Then Newton's method converges <strong>quadratically</strong>:</p>
 $$\|x_{k+1} - x^*\| \leq C \|x_k - x^*\|^2$$
 
-<p>where $C$ is a constant depending on $L$ and $\nabla^2 f(x^*)$.</p>
+<dl class="breakdown">
+ <dt>$\|x_{k+1} - x^*\|$</dt><dd>error after the next step; how far we are from the solution</dd>
+ <dt>$\|x_k - x^*\|^2$</dt><dd>the current error <em>squared</em>; this squaring is what makes convergence so fast near the solution</dd>
+ <dt>$C$</dt><dd>a constant depending on $L$ (how fast curvature changes) and $\nabla^2 f(x^*)$ (the curvature at the solution). Smaller $C$ means a bigger "safe zone."</dd>
+ <dt>$\leq$</dt><dd>an upper bound; the actual error may be even smaller</dd>
+</dl>
 </div>
 
 <p>Let us unpack every condition in plain English:</p>

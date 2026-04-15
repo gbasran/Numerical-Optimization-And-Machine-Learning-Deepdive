@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page 24 : Logistic Regression | MATH 3850 Course Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+ onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<span class="tag">PAGE 24; POST-MIDTERM</span>
+<h1>Logistic Regression</h1>
+<p class="subtitle">From continuous predictions to yes/no probabilities; the sigmoid squasher, the logistic loss, and how gradient descent, BFGS, and nonlinear CG each attack a convex but not strongly convex objective</p>
+
+
+<!-- ==================== PART A ==================== -->
+<span class="tag">PART A</span>
+<h2>From Regression to Classification</h2>
+
+<div class="analogy">
+<p><strong>Analogy: the pass/fail thermometer.</strong> In linear regression (<a href="cg-23-linear-regression.html">Page 23</a>), the output is a continuous number: temperature in degrees, price in dollars, any real value on the number line. But classification asks a yes/no question: pass or fail? spam or not spam? tumor or healthy? We need to squash any real-valued score into a number between 0 and 1 that we can interpret as a probability.</p>
+<p style="margin-top:12px;">The sigmoid function is that squasher. Think of it as a thermometer that reads any temperature but displays it as a percentage between "definitely cold" (0%) and "definitely hot" (100%). A raw score of 0 maps to 50% (total uncertainty). Large positive scores map close to 100%. Large negative scores map close to 0%. No matter how extreme the input, the output always stays between 0 and 1; it never breaks the thermometer.</p>
+<p style="margin-top:12px;">Where <a href="cg-23-linear-regression.html">linear regression (Page 23)</a> predicts a number, logistic regression predicts a probability.</p>
+</div>
+
+<p>The setup: we have $n$ data points, each with $d$ features $x_i \in \mathbb{R}^d$ and a label $y_i$ indicating which class it belongs to. The model computes a raw score $\theta^T x_i$ (a dot product, exactly like linear regression) and then passes it through the <strong>sigmoid function</strong> to get a probability. Everything that follows is about choosing $\theta$ so those probabilities match the observed labels as closely as possible.</p>
+
+
+<!-- ==================== PART B ==================== -->
+<span class="tag">PART B</span>
+<h2>The Sigmoid Function</h2>
+
+<div class="analogy">
+<p><strong>Analogy: a dimmer switch.</strong> Imagine a light switch that is not just on/off but has a smooth dial. Turning the knob far to the left gives you 0% brightness (off). Far to the right gives 100% brightness (full). The middle position gives exactly 50%. The transition between dim and bright is smooth, not abrupt. The sigmoid function is that dimmer switch for probabilities: it converts any real number into a smooth value between 0 and 1.</p>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">The Sigmoid Function</p>
+$$\sigma(z) = \frac{1}{1 + e^{-z}}$$
+<dl class="breakdown">
+ <dt>$z$</dt>
+ <dd>The <strong>raw score</strong> (also called the "logit"). In logistic regression, $z = \theta^T x$, the dot product of the parameter vector with the feature vector. This is the same linear combination that appears in linear regression.</dd>
+ <dt>$e^{-z}$</dt>
+ <dd>The exponential decay term. When $z$ is large and positive, $e^{-z} \approx 0$, so $\sigma(z) \approx 1$. When $z$ is large and negative, $e^{-z}$ is huge, so $\sigma(z) \approx 0$.</dd>
+ <dt>Output range</dt>
+ <dd>Always strictly between 0 and 1. Never exactly reaches either endpoint.</dd>
+ <dt>$\sigma(0) = 0.5$</dt>
+ <dd>The uncertain midpoint. When the raw score is zero, the model is perfectly undecided.</dd>
+ <dt>$\sigma(z) \to 1$</dt>
+ <dd>As $z \to +\infty$; strong positive evidence pushes the probability toward certainty.</dd>
+ <dt>$\sigma(z) \to 0$</dt>
+ <dd>As $z \to -\infty$; strong negative evidence pushes the probability toward zero.</dd>
+</dl>
+</div>
+
+<p>The model for a single data point is:</p>
+$$P(y = 1 \mid x) = \sigma(\theta^T x)$$
+
+<div class="note">
+<p><strong>Key properties of the sigmoid:</strong></p>
+<ul style="margin-top: 8px;">
+<li><strong>Symmetry:</strong> $\sigma(-z) = 1 - \sigma(z)$. Flipping the sign of $z$ swaps the probability between the two classes. This is why the margin-based formulation (Part C) works so cleanly.</li>
+<li><strong>Derivative:</strong> $\sigma'(z) = \sigma(z)(1 - \sigma(z))$. The derivative is largest at $z = 0$ (where $\sigma'(0) = 0.25$) and goes to zero as $|z|$ grows. In other words, the sigmoid is steepest in the middle and flattens out at the extremes; points near the decision boundary are the most "sensitive" to changes in $\theta$.</li>
+</ul>
+</div>
+
+<!-- SVG: Sigmoid curve -->
+<div style="text-align: center; margin: 30px 0;">
+<svg viewBox="0 0 440 260" width="440" style="max-width: 100%;">
+ <!-- background grid lines -->
+ <line x1="60" y1="30" x2="60" y2="230" stroke="#2e2e38" stroke-width="1"/>
+ <line x1="140" y1="30" x2="140" y2="230" stroke="#2e2e38" stroke-width="0.5"/>
+ <line x1="220" y1="30" x2="220" y2="230" stroke="#2e2e38" stroke-width="1"/>
+ <line x1="300" y1="30" x2="300" y2="230" stroke="#2e2e38" stroke-width="0.5"/>
+ <line x1="380" y1="30" x2="380" y2="230" stroke="#2e2e38" stroke-width="1"/>
+
+ <!-- horizontal guides at 0, 0.5, 1 -->
+ <line x1="55" y1="230" x2="385" y2="230" stroke="#555" stroke-width="1"/>
+ <line x1="55" y1="130" x2="385" y2="130" stroke="#3a3a46" stroke-width="1" stroke-dasharray="4,3"/>
+ <line x1="55" y1="30" x2="385" y2="30" stroke="#3a3a46" stroke-width="1" stroke-dasharray="4,3"/>
+
+ <!-- axes -->
+ <line x1="55" y1="230" x2="390" y2="230" stroke="#706c64" stroke-width="1.5"/>
+ <line x1="220" y1="25" x2="220" y2="235" stroke="#706c64" stroke-width="1.5"/>
+
+ <!-- axis labels -->
+ <text x="58" y="245" fill="#a8a49c" font-size="11">-6</text>
+ <text x="138" y="245" fill="#a8a49c" font-size="11">-3</text>
+ <text x="218" y="245" fill="#a8a49c" font-size="11">0</text>
+ <text x="298" y="245" fill="#a8a49c" font-size="11">3</text>
+ <text x="378" y="245" fill="#a8a49c" font-size="11">6</text>
+ <text x="395" y="235" fill="#a8a49c" font-size="12">z</text>
+
+ <text x="35" y="235" fill="#a8a49c" font-size="11">0</text>
+ <text x="28" y="135" fill="#a8a49c" font-size="11">0.5</text>
+ <text x="35" y="35" fill="#a8a49c" font-size="11">1</text>
+
+ <!-- asymptote labels -->
+ <text x="62" y="22" fill="#706c64" font-size="10" font-style="italic">y = 1</text>
+ <text x="62" y="225" fill="#706c64" font-size="10" font-style="italic">y = 0</text>
+
+ <!-- sigmoid curve (sampled points, z from -6 to 6) -->
+ <!-- sigma(z) = 1/(1+exp(-z)), mapped: x = 220 + z*(160/6), y = 230 - sigma*200 -->
+ <path d="M 60,229 C 60,229 80,228 100,227 C 120,225 140,220 155,213 C 170,203 185,188 200,168 C 210,153 215,140 220,130 C 225,120 230,107 240,92 C 255,72 270,57 285,47 C 300,40 320,35 340,33 C 360,31 380,31 380,31"
+       fill="none" stroke="#d4956a" stroke-width="3" stroke-linecap="round"/>
+
+ <!-- midpoint dot -->
+ <circle cx="220" cy="130" r="5" fill="#d4956a" stroke="#17171c" stroke-width="1.5"/>
+ <text x="230" y="125" fill="#d4956a" font-size="12" font-weight="bold">(0, 0.5)</text>
+
+ <!-- title -->
+ <text x="220" y="258" fill="#c9a84c" font-size="13" font-weight="bold" text-anchor="middle">The sigmoid: any real number in, probability out</text>
+</svg>
+</div>
+
+
+<!-- ==================== PART C ==================== -->
+<span class="tag">PART C</span>
+<h2>Two Label Conventions</h2>
+
+<div class="analogy">
+<p><strong>Analogy: two ways to score a game.</strong> Convention 1 uses 0 and 1, like soccer goals: you either scored or you did not. Convention 2 uses $-1$ and $+1$, like tug-of-war: you pull left or right. Both describe the same game; they just use different number systems. The margin-based convention ($\{-1,+1\}$) turns out to be cleaner for optimization because the loss function collapses into a single, elegant formula instead of a two-part expression with an "if" baked inside.</p>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Convention 1: $y_i \in \{0, 1\}$ (Probabilistic / Cross-Entropy)</p>
+$$\ell_i(\theta) = -\bigl[y_i \log \sigma(\theta^T x_i) + (1 - y_i)\log(1 - \sigma(\theta^T x_i))\bigr]$$
+<dl class="breakdown">
+ <dt>$y_i \in \{0,1\}$</dt>
+ <dd>The label is 0 ("negative") or 1 ("positive"). Only one of the two log-terms is active at a time: when $y_i = 1$, the $(1-y_i)$ term vanishes; when $y_i = 0$, the $y_i$ term vanishes.</dd>
+ <dt>$\sigma(\theta^T x_i)$</dt>
+ <dd>The model's predicted probability that $y_i = 1$.</dd>
+ <dt>$-\log(\cdot)$</dt>
+ <dd>The negative log turns a probability (between 0 and 1) into a loss (between 0 and $\infty$). High predicted probability for the correct class gives low loss; low predicted probability gives huge loss.</dd>
+</dl>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Convention 2: $y_i \in \{-1, +1\}$ (Margin-Based)</p>
+$$\ell_i(\theta) = \log(1 + e^{-y_i \theta^T x_i})$$
+<dl class="breakdown">
+ <dt>$y_i \in \{-1,+1\}$</dt>
+ <dd>The label is $-1$ ("negative") or $+1$ ("positive").</dd>
+ <dt>$y_i \theta^T x_i$</dt>
+ <dd>The <strong>margin</strong>. When the model agrees with the label (both positive or both negative), the margin is positive and the loss is small. When the model disagrees, the margin is negative and the loss is large.</dd>
+ <dt>$\log(1 + e^{-\text{margin}})$</dt>
+ <dd>A single, clean formula. No if/else, no separate cases. The margin does all the work.</dd>
+</dl>
+</div>
+
+<div class="why-box">
+<h3>Why the margin-based form works</h3>
+<p>The product $y_i \theta^T x_i$ is the key insight. Think of it this way:</p>
+<ul style="margin-top: 8px;">
+<li>When $y_i = +1$ and $\theta^T x_i$ is large and positive (correct, confident prediction): the margin $y_i \theta^T x_i$ is large and positive, so $e^{-\text{large positive}} \approx 0$, and $\ell_i \approx \log(1 + 0) = 0$. Almost no loss.</li>
+<li>When $y_i = +1$ but $\theta^T x_i$ is negative (wrong prediction): the margin is negative, so $e^{-\text{negative}} = e^{\text{positive}}$ is large, and $\ell_i$ is large. Big penalty.</li>
+<li>The same logic works symmetrically when $y_i = -1$: the model should produce a negative $\theta^T x_i$, which makes $y_i \theta^T x_i = (-1)(\text{negative}) = \text{positive}$, giving low loss.</li>
+</ul>
+</div>
+
+<div class="note">
+<p><strong>Course convention:</strong> This course uses Convention 2 (margin-based, $y \in \{-1,+1\}$) throughout. All formulas below follow this convention. The two conventions produce mathematically equivalent optimization problems; the margin-based form is simply more compact.</p>
+</div>
+
+
+<!-- ==================== PART D ==================== -->
+<span class="tag">PART D</span>
+<h2>The Objective Function</h2>
+
+<div class="analogy">
+<p><strong>Analogy: the average regret.</strong> Each data point contributes a "regret" score based on how badly the model predicted its label. A correctly classified point with high confidence contributes almost zero regret. A misclassified point contributes a lot. The objective function is just the average regret across all data points; we want to find the parameters $\theta$ that minimize the collective regret.</p>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Logistic Regression Objective (Margin-Based)</p>
+$$f(\theta) = \frac{1}{n}\sum_{i=1}^{n} \log(1 + e^{-y_i \theta^T x_i})$$
+<dl class="breakdown">
+ <dt>$n$</dt>
+ <dd>Number of data points.</dd>
+ <dt>$y_i \in \{-1, +1\}$</dt>
+ <dd>The label for the $i$-th data point.</dd>
+ <dt>$x_i \in \mathbb{R}^d$</dt>
+ <dd>The feature vector for the $i$-th data point (a column vector with $d$ entries).</dd>
+ <dt>$\theta \in \mathbb{R}^d$</dt>
+ <dd>The parameter vector we are trying to find. These $d$ numbers define the decision boundary.</dd>
+ <dt>$\theta^T x_i$</dt>
+ <dd>The raw score for data point $i$. This is the same linear combination as in linear regression: $\theta_1 x_{i1} + \theta_2 x_{i2} + \cdots + \theta_d x_{id}$.</dd>
+ <dt>$\frac{1}{n}\sum$</dt>
+ <dd>The average over all data points. This scaling does not affect where the minimum is, but it makes the gradient independent of $n$.</dd>
+</dl>
+</div>
+
+<div class="why-box">
+<h3>Three key properties from the optimization perspective</h3>
+<ol style="margin-top: 8px;">
+<li><strong>Convex.</strong> The function $\log(1 + e^{-z})$ is convex in $z$, and each $z_i = y_i\theta^Tx_i$ is a linear (hence convex) function of $\theta$. The composition of a convex function with a linear function is convex. A sum of convex functions is convex. So $f$ is convex. Every local minimum is a global minimum (recall from <a href="cg-05-convexity.html">Page 05</a>).</li>
+<li><strong>Smooth ($C^\infty$).</strong> The sigmoid and the exponential are infinitely differentiable. So the gradient, Hessian, and all higher derivatives exist everywhere. This means Newton's method (<a href="cg-07-newton-method.html">Page 07</a>), BFGS (<a href="cg-12-bfgs.html">Page 12</a>), and nonlinear CG (<a href="cg-11-nonlinear-cg.html">Page 11</a>) all apply.</li>
+<li><strong>Not strongly convex</strong> (without regularization). The Hessian can have zero eigenvalues if some data directions are uninformative. This means the convergence rate depends on the data, and gradient descent may be slow. Adding an $\ell_2$ penalty $\frac{\lambda}{2}\|\theta\|^2$ to the objective makes it strongly convex, guaranteeing a unique minimizer and faster convergence.</li>
+</ol>
+</div>
+
+<div class="note">
+<p><strong>Comparison with linear regression (<a href="cg-23-linear-regression.html">Page 23</a>):</strong> The least-squares objective $\|A\theta - b\|^2$ is also convex and smooth, but it is a <em>quadratic</em>, so Newton converges in one step and the Hessian is constant. The logistic objective is not quadratic; the Hessian changes at every point. So Newton requires multiple iterations, and BFGS approximates the changing Hessian instead of computing it exactly.</p>
+</div>
+
+
+<!-- ==================== PART E ==================== -->
+<span class="tag">PART E</span>
+<h2>The Gradient</h2>
+
+<div class="analogy">
+<p><strong>Analogy: a classroom attention filter.</strong> Imagine a teacher grading a stack of exams. For each student, the gradient asks: "How much would adjusting the answer key change this student's score?" Students who clearly passed (high confidence, correct) barely register; their contribution to the gradient is almost zero. Students near the pass/fail boundary, or students who were misclassified, contribute the most. The gradient acts like an attention filter that focuses the optimization on the hard cases and ignores the easy ones.</p>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Gradient of the Logistic Objective</p>
+$$\nabla f(\theta) = -\frac{1}{n}\sum_{i=1}^{n} \frac{y_i x_i}{1 + e^{y_i \theta^T x_i}}$$
+<dl class="breakdown">
+ <dt>$y_i x_i$</dt>
+ <dd>The "signed data point." When $y_i = +1$, this is just $x_i$. When $y_i = -1$, this is $-x_i$. The label flips the direction of the contribution.</dd>
+ <dt>$\frac{1}{1 + e^{y_i \theta^T x_i}}$</dt>
+ <dd>The <strong>weight</strong> for data point $i$. This is $\sigma(-y_i\theta^Tx_i)$: the sigmoid of the negative margin. When the margin is large and positive (correct, confident), this weight is close to 0 (the point is "handled"). When the margin is small or negative (uncertain or wrong), this weight is close to 1 (the point demands attention).</dd>
+ <dt>$-\frac{1}{n}\sum$</dt>
+ <dd>Negative sign because we are minimizing. The average makes the gradient scale-independent of $n$.</dd>
+</dl>
+</div>
+
+<p>There is also a compact matrix form. Stack all data into a matrix $A \in \mathbb{R}^{n \times d}$ (rows are data points) and labels into $y \in \mathbb{R}^n$:</p>
+
+<div class="formula-box">
+<p style="color: #6b8fbd; font-weight: bold; margin-bottom: 12px;">Matrix Form of the Gradient</p>
+$$\nabla f(\theta) = -\frac{1}{n}A^T\bigl(y \odot \sigma(-y \odot (A\theta))\bigr)$$
+<dl class="breakdown">
+ <dt>$A\theta \in \mathbb{R}^n$</dt>
+ <dd>The vector of raw scores for all $n$ data points.</dd>
+ <dt>$y \odot (A\theta)$</dt>
+ <dd>Elementwise product: the vector of margins $[y_1\theta^Tx_1, \ldots, y_n\theta^Tx_n]^T$.</dd>
+ <dt>$\sigma(-y \odot (A\theta))$</dt>
+ <dd>Apply the sigmoid to the negative margins. This gives the weight vector.</dd>
+ <dt>$y \odot \sigma(\cdot)$</dt>
+ <dd>Elementwise product with labels again, producing the signed weights.</dd>
+ <dt>$A^T(\cdot)$</dt>
+ <dd>Projects the $n$-dimensional weight vector back into the $d$-dimensional parameter space (same role as $A^T$ in the linear regression gradient).</dd>
+ <dt>$\odot$</dt>
+ <dd>Elementwise (Hadamard) product: $(u \odot v)_i = u_i v_i$.</dd>
+</dl>
+</div>
+
+<div class="exam-flag">
+<h4>Exam Simplification: Gradient at $\theta = 0$</h4>
+<p>At $\theta = 0$, every margin $y_i\theta^Tx_i = 0$, so $e^{y_i\theta^Tx_i} = e^0 = 1$ for all $i$. The gradient simplifies to:</p>
+$$\nabla f(0) = -\frac{1}{n}\sum_{i=1}^{n} \frac{y_i x_i}{1 + 1} = -\frac{1}{2n}\sum_{i=1}^{n} y_i x_i$$
+<p style="margin-top:8px;">This is a common exam starting point: "compute the gradient at the origin." Every data point gets equal weight ($\frac{1}{2}$), and the gradient is just the (scaled, negated) sum of the signed data vectors.</p>
+</div>
+
+
+<!-- ==================== PART F ==================== -->
+<span class="tag">PART F</span>
+<h2>Solving with Optimization Methods</h2>
+
+<div class="analogy">
+<p><strong>Analogy: choosing your hiking gear.</strong> Gradient descent (<a href="cg-06-gradient-descent.html">Page 06</a>) is like hiking downhill with just your feet; slow but reliable, and you only need to feel the slope under your boots. BFGS (<a href="cg-12-bfgs.html">Page 12</a>) is like having a terrain map that updates with every step; much faster because it learns the curvature of the landscape as it goes. Nonlinear CG (<a href="cg-11-nonlinear-cg.html">Page 11</a>) is somewhere in between; it remembers which direction it came from and avoids zigzagging back and forth across a valley. All three methods work here because the logistic objective is smooth and convex.</p>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Three Methods for Logistic Regression</p>
+<table style="width: 100%; border-collapse: collapse; margin-top: 8px;">
+<tr style="border-bottom: 2px solid #3a3a46;">
+ <th style="text-align: left; padding: 8px; color: #a8a49c;"></th>
+ <th style="text-align: center; padding: 8px; color: #d4956a;">Gradient Descent</th>
+ <th style="text-align: center; padding: 8px; color: #6b8fbd;">BFGS</th>
+ <th style="text-align: center; padding: 8px; color: #9b89b6;">Nonlinear CG</th>
+</tr>
+<tr style="border-bottom: 1px solid #2e2e38;">
+ <td style="padding: 8px; color: #a8a49c;">Update Rule</td>
+ <td style="text-align: center; padding: 8px;">$\theta_{k+1} = \theta_k - \alpha_k \nabla f$</td>
+ <td style="text-align: center; padding: 8px;">$\theta_{k+1} = \theta_k - \alpha_k H_k \nabla f$</td>
+ <td style="text-align: center; padding: 8px;">$\theta_{k+1} = \theta_k + \alpha_k d_k$</td>
+</tr>
+<tr style="border-bottom: 1px solid #2e2e38;">
+ <td style="padding: 8px; color: #a8a49c;">Convergence</td>
+ <td style="text-align: center; padding: 8px;">Linear</td>
+ <td style="text-align: center; padding: 8px;">Superlinear</td>
+ <td style="text-align: center; padding: 8px;">Superlinear</td>
+</tr>
+<tr style="border-bottom: 1px solid #2e2e38;">
+ <td style="padding: 8px; color: #a8a49c;">Storage</td>
+ <td style="text-align: center; padding: 8px;">$O(d)$</td>
+ <td style="text-align: center; padding: 8px;">$O(d^2)$</td>
+ <td style="text-align: center; padding: 8px;">$O(d)$</td>
+</tr>
+<tr>
+ <td style="padding: 8px; color: #a8a49c;">Best When</td>
+ <td style="text-align: center; padding: 8px;">Large $n$ (use SGD variant)</td>
+ <td style="text-align: center; padding: 8px;">Moderate $d$</td>
+ <td style="text-align: center; padding: 8px;">Large $d$, memory limited</td>
+</tr>
+</table>
+</div>
+
+<div class="note">
+<p><strong>Line search requirements:</strong> BFGS needs a <strong>Wolfe line search</strong> to maintain the condition $s^T y \gt 0$ that keeps the approximate Hessian positive definite (recall from <a href="cg-12-bfgs.html">Page 12</a>). Nonlinear CG needs the <strong>Strong Wolfe conditions</strong> to ensure the conjugate direction does not degrade (recall from <a href="cg-11-nonlinear-cg.html">Page 11</a>). Gradient descent works with any line search or even a well-chosen constant step size.</p>
+</div>
+
+<div class="why-box">
+<h3>Why not Newton's method?</h3>
+<p>Newton's method (<a href="cg-07-newton-method.html">Page 07</a>) would also work here, since the logistic objective is smooth and convex. But unlike linear regression where the Hessian is constant, the logistic Hessian changes at every iteration and costs $O(nd^2)$ to compute. BFGS approximates the Hessian from gradient information alone, achieving near-Newton convergence speed without ever forming the true Hessian. For moderate $d$, BFGS is typically the best practical choice.</p>
+</div>
+
+<p>The <strong>decision boundary</strong> is the set of points where the model is perfectly undecided:</p>
+
+<div class="formula-box">
+<p style="color: #6b8fbd; font-weight: bold; margin-bottom: 12px;">Decision Boundary</p>
+$$\theta^T x = 0$$
+<p style="margin-top: 8px;">This is a <strong>hyperplane</strong> in $\mathbb{R}^d$. Points with $\theta^T x \gt 0$ are classified as $+1$; points with $\theta^T x \lt 0$ are classified as $-1$; points exactly on the boundary have $\sigma(\theta^Tx) = 0.5$. In 2D, the decision boundary is a straight line. In 3D, it is a plane.</p>
+</div>
+
+
+<!-- ==================== PART G ==================== -->
+<span class="tag">PART G</span>
+<h2>Worked Hand Computation</h2>
+
+<div class="analogy">
+<p><strong>Analogy: calibrating the thermometer by hand.</strong> We are going to walk through one gradient descent step on a tiny dataset, computing every number explicitly. This is the kind of computation that appears on exams: small enough to do by hand, but it exercises every piece of the logistic regression formula.</p>
+</div>
+
+<div class="hand-calc">
+<h3>One Gradient Descent Step for Logistic Regression</h3>
+<p style="margin-bottom: 16px;">Given $n = 3$ data points with $d = 2$ features:</p>
+
+<p>$x_1 = \begin{bmatrix}1\\0\end{bmatrix},\; y_1 = +1$; &nbsp; $x_2 = \begin{bmatrix}0\\1\end{bmatrix},\; y_2 = -1$; &nbsp; $x_3 = \begin{bmatrix}1\\1\end{bmatrix},\; y_3 = +1$</p>
+
+<p style="margin-top: 12px;">Starting at $\theta_0 = \begin{bmatrix}0\\0\end{bmatrix}$, learning rate $\eta = 1$. Compute one gradient descent step.</p>
+
+<div class="step">
+<div class="step-label">Step 1: Compute the margins $z_i = y_i \theta_0^T x_i$</div>
+<p>Since $\theta_0 = \begin{bmatrix}0\\0\end{bmatrix}$, every dot product $\theta_0^T x_i = 0$.</p>
+$$z_1 = (+1)(0) = 0, \quad z_2 = (-1)(0) = 0, \quad z_3 = (+1)(0) = 0$$
+<div class="result">All margins are zero. The model is completely undecided about every point.</div>
+</div>
+
+<div class="step">
+<div class="step-label">Step 2: Compute the current loss $f(\theta_0)$</div>
+$$f(\theta_0) = \frac{1}{3}\sum_{i=1}^{3} \log(1 + e^{-z_i}) = \frac{1}{3} \cdot 3 \cdot \log(1 + e^0) = \frac{1}{3} \cdot 3 \cdot \log(2) = \log 2 \approx 0.693$$
+<div class="result">$f(\theta_0) = \log 2 \approx 0.693$. This is the maximum possible average loss per point (since $\sigma(0) = 0.5$ for every point).</div>
+</div>
+
+<div class="step">
+<div class="step-label">Step 3: Compute the gradient $\nabla f(\theta_0)$</div>
+<p>Using the exam simplification from Part E (all margins are zero, so each weight is $\frac{1}{2}$):</p>
+$$\nabla f(\theta_0) = -\frac{1}{2n}\sum_{i=1}^{3} y_i x_i = -\frac{1}{6}\left[y_1 x_1 + y_2 x_2 + y_3 x_3\right]$$
+<p>Substituting each term:</p>
+$$= -\frac{1}{6}\left[(+1)\begin{bmatrix}1\\0\end{bmatrix} + (-1)\begin{bmatrix}0\\1\end{bmatrix} + (+1)\begin{bmatrix}1\\1\end{bmatrix}\right]$$
+$$= -\frac{1}{6}\begin{bmatrix}1 + 0 + 1 \\ 0 - 1 + 1\end{bmatrix} = -\frac{1}{6}\begin{bmatrix}2\\0\end{bmatrix} = \begin{bmatrix}-1/3\\0\end{bmatrix}$$
+<div class="result">$\nabla f(\theta_0) = \begin{bmatrix}-1/3\\0\end{bmatrix}$. The gradient points in the negative $\theta_1$ direction; the optimization wants to increase $\theta_1$.</div>
+</div>
+
+<div class="step">
+<div class="step-label">Step 4: Update $\theta$</div>
+$$\theta_1 = \theta_0 - \eta \cdot \nabla f(\theta_0) = \begin{bmatrix}0\\0\end{bmatrix} - 1 \cdot \begin{bmatrix}-1/3\\0\end{bmatrix} = \begin{bmatrix}1/3\\0\end{bmatrix}$$
+<div class="result">$\theta_1 = \begin{bmatrix}1/3\\0\end{bmatrix}$</div>
+</div>
+
+<div class="step">
+<div class="step-label">Step 5: Interpret the new decision boundary</div>
+<p>The decision boundary is $\theta^T x = 0$, which gives $\frac{1}{3}x_1 + 0 \cdot x_2 = 0$, i.e., $x_1 = 0$.</p>
+<ul style="margin-top: 8px;">
+<li>Points with $x_1 \gt 0$ are classified as $+1$: this correctly classifies $x_1 = (1,0)$ and $x_3 = (1,1)$.</li>
+<li>Points with $x_1 \lt 0$ are classified as $-1$: $x_2 = (0,1)$ has $x_1 = 0$, so it lands exactly on the boundary (uncertain).</li>
+</ul>
+<div class="result">After just one step, the model has learned that the first feature matters for classification, but it has not yet figured out how to handle the second feature.</div>
+</div>
+
+<p class="check">Sanity check: the gradient had a nonzero first component ($-1/3$) and zero second component. This makes sense; looking at the labels, positive points ($x_1$ and $x_3$) both have $x_1 = 1$, while the negative point ($x_2$) has $x_1 = 0$. Feature 1 carries class-separating information. Feature 2 is present in both a positive ($x_3$) and a negative ($x_2$) point, so its contribution cancels in the gradient.</p>
+</div>
+
+
+<!-- ==================== GLOSSARY ==================== -->
+<span class="tag">GLOSSARY</span>
+<h2>Key Terms</h2>
+
+<div class="glossary">
+<dl>
+ <dt>Sigmoid ($\sigma$)</dt>
+ <dd>The function $\sigma(z) = \frac{1}{1+e^{-z}}$ that maps any real number to the interval $(0, 1)$. Used to convert a raw score into a probability. Also called the logistic function or the squashing function.</dd>
+
+ <dt>Logit</dt>
+ <dd>The raw score $z = \theta^Tx$ before the sigmoid is applied. The logit can be any real number. It is the "inverse" of the sigmoid: $z = \log\frac{p}{1-p}$ where $p = \sigma(z)$. The name "logistic regression" comes from "log-odds" → "logit."</dd>
+
+ <dt>Logistic Loss</dt>
+ <dd>The per-sample loss $\ell_i = \log(1 + e^{-y_i\theta^Tx_i})$ (margin form) or $\ell_i = -[y_i\log p_i + (1-y_i)\log(1-p_i)]$ (probabilistic form). Both are convex in $\theta$. Also called log-loss.</dd>
+
+ <dt>Cross-Entropy</dt>
+ <dd>Another name for the probabilistic form of the logistic loss (Convention 1). The name comes from information theory: it measures the "distance" between the true label distribution and the predicted probability distribution. Minimizing cross-entropy is equivalent to maximum likelihood estimation.</dd>
+
+ <dt>Margin</dt>
+ <dd>The product $y_i \theta^T x_i$. Positive margin means the model agrees with the true label; negative margin means it disagrees. Larger positive margin means more confident correct prediction. The margin-based loss $\log(1+e^{-\text{margin}})$ penalizes negative margins heavily and rewards large positive margins with near-zero loss.</dd>
+
+ <dt>Decision Boundary</dt>
+ <dd>The set $\{\,x : \theta^T x = 0\,\}$, a hyperplane in $\mathbb{R}^d$. Points on one side are classified as $+1$, points on the other as $-1$. In 2D it is a line; in 3D it is a plane. Logistic regression always produces a linear decision boundary (unlike SVMs with kernels).</dd>
+
+ <dt>Convex (Not Strongly Convex)</dt>
+ <dd>The logistic objective is convex (every local min is global; recall <a href="cg-05-convexity.html">Page 05</a>), but without regularization it is not <em>strongly</em> convex: the Hessian can have zero eigenvalues. Strong convexity can be enforced by adding an $\ell_2$ penalty $\frac{\lambda}{2}\|\theta\|^2$, which guarantees a unique minimizer and improves convergence rates.</dd>
+
+ <dt>Support (Connection to SVM)</dt>
+ <dd>In logistic regression, all data points contribute to the gradient (some with tiny weight). In a <strong>support vector machine</strong> (<a href="cg-25-svm.html">Page 25</a>), only the points near the decision boundary (the "support vectors") matter at all. SVM uses a hinge loss instead of the smooth logistic loss. The two approaches produce similar decision boundaries but have different mathematical properties.</dd>
+</dl>
+</div>
+
+<!-- ==================== NAV ==================== -->
+</div>
+
+<div class="bottom-nav">
+  <div class="bottom-nav-row">
+    <a class="bottom-nav-btn prev" href="cg-23-linear-regression.html">&larr; 23. Linear Regression</a>
+    <a class="bottom-nav-btn next" href="cg-25-svm.html">25. Support Vector Machines &rarr;</a>
+  </div>
+  <a class="bottom-nav-index" href="index.html">Back to Index</a>
+</div>
+
+<script src="sidebar.js"></script>
+</body>
+</html>

@@ -152,6 +152,23 @@ Full explanation on <a href="cg-15-constrained.html" style="color:#d4956a;">Page
 <dt>"Complementary slackness"</dt><dd>For each inequality: either the constraint is tight ($c_j = 0$) or the multiplier is zero ($\mu_j = 0$) or both. This is the "either/or" condition that makes enumeration possible on exams.</dd>
 </dl>
 
+<!-- Theorem 8: Strong Duality for SVM -->
+<div class="formula-box">
+<strong>Theorem: Strong Duality for Convex QP (SVM)</strong><br><br>
+If the primal is a convex quadratic program with linear constraints and Slater's condition holds (there exists a strictly feasible point), then strong duality holds: the primal and dual have the same optimal value, and the KKT conditions are necessary and sufficient for optimality.
+</div>
+
+<div class="analogy">
+<strong>Plain English:</strong> For SVM, the dual problem gives the exact same answer as the primal. You can solve whichever is easier; usually the dual, since it only involves dot products $x_i^T x_j$ rather than the weight vector $w$ directly. Strong duality means there is no "gap" between the best primal value and the best dual value. This is what justifies solving the SVM dual instead of the primal.<br><br>
+Full explanation on <a href="cg-25-svm.html" style="color:#d4956a;">Page 25</a>, <a href="cg-15-constrained.html" style="color:#d4956a;">Page 15</a>.
+</div>
+
+<dl class="breakdown">
+<dt>"Convex QP"</dt><dd>The objective is a convex quadratic ($\frac{1}{2}\|w\|^2$) and the constraints are linear ($y_i(w^Tx_i+b) \geq 1$). SVM fits this form exactly.</dd>
+<dt>"Slater's condition"</dt><dd>There must exist a point that strictly satisfies all inequality constraints. For SVM, this means the data must be linearly separable (there exists some $w,b$ with $y_i(w^Tx_i+b) \gt 1$ for all $i$).</dd>
+<dt>"KKT necessary and sufficient"</dt><dd>For convex problems with strong duality, a point is optimal if and only if it satisfies KKT. No need for second-order conditions; KKT alone is enough.</dd>
+</dl>
+
 <!-- ===================== PART B ===================== -->
 <h2>Part B: "Why" Questions and Answers</h2>
 
@@ -195,6 +212,29 @@ Full explanation on <a href="cg-15-constrained.html" style="color:#d4956a;">Page
 <p>KKT conditions tell you that at any local minimum (satisfying LICQ), these conditions hold. But they also hold at saddle points and local maxima of the Lagrangian. A point can satisfy all four KKT conditions and still not be a minimizer if the problem is non-convex.</p>
 <p style="margin-top: 8px;">For <strong>convex</strong> problems (convex $f$, convex feasible region), KKT conditions are both necessary AND sufficient. This is one of the main reasons convexity is so important (<a href="cg-05-convexity.html" style="color:#d4956a;">Page 05</a>).</p>
 <p style="margin-top: 8px;">Full explanation: <a href="cg-15-constrained.html" style="color:#d4956a;">Page 15</a>.</p>
+</div>
+
+<div class="why-box">
+<h3>Why maximize the margin in SVM?</h3>
+<p>A wider margin means a more robust classifier. Points near the decision boundary are uncertain; a small perturbation could flip their label. Pushing the boundary further from both classes reduces this misclassification risk. Think of it like a road divider: a narrow painted line is easy to cross accidentally, but a wide median separating two lanes gives much more room for error.</p>
+<p style="margin-top: 8px;">Geometrically, the margin between the two classes is $2/\|w\|$. So minimizing $\frac{1}{2}\|w\|^2$ is equivalent to maximizing the margin. The factor of $\frac{1}{2}$ and squaring are for mathematical convenience (smooth, differentiable objective).</p>
+<p style="margin-top: 8px;">Full explanation: <a href="cg-25-svm.html" style="color:#d4956a;">Page 25</a>.</p>
+</div>
+
+<div class="why-box">
+<h3>Why does the SVM dual only depend on dot products?</h3>
+<p>After substituting the stationarity conditions ($w = \sum \alpha_i y_i x_i$) back into the Lagrangian, the weight vector $w$ disappears completely. The objective becomes:</p>
+<p style="margin-top: 8px;">$$\sum_{i} \alpha_i - \frac{1}{2}\sum_{i}\sum_{j} \alpha_i \alpha_j y_i y_j (x_i^T x_j)$$</p>
+<p style="margin-top: 8px;">Only dot products $x_i^T x_j$ remain. This is significant because it enables the <strong>kernel trick</strong>: replace $x_i^T x_j$ with a kernel function $K(x_i, x_j)$ to classify data in higher-dimensional spaces without ever computing the transformation explicitly. The dual formulation makes SVM far more powerful than the primal alone suggests.</p>
+<p style="margin-top: 8px;">Full explanation: <a href="cg-25-svm.html" style="color:#d4956a;">Page 25</a>, <a href="cg-15-constrained.html" style="color:#d4956a;">Page 15</a>.</p>
+</div>
+
+<div class="why-box">
+<h3>Why is backpropagation just the chain rule?</h3>
+<p>In an MLP, the loss $J$ depends on $W_2$, which depends on $a^{(1)}$, which depends on $W_1$, which depends on $x$. This is a chain of nested functions. The chain rule from multivariable calculus (<a href="cg-02-multivariable-bridge.html" style="color:#d4956a;">Page 02</a>) tells us exactly how to propagate the gradient backward through this chain:</p>
+<p style="margin-top: 8px;">$$\frac{\partial J}{\partial W_1} = \frac{\partial J}{\partial \hat{y}} \cdot \frac{\partial \hat{y}}{\partial a^{(1)}} \cdot \frac{\partial a^{(1)}}{\partial z^{(1)}} \cdot \frac{\partial z^{(1)}}{\partial W_1}$$</p>
+<p style="margin-top: 8px;">Backpropagation is not a new mathematical idea; it is the chain rule applied systematically to a computational graph. Each "layer" of the backward pass computes one link in the chain. The reason it has a special name is that applying the chain rule efficiently (reusing intermediate results, going layer by layer from output to input) is crucial for computational speed in networks with many layers.</p>
+<p style="margin-top: 8px;">Full explanation: <a href="cg-26-mlp.html" style="color:#d4956a;">Page 26</a>, <a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>.</p>
 </div>
 
 <!-- ===================== PART C ===================== -->
@@ -361,6 +401,18 @@ $$= H_k y_k + s_k - H_k y_k = s_k$$
 <h4>Pitfall 8: Mixing up $B_k$ and $H_k$ in quasi-Newton methods</h4>
 <p><strong>Wrong:</strong> Using the BFGS formula for $B_k$ (Hessian approximation) when the problem asks for $H_k$ (inverse Hessian approximation), or vice versa.<br>
 <strong>Right:</strong> $B_k \approx \nabla^2 f$ (direct Hessian approximation), $H_k \approx [\nabla^2 f]^{-1}$ (inverse Hessian approximation). The secant condition is $B_{k+1}s_k = y_k$ equivalently $H_{k+1}y_k = s_k$. Know which formula you are using.</p>
+</div>
+
+<div class="exam-flag">
+<h4>Pitfall 9: Forgetting to check support vector conditions in SVM</h4>
+<p><strong>Wrong:</strong> Solving the dual and stopping without verifying which points are support vectors.<br>
+<strong>Right:</strong> After solving the dual, you must use complementary slackness: if $\alpha_i \gt 0$, then $y_i(w^T x_i + b) = 1$ (the point lies exactly on the margin; it is a support vector). If $y_i(w^T x_i + b) \gt 1$, then $\alpha_i = 0$ (the point is not a support vector and does not influence the decision boundary). Use the support vectors to compute $b$ from the margin condition.</p>
+</div>
+
+<div class="exam-flag">
+<h4>Pitfall 10: Confusing forward pass and backward pass in MLP</h4>
+<p><strong>Wrong:</strong> Trying to compute gradients without first computing the output, or mixing up the direction of computation.<br>
+<strong>Right:</strong> Forward pass computes the output (input $\to$ hidden $\to$ output). Backward pass computes gradients (output $\to$ hidden $\to$ input). You must do the forward pass FIRST to get $\hat{y}$ and the loss, THEN the backward pass to get gradients, THEN update weights. The backward pass depends on intermediate values ($z^{(1)}, a^{(1)}, \hat{y}$) computed during the forward pass.</p>
 </div>
 
 <!-- ===================== NAV ===================== -->

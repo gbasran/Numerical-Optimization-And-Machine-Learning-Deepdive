@@ -215,19 +215,24 @@ $$\bigl|\nabla f(x_k + \alpha_k p_k)^T p_k\bigr| \leq c_2 \bigl|\nabla f(x_k)^T 
 </div>
 
 <div class="formula-box">
-<strong>Goldstein Conditions (Brief)</strong>
+<strong>Goldstein Conditions</strong>
 
-$$f(x_k) + (1 - c)\alpha \nabla f(x_k)^T p_k \leq f(x_k + \alpha p_k) \leq f(x_k) + c \, \alpha \nabla f(x_k)^T p_k$$
+<p style="margin-bottom:12px;">The Goldstein conditions place <strong>symmetric upper and lower bounds</strong> on the function value after a step:</p>
 
-<p style="margin-top:12px;">where $0 \lt  c \lt  1/2$. This provides symmetric upper and lower bounds on the function value. The upper bound is the Armijo condition. The lower bound prevents too-short steps (the function cannot decrease TOO much, which happens when you use a step that is much larger than needed).</p>
+$$f(x_k) + (1-c)\alpha_k \nabla f_k^T p_k \leq f(x_k + \alpha_k p_k) \leq f(x_k) + c\,\alpha_k \nabla f_k^T p_k, \quad 0 \lt c \lt \frac{1}{2}$$
 
 <dl class="breakdown">
- <dt>Upper bound</dt><dd>Same as Armijo; prevents insufficient decrease (steps too long)</dd>
- <dt>Lower bound</dt><dd>Prevents too much decrease; ensures step is not way past the minimum</dd>
- <dt>$c$</dt><dd>Typically $c = 10^{-4}$. Must be less than $1/2$ for both bounds to be compatible.</dd>
+ <dt>Upper bound (right inequality)</dt><dd>This is exactly the <strong>Armijo condition</strong>: the function must decrease by at least a fraction $c$ of the linear prediction. Prevents steps that are too long (insufficient decrease).</dd>
+ <dt>Lower bound (left inequality)</dt><dd>Prevents steps that are too short. It says: the function cannot decrease by more than a fraction $(1-c)$ of the linear prediction. If you walk so little that the function drops almost as much as the tangent line predicts, you should keep walking; there is easy progress still on the table.</dd>
+ <dt>$c$</dt><dd>Typically $c = 10^{-4}$. Must satisfy $0 \lt c \lt 1/2$ so that the upper and lower bounds are compatible (the interval between the two lines is nonempty).</dd>
+ <dt>$\nabla f_k^T p_k$</dt><dd>The directional derivative at $x_k$, which is negative because $p_k$ is a descent direction. So $(1-c)\alpha_k \nabla f_k^T p_k$ is more negative than $c\,\alpha_k \nabla f_k^T p_k$ (since $1-c \gt c$ when $c \lt 1/2$), giving a valid interval.</dd>
 </dl>
+</div>
 
-<p style="margin-top:12px; color:#aaa;">Goldstein conditions are simpler than Wolfe but less commonly used because they do not guarantee $s_k^T y_k \gt  0$, so they cannot be used with BFGS.</p>
+<div class="why-box">
+<h3>Goldstein vs. Wolfe: Drawback</h3>
+<p>The Goldstein and Wolfe conditions have similar convergence properties for general line search methods. However, Goldstein has a key <strong>drawback</strong>: the lower bound is a straight line, and the true function $\phi(\alpha)$ may dip below this line at the minimizer $\alpha^*$. This means the Goldstein conditions can <strong>exclude all minimizers</strong> of $\phi(\alpha)$, forcing the accepted step to be away from the optimal step length.</p>
+<p style="margin-top:8px;">More critically, Goldstein is <strong>less suitable for quasi-Newton methods</strong> because it cannot guarantee $s_k^T y_k \gt 0$ (the curvature condition needed by BFGS; see <a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>). The Wolfe curvature condition directly ensures this property, which is why Wolfe (not Goldstein) is standard for BFGS and L-BFGS.</p>
 </div>
 
 <div class="exam-flag">

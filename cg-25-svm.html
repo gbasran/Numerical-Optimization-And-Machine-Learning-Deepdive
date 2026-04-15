@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page 25 : Support Vector Machines | MATH 3850 Course Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+ onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<span class="tag">PAGE 25; POST-MIDTERM</span>
+<h1>Support Vector Machines</h1>
+<p class="subtitle">Drawing the widest possible border between two classes; a convex QP whose solution depends on only a handful of critical data points</p>
+
+<!-- ==================== PART A ==================== -->
+<span class="tag">PART A</span>
+<h2>The Classification Problem</h2>
+
+<div class="analogy">
+<p><strong>Analogy: the widest no-man's-land between two armies.</strong> Imagine two armies camped on a flat plain. Positive troops on one side, negative troops on the other. You need to draw a straight border (a line in 2D, a hyperplane in higher dimensions) between them. But not just any border; you want the <strong>widest possible strip of empty land</strong> between the border and the nearest soldier on either side. That strip is the "margin."</p>
+<p style="margin-top:12px;">The soldiers closest to the border, the ones that define where the margin ends, are the <strong>support vectors</strong>. Move any of them and the border shifts. Remove any soldier that is NOT a support vector and the border stays exactly the same. This is the fundamental insight of SVM: the entire decision boundary is determined by just a few critical data points.</p>
+</div>
+
+<p>We have $n$ data points $\{(x_i, y_i)\}_{i=1}^n$ where $x_i \in \mathbb{R}^d$ is a feature vector and $y_i \in \{-1, +1\}$ is the class label. We want a separating hyperplane $w^T x + b = 0$ that divides the two classes.</p>
+
+<p>The <strong>functional margin</strong> of a point $(x_i, y_i)$ with respect to the hyperplane is $y_i(w^T x_i + b)$. If this quantity is positive, the point is on the correct side. The <strong>geometric margin</strong> (the actual Euclidean distance from the point to the hyperplane) is $\frac{y_i(w^T x_i + b)}{\|w\|}$.</p>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Margin Width</p>
+$$\text{margin} = \frac{2}{\|w\|}$$
+<dl class="breakdown">
+ <dt>$\|w\|$</dt>
+ <dd>The Euclidean norm of the weight vector. It controls the "steepness" of the hyperplane: a larger $\|w\|$ means a narrower margin.</dd>
+ <dt>$2$</dt>
+ <dd>The margin extends $1/\|w\|$ on each side of the hyperplane (one side for the positive class, one for the negative class), giving a total width of $2/\|w\|$.</dd>
+</dl>
+</div>
+
+<div class="why-box">
+<h3>Why Maximizing the Margin Becomes Minimizing $\|w\|^2$</h3>
+<p>Maximizing $\frac{2}{\|w\|}$ is the same as minimizing $\|w\|$, which is the same as minimizing $\frac{1}{2}\|w\|^2$ (we add the $\frac{1}{2}$ for convenience when differentiating, and we square to remove the square root). This converts a geometric goal into an optimization problem; specifically, a <strong>convex quadratic program</strong> with linear inequality constraints. Everything from <a href="cg-05-convexity.html">Page 05</a> (convexity) and <a href="cg-15-constrained.html">Page 15</a> (constrained optimization, KKT conditions) applies directly.</p>
+</div>
+
+<!-- SVG: 2D classification with margin -->
+<div style="text-align: center; margin: 30px 0;">
+<svg viewBox="0 0 440 320" width="440" style="max-width: 100%;">
+ <!-- background margin strip -->
+ <polygon points="100,20 180,300 260,300 180,20" fill="rgba(201,168,76,0.08)" stroke="none"/>
+ <!-- separating hyperplane -->
+ <line x1="140" y1="20" x2="220" y2="300" stroke="#c9a84c" stroke-width="2.5"/>
+ <!-- margin boundaries -->
+ <line x1="100" y1="20" x2="180" y2="300" stroke="#c9a84c" stroke-width="1" stroke-dasharray="5,4"/>
+ <line x1="180" y1="20" x2="260" y2="300" stroke="#c9a84c" stroke-width="1" stroke-dasharray="5,4"/>
+ <!-- positive class (right side) -->
+ <circle cx="270" cy="80" r="7" fill="#6aab8e"/>
+ <circle cx="300" cy="140" r="7" fill="#6aab8e"/>
+ <circle cx="250" cy="200" r="7" fill="#6aab8e"/>
+ <circle cx="340" cy="220" r="7" fill="#6aab8e"/>
+ <circle cx="290" cy="260" r="7" fill="#6aab8e"/>
+ <!-- support vectors (positive) -->
+ <circle cx="220" cy="120" r="8" fill="none" stroke="#6aab8e" stroke-width="2.5"/>
+ <circle cx="220" cy="120" r="4" fill="#6aab8e"/>
+ <!-- negative class (left side) -->
+ <circle cx="60" cy="100" r="7" fill="#c47070"/>
+ <circle cx="80" cy="180" r="7" fill="#c47070"/>
+ <circle cx="50" cy="240" r="7" fill="#c47070"/>
+ <circle cx="90" cy="270" r="7" fill="#c47070"/>
+ <!-- support vectors (negative) -->
+ <circle cx="120" cy="160" r="8" fill="none" stroke="#c47070" stroke-width="2.5"/>
+ <circle cx="120" cy="160" r="4" fill="#c47070"/>
+ <!-- margin arrow -->
+ <line x1="122" y1="52" x2="178" y2="52" stroke="#d4956a" stroke-width="1.5" marker-start="url(#arrowL)" marker-end="url(#arrowR)"/>
+ <text x="150" y="44" fill="#d4956a" font-size="12" text-anchor="middle" font-weight="bold">margin</text>
+ <!-- labels -->
+ <text x="320" y="60" fill="#6aab8e" font-size="13" font-weight="bold">$y = +1$</text>
+ <text x="30" y="70" fill="#c47070" font-size="13" font-weight="bold">$y = -1$</text>
+ <text x="155" y="300" fill="#c9a84c" font-size="11">$w^Tx + b = 0$</text>
+ <text x="220" y="108" fill="#a8a49c" font-size="10">support vector</text>
+ <text x="70" y="152" fill="#a8a49c" font-size="10">support vector</text>
+ <defs>
+  <marker id="arrowL" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M6,0 L0,3 L6,6" fill="none" stroke="#d4956a" stroke-width="1"/></marker>
+  <marker id="arrowR" markerWidth="6" markerHeight="6" refX="0" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#d4956a" stroke-width="1"/></marker>
+ </defs>
+</svg>
+</div>
+
+
+<!-- ==================== PART B ==================== -->
+<span class="tag">PART B</span>
+<h2>The Primal QP Formulation</h2>
+
+<div class="analogy">
+<p><strong>Analogy: building the narrowest fence.</strong> Minimizing $\frac{1}{2}\|w\|^2$ is like building a fence using the least material (smallest $w$) that still keeps both classes on their correct sides. The constraints $y_i(w^Tx_i + b) \geq 1$ are the "building code" requirements: every data point must be at least a unit distance (in functional margin) from the fence line. The less material you use, the wider the gap between the two sides of the fence.</p>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Hard-Margin SVM: Primal Formulation</p>
+$$\min_{w, b} \; \frac{1}{2}\|w\|^2$$
+$$\text{subject to: } \; y_i(w^T x_i + b) \geq 1, \quad i = 1, \ldots, n$$
+<dl class="breakdown">
+ <dt>$w \in \mathbb{R}^d$</dt>
+ <dd>The normal vector to the separating hyperplane. Its direction determines which way the hyperplane faces; its magnitude controls the margin width.</dd>
+ <dt>$b \in \mathbb{R}$</dt>
+ <dd>The bias (offset) term. It shifts the hyperplane away from the origin without changing its orientation.</dd>
+ <dt>$y_i \in \{-1, +1\}$</dt>
+ <dd>The class label for data point $i$. Multiplying by $y_i$ ensures the constraint works for both classes: positive points need $w^Tx_i + b \geq 1$, negative points need $w^Tx_i + b \leq -1$.</dd>
+ <dt>$x_i \in \mathbb{R}^d$</dt>
+ <dd>The $i$-th data point (feature vector).</dd>
+ <dt>$\frac{1}{2}\|w\|^2$</dt>
+ <dd>Strictly convex quadratic objective. The $\frac{1}{2}$ is a convenience factor (produces cleaner derivatives). Because this is strictly convex, the problem has a <strong>unique solution</strong> (recall <a href="cg-05-convexity.html">Page 05</a>).</dd>
+ <dt>$y_i(w^Tx_i + b) \geq 1$</dt>
+ <dd>Linear inequality constraints. There is one per data point. They enforce that every point has a functional margin of at least 1.</dd>
+</dl>
+</div>
+
+<div class="note">
+<p><strong>Connection to earlier pages:</strong> This is a convex QP with linear inequality constraints. The objective is quadratic and strictly convex (<a href="cg-05-convexity.html">Page 05</a>). The constraints are linear inequalities, handled by the Lagrangian and KKT framework from <a href="cg-15-constrained.html">Page 15</a>. The dual derivation below uses the same Lagrange multiplier machinery, and the resulting dual problem connects to the duality concepts from <a href="cg-16-lp-interior-point.html">Page 16</a>.</p>
+</div>
+
+
+<!-- ==================== PART C ==================== -->
+<span class="tag">PART C</span>
+<h2>The Lagrangian</h2>
+
+<div class="analogy">
+<p><strong>Analogy: price for constraints (from <a href="cg-15-constrained.html">Page 15</a>).</strong> Each constraint $y_i(w^Tx_i + b) \geq 1$ gets a multiplier $\alpha_i \geq 0$ that acts as a "penalty price" for violating it. If the constraint is easily satisfied (the data point is far from the border), the price is zero: that constraint is cheap, it is not costing you anything. If the constraint is tight (the point sits exactly on the margin), the price may be positive: the constraint is actively restricting your choice of hyperplane. These prices are the Lagrange multipliers, and finding them is equivalent to finding the optimal hyperplane.</p>
+</div>
+
+<p>We rewrite each constraint in the standard form $g_i(w,b) \leq 0$ by flipping the inequality: $1 - y_i(w^Tx_i + b) \leq 0$. Each gets a multiplier $\alpha_i \geq 0$.</p>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">The Lagrangian for SVM</p>
+$$L(w, b, \alpha) = \frac{1}{2}\|w\|^2 - \sum_{i=1}^{n} \alpha_i\bigl[y_i(w^T x_i + b) - 1\bigr]$$
+<dl class="breakdown">
+ <dt>$\frac{1}{2}\|w\|^2$</dt>
+ <dd>The original objective (fence material cost).</dd>
+ <dt>$\alpha_i \geq 0$</dt>
+ <dd>The Lagrange multiplier for constraint $i$. It is the "penalty price" for the $i$-th data point's margin requirement.</dd>
+ <dt>$y_i(w^Tx_i + b) - 1$</dt>
+ <dd>The slack in constraint $i$. If this is 0, the point is exactly on the margin (active constraint). If positive, the point is safely beyond the margin (inactive).</dd>
+ <dt>$-\alpha_i[\cdots]$</dt>
+ <dd>The penalty term. The negative sign comes from our constraint form: the Lagrangian subtracts $\alpha_i$ times the slack. When $\alpha_i \gt 0$ and the slack is zero, this term equals $+\alpha_i$, increasing the Lagrangian.</dd>
+</dl>
+</div>
+
+<div class="why-box">
+<h3>The Saddle-Point Interpretation</h3>
+<p>The primal problem is equivalent to finding the <strong>saddle point</strong>: $\min_{w,b} \max_{\alpha \geq 0} L(w, b, \alpha)$. Here is the intuition. For a fixed $(w, b)$, if any constraint is violated (slack is negative), the inner $\max$ over $\alpha$ drives $L$ to $+\infty$ (the maximizer sets $\alpha_i \to \infty$ for the violated constraint). So the outer $\min$ is forced to choose a feasible $(w, b)$ to avoid this blowup. Among feasible points, the penalty terms vanish (complementary slackness) and $L$ reduces to $\frac{1}{2}\|w\|^2$, so we minimize the original objective.</p>
+</div>
+
+
+<!-- ==================== PART D ==================== -->
+<span class="tag">PART D</span>
+<h2>First-Order Conditions and the Wolfe Dual</h2>
+
+<div class="analogy">
+<p><strong>Analogy: reverse-engineering the fence from the tickets.</strong> Instead of building the fence directly (optimizing over $w$ and $b$), we look at the ticket prices ($\alpha_i$) that the soldiers are willing to pay to stand near the border. The dual problem finds the ticket prices that maximize revenue. Once you know the prices, you can reconstruct the fence from them. This is the standard Lagrangian duality trick: swap the order of min and max to get an equivalent problem that is sometimes easier to solve.</p>
+</div>
+
+<p>To derive the dual, we first minimize $L$ over the primal variables $(w, b)$ by setting partial derivatives to zero.</p>
+
+<div class="formula-box">
+<p style="color: #6b8fbd; font-weight: bold; margin-bottom: 12px;">First-Order Condition 1: $\nabla_w L = 0$</p>
+$$\nabla_w L = w - \sum_{i=1}^{n} \alpha_i y_i x_i = 0$$
+$$\boxed{w = \sum_{i=1}^{n} \alpha_i y_i x_i}$$
+</div>
+
+<div class="formula-box">
+<p style="color: #6b8fbd; font-weight: bold; margin-bottom: 12px;">First-Order Condition 2: $\frac{\partial L}{\partial b} = 0$</p>
+$$\frac{\partial L}{\partial b} = -\sum_{i=1}^{n} \alpha_i y_i = 0$$
+$$\boxed{\sum_{i=1}^{n} \alpha_i y_i = 0}$$
+</div>
+
+<div class="why-box">
+<h3>Why These Conditions Matter</h3>
+<p>The first condition says the optimal $w$ is a <strong>linear combination of the data points</strong>, weighted by $\alpha_i y_i$. Only points with $\alpha_i \gt 0$ contribute to this sum; these are the <strong>support vectors</strong>. Every other data point has $\alpha_i = 0$ and contributes nothing to $w$. This means the decision boundary is entirely determined by a small subset of the data.</p>
+<p style="margin-top:10px;">The second condition is a "charge balance" requirement: the total positive-class weight $\sum_{y_i=+1} \alpha_i$ must equal the total negative-class weight $\sum_{y_i=-1} \alpha_i$.</p>
+</div>
+
+<p>Now we substitute both conditions back into $L$ to eliminate $w$ and $b$, obtaining a function of $\alpha$ alone. This is the <strong>Wolfe Dual</strong>.</p>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">The Wolfe Dual of SVM</p>
+$$\max_{\alpha} \; Q(\alpha) = \sum_{i=1}^{n} \alpha_i - \frac{1}{2}\sum_{i=1}^{n}\sum_{j=1}^{n} \alpha_i \alpha_j y_i y_j (x_i^T x_j)$$
+$$\text{subject to: } \; \sum_{i=1}^{n} \alpha_i y_i = 0 \quad \text{and} \quad \alpha_i \geq 0 \;\; \forall \, i$$
+<dl class="breakdown">
+ <dt>$\sum \alpha_i$</dt>
+ <dd>Linear term. Wants to make all multipliers as large as possible (maximize total "ticket revenue").</dd>
+ <dt>$\frac{1}{2}\sum\sum \alpha_i\alpha_j y_iy_j(x_i^Tx_j)$</dt>
+ <dd>Quadratic penalty. Discourages putting too much weight on points that are "similar" (large dot product between same-class points, or large negative dot product between opposite-class points).</dd>
+ <dt>$\sum \alpha_i y_i = 0$</dt>
+ <dd>Equality constraint from the first-order condition on $b$. Balances the weights across classes.</dd>
+ <dt>$\alpha_i \geq 0$</dt>
+ <dd>Dual feasibility. Multipliers for inequality constraints are non-negative (recall <a href="cg-15-constrained.html">Page 15</a>, KKT Condition 3).</dd>
+</dl>
+</div>
+
+<div class="note">
+<p><strong>Key observation:</strong> The dual depends on the data <strong>only through dot products</strong> $x_i^T x_j$. The individual coordinates of the data points never appear separately. This property is what enables the <strong>kernel trick</strong>: by replacing $x_i^Tx_j$ with a kernel function $K(x_i, x_j)$, you can implicitly work in a higher-dimensional feature space without ever computing the coordinates in that space. (The kernel trick is beyond the scope of this course, but the fact that the dual "sees" only dot products is the mathematical foundation.) Cross-reference: <a href="cg-16-lp-interior-point.html">Page 16</a> for duality concepts in the LP setting.</p>
+</div>
+
+
+<!-- ==================== PART E ==================== -->
+<span class="tag">PART E</span>
+<h2>KKT Conditions for SVM</h2>
+
+<div class="analogy">
+<p><strong>Analogy: the support vector spotlight.</strong> Complementary slackness acts like a spotlight: it illuminates only the soldiers standing exactly on the margin line. Everyone else is in the dark ($\alpha_i = 0$). If you want to know which data points matter, just check which ones have the spotlight on them; those are the support vectors.</p>
+</div>
+
+<p>The KKT conditions from <a href="cg-15-constrained.html">Page 15</a> specialize to SVM as follows. At the optimal solution $(w^*, b^*, \alpha^*)$, all four conditions must hold simultaneously:</p>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">KKT Conditions for Hard-Margin SVM</p>
+
+<p style="color: #d4956a; font-weight: 600; margin-top: 16px;">1. Stationarity</p>
+$$w^* = \sum_{i=1}^{n} \alpha_i^* y_i x_i \qquad \text{and} \qquad \sum_{i=1}^{n} \alpha_i^* y_i = 0$$
+
+<p style="color: #d4956a; font-weight: 600; margin-top: 16px;">2. Primal feasibility</p>
+$$y_i(w^{*T} x_i + b^*) \geq 1 \quad \text{for all } i$$
+
+<p style="color: #d4956a; font-weight: 600; margin-top: 16px;">3. Dual feasibility</p>
+$$\alpha_i^* \geq 0 \quad \text{for all } i$$
+
+<p style="color: #d4956a; font-weight: 600; margin-top: 16px;">4. Complementary slackness</p>
+$$\alpha_i^*\bigl[y_i(w^{*T} x_i + b^*) - 1\bigr] = 0 \quad \text{for all } i$$
+</div>
+
+<div class="exam-flag">
+<h4>Exam Alert: Identifying Support Vectors via Complementary Slackness</h4>
+<p>This is the single most important condition to internalize for exam problems. For each data point, exactly one of two things is true:</p>
+<ul style="margin-left: 20px; margin-top: 8px;">
+ <li>If $\alpha_i^* \gt 0$, then $y_i(w^{*T}x_i + b^*) = 1$. The point sits <strong>exactly on the margin</strong>. It is a support vector.</li>
+ <li>If $y_i(w^{*T}x_i + b^*) \gt 1$, then $\alpha_i^* = 0$. The point is <strong>beyond the margin</strong>. It is NOT a support vector.</li>
+</ul>
+<p style="margin-top: 8px;">This dichotomy is the key to working SVM problems by hand: once you know the support vectors, you can compute $w^*$ and $b^*$ directly.</p>
+</div>
+
+
+<!-- ==================== PART F ==================== -->
+<span class="tag">PART F</span>
+<h2>The Final Solution</h2>
+
+<div class="analogy">
+<p><strong>Analogy: the guest list that matters.</strong> After solving the dual, you discover that most of the $\alpha_i$ values are zero. Only the support vectors have positive multipliers. You could throw away every data point that is not a support vector and the decision boundary would be identical. It is as if you surveyed an entire army but only a handful of soldiers actually define where the border goes.</p>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Reconstructing the Solution from the Dual</p>
+
+<p style="color: #d4956a; font-weight: 600; margin-top: 12px;">Step 1: Weight vector</p>
+$$w^* = \sum_{i \in \text{SV}} \alpha_i^* y_i x_i$$
+
+<p style="color: #d4956a; font-weight: 600; margin-top: 16px;">Step 2: Bias term</p>
+<p>Pick any support vector $x_k$ (one with $\alpha_k^* \gt 0$). Since it is on the margin:</p>
+$$y_k(w^{*T} x_k + b^*) = 1 \implies b^* = y_k - w^{*T} x_k$$
+<p style="margin-top: 4px; color: #a8a49c; font-size: 0.92rem;">(Equivalently: $b^* = y_k - \sum_{i \in \text{SV}} \alpha_i^* y_i (x_i^T x_k)$. In practice, average over all support vectors for numerical stability.)</p>
+
+<p style="color: #d4956a; font-weight: 600; margin-top: 16px;">Step 3: Decision function</p>
+$$h(x) = \text{sign}\!\left(\sum_{i \in \text{SV}} \alpha_i^* y_i (x_i^T x) + b^*\right)$$
+</div>
+
+<div class="why-box">
+<h3>Why Only Support Vectors Matter</h3>
+<p>Every non-support vector has $\alpha_i = 0$, so it contributes nothing to $w^*$ and nothing to the decision function $h(x)$. You could delete all non-support vector data and the classifier would be identical. This sparsity is what makes SVM memory-efficient for prediction: at test time, you only need to store the support vectors, not the entire training set. The number of support vectors is typically much smaller than $n$.</p>
+</div>
+
+
+<!-- ==================== PART G ==================== -->
+<span class="tag">PART G</span>
+<h2>Worked Hand Computation</h2>
+
+<div class="exam-flag">
+<h4>Exam Alert: Full Dual Setup and Solution</h4>
+<p>This type of problem could appear on the final. You need to: (1) compute the dot product / kernel matrix, (2) write out the dual objective, (3) apply the equality constraint to eliminate a variable, (4) optimize the reduced objective, and (5) recover $w^*$ and $b^*$. Every step uses clean arithmetic.</p>
+</div>
+
+<div class="hand-calc">
+<h3>SVM with Two Data Points in $\mathbb{R}^2$</h3>
+<p>Given two data points:</p>
+<ul style="margin: 8px 0 8px 20px;">
+ <li>$x_1 = (2, 1)^T$, $y_1 = +1$ (positive class)</li>
+ <li>$x_2 = (0, -1)^T$, $y_2 = -1$ (negative class)</li>
+</ul>
+<p>Find the maximum-margin separating hyperplane.</p>
+
+<div class="step">
+<div class="step-label">Step 1: Compute all dot products</div>
+<p>We need $x_i^T x_j$ for every pair:</p>
+$$x_1^T x_1 = 2(2) + 1(1) = 5$$
+$$x_1^T x_2 = 2(0) + 1(-1) = -1$$
+$$x_2^T x_2 = 0(0) + (-1)(-1) = 1$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 2: Build the kernel matrix $H_{ij} = y_i y_j (x_i^T x_j)$</div>
+<p>Multiply each dot product by the product of labels:</p>
+$$H_{11} = (+1)(+1)(5) = 5$$
+$$H_{12} = H_{21} = (+1)(-1)(-1) = 1$$
+$$H_{22} = (-1)(-1)(1) = 1$$
+$$H = \begin{pmatrix} 5 & 1 \\ 1 & 1 \end{pmatrix}$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 3: Write the dual objective</div>
+$$Q(\alpha_1, \alpha_2) = \alpha_1 + \alpha_2 - \frac{1}{2}\bigl[H_{11}\alpha_1^2 + 2H_{12}\alpha_1\alpha_2 + H_{22}\alpha_2^2\bigr]$$
+$$= \alpha_1 + \alpha_2 - \frac{1}{2}\bigl[5\alpha_1^2 + 2\alpha_1\alpha_2 + \alpha_2^2\bigr]$$
+<p style="margin-top:8px;">Subject to: $y_1\alpha_1 + y_2\alpha_2 = 0$, i.e., $\alpha_1 - \alpha_2 = 0$, and $\alpha_i \geq 0$.</p>
+</div>
+
+<div class="step">
+<div class="step-label">Step 4: Apply the equality constraint to reduce variables</div>
+<p>From $\alpha_1 - \alpha_2 = 0$, we get $\alpha_1 = \alpha_2$. Call this common value $\alpha$. Substitute:</p>
+$$Q(\alpha) = \alpha + \alpha - \frac{1}{2}\bigl[5\alpha^2 + 2\alpha^2 + \alpha^2\bigr]$$
+$$= 2\alpha - \frac{1}{2}(8\alpha^2)$$
+$$= 2\alpha - 4\alpha^2$$
+</div>
+
+<div class="step">
+<div class="step-label">Step 5: Optimize the one-variable quadratic</div>
+$$\frac{dQ}{d\alpha} = 2 - 8\alpha = 0$$
+<div class="result">$$\alpha^* = \frac{1}{4}$$</div>
+<p class="check">Check: $\frac{d^2Q}{d\alpha^2} = -8 \lt 0$, confirming this is a maximum.</p>
+<p style="margin-top: 6px;">So $\alpha_1^* = \alpha_2^* = \frac{1}{4}$. Both are positive, so <strong>both points are support vectors</strong>.</p>
+</div>
+
+<div class="step">
+<div class="step-label">Step 6: Recover $w^*$</div>
+$$w^* = \alpha_1^* y_1 x_1 + \alpha_2^* y_2 x_2$$
+$$= \frac{1}{4}(+1)\begin{pmatrix}2\\1\end{pmatrix} + \frac{1}{4}(-1)\begin{pmatrix}0\\-1\end{pmatrix}$$
+$$= \begin{pmatrix}1/2\\1/4\end{pmatrix} + \begin{pmatrix}0\\1/4\end{pmatrix}$$
+<div class="result">$$w^* = \begin{pmatrix}1/2\\1/2\end{pmatrix}$$</div>
+</div>
+
+<div class="step">
+<div class="step-label">Step 7: Recover $b^*$ using support vector $x_1$</div>
+<p>Since $x_1$ is a support vector: $y_1(w^{*T}x_1 + b^*) = 1$.</p>
+$$w^{*T}x_1 = \frac{1}{2}(2) + \frac{1}{2}(1) = \frac{3}{2}$$
+$$1 \cdot \left(\frac{3}{2} + b^*\right) = 1 \implies b^* = 1 - \frac{3}{2}$$
+<div class="result">$$b^* = -\frac{1}{2}$$</div>
+</div>
+
+<div class="step">
+<div class="step-label">Step 8: Verify with support vector $x_2$</div>
+$$y_2(w^{*T}x_2 + b^*) = (-1)\!\left(\frac{1}{2}(0) + \frac{1}{2}(-1) + \left(-\frac{1}{2}\right)\right)$$
+$$= (-1)\!\left(-\frac{1}{2} - \frac{1}{2}\right) = (-1)(-1) = 1 \;\; \checkmark$$
+<p class="check">Both support vectors have functional margin exactly 1, confirming complementary slackness is satisfied.</p>
+</div>
+
+<div class="step">
+<div class="step-label">Final Answer</div>
+<p>The maximum-margin separating hyperplane is:</p>
+<div class="result">$$\frac{1}{2}x_1 + \frac{1}{2}x_2 - \frac{1}{2} = 0 \quad \Longleftrightarrow \quad x_1 + x_2 = 1$$</div>
+<p style="margin-top: 8px;">The margin width is $\frac{2}{\|w^*\|} = \frac{2}{\sqrt{1/4 + 1/4}} = \frac{2}{\sqrt{1/2}} = \frac{2}{\frac{1}{\sqrt{2}}} = 2\sqrt{2} \approx 2.83$.</p>
+<p style="margin-top: 4px;">Decision rule: classify a new point $x$ as $+1$ if $x_1 + x_2 \gt 1$, and as $-1$ if $x_1 + x_2 \lt 1$.</p>
+</div>
+</div>
+
+<!-- SVG: The solved example visualized -->
+<div style="text-align: center; margin: 30px 0;">
+<svg viewBox="0 0 400 400" width="380" style="max-width: 100%;">
+ <!-- Coordinate system: origin at (200,200), 50px per unit -->
+ <!-- Pixel mapping: math (a,b) → px (200+50a, 200-50b) -->
+ <!-- Line x1+x2=k in px coords: py = px - 50k (slope +1, upper-left to lower-right) -->
+ <!-- x1+x2=1: (50,0)→(400,350);  x1+x2=-1: (0,50)→(350,400);  x1+x2=3: (150,0)→(400,250) -->
+ <defs>
+  <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+   <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#2e2e38" stroke-width="0.5"/>
+  </pattern>
+ </defs>
+ <rect width="400" height="400" fill="url(#grid)"/>
+ <!-- Margin strip shading between x1+x2=-1 and x1+x2=3 -->
+ <polygon points="0,0 150,0 400,250 400,400 350,400 0,50" fill="rgba(201,168,76,0.06)" stroke="none"/>
+ <!-- Margin boundary: x1+x2=-1 (through the negative support vector) -->
+ <line x1="0" y1="50" x2="350" y2="400" stroke="#c9a84c" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+ <!-- Separating hyperplane: x1+x2=1 -->
+ <line x1="50" y1="0" x2="400" y2="350" stroke="#c9a84c" stroke-width="2.5"/>
+ <!-- Margin boundary: x1+x2=3 (through the positive support vector) -->
+ <line x1="150" y1="0" x2="400" y2="250" stroke="#c9a84c" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+ <!-- Axes -->
+ <line x1="200" y1="0" x2="200" y2="400" stroke="#555" stroke-width="1"/>
+ <line x1="0" y1="200" x2="400" y2="200" stroke="#555" stroke-width="1"/>
+ <text x="388" y="215" fill="#a8a49c" font-size="12">x1</text>
+ <text x="207" y="15" fill="#a8a49c" font-size="12">x2</text>
+ <!-- Tick marks -->
+ <line x1="250" y1="197" x2="250" y2="203" stroke="#555" stroke-width="1"/>
+ <text x="250" y="218" fill="#706c64" font-size="10" text-anchor="middle">1</text>
+ <line x1="300" y1="197" x2="300" y2="203" stroke="#555" stroke-width="1"/>
+ <text x="300" y="218" fill="#706c64" font-size="10" text-anchor="middle">2</text>
+ <line x1="150" y1="197" x2="150" y2="203" stroke="#555" stroke-width="1"/>
+ <text x="150" y="218" fill="#706c64" font-size="10" text-anchor="middle">-1</text>
+ <line x1="197" y1="150" x2="203" y2="150" stroke="#555" stroke-width="1"/>
+ <text x="185" y="155" fill="#706c64" font-size="10" text-anchor="end">1</text>
+ <line x1="197" y1="100" x2="203" y2="100" stroke="#555" stroke-width="1"/>
+ <text x="185" y="105" fill="#706c64" font-size="10" text-anchor="end">2</text>
+ <line x1="197" y1="250" x2="203" y2="250" stroke="#555" stroke-width="1"/>
+ <text x="185" y="255" fill="#706c64" font-size="10" text-anchor="end">-1</text>
+ <!-- Data point x1=(2,1) → pixel (300, 150), positive class, support vector -->
+ <circle cx="300" cy="150" r="8" fill="none" stroke="#6aab8e" stroke-width="2.5"/>
+ <circle cx="300" cy="150" r="4" fill="#6aab8e"/>
+ <text x="312" y="142" fill="#6aab8e" font-size="11" font-weight="bold">(2, 1) +</text>
+ <!-- Data point x2=(0,-1) → pixel (200, 250), negative class, support vector -->
+ <circle cx="200" cy="250" r="8" fill="none" stroke="#c47070" stroke-width="2.5"/>
+ <circle cx="200" cy="250" r="4" fill="#c47070"/>
+ <text x="145" y="268" fill="#c47070" font-size="11" font-weight="bold">(0, -1) -</text>
+ <!-- Labels for lines: positioned along each diagonal -->
+ <!-- Hyperplane label near upper portion of line -->
+ <text x="115" y="56" fill="#c9a84c" font-size="11" font-weight="600" transform="rotate(45,115,56)">x1 + x2 = 1</text>
+ <!-- Margin boundary labels -->
+ <text x="20" y="100" fill="#a8a49c" font-size="10" transform="rotate(45,20,100)">x1 + x2 = -1</text>
+ <text x="215" y="56" fill="#a8a49c" font-size="10" transform="rotate(45,215,56)">x1 + x2 = 3</text>
+</svg>
+</div>
+
+
+<!-- ==================== GLOSSARY ==================== -->
+<div class="glossary">
+<h3>Glossary</h3>
+<dl>
+ <dt>Hyperplane</dt>
+ <dd>A flat surface of dimension $d-1$ in $\mathbb{R}^d$, defined by $w^Tx + b = 0$. In 2D it is a line; in 3D it is a plane. It serves as the decision boundary for SVM.</dd>
+ <dt>Margin</dt>
+ <dd>The perpendicular distance between the separating hyperplane and the nearest data point on either side. The total margin width is $2/\|w\|$. SVM maximizes this quantity.</dd>
+ <dt>Support vector</dt>
+ <dd>A data point that lies exactly on the margin boundary (functional margin = 1). These are the points with $\alpha_i \gt 0$. The decision boundary depends only on these points; all other data points could be removed without changing the classifier.</dd>
+ <dt>Hard margin</dt>
+ <dd>The setting where we require all data points to be correctly classified with functional margin $\geq 1$. This only works when the data is linearly separable. The "soft margin" extension (not covered here) introduces slack variables to allow some misclassification.</dd>
+ <dt>Wolfe dual</dt>
+ <dd>The dual optimization problem obtained by substituting the first-order conditions back into the Lagrangian. For SVM, the Wolfe dual is a concave QP in the $\alpha_i$ variables, subject to a linear equality constraint and non-negativity bounds.</dd>
+ <dt>Kernel trick</dt>
+ <dd>The observation that the dual depends on data only through dot products $x_i^Tx_j$. Replacing dot products with a kernel function $K(x_i, x_j)$ implicitly maps data into a higher-dimensional space where it may be linearly separable, without computing the mapping explicitly.</dd>
+ <dt>Complementary slackness</dt>
+ <dd>The KKT condition $\alpha_i[y_i(w^Tx_i + b) - 1] = 0$. For each point, either $\alpha_i = 0$ (not a support vector) or the functional margin is exactly 1 (a support vector). This is the mechanism that makes the SVM solution sparse.</dd>
+</dl>
+</div>
+
+</div>
+
+<div class="bottom-nav">
+  <div class="bottom-nav-row">
+    <a class="bottom-nav-btn prev" href="cg-24-logistic-regression.html">&larr; 24. Logistic Regression</a>
+    <a class="bottom-nav-btn next" href="cg-26-mlp.html">26. Multi-Layer Perceptron &rarr;</a>
+  </div>
+  <a class="bottom-nav-index" href="index.html">Back to Index</a>
+</div>
+
+<script src="sidebar.js"></script>
+</body>
+</html>

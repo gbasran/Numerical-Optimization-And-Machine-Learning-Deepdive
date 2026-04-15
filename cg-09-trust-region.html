@@ -322,6 +322,45 @@ $$\tau_k = \min\!\left(1,\; \frac{\|g_k\|^3}{\Delta_k \cdot g_k^T B_k g_k}\right
 <p><strong>Guaranteed convergence.</strong> Theorem 4.4 in the textbook proves: if every step produces at least as much reduction as the Cauchy point, then the algorithm is globally convergent (the gradient norms go to zero). The Cauchy point is the "minimum quality bar" for the subproblem solution. Any better solution (like the exact Newton step when it fits inside the circle) is a bonus.</p>
 </div>
 
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Lemma 4.3 (Decrease Guarantee for the Cauchy Point)</p>
+
+$$m_k(0) - m_k(p_k^C) \geq \frac{1}{2}\|g_k\| \min\!\left(\Delta_k,\; \frac{\|g_k\|}{\|B_k\|}\right)$$
+
+<dl class="breakdown">
+ <dt>$m_k(0) - m_k(p_k^C)$</dt><dd>the predicted reduction achieved by the Cauchy point; how much the model improves by taking this step</dd>
+ <dt>$\|g_k\|$</dt><dd>the gradient norm; measures how steep the landscape is. Larger gradient = more guaranteed progress.</dd>
+ <dt>$\Delta_k$</dt><dd>the trust-region radius; when the step hits the boundary, the decrease scales with $\Delta_k$</dd>
+ <dt>$\|g_k\|/\|B_k\|$</dt><dd>when the step stays interior, the decrease depends on the ratio of gradient norm to Hessian norm (how far along $-g_k$ the model's minimum lies)</dd>
+</dl>
+</div>
+
+<div class="hand-calc">
+<h3>Proof Sketch (Three Cases)</h3>
+
+<div class="step">
+<span class="step-label">Case 1: $g_k^T B_k g_k \leq 0$ (nonpositive curvature along the gradient)</span><br>
+<p>The model has zero or negative curvature in the $-g_k$ direction, so it never curves back up. The Cauchy point goes all the way to the trust-region boundary ($\tau_k = 1$). Walking distance $\Delta_k$ along $-g_k$ gives a decrease of at least $\|g_k\|\Delta_k$, because the linear term alone contributes $\|g_k\|\Delta_k$ and the quadratic term only helps (it is non-positive).</p>
+<p>Decrease $\geq \|g_k\|\Delta_k$.</p>
+</div>
+
+<div class="step">
+<span class="step-label">Case 2: $g_k^T B_k g_k \gt 0$ and $\tau_k \lt 1$ (positive curvature, step is interior)</span><br>
+<p>The model has a bowl shape along $-g_k$, and the unconstrained minimum along this line is <strong>inside</strong> the trust region. The optimal $\tau_k$ balances the linear decrease against the quadratic penalty. A direct computation shows the decrease at this interior minimum is $\frac{\|g_k\|^4}{2\,g_k^T B_k g_k}$, which is at least $\frac{1}{2}\|g_k\|^2/\|B_k\|$ (since $g_k^T B_k g_k \leq \|B_k\|\|g_k\|^2$).</p>
+<p>Decrease $\geq \frac{1}{2}\|g_k\|^2/\|B_k\|$.</p>
+</div>
+
+<div class="step">
+<span class="step-label">Case 3: $g_k^T B_k g_k \gt 0$ and $\tau_k = 1$ (positive curvature, step hits boundary)</span><br>
+<p>The model has positive curvature but its minimum along $-g_k$ lies outside the trust region, so we walk to the boundary. The linear decrease is $\|g_k\|\Delta_k$ and the quadratic penalty is at most half that (because if the unconstrained minimum were inside, $\tau_k$ would be $\lt 1$). Net decrease is at least $\frac{1}{2}\|g_k\|\Delta_k$.</p>
+<p>Decrease $\geq \frac{1}{2}\|g_k\|\Delta_k$.</p>
+</div>
+
+<div class="check">
+<strong>Conclusion:</strong> In all three cases, $m_k(0) - m_k(p_k^C) \geq \frac{1}{2}\|g_k\|\min(\Delta_k, \|g_k\|/\|B_k\|)$. This is why trust-region methods with <strong>any</strong> step that beats the Cauchy point are globally convergent: the guaranteed decrease per iteration, combined with the radius adaptation mechanism, forces $\|\nabla f(x_k)\| \to 0$.
+</div>
+</div>
+
 <div class="note">
 <strong>In practice:</strong> Good implementations solve the subproblem more accurately than just the Cauchy point (e.g., using the "dogleg" method or iteratively solving the subproblem). But on exams, you typically either compute the Newton step (and check if it fits) or compute the Cauchy point. Quiz 4 asks for the Newton step approach.
 </div>

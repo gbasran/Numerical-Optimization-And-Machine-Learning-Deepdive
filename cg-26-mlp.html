@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page 26 : Multi-Layer Perceptron | MATH 3850 Course Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+ onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<span class="tag">PAGE 26; POST-MIDTERM</span>
+<h1>Multi-Layer Perceptron (MLP)</h1>
+<p class="subtitle">A simple neural network as an optimization problem; forward pass, backpropagation, and gradient descent on weights</p>
+
+<!-- ==================== PART A ==================== -->
+<h2>Part A: Architecture</h2>
+
+<div class="analogy">
+<strong>Analogy: factory assembly line.</strong><br><br>
+Picture a factory with three stations. Raw materials ($x$) enter the first station, where workers (weights $W_1$) transform them into intermediate parts ($a^{(1)}$). These parts move to the second station, where different workers ($W_2$) assemble them into the final product ($\hat{y}$). Quality control compares $\hat{y}$ to the target $y$ and computes a "defect score" (the loss $J$).<br><br>
+To improve the factory, you trace back: which station caused the most defects? How should each worker adjust? This backward trace is <strong>backpropagation</strong>.
+</div>
+
+<!-- SVG: MLP Architecture Diagram -->
+<div style="text-align: center; margin: 30px 0;">
+<svg width="700" height="260" viewBox="0 0 700 260">
+ <rect width="700" height="260" fill="#0f1a2e" rx="12"/>
+ <text x="350" y="28" fill="#c9a84c" font-size="15" font-weight="bold" text-anchor="middle">MLP Architecture (One Hidden Layer)</text>
+
+ <!-- Input Layer -->
+ <rect x="40" y="70" width="130" height="130" rx="10" fill="none" stroke="#d4956a" stroke-width="2" stroke-dasharray="6,3"/>
+ <text x="105" y="60" fill="#d4956a" font-size="13" font-weight="bold" text-anchor="middle">Input Layer</text>
+ <circle cx="105" cy="110" r="18" fill="#1a2840" stroke="#d4956a" stroke-width="1.5"/>
+ <text x="105" y="115" fill="#d4956a" font-size="12" text-anchor="middle">x&#x2081;</text>
+ <circle cx="105" cy="165" r="18" fill="#1a2840" stroke="#d4956a" stroke-width="1.5"/>
+ <text x="105" y="170" fill="#d4956a" font-size="12" text-anchor="middle">x&#x2082;</text>
+ <text x="105" y="220" fill="#a8a49c" font-size="11" text-anchor="middle">x &#x2208; &#x211D;&#x1D48;</text>
+
+ <!-- Hidden Layer -->
+ <rect x="270" y="50" width="130" height="170" rx="10" fill="none" stroke="#9b89b6" stroke-width="2" stroke-dasharray="6,3"/>
+ <text x="335" y="42" fill="#9b89b6" font-size="13" font-weight="bold" text-anchor="middle">Hidden Layer</text>
+ <circle cx="335" cy="95" r="18" fill="#1a2840" stroke="#9b89b6" stroke-width="1.5"/>
+ <text x="335" y="100" fill="#9b89b6" font-size="11" text-anchor="middle">a&#x2081;&#x207D;&#xB9;&#x207E;</text>
+ <circle cx="335" cy="150" r="18" fill="#1a2840" stroke="#9b89b6" stroke-width="1.5"/>
+ <text x="335" y="155" fill="#9b89b6" font-size="11" text-anchor="middle">a&#x2082;&#x207D;&#xB9;&#x207E;</text>
+ <text x="335" y="240" fill="#a8a49c" font-size="11" text-anchor="middle">&#x03C3;(W&#x2081;x + b&#x2081;)</text>
+
+ <!-- Output Layer -->
+ <rect x="510" y="90" width="130" height="90" rx="10" fill="none" stroke="#c9a84c" stroke-width="2" stroke-dasharray="6,3"/>
+ <text x="575" y="82" fill="#c9a84c" font-size="13" font-weight="bold" text-anchor="middle">Output Layer</text>
+ <circle cx="575" cy="135" r="18" fill="#1a2840" stroke="#c9a84c" stroke-width="1.5"/>
+ <text x="575" y="140" fill="#c9a84c" font-size="12" text-anchor="middle">&#x177;</text>
+ <text x="575" y="200" fill="#a8a49c" font-size="11" text-anchor="middle">W&#x2082;a&#x207D;&#xB9;&#x207E; + b&#x2082;</text>
+
+ <!-- Connections: Input to Hidden -->
+ <line x1="123" y1="110" x2="317" y2="95" stroke="#555" stroke-width="1"/>
+ <line x1="123" y1="110" x2="317" y2="150" stroke="#555" stroke-width="1"/>
+ <line x1="123" y1="165" x2="317" y2="95" stroke="#555" stroke-width="1"/>
+ <line x1="123" y1="165" x2="317" y2="150" stroke="#555" stroke-width="1"/>
+
+ <!-- Connections: Hidden to Output -->
+ <line x1="353" y1="95" x2="557" y2="135" stroke="#555" stroke-width="1"/>
+ <line x1="353" y1="150" x2="557" y2="135" stroke="#555" stroke-width="1"/>
+
+ <!-- Weight labels -->
+ <text x="210" y="90" fill="#d4956a" font-size="12" font-style="italic">W&#x2081;</text>
+ <text x="445" y="108" fill="#c9a84c" font-size="12" font-style="italic">W&#x2082;</text>
+</svg>
+</div>
+
+<p>A simple MLP has:</p>
+<ol>
+ <li><strong>Input Layer:</strong> receives features $x \in \mathbb{R}^d$</li>
+ <li><strong>One Hidden Layer:</strong> processes inputs using weights $W_1$ and an activation function</li>
+ <li><strong>Output Layer:</strong> produces prediction $\hat{y}$</li>
+</ol>
+
+
+<!-- ==================== PART B ==================== -->
+<h2>Part B: Forward Pass</h2>
+
+<div class="analogy">
+<strong>Analogy: reading left to right.</strong><br><br>
+The forward pass is like reading a sentence from left to right; each word (layer) depends on the previous one. You start with the raw input, transform it through the hidden layer, and arrive at the prediction.
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Forward Pass Equations</p>
+
+<p><strong>Step 1 (Input to Hidden):</strong></p>
+$$z^{(1)} = W_1 x + b_1$$
+$$a^{(1)} = \sigma(z^{(1)})$$
+
+<p><strong>Step 2 (Hidden to Output):</strong></p>
+$$\hat{y} = W_2 a^{(1)} + b_2$$
+
+<dl class="breakdown">
+ <dt>$W_1 \in \mathbb{R}^{h \times d}$</dt><dd>hidden weights; maps $d$ input features to $h$ hidden neurons</dd>
+ <dt>$b_1$</dt><dd>hidden bias vector</dd>
+ <dt>$\sigma$</dt><dd>activation function (sigmoid, ReLU, or linear)</dd>
+ <dt>$z^{(1)}$</dt><dd>pre-activation; the linear combination before applying $\sigma$</dd>
+ <dt>$a^{(1)}$</dt><dd>hidden activation; the output of the hidden layer after applying $\sigma$</dd>
+ <dt>$W_2 \in \mathbb{R}^{1 \times h}$</dt><dd>output weights; maps $h$ hidden neurons to a single output</dd>
+ <dt>$b_2$</dt><dd>output bias (scalar)</dd>
+</dl>
+</div>
+
+<div class="note">
+<strong>Activation choice matters:</strong> For regression, the output layer uses the identity function (no activation). For classification, use sigmoid. The hidden layer activation is what makes the network nonlinear; without it, stacking layers would be equivalent to a single linear transformation.
+</div>
+
+
+<!-- ==================== PART C ==================== -->
+<h2>Part C: Loss Function (MSE)</h2>
+
+<div class="analogy">
+<strong>Analogy: quality control inspection.</strong><br><br>
+The loss function is like a quality inspector measuring how far each product is from the blueprint. Squaring the differences makes big errors count much more than small ones (same idea as least-squares in <a href="cg-23-nonlinear-ls.html" style="color:#d4956a;">Page 23</a>).
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Mean Squared Error Loss</p>
+$$J(W, b) = \frac{1}{2}\|y - \hat{y}\|^2$$
+
+<dl class="breakdown">
+ <dt>$J(W, b)$</dt><dd>the loss; a scalar measuring total prediction error, depending on all weights and biases</dd>
+ <dt>$y$</dt><dd>the true target value</dd>
+ <dt>$\hat{y}$</dt><dd>the network's prediction</dd>
+ <dt>$\frac{1}{2}$</dt><dd>a convenience factor that cancels with the derivative of the square</dd>
+</dl>
+</div>
+
+<div class="why-box">
+<h3>Connection to Earlier Material</h3>
+<p>This is the same MSE loss from linear regression (<a href="cg-23-nonlinear-ls.html" style="color:#d4956a;">Page 23</a>). The difference is that $\hat{y}$ is now a <strong>nonlinear</strong> function of the weights (because of the activation function in the hidden layer), so the optimization landscape is <strong>non-convex</strong>. There may be multiple local minima. Everything we learned about gradient descent (<a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>) still applies, but convergence to a global minimum is no longer guaranteed.</p>
+</div>
+
+
+<!-- ==================== PART D ==================== -->
+<h2>Part D: Backpropagation (Computing Gradients)</h2>
+
+<div class="analogy">
+<strong>Analogy: blame assignment.</strong><br><br>
+When the final product has a defect, you trace backward through the factory: how much of the defect was caused by the output station ($W_2$)? And how much was caused by the hidden station ($W_1$), whose mistakes were amplified by the output station? This backward tracing of blame is exactly the chain rule from multivariable calculus (<a href="cg-02-multivariable-bridge.html" style="color:#d4956a;">Page 02</a>).
+</div>
+
+<h3>Output Weights ($W_2$)</h3>
+<p>The chain from $J$ to $W_2$ is short:</p>
+$$\frac{\partial J}{\partial W_2} = \frac{\partial J}{\partial \hat{y}} \cdot \frac{\partial \hat{y}}{\partial z^{(2)}} \cdot \frac{\partial z^{(2)}}{\partial W_2}$$
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Output Weight Gradient</p>
+$$\nabla_{W_2} J = \delta^{(2)} (a^{(1)})^T$$
+<p style="margin-top:8px;">where $\delta^{(2)} = -(y - \hat{y})$ is the output error signal.</p>
+
+<dl class="breakdown">
+ <dt>$\delta^{(2)}$</dt><dd>how wrong the output is; the negative residual</dd>
+ <dt>$(a^{(1)})^T$</dt><dd>what the hidden layer produced (transposed for the outer product)</dd>
+ <dt>Interpretation</dt><dd>the gradient is the outer product of the error and the hidden activation</dd>
+</dl>
+</div>
+
+<h3>Hidden Weights ($W_1$)</h3>
+<p>The chain from $J$ to $W_1$ is longer (must go through $W_2$):</p>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Hidden Weight Gradient</p>
+$$\nabla_{W_1} J = \bigl[W_2^T \delta^{(2)} \odot \sigma'(z^{(1)})\bigr] \, x^T$$
+
+<dl class="breakdown">
+ <dt>$W_2^T \delta^{(2)}$</dt><dd>error propagated back through the output weights; blame distributed to each hidden neuron</dd>
+ <dt>$\sigma'(z^{(1)})$</dt><dd>how sensitive the activation is at the hidden layer; the derivative of the activation function evaluated at the pre-activation</dd>
+ <dt>$\odot$</dt><dd>element-wise multiplication (Hadamard product); each hidden neuron's error is scaled by its own activation sensitivity</dd>
+ <dt>$x^T$</dt><dd>the original input (transposed for the outer product)</dd>
+</dl>
+</div>
+
+<div class="exam-flag">
+<h4>Simplification for Linear Activation</h4>
+<p>For <strong>linear activation</strong> ($\sigma(z) = z$), the derivative is $\sigma'(z) = 1$, so the Hadamard product disappears and the gradient simplifies to:</p>
+$$\nabla_{W_1} J = W_2^T \delta^{(2)} x^T$$
+<p>This is the case used in the worked example below.</p>
+</div>
+
+
+<!-- ==================== PART E ==================== -->
+<h2>Part E: Weight Update (Gradient Descent)</h2>
+
+<div class="analogy">
+<strong>Analogy: adjusting the factory workers.</strong><br><br>
+After computing how much each worker contributed to the defect, you tell each one to adjust by a small amount proportional to their contribution. The learning rate $\eta$ controls how big the adjustment is (same as the step size $\alpha$ from <a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>).
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Weight Update Rules</p>
+$$W_1 \leftarrow W_1 - \eta \nabla_{W_1} J$$
+$$W_2 \leftarrow W_2 - \eta \nabla_{W_2} J$$
+
+<dl class="breakdown">
+ <dt>$\eta$</dt><dd>learning rate; controls the step size. Too large and you overshoot; too small and convergence is slow.</dd>
+ <dt>$-\nabla J$</dt><dd>the negative gradient direction; move opposite to the steepest ascent to decrease the loss</dd>
+</dl>
+</div>
+
+<div class="why-box">
+<h3>This Is Just Gradient Descent</h3>
+<p>This is exactly gradient descent from <a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>. The weights $W_1, W_2$ are the optimization variables (like $x$ in earlier chapters). The loss $J$ is the objective function. Backpropagation gives us $\nabla J$, and gradient descent moves in the direction $-\nabla J$. In practice, <strong>mini-batch SGD</strong> is used (compute gradients on a small batch of data, not the whole dataset), which introduces noise but converges faster for large datasets.</p>
+</div>
+
+
+<!-- ==================== PART F ==================== -->
+<h2>Part F: Worked Example (Full Numerical Computation)</h2>
+
+<div class="exam-flag">
+<h4>EXAM ALERT: This exact computation style could appear on the final</h4>
+<p>You must show every matrix multiplication step. Follow the forward pass, compute the loss, backpropagate the error, and update all weights.</p>
+</div>
+
+<div class="formula-box">
+<p style="color: #c9a84c; font-weight: bold; margin-bottom: 12px;">Problem Setup</p>
+<ul style="margin-left: 20px; margin-top: 8px;">
+ <li>Input: $x = [1, 0.5]^T$, &nbsp; Target: $y = 1$</li>
+ <li>$W_1 = \begin{bmatrix}0.2 & 0.3\\0.1 & 0.4\end{bmatrix}$, &nbsp; $W_2 = [0.5, 0.6]$</li>
+ <li>All biases = 0, &nbsp; linear activation ($\sigma(z) = z$, $\sigma'(z) = 1$)</li>
+ <li>Learning rate: $\eta = 0.1$</li>
+</ul>
+</div>
+
+<div class="hand-calc">
+<h3>Step 1: Forward Pass (Hidden Layer)</h3>
+<div class="step">
+$$z^{(1)} = W_1 x = \begin{bmatrix}0.2 & 0.3\\0.1 & 0.4\end{bmatrix}\begin{bmatrix}1\\0.5\end{bmatrix} = \begin{bmatrix}0.2(1)+0.3(0.5)\\0.1(1)+0.4(0.5)\end{bmatrix} = \begin{bmatrix}0.35\\0.3\end{bmatrix}$$
+<p>Since $\sigma(z) = z$ (linear activation): $a^{(1)} = z^{(1)} = [0.35, 0.3]^T$</p>
+<p class="result">$a^{(1)} = [0.35, 0.3]^T$</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 2: Forward Pass (Output)</h3>
+<div class="step">
+$$\hat{y} = W_2 a^{(1)} = [0.5, 0.6]\begin{bmatrix}0.35\\0.3\end{bmatrix} = 0.5(0.35) + 0.6(0.3) = 0.175 + 0.18 = 0.355$$
+<p class="result">$\hat{y} = 0.355$</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 3: Loss</h3>
+<div class="step">
+$$J = \frac{1}{2}(y - \hat{y})^2 = \frac{1}{2}(1 - 0.355)^2 = \frac{1}{2}(0.645)^2 = \frac{1}{2}(0.416025) \approx 0.208$$
+<p class="result">$J \approx 0.208$</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 4: Output Error</h3>
+<div class="step">
+$$\delta^{(2)} = -(y - \hat{y}) = -(1 - 0.355) = -0.645$$
+<p class="result">$\delta^{(2)} = -0.645$</p>
+<p class="check">Negative error signal means the output was too low (we need to increase $\hat{y}$ to reach $y = 1$).</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 5: Output Gradient</h3>
+<div class="step">
+$$\nabla_{W_2} J = \delta^{(2)} (a^{(1)})^T = (-0.645) \cdot [0.35, 0.3] = [-0.2258, -0.1935]$$
+<p class="result">$\nabla_{W_2} J = [-0.2258, -0.1935]$</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 6: Propagate Error to Hidden Layer</h3>
+<div class="step">
+$$W_2^T \delta^{(2)} = \begin{bmatrix}0.5\\0.6\end{bmatrix}(-0.645) = \begin{bmatrix}-0.3225\\-0.387\end{bmatrix}$$
+<p class="result">Backpropagated error = $[-0.3225, -0.387]^T$</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 7: Hidden Gradient (linear activation, so $\sigma' = 1$)</h3>
+<div class="step">
+<p>Since $\sigma'(z) = 1$, the Hadamard product with the identity just gives us the backpropagated error directly:</p>
+$$\nabla_{W_1} J = \begin{bmatrix}-0.3225\\-0.387\end{bmatrix}[1, 0.5] = \begin{bmatrix}-0.3225 \times 1 & -0.3225 \times 0.5\\-0.387 \times 1 & -0.387 \times 0.5\end{bmatrix} = \begin{bmatrix}-0.3225 & -0.1613\\-0.387 & -0.1935\end{bmatrix}$$
+<p class="result">$\nabla_{W_1} J = \begin{bmatrix}-0.3225 & -0.1613\\-0.387 & -0.1935\end{bmatrix}$</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 8: Update Output Weights</h3>
+<div class="step">
+$$W_2^{\text{new}} = W_2 - \eta \nabla_{W_2} J = [0.5, 0.6] - 0.1[-0.2258, -0.1935]$$
+$$= [0.5 + 0.02258,\; 0.6 + 0.01935] = [0.5226, 0.6194]$$
+<p class="result">$W_2^{\text{new}} = [0.5226, 0.6194]$</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 9: Update Hidden Weights</h3>
+<div class="step">
+$$W_1^{\text{new}} = W_1 - \eta \nabla_{W_1} J = \begin{bmatrix}0.2 & 0.3\\0.1 & 0.4\end{bmatrix} - 0.1\begin{bmatrix}-0.3225 & -0.1613\\-0.387 & -0.1935\end{bmatrix}$$
+$$= \begin{bmatrix}0.2 + 0.03225 & 0.3 + 0.01613\\0.1 + 0.0387 & 0.4 + 0.01935\end{bmatrix} = \begin{bmatrix}0.2323 & 0.3161\\0.1387 & 0.4194\end{bmatrix}$$
+<p class="result">$W_1^{\text{new}} = \begin{bmatrix}0.2323 & 0.3161\\0.1387 & 0.4194\end{bmatrix}$</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Step 10: Verification</h3>
+<div class="step">
+<p class="check">All weights increased. This makes sense: the network produced $\hat{y} = 0.355$ but needed $y = 1$, so it needed a <strong>larger</strong> output. Increasing the weights (which were all positive, multiplying positive inputs) pushes the output up toward the target. The gradients were all negative (pointing toward decreasing $J$), and subtracting a negative number increases the weight.</p>
+</div>
+</div>
+
+<div class="hand-calc">
+<h3>Summary Table</h3>
+<table class="step-table">
+<tr>
+ <th>Quantity</th>
+ <th>Value</th>
+</tr>
+<tr><td style="text-align:left;">Input $x$</td><td>$[1, 0.5]^T$</td></tr>
+<tr><td style="text-align:left;">Target $y$</td><td>$1$</td></tr>
+<tr><td style="text-align:left;">$a^{(1)}$ (hidden activation)</td><td>$[0.35, 0.3]^T$</td></tr>
+<tr><td style="text-align:left;">$\hat{y}$ (prediction)</td><td>$0.355$</td></tr>
+<tr><td style="text-align:left;">$J$ (loss)</td><td>$\approx 0.208$</td></tr>
+<tr><td style="text-align:left;">$\delta^{(2)}$ (output error)</td><td>$-0.645$</td></tr>
+<tr><td style="text-align:left;">$\nabla_{W_2} J$</td><td>$[-0.2258, -0.1935]$</td></tr>
+<tr><td style="text-align:left;">$\nabla_{W_1} J$</td><td>$\begin{bmatrix}-0.3225 & -0.1613\\-0.387 & -0.1935\end{bmatrix}$</td></tr>
+<tr><td style="text-align:left;">$W_2^{\text{new}}$</td><td>$[0.5226, 0.6194]$</td></tr>
+<tr><td style="text-align:left;">$W_1^{\text{new}}$</td><td>$\begin{bmatrix}0.2323 & 0.3161\\0.1387 & 0.4194\end{bmatrix}$</td></tr>
+</table>
+</div>
+
+
+<!-- ==================== GLOSSARY ==================== -->
+<div class="glossary">
+<h3>Glossary</h3>
+<dl>
+ <dt>Multi-Layer Perceptron (MLP)</dt>
+ <dd>A feedforward neural network with at least one hidden layer between the input and output. The simplest architecture for learning nonlinear relationships.</dd>
+
+ <dt>Hidden Layer</dt>
+ <dd>A layer of neurons between input and output. Its purpose is to learn intermediate representations; features the raw input does not explicitly contain.</dd>
+
+ <dt>Forward Pass</dt>
+ <dd>Computing the output $\hat{y}$ from the input $x$ by propagating values left to right through each layer.</dd>
+
+ <dt>Backpropagation</dt>
+ <dd>Computing $\nabla J$ with respect to every weight by applying the chain rule backwards through the network. The errors at the output are "propagated back" to assign blame to each weight.</dd>
+
+ <dt>Activation Function ($\sigma$)</dt>
+ <dd>A function applied after each layer's linear transformation. Common choices: sigmoid $\sigma(z) = 1/(1+e^{-z})$, ReLU $\sigma(z) = \max(0,z)$, or linear $\sigma(z) = z$. Without a nonlinear activation, the network collapses to a single linear model.</dd>
+
+ <dt>Loss Function ($J$)</dt>
+ <dd>A scalar measuring prediction error. MSE loss $J = \frac{1}{2}\|y - \hat{y}\|^2$ is standard for regression. Cross-entropy is standard for classification.</dd>
+
+ <dt>Learning Rate ($\eta$)</dt>
+ <dd>The step size for gradient descent. Analogous to $\alpha$ in <a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>. Controls how much each weight changes per update.</dd>
+
+ <dt>Epoch</dt>
+ <dd>One complete pass through the entire training dataset. Training typically runs for many epochs until the loss converges.</dd>
+
+ <dt>Mini-batch</dt>
+ <dd>A small random subset of the training data used to estimate the gradient. Introduces noise but makes each update much cheaper than computing the gradient over the full dataset.</dd>
+</dl>
+</div>
+
+<!-- ==================== NAV ==================== -->
+</div>
+
+<div class="bottom-nav">
+  <div class="bottom-nav-row">
+    <a class="bottom-nav-btn prev" href="cg-25-svm.html">&larr; 25. Support Vector Machines</a>
+    <a class="bottom-nav-btn next" href="cg-17-method-map.html">17. Method Map &rarr;</a>
+  </div>
+  <a class="bottom-nav-index" href="index.html">Back to Index</a>
+</div>
+<script src="sidebar.js"></script>
+</body>
+</html>

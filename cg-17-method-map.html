@@ -229,6 +229,10 @@ When a car won't start, a good mechanic doesn't randomly try parts. They follow 
 <strong>How to use this chart on the exam:</strong> When you see a problem, first classify it; unconstrained? constrained? system of equations? linear system? Then follow the appropriate branch. The information you are given (gradient, Hessian, etc.) determines which method is appropriate.
 </div>
 
+<div class="note" style="border-left: 3px solid #9b89b6; margin-top: 20px;">
+<strong style="color:#9b89b6;">Classification / ML methods (Pages 24, 25, 26):</strong> Three application areas feed directly into this flowchart. <strong>Logistic Regression</strong> (Page 24) is unconstrained optimization of convex logistic loss, solved with GD, BFGS, or Nonlinear CG. <strong>SVM</strong> (Page 25) is a constrained convex QP, solved via the dual problem and KKT conditions. <strong>MLP / Neural Networks</strong> (Page 26) are non-convex unconstrained optimization, solved with gradient descent using backpropagation for gradients. All three reuse the core methods shown above.
+</div>
+
 <!-- ===================== PART B ===================== -->
 <h2>Part B: Method Comparison Table</h2>
 
@@ -343,6 +347,33 @@ When a car won't start, a good mechanic doesn't randomly try parts. They follow 
  <td>N/A</td>
  <td>Problems with constraints</td>
  <td><a href="cg-15-constrained.html" style="color:#d4956a;">15</a></td>
+</tr>
+<tr style="border-top: 2px solid #9b89b6;">
+ <td style="color:#9b89b6; font-weight:bold;">Logistic Regression</td>
+ <td>$\nabla f$ (logistic loss)</td>
+ <td>$O(n)$ to $O(n^2)$</td>
+ <td>Linear (GD) to superlinear (BFGS)</td>
+ <td>Line search</td>
+ <td>Binary classification (convex, smooth)</td>
+ <td><a href="cg-24-logistic-regression.html" style="color:#9b89b6;">24</a></td>
+</tr>
+<tr>
+ <td style="color:#9b89b6; font-weight:bold;">SVM</td>
+ <td>$\nabla f$, constraints, KKT multipliers</td>
+ <td>Depends on solver (dual QP)</td>
+ <td>Depends on solver</td>
+ <td>N/A (constrained QP)</td>
+ <td>Max-margin classification</td>
+ <td><a href="cg-25-svm.html" style="color:#9b89b6;">25</a></td>
+</tr>
+<tr>
+ <td style="color:#9b89b6; font-weight:bold;">MLP / Neural Network</td>
+ <td>$\nabla f$ (via backpropagation)</td>
+ <td>$O(n)$ per batch</td>
+ <td>Linear (non-convex; local minima)</td>
+ <td>Learning rate schedule</td>
+ <td>Non-convex function approximation</td>
+ <td><a href="cg-26-mlp.html" style="color:#9b89b6;">26</a></td>
 </tr>
 </table>
 </div>
@@ -547,12 +578,44 @@ Think of optimization as hiking down a mountain to the valley floor:<br><br>
 <p>If the exam asks "explain how method X relates to method Y," the answer is usually one of the six connections above. The most common: "How does BFGS relate to Newton?" (Connection 2) and "How does Newton for optimization relate to Newton for equations?" (Connection 1).</p>
 </div>
 
+<!-- ===================== PART F ===================== -->
+<h2>Part F: Classification and ML Methods</h2>
+
+<p>These three methods show how the optimization toolkit from the entire course powers real machine learning applications. Each one maps directly back to a problem type and solver we already studied.</p>
+
+<div class="why-box">
+<h3>Logistic Regression (Page 24): Unconstrained Optimization for Binary Classification</h3>
+<p><strong>Objective:</strong> Minimize the logistic loss function, which is convex and smooth. Given data points $(x_i, y_i)$ with $y_i \in \{0, 1\}$, find weights $w$ that minimize:</p>
+<p style="text-align:center; margin: 12px 0;">$$\min_w \; -\sum_{i=1}^{m} \bigl[ y_i \ln(\sigma(w^T x_i)) + (1 - y_i) \ln(1 - \sigma(w^T x_i)) \bigr]$$</p>
+<p><strong>Solved with:</strong> Gradient Descent (<a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>), BFGS (<a href="cg-12-bfgs.html" style="color:#d4956a;">Page 12</a>), or Nonlinear CG (<a href="cg-11-nonlinear-cg.html" style="color:#d4956a;">Page 11</a>). Because the loss is convex and smooth, all our unconstrained methods apply directly.</p>
+<p style="margin-top: 8px;"><strong>Course connection:</strong> This is a straight application of the unconstrained branch of the decision flowchart above. The only new ingredient is the logistic loss function; the solvers are ones we already know.</p>
+</div>
+
+<div class="why-box">
+<h3>SVM (Page 25): Convex QP with Linear Inequality Constraints</h3>
+<p><strong>Objective:</strong> Maximize the margin between two classes by minimizing $\frac{1}{2}\|w\|^2$ subject to $y_i(w^T x_i + b) \geq 1$ for all training points. This is a convex quadratic program (QP).</p>
+<p><strong>Solved with:</strong> The dual problem and KKT conditions. The KKT multipliers $\alpha_i$ identify the support vectors (the data points that sit exactly on the margin boundary).</p>
+<p style="margin-top: 8px;"><strong>Course connection:</strong> This uses constrained optimization (<a href="cg-15-constrained.html" style="color:#d4956a;">Page 15</a>) and duality (<a href="cg-16-lp-interior-point.html" style="color:#d4956a;">Page 16</a>). The KKT conditions from Connection 6 above are exactly what determine the optimal solution.</p>
+</div>
+
+<div class="why-box">
+<h3>MLP / Neural Network (Page 26): Non-Convex Unconstrained Optimization</h3>
+<p><strong>Objective:</strong> Minimize the MSE loss (or cross-entropy loss) over all network weights. For a network with layers $W_1, W_2, \ldots$, the loss is a highly non-convex function of all these weight matrices.</p>
+<p><strong>Solved with:</strong> Gradient descent, where the gradients are computed via backpropagation (the chain rule applied layer by layer). The non-convexity means we can get stuck in local minima or saddle points; there is no guarantee of finding the global optimum.</p>
+<p style="margin-top: 8px;"><strong>Course connection:</strong> This uses gradient descent (<a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>) and the chain rule for computing derivatives (<a href="cg-02-derivatives-gradients.html" style="color:#d4956a;">Page 02</a>). The key difference from everything else in the course: the loss landscape is non-convex, so convergence theory is weaker and practical tricks (learning rate schedules, momentum) become essential.</p>
+</div>
+
+<div class="analogy">
+<strong>Physical analogy; three different uses of the same toolbox.</strong><br><br>
+Think of the optimization methods from this course as a set of power tools. Logistic regression is like using those tools to build a straight fence (convex, well-behaved; the tools work perfectly). SVM is like building a fence with property-line constraints (you need to respect boundaries; KKT conditions enforce them). Neural networks are like sculpting a complex shape (the surface has bumps and valleys everywhere; you do your best with gradient descent, but there is no guarantee you found the absolute best shape).
+</div>
+
 <!-- ===================== NAV ===================== -->
 </div>
 
 <div class="bottom-nav">
   <div class="bottom-nav-row">
-    <a class="bottom-nav-btn prev" href="cg-23-linear-regression.html">&larr; 23. Linear Regression</a>
+    <a class="bottom-nav-btn prev" href="cg-26-mlp.html">&larr; 26. Multi-Layer Perceptron</a>
     <a class="bottom-nav-btn next" href="cg-18-exam-computations.html">18. Exam: Computations &rarr;</a>
   </div>
   <a class="bottom-nav-index" href="index.html">Back to Index</a>

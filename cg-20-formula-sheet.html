@@ -389,6 +389,120 @@ $$\lambda = \frac{(a+d) \pm \sqrt{(a-d)^2 + 4bc}}{2} \qquad \text{for } A = \beg
 <p class="ref"><a href="cg-04-optimality.html">Page 04</a></p>
 </div>
 
+<!-- ===================== PART I ===================== -->
+<h2>Part I: Classification (Logistic Regression)</h2>
+
+<div class="formula-box">
+<strong>Sigmoid Function</strong>
+$$\sigma(z) = \frac{1}{1 + e^{-z}}$$
+<em>Maps any real number to $(0,1)$. Properties: $\sigma(-z) = 1 - \sigma(z)$, derivative $\sigma'(z) = \sigma(z)(1 - \sigma(z))$.</em>
+<p class="ref"><a href="cg-24-logistic-regression.html">Page 24</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Logistic Loss (margin-based, $y \in \{-1,+1\}$)</strong>
+$$f(\theta) = \frac{1}{n}\sum_{i=1}^{n} \log(1 + e^{-y_i \theta^T x_i})$$
+<em>Convex, smooth, not strongly convex without regularization. Penalizes misclassified points exponentially.</em>
+<p class="ref"><a href="cg-24-logistic-regression.html">Page 24</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Logistic Regression Gradient</strong>
+$$\nabla f(\theta) = -\frac{1}{n}\sum_{i=1}^{n} \frac{y_i x_i}{1 + e^{y_i \theta^T x_i}}$$
+<em>Used directly in gradient descent. Each term is weighted by how confident the model is on that point.</em>
+<p class="ref"><a href="cg-24-logistic-regression.html">Page 24</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Decision Boundary</strong>
+$$\theta^T x = 0 \quad \text{(linear)}$$
+<em>Points with $\theta^T x \gt 0$ are classified as $+1$; points with $\theta^T x \lt 0$ are classified as $-1$.</em>
+<p class="ref"><a href="cg-24-logistic-regression.html">Page 24</a></p>
+</div>
+
+<!-- ===================== PART J ===================== -->
+<h2>Part J: Support Vector Machines (SVM)</h2>
+
+<div class="formula-box">
+<strong>SVM Primal (Hard-Margin)</strong>
+$$\min_{w,b} \frac{1}{2}\|w\|^2 \qquad \text{subject to } y_i(w^T x_i + b) \geq 1 \;\; \forall\, i$$
+<em>Minimize the weight norm (maximize the margin $2/\|w\|$) while correctly classifying all points.</em>
+<p class="ref"><a href="cg-25-svm.html">Page 25</a></p>
+</div>
+
+<div class="formula-box">
+<strong>SVM Lagrangian</strong>
+$$L(w,b,\alpha) = \frac{1}{2}\|w\|^2 - \sum_{i=1}^{n} \alpha_i[y_i(w^T x_i + b) - 1]$$
+<em>Combines the objective and constraints. $\alpha_i \geq 0$ are Lagrange multipliers.</em>
+<p class="ref"><a href="cg-25-svm.html">Page 25</a>, <a href="cg-15-constrained.html">Page 15</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Stationarity Conditions</strong>
+$$w = \sum_{i=1}^{n} \alpha_i y_i x_i, \qquad \sum_{i=1}^{n} \alpha_i y_i = 0$$
+<em>Setting $\partial L/\partial w = 0$ and $\partial L/\partial b = 0$. The optimal $w$ is a linear combination of training points.</em>
+<p class="ref"><a href="cg-25-svm.html">Page 25</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Wolfe Dual</strong>
+$$\max_\alpha \sum_{i=1}^{n} \alpha_i - \frac{1}{2}\sum_{i=1}^{n}\sum_{j=1}^{n} \alpha_i \alpha_j y_i y_j (x_i^T x_j) \qquad \text{s.t. } \alpha_i \geq 0, \;\; \sum_{i=1}^{n} \alpha_i y_i = 0$$
+<em>Obtained by substituting stationarity conditions back into the Lagrangian. Only depends on dot products $x_i^T x_j$.</em>
+<p class="ref"><a href="cg-25-svm.html">Page 25</a>, <a href="cg-15-constrained.html">Page 15</a>, <a href="cg-16-lp-interior-point.html">Page 16</a></p>
+</div>
+
+<div class="formula-box">
+<strong>KKT (Complementary Slackness) for SVM</strong>
+$$\alpha_i[y_i(w^T x_i + b) - 1] = 0$$
+<em>If $\alpha_i \gt 0$, then $y_i(w^T x_i + b) = 1$: the point is on the margin (support vector). If $y_i(w^T x_i + b) \gt 1$, then $\alpha_i = 0$.</em>
+<p class="ref"><a href="cg-25-svm.html">Page 25</a>, <a href="cg-15-constrained.html">Page 15</a></p>
+</div>
+
+<div class="formula-box">
+<strong>SVM Decision Function</strong>
+$$h(x) = \text{sign}\!\left(\sum_{i \in SV} \alpha_i y_i (x_i^T x) + b\right)$$
+<em>Classification depends only on support vectors (points with $\alpha_i \gt 0$). All other training points can be discarded.</em>
+<p class="ref"><a href="cg-25-svm.html">Page 25</a></p>
+</div>
+
+<!-- ===================== PART K ===================== -->
+<h2>Part K: Multi-Layer Perceptron (MLP)</h2>
+
+<div class="formula-box">
+<strong>Forward Pass (one hidden layer)</strong>
+$$z^{(1)} = W_1 x + b_1, \qquad a^{(1)} = \sigma(z^{(1)}), \qquad \hat{y} = W_2 a^{(1)} + b_2$$
+<em>Input $\to$ linear transform $\to$ activation $\to$ linear transform $\to$ output. Each layer applies weights, then a nonlinearity.</em>
+<p class="ref"><a href="cg-26-mlp.html">Page 26</a></p>
+</div>
+
+<div class="formula-box">
+<strong>MSE Loss</strong>
+$$J(W,b) = \frac{1}{2}\|y - \hat{y}\|^2$$
+<em>Measures the squared error between the target $y$ and the network output $\hat{y}$.</em>
+<p class="ref"><a href="cg-26-mlp.html">Page 26</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Output Layer Gradient</strong>
+$$\nabla_{W_2} J = -(y - \hat{y})(a^{(1)})^T$$
+<em>How the loss changes with respect to the output weights. Depends on the error and the hidden activations.</em>
+<p class="ref"><a href="cg-26-mlp.html">Page 26</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Hidden Layer Gradient (Backpropagation)</strong>
+$$\nabla_{W_1} J = [W_2^T \delta^{(2)} \odot \sigma'(z^{(1)})] x^T \qquad \text{where } \delta^{(2)} = -(y - \hat{y})$$
+<em>The chain rule applied backward through the network. $\odot$ is element-wise multiplication. The error propagates from output to hidden layer.</em>
+<p class="ref"><a href="cg-26-mlp.html">Page 26</a>, <a href="cg-06-gradient-descent.html">Page 06</a></p>
+</div>
+
+<div class="formula-box">
+<strong>Weight Update (Gradient Descent)</strong>
+$$W \leftarrow W - \eta \nabla_W J$$
+<em>Same gradient descent update from <a href="cg-06-gradient-descent.html">Page 06</a>, applied to each weight matrix independently. $\eta$ is the learning rate.</em>
+<p class="ref"><a href="cg-26-mlp.html">Page 26</a>, <a href="cg-06-gradient-descent.html">Page 06</a></p>
+</div>
+
 <!-- ===================== NAV ===================== -->
 </div>
 
