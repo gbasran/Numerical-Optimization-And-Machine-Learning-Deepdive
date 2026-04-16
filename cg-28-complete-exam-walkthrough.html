@@ -28,6 +28,15 @@
 <h2>1. Trust-Region Method</h2>
 <p><em>Format: Quiz 4. Given a function, initial point, and radius, compute one full trust-region iteration.</em></p>
 
+<div class="exam-flag">
+<h4>The Question</h4>
+<p>Consider the function $f(x_1, x_2) = 2x_1^2 + x_2^2 - 2x_1x_2 + 2x_1^3 + x_1^4$. Starting from $x_0 = (1, 1)$ with trust-region radius $\Delta_0 = 1$ and acceptance threshold $\eta = 0.25$:</p>
+<p>(a) Compute the gradient and Hessian at $x_0$.</p>
+<p>(b) Write the quadratic model $m_0(p)$.</p>
+<p>(c) Find the Newton step $p^N$. Does it lie inside the trust region?</p>
+<p>(d) Compute the trust-region ratio $\rho_0$. Accept or reject the step? Update $\Delta$?</p>
+</div>
+
 <div class="why-box">
   <h4>The big picture</h4>
   <p>Imagine you are standing on a hilly landscape at night with only a small flashlight. You can see the terrain clearly within a small circle around your feet (the <strong>trust region</strong>), but beyond that circle you cannot trust what you see. So you build a simple model of the terrain inside your circle (a quadratic approximation), find the lowest point of that model, step there, and then check: did the real terrain actually go downhill the way the model predicted? If yes, great; step forward and maybe widen your flashlight beam. If not, shrink the beam and try again. That is the trust-region method: build a local model, optimize it within a radius you trust, then verify.</p>
@@ -272,6 +281,13 @@
 <h2>2. Linear Conjugate Gradient</h2>
 <p><em>Format: Quiz 5. Given SPD matrix A and vector b, solve Ax = b using CG.</em></p>
 
+<div class="exam-flag">
+<h4>The Question</h4>
+<p>Solve the linear system $Ax = b$ using the Conjugate Gradient method, where:</p>
+<p>$$A = \begin{bmatrix}5 & 2 \\ 2 & 2\end{bmatrix}, \quad b = \begin{bmatrix}7 \\ 4\end{bmatrix}, \quad x_0 = \begin{bmatrix}0 \\ 0\end{bmatrix}$$</p>
+<p>Perform 2 complete iterations. Show all intermediate values ($\alpha_k$, $\beta_k$, $r_k$, $p_k$, $x_k$). Verify that $Ax_2 = b$.</p>
+</div>
+
 <div class="why-box">
   <h4>What CG does and why it matters</h4>
   <p>The conjugate gradient method solves the linear system $Ax = b$ where $A$ is symmetric positive definite (SPD). Equivalently, it minimizes the quadratic function $f(x) = \frac{1}{2}x^T A x - b^T x$, whose gradient is $\nabla f = Ax - b$, so the minimum occurs exactly where $Ax = b$.</p>
@@ -454,6 +470,14 @@
 
 <h2>3. BFGS Method</h2>
 <p><em>Format: Quiz 6. One full BFGS iteration with exact line search on a quadratic.</em></p>
+
+<div class="exam-flag">
+<h4>The Question</h4>
+<p>Consider $f(x) = \frac{1}{2}x^TQx$ with $Q = \begin{bmatrix}2 & 0 \\ 0 & 3\end{bmatrix}$, starting from $x_0 = \begin{bmatrix}1 \\ 1\end{bmatrix}$ with initial inverse Hessian approximation $H_0 = I$.</p>
+<p>(a) Perform one BFGS iteration with exact line search: compute $g_0$, $p_0$, $\alpha_0$, $x_1$, $g_1$.</p>
+<p>(b) Compute the secant quantities $s_0$ and $y_0$. Verify $s_0^Ty_0 \gt 0$.</p>
+<p>(c) Apply the BFGS inverse Hessian update to get $H_1$. Verify $H_1 y_0 = s_0$.</p>
+</div>
 
 <div class="why-box">
   <h4>What BFGS does and why it matters</h4>
@@ -709,6 +733,13 @@
 <h2>4. Newton's Method for Nonlinear Systems</h2>
 <p><em>Format: Quiz 7. Given a system of equations, compute one Newton iteration.</em></p>
 
+<div class="exam-flag">
+<h4>The Question</h4>
+<p>Find a solution to the nonlinear system:</p>
+<p>$$x_1^2 + x_2^2 = 1 \qquad \text{and} \qquad x_1 - x_2 = 0$$</p>
+<p>Starting from $x^{(0)} = (0.8, 0.5)$, perform one iteration of Newton's method for systems. Show: (a) the residual $r(x^{(0)})$, (b) the Jacobian $J(x^{(0)})$, (c) the Newton step $p^{(0)}$, (d) the updated point $x^{(1)}$. Verify the residual norm decreased.</p>
+</div>
+
 <div class="why-box">
   <h4>What this method does and why it matters</h4>
   <p>In previous sections we minimized functions (found where the gradient is zero). Here, we find where a <strong>system of equations</strong> equals zero directly: given $r(x) = 0$ where $r : \mathbb{R}^n \to \mathbb{R}^n$, find the $x$ that makes all equations simultaneously zero.</p>
@@ -880,6 +911,14 @@
 
 <div class="analogy">
 <strong>The "fences and gravity" picture for KKT:</strong> Imagine you are a ball rolling downhill (minimizing $f$) inside a fenced yard (the feasible region). Gravity pulls you toward the bottom of the hill, but the fences block your path. At the optimal point, you are pushed up against one or more fences, and the pull of gravity is exactly balanced by the fences pushing you back. The Lagrange multipliers $\mu_j$ measure how hard each fence is pushing. A fence you are not touching ($c_j \gt 0$, slack) exerts no force ($\mu_j = 0$). A fence you ARE touching ($c_j = 0$, active) may push ($\mu_j \gt 0$). This "either the fence is untouched OR the force is zero" rule is <strong>complementary slackness</strong>; the single most important idea in constrained optimization.
+</div>
+
+<div class="exam-flag">
+<h4>The Question</h4>
+<p>Solve the following constrained optimization problem using KKT conditions:</p>
+<p>$$\min \; -3x_1 - 2x_2$$</p>
+<p>$$\text{subject to: } x_1 + x_2 \leq 4, \quad x_1 + 3x_2 \leq 6, \quad x_1 \geq 0, \quad x_2 \geq 0$$</p>
+<p>Write the Lagrangian, derive stationarity and complementary slackness conditions, enumerate all cases, and identify the optimal solution with multiplier values.</p>
 </div>
 
 <div class="formula-box">
@@ -1117,6 +1156,14 @@ Interpretation: Constraint $c_1$ (the $x_1 + x_2 \leq 4$ fence) is active with m
 <strong>The "ruler on graph paper" picture:</strong> You have 3 dots on graph paper and you want to draw a straight line as close as possible to all of them. "Close" means the sum of squared vertical distances from each dot to the line is as small as possible. The vertical distance from point $(x_i, y_i)$ to the line $y = wx + b$ is $|wx_i + b - y_i|$. Squaring removes the absolute value and penalizes big misses more than small ones. This is the least-squares problem; the most fundamental optimization problem in applied math.
 </div>
 
+<div class="exam-flag">
+<h4>The Question</h4>
+<p>Given data points $(1, 2)$, $(2, 3)$, $(3, 5)$, fit the linear model $f(x) = wx + b$ by minimizing the least-squares cost $J(w,b) = \frac{1}{2}\sum_{i=1}^{3}(wx_i + b - y_i)^2$.</p>
+<p>(a) Compute $\partial J/\partial w$ and $\partial J/\partial b$.</p>
+<p>(b) Set both to zero and solve the resulting system for $w$ and $b$.</p>
+<p>(c) Predict $f(4)$.</p>
+</div>
+
 <div class="formula-box">
 <strong>Problem:</strong> Given data points $(1, 2)$, $(2, 3)$, $(3, 5)$, fit the model $f(x) = wx + b$ by minimizing:
 $$J(w, b) = \frac{1}{2}\sum_{i=1}^{3}(wx_i + b - y_i)^2$$
@@ -1270,6 +1317,16 @@ So: $\begin{bmatrix}14&6\\6&3\end{bmatrix}\begin{bmatrix}w\\b\end{bmatrix} = \be
 <strong>The "mixing paints" picture:</strong> Imagine $V$ is a painting and we want to recreate it by mixing $k$ base colors. $W$ is the palette (which base colors we use) and $H$ is the recipe (how much of each color in each region). The constraint: paint amounts are non-negative; you cannot "subtract" paint. The Lee-Seung update iteratively adjusts recipes ($H$) then palette ($W$), using a multiplicative rule that naturally keeps everything non-negative. Each update decreases the error $\|V - WH\|_F^2$ (the Frobenius norm squared; just sum all squared element differences).
 </div>
 
+<div class="exam-flag">
+<h4>The Question</h4>
+<p>Perform one iteration of the Lee-Seung multiplicative update rules for rank-1 NMF. Given:</p>
+<p>$$V = \begin{bmatrix}2 & 1 \\ 1 & 2\end{bmatrix}, \quad W^{(0)} = \begin{bmatrix}1 \\ 1\end{bmatrix}, \quad H^{(0)} = \begin{bmatrix}1 & 1\end{bmatrix}$$</p>
+<p>(a) Compute the initial approximation $W^{(0)}H^{(0)}$ and its Frobenius norm error.</p>
+<p>(b) Update $H$ using $H \leftarrow H \odot \frac{W^TV}{W^TWH}$.</p>
+<p>(c) Update $W$ using the new $H$.</p>
+<p>(d) Compute the new approximation and its error. Did the error decrease?</p>
+</div>
+
 <div class="formula-box">
 <strong>Problem:</strong> Given
 $$V = \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix}$$
@@ -1413,6 +1470,17 @@ After one iteration: $W^{(1)} = \begin{bmatrix}1\\1\end{bmatrix}$, $H^{(1)} = \b
 
 <div class="analogy">
 <strong>The "central corridor" picture:</strong> The simplex method walks along edges of the feasible region to find the optimal corner. Interior point methods take a different route: they walk through the INTERIOR along a smooth "central path," guided by a barrier function ($-\mu\sum\ln x_i$) that repels them from the walls ($x_i = 0$ boundaries). As $\mu$ shrinks toward zero, the repulsion weakens and you drift toward the optimal corner. Each iteration solves a Newton system to step along this path. The key variables: $x$ (primal; the decision), $y$ (dual; Lagrange multipliers for equality constraints), $s$ (slack; dual variables for the $x \geq 0$ bounds). We must keep $x \gt 0$ and $s \gt 0$ at all times; that is what "interior" means.
+</div>
+
+<div class="exam-flag">
+<h4>The Question</h4>
+<p>Perform one iteration of the primal-dual interior point method for the LP:</p>
+<p>$$\min \; -x_1 - 2x_2 \quad \text{s.t.} \quad x_1+x_2=4, \; x_1+3x_2=6, \; x_1,x_2 \geq 0$$</p>
+<p>Starting from $x^{(0)} = (1,1)$, $y^{(0)} = (0,0)$, $s^{(0)} = (1,1)$:</p>
+<p>(a) Compute primal and dual residuals.</p>
+<p>(b) Set up and solve the Newton system for $(\Delta x, \Delta y, \Delta s)$.</p>
+<p>(c) Take a full step ($\alpha = 1$). Check if $x^{(1)} \gt 0$ and $s^{(1)} \gt 0$.</p>
+<p>(d) If not feasible, compute the maximum safe step size.</p>
 </div>
 
 <div class="formula-box">
@@ -1639,6 +1707,14 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <h2>9. Multi-Layer Perceptron (MLP)</h2>
 <p><em>Format: Assignment 4 Q1. One complete gradient descent iteration on a simple neural network.</em></p>
 
+<div class="exam-flag">
+<h4>The Question</h4>
+<p>Consider a simple MLP with input $x = \begin{bmatrix}2\\1\end{bmatrix}$, target $y = 0$, hidden weights $W_1 = \begin{bmatrix}0.4 & 0.1\\0.2 & 0.3\end{bmatrix}$, output weights $W_2 = \begin{bmatrix}0.7 & 0.5\end{bmatrix}$, all biases zero, linear activation $\sigma(z) = z$, learning rate $\eta = 0.1$.</p>
+<p>(a) Forward pass: compute hidden activations $a^{(1)}$, output $\hat{y}$, and loss $J$.</p>
+<p>(b) Backward pass: compute $\nabla_{W_2} J$ and $\nabla_{W_1} J$ using backpropagation.</p>
+<p>(c) Update both weight matrices using gradient descent.</p>
+</div>
+
 <div class="analogy">
     <strong>Big Picture:</strong> An MLP is just a composition of linear transformations with nonlinear activations. Training it with gradient descent is no different from optimizing any other function; the special ingredient is <strong>backpropagation</strong>, which is just the chain rule (Page 02) applied to the network graph. For linear activation, the math simplifies considerably.
 </div>
@@ -1800,6 +1876,14 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <h2>10. Nonlinear Conjugate Gradient (Fletcher-Reeves)</h2>
 <p><em>Could appear on the final. One iteration of nonlinear CG with Strong Wolfe line search.</em></p>
 
+<div class="exam-flag">
+<h4>The Question</h4>
+<p>Apply the Fletcher-Reeves nonlinear conjugate gradient method to minimize the Rosenbrock function $f(x_1,x_2) = (x_1-1)^2 + 10(x_2-x_1^2)^2$ starting from $x_0 = (-1, 1)$. Perform 2 iterations. Given step sizes: $\alpha_0 = 0.001$, $\alpha_1 = 0.002$.</p>
+<p>(a) Compute $g_0$ and the initial direction $d_0$.</p>
+<p>(b) After the first step, compute $g_1$, $\beta_1^{FR}$, and the new direction $d_1$.</p>
+<p>(c) How does this compare to Polak-Ribiere?</p>
+</div>
+
 <div class="analogy">
     <strong>Big Picture:</strong> Nonlinear CG (Page 11) extends linear CG to general (non-quadratic) functions. The key idea: instead of restarting with steepest descent every step, we add a fraction $\beta_k$ of the previous direction. This gives better convergence because the search directions "remember" previous curvature information. Think of it like skiing downhill: pure steepest descent makes you zigzag across the valley, but CG remembers which direction you were carving and adjusts, so you cut a smoother, faster path to the bottom.
 </div>
@@ -1936,6 +2020,15 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
      ============================================================ -->
 <h2>11. SR1 (Symmetric Rank-1) Method</h2>
 <p><em>Format: Assignment 2 Q2 (post-midterm material). One SR1 iteration with exact line search.</em></p>
+
+<div class="exam-flag">
+<h4>The Question</h4>
+<p>Perform one iteration of the SR1 method on $f(x) = \frac{1}{2}x^TQx$ where $Q = \begin{bmatrix}2 & 0\\0 & 1\end{bmatrix}$, starting from $x_0 = \begin{bmatrix}1\\1\end{bmatrix}$ with $H_0 = I$.</p>
+<p>(a) Compute the search direction and exact line search step size.</p>
+<p>(b) Compute the secant quantities $s_0$ and $y_0$.</p>
+<p>(c) Apply the SR1 update formula to get $H_1$. Does $H_1 = Q^{-1}$?</p>
+<p>(d) Verify that a second iteration with $H_1$ converges to $x^* = 0$ exactly.</p>
+</div>
 
 <div class="analogy">
     <strong>Big Picture:</strong> SR1 (Page 13) is a rank-1 quasi-Newton update. Unlike BFGS (rank-2), SR1 uses a simpler update formula and can capture <strong>indefinite Hessians</strong>. The trade-off: SR1 does not guarantee positive definiteness, so it is typically used with trust regions instead of line search. Think of it like updating a map one road at a time: each iteration corrects one direction of curvature information, and after $n$ updates, you have the complete map.
@@ -2110,6 +2203,15 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <h2>12. Logistic Regression</h2>
 <p><em>New topic. One gradient descent step on logistic loss.</em></p>
 
+<div class="exam-flag">
+<h4>The Question</h4>
+<p>Given 3 data points with labels: $x_1 = (1,0)$, $y_1 = +1$; $x_2 = (0,1)$, $y_2 = -1$; $x_3 = (1,1)$, $y_3 = +1$. Starting from $\theta_0 = (0, 0)$ with learning rate $\eta = 1$, minimize the logistic loss $f(\theta) = \frac{1}{3}\sum_{i=1}^{3}\log(1 + e^{-y_i\theta^Tx_i})$.</p>
+<p>(a) Compute the loss at $\theta_0$.</p>
+<p>(b) Compute the gradient $\nabla f(\theta_0)$.</p>
+<p>(c) Take one gradient descent step to get $\theta_1$.</p>
+<p>(d) What is the decision boundary at $\theta_1$?</p>
+</div>
+
 <div class="analogy">
     <strong>Big Picture:</strong> Logistic regression (Page 24) minimizes a convex loss function for binary classification. Imagine you are adjusting a dial (the parameter vector $\theta$) that controls the tilt of a decision plane. Points on one side get classified +1, points on the other side get classified -1. The logistic loss is "soft": instead of a hard boundary, it assigns probabilities. The gradient formula has a nice form: misclassified or uncertain points contribute strongly to the gradient, while correctly-classified-with-confidence points contribute weakly; the optimization naturally focuses attention where it is most needed.
 </div>
@@ -2225,6 +2327,15 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
      ============================================================ -->
 <h2>13. Support Vector Machines (SVM)</h2>
 <p><em>New topic. Setting up and interpreting the Wolfe dual.</em></p>
+
+<div class="exam-flag">
+<h4>The Question</h4>
+<p>Given 3 data points: $x_1 = (1,0)$, $y_1 = +1$; $x_2 = (0,1)$, $y_2 = +1$; $x_3 = (-1,0)$, $y_3 = -1$.</p>
+<p>(a) Compute the dot product matrix $x_i^Tx_j$ and the kernel matrix $K_{ij} = y_iy_j(x_i^Tx_j)$.</p>
+<p>(b) Write out the Wolfe dual objective $Q(\alpha)$ and the equality constraint.</p>
+<p>(c) Use the constraint to eliminate one variable and simplify $Q$ to two variables.</p>
+<p>(d) Given the optimal $\alpha^*$, how would you recover $w^*$ and $b^*$?</p>
+</div>
 
 <div class="analogy">
     <strong>Big Picture:</strong> SVM (Page 25) finds the maximum-margin hyperplane between two classes. Imagine placing a ruler between two clusters of dots on a table and trying to make the ruler as thick as possible while still separating the colors. The dots that touch the edges of the ruler are the <strong>support vectors</strong>; they alone determine the solution. The primal is a constrained QP; the dual reformulates it using only dot products between data points, which opens the door to kernel methods.
