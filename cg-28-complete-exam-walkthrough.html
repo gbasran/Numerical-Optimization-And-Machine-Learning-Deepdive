@@ -38,64 +38,64 @@
   <p>$$f(x_1, x_2) = 2x_1^2 + x_2^2 - 2x_1 x_2 + 2x_1^3 + x_1^4$$</p>
   <p>$$x_0 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}, \quad \Delta_0 = 1, \quad \eta = 0.25$$</p>
   <dl class="breakdown">
-    <dt>\(x_0\)</dt><dd>the starting point; where we currently stand on the landscape</dd>
-    <dt>\(\Delta_0\)</dt><dd>the trust-region radius; how far from \(x_0\) we are willing to step</dd>
-    <dt>\(\eta\)</dt><dd>the acceptance threshold; the minimum ratio of actual-to-predicted reduction we require before accepting a step (here 0.25, meaning the real improvement must be at least 25% of what the model promised)</dd>
+    <dt>$x_0$</dt><dd>the starting point; where we currently stand on the landscape</dd>
+    <dt>$\Delta_0$</dt><dd>the trust-region radius; how far from $x_0$ we are willing to step</dd>
+    <dt>$\eta$</dt><dd>the acceptance threshold; the minimum ratio of actual-to-predicted reduction we require before accepting a step (here 0.25, meaning the real improvement must be at least 25% of what the model promised)</dd>
   </dl>
 </div>
 
 <!-- Step 1 -->
 <div class="step">
-  <div class="step-label">Step 1: Compute the gradient at \(x_0\)</div>
+  <div class="step-label">Step 1: Compute the gradient at $x_0$</div>
 
-  <p>The gradient \(\nabla f(x)\) is the vector of partial derivatives. Each component tells us the rate of change of \(f\) along one coordinate axis. We need it for two reasons: (1) it appears directly in the quadratic model, and (2) it defines the Newton step via \(B_0 p = -g_0\).</p>
+  <p>The gradient $\nabla f(x)$ is the vector of partial derivatives. Each component tells us the rate of change of $f$ along one coordinate axis. We need it for two reasons: (1) it appears directly in the quadratic model, and (2) it defines the Newton step via $B_0 p = -g_0$.</p>
 
   <p>Take the partial derivative with respect to each variable (Page 02):</p>
 
   <div class="formula-box">
     <p>$$\nabla f(x) = \begin{bmatrix} \dfrac{\partial f}{\partial x_1} \\[8pt] \dfrac{\partial f}{\partial x_2} \end{bmatrix} = \begin{bmatrix} 4x_1 - 2x_2 + 6x_1^2 + 4x_1^3 \\ 2x_2 - 2x_1 \end{bmatrix}$$</p>
     <dl class="breakdown">
-      <dt>\(\partial f / \partial x_1\)</dt><dd>differentiate each term of \(f\) with respect to \(x_1\), treating \(x_2\) as a constant: \(2x_1^2 \to 4x_1\), \(-2x_1 x_2 \to -2x_2\), \(2x_1^3 \to 6x_1^2\), \(x_1^4 \to 4x_1^3\); the \(x_2^2\) term vanishes</dd>
-      <dt>\(\partial f / \partial x_2\)</dt><dd>differentiate with respect to \(x_2\): \(x_2^2 \to 2x_2\), \(-2x_1 x_2 \to -2x_1\); all pure \(x_1\) terms vanish</dd>
+      <dt>$\partial f / \partial x_1$</dt><dd>differentiate each term of $f$ with respect to $x_1$, treating $x_2$ as a constant: $2x_1^2 \to 4x_1$, $-2x_1 x_2 \to -2x_2$, $2x_1^3 \to 6x_1^2$, $x_1^4 \to 4x_1^3$; the $x_2^2$ term vanishes</dd>
+      <dt>$\partial f / \partial x_2$</dt><dd>differentiate with respect to $x_2$: $x_2^2 \to 2x_2$, $-2x_1 x_2 \to -2x_1$; all pure $x_1$ terms vanish</dd>
     </dl>
   </div>
 
   <div class="hand-calc">
-    <p>Evaluate at \(x_0 = (1, 1)\):</p>
+    <p>Evaluate at $x_0 = (1, 1)$:</p>
     <p>$$\nabla f(1,1) = \begin{bmatrix} 4(1) - 2(1) + 6(1)^2 + 4(1)^3 \\ 2(1) - 2(1) \end{bmatrix} = \begin{bmatrix} 4 - 2 + 6 + 4 \\ 0 \end{bmatrix} = \begin{bmatrix} 12 \\ 0 \end{bmatrix}$$</p>
   </div>
 
-  <p>We write \(g_0 = \nabla f(1,1) = \begin{bmatrix} 12 \\ 0 \end{bmatrix}\). The fact that the second component is zero means the function is flat in the \(x_2\) direction at this point; all the slope is in the \(x_1\) direction.</p>
+  <p>We write $g_0 = \nabla f(1,1) = \begin{bmatrix} 12 \\ 0 \end{bmatrix}$. The fact that the second component is zero means the function is flat in the $x_2$ direction at this point; all the slope is in the $x_1$ direction.</p>
 </div>
 
 <!-- Step 2 -->
 <div class="step">
-  <div class="step-label">Step 2: Compute the Hessian at \(x_0\)</div>
+  <div class="step-label">Step 2: Compute the Hessian at $x_0$</div>
 
-  <p>The Hessian \(\nabla^2 f(x)\) is the matrix of second partial derivatives. It captures <strong>curvature</strong>: how quickly the gradient itself is changing. Think of it as the "acceleration" of the landscape. The quadratic model needs it because a quadratic is defined by its linear term (gradient) and its quadratic term (Hessian).</p>
+  <p>The Hessian $\nabla^2 f(x)$ is the matrix of second partial derivatives. It captures <strong>curvature</strong>: how quickly the gradient itself is changing. Think of it as the "acceleration" of the landscape. The quadratic model needs it because a quadratic is defined by its linear term (gradient) and its quadratic term (Hessian).</p>
 
   <div class="formula-box">
     <p>$$\nabla^2 f(x) = \begin{bmatrix} \dfrac{\partial^2 f}{\partial x_1^2} & \dfrac{\partial^2 f}{\partial x_1 \partial x_2} \\[8pt] \dfrac{\partial^2 f}{\partial x_2 \partial x_1} & \dfrac{\partial^2 f}{\partial x_2^2} \end{bmatrix} = \begin{bmatrix} 4 + 12x_1 + 12x_1^2 & -2 \\ -2 & 2 \end{bmatrix}$$</p>
     <dl class="breakdown">
-      <dt>\(\partial^2 f / \partial x_1^2\)</dt><dd>differentiate the first gradient component \(4x_1 - 2x_2 + 6x_1^2 + 4x_1^3\) with respect to \(x_1\) again: \(4 + 12x_1 + 12x_1^2\)</dd>
-      <dt>\(\partial^2 f / \partial x_1 \partial x_2\)</dt><dd>differentiate the first gradient component with respect to \(x_2\): only the \(-2x_2\) term survives, giving \(-2\)</dd>
-      <dt>\(\partial^2 f / \partial x_2^2\)</dt><dd>differentiate the second gradient component \(2x_2 - 2x_1\) with respect to \(x_2\): gives \(2\)</dd>
+      <dt>$\partial^2 f / \partial x_1^2$</dt><dd>differentiate the first gradient component $4x_1 - 2x_2 + 6x_1^2 + 4x_1^3$ with respect to $x_1$ again: $4 + 12x_1 + 12x_1^2$</dd>
+      <dt>$\partial^2 f / \partial x_1 \partial x_2$</dt><dd>differentiate the first gradient component with respect to $x_2$: only the $-2x_2$ term survives, giving $-2$</dd>
+      <dt>$\partial^2 f / \partial x_2^2$</dt><dd>differentiate the second gradient component $2x_2 - 2x_1$ with respect to $x_2$: gives $2$</dd>
     </dl>
   </div>
 
   <div class="hand-calc">
-    <p>Evaluate at \(x_0 = (1,1)\):</p>
+    <p>Evaluate at $x_0 = (1,1)$:</p>
     <p>$$B_0 = \nabla^2 f(1,1) = \begin{bmatrix} 4 + 12(1) + 12(1)^2 & -2 \\ -2 & 2 \end{bmatrix} = \begin{bmatrix} 28 & -2 \\ -2 & 2 \end{bmatrix}$$</p>
   </div>
 
   <div class="check">
     <h4>Positive definiteness check</h4>
-    <p>For the Newton step to be a descent direction, we need \(B_0\) to be positive definite (all eigenvalues positive). Quick checks:</p>
+    <p>For the Newton step to be a descent direction, we need $B_0$ to be positive definite (all eigenvalues positive). Quick checks:</p>
     <ul>
-      <li>Diagonal entries: \(28 \gt 0\) and \(2 \gt 0\) &#10003;</li>
-      <li>Determinant: \(\det(B_0) = 28 \cdot 2 - (-2)(-2) = 56 - 4 = 52 \gt 0\) &#10003;</li>
+      <li>Diagonal entries: $28 \gt 0$ and $2 \gt 0$ &#10003;</li>
+      <li>Determinant: $\det(B_0) = 28 \cdot 2 - (-2)(-2) = 56 - 4 = 52 \gt 0$ &#10003;</li>
     </ul>
-    <p>Both leading minors are positive, so \(B_0\) is positive definite. (The eigenvalues are approximately 1.85 and 28.15; both positive.) This means the quadratic model has a unique minimizer and the Newton step points downhill.</p>
+    <p>Both leading minors are positive, so $B_0$ is positive definite. (The eigenvalues are approximately 1.85 and 28.15; both positive.) This means the quadratic model has a unique minimizer and the Newton step points downhill.</p>
   </div>
 </div>
 
@@ -103,24 +103,24 @@
 <div class="step">
   <div class="step-label">Step 3: Write the quadratic model</div>
 
-  <p>The trust-region method does not optimize \(f\) directly. Instead, it builds a <strong>quadratic model</strong> \(m_0(p)\) that approximates \(f\) near \(x_0\), then minimizes this simpler function within the trust region. The model is just the second-order Taylor expansion of \(f\) around \(x_0\):</p>
+  <p>The trust-region method does not optimize $f$ directly. Instead, it builds a <strong>quadratic model</strong> $m_0(p)$ that approximates $f$ near $x_0$, then minimizes this simpler function within the trust region. The model is just the second-order Taylor expansion of $f$ around $x_0$:</p>
 
   <div class="formula-box">
     <p>$$m_0(p) = f(x_0) + g_0^T p + \tfrac{1}{2}\, p^T B_0\, p$$</p>
     <dl class="breakdown">
-      <dt>\(f(x_0)\)</dt><dd>the function value at the current point; a constant that shifts the model vertically</dd>
-      <dt>\(g_0^T p\)</dt><dd>the linear term; captures the slope of \(f\) in direction \(p\)</dd>
-      <dt>\(\frac{1}{2} p^T B_0 p\)</dt><dd>the quadratic term; captures the curvature; this is what makes the model "bowl-shaped" when \(B_0\) is positive definite</dd>
-      <dt>\(p\)</dt><dd>the step from \(x_0\); we are choosing the best \(p\) to take, subject to \(\|p\| \leq \Delta_0\)</dd>
+      <dt>$f(x_0)$</dt><dd>the function value at the current point; a constant that shifts the model vertically</dd>
+      <dt>$g_0^T p$</dt><dd>the linear term; captures the slope of $f$ in direction $p$</dd>
+      <dt>$\frac{1}{2} p^T B_0 p$</dt><dd>the quadratic term; captures the curvature; this is what makes the model "bowl-shaped" when $B_0$ is positive definite</dd>
+      <dt>$p$</dt><dd>the step from $x_0$; we are choosing the best $p$ to take, subject to $\|p\| \leq \Delta_0$</dd>
     </dl>
   </div>
 
   <div class="analogy">
-    <p>Think of \(m_0(p)\) as a paraboloid (a bowl) that you fit to the landscape at your current location. Near \(x_0\), this bowl closely matches the real terrain. Far away, it might diverge wildly. That is exactly why we restrict our step to lie within the trust region: the model is only reliable close to \(x_0\).</p>
+    <p>Think of $m_0(p)$ as a paraboloid (a bowl) that you fit to the landscape at your current location. Near $x_0$, this bowl closely matches the real terrain. Far away, it might diverge wildly. That is exactly why we restrict our step to lie within the trust region: the model is only reliable close to $x_0$.</p>
   </div>
 
   <div class="hand-calc">
-    <p>Compute the function value at \(x_0\):</p>
+    <p>Compute the function value at $x_0$:</p>
     <p>$$f(1,1) = 2(1)^2 + (1)^2 - 2(1)(1) + 2(1)^3 + (1)^4 = 2 + 1 - 2 + 2 + 1 = 4$$</p>
     <p>So the model is:</p>
     <p>$$m_0(p) = 4 + \begin{bmatrix}12 & 0\end{bmatrix}p + \tfrac{1}{2}\,p^T\begin{bmatrix}28 & -2 \\ -2 & 2\end{bmatrix}p$$</p>
@@ -131,70 +131,70 @@
 <div class="step">
   <div class="step-label">Step 4: Compute the Newton step</div>
 
-  <p>The Newton step \(p^N\) is the unconstrained minimizer of the quadratic model. Setting \(\nabla_p m_0(p) = 0\) gives \(g_0 + B_0 p = 0\), which rearranges to:</p>
+  <p>The Newton step $p^N$ is the unconstrained minimizer of the quadratic model. Setting $\nabla_p m_0(p) = 0$ gives $g_0 + B_0 p = 0$, which rearranges to:</p>
 
   <div class="formula-box">
     <p>$$B_0\, p^N = -g_0 \quad \Longrightarrow \quad p^N = -B_0^{-1}\, g_0$$</p>
     <p>This is the exact same Newton step from unconstrained optimization (Page 03). It jumps straight to the bottom of the quadratic model.</p>
   </div>
 
-  <p>For a \(2 \times 2\) matrix, we use the explicit inverse formula (Page 03):</p>
+  <p>For a $2 \times 2$ matrix, we use the explicit inverse formula (Page 03):</p>
 
   <div class="formula-box">
     <p>$$\text{If } B = \begin{bmatrix}a & b \\ c & d\end{bmatrix}, \quad B^{-1} = \frac{1}{ad - bc}\begin{bmatrix}d & -b \\ -c & a\end{bmatrix}$$</p>
   </div>
 
   <div class="hand-calc">
-    <p>We already computed \(\det(B_0) = 52\). Now:</p>
+    <p>We already computed $\det(B_0) = 52$. Now:</p>
     <p>$$B_0^{-1} = \frac{1}{52}\begin{bmatrix}2 & 2 \\ 2 & 28\end{bmatrix}$$</p>
     <p>Compute the Newton step:</p>
     <p>$$p^N = -B_0^{-1} g_0 = -\frac{1}{52}\begin{bmatrix}2 & 2 \\ 2 & 28\end{bmatrix}\begin{bmatrix}12 \\ 0\end{bmatrix} = -\frac{1}{52}\begin{bmatrix}2(12) + 2(0) \\ 2(12) + 28(0)\end{bmatrix} = -\frac{1}{52}\begin{bmatrix}24 \\ 24\end{bmatrix} = \begin{bmatrix}-6/13 \\ -6/13\end{bmatrix}$$</p>
   </div>
 
-  <p>The Newton step says: "move \(-6/13 \approx -0.462\) in both the \(x_1\) and \(x_2\) directions." This would bring us to \(x_0 + p^N = (7/13,\; 7/13) \approx (0.538,\; 0.538)\).</p>
+  <p>The Newton step says: "move $-6/13 \approx -0.462$ in both the $x_1$ and $x_2$ directions." This would bring us to $x_0 + p^N = (7/13,\; 7/13) \approx (0.538,\; 0.538)$.</p>
 </div>
 
 <!-- Step 5 -->
 <div class="step">
   <div class="step-label">Step 5: Check if Newton step fits inside the trust region</div>
 
-  <p>The constraint is \(\|p\| \leq \Delta_0\). If the Newton step already satisfies this, it is the solution to the trust-region subproblem (because it minimizes the model globally, and it is feasible). If it violates the constraint, we would need to find a step on the boundary of the trust region instead (using the Cauchy point or the dogleg method).</p>
+  <p>The constraint is $\|p\| \leq \Delta_0$. If the Newton step already satisfies this, it is the solution to the trust-region subproblem (because it minimizes the model globally, and it is feasible). If it violates the constraint, we would need to find a step on the boundary of the trust region instead (using the Cauchy point or the dogleg method).</p>
 
   <div class="hand-calc">
     <p>$$\|p^N\| = \sqrt{\left(\frac{-6}{13}\right)^2 + \left(\frac{-6}{13}\right)^2} = \sqrt{\frac{36}{169} + \frac{36}{169}} = \sqrt{\frac{72}{169}} = \frac{6\sqrt{2}}{13} \approx 0.653$$</p>
   </div>
 
   <div class="result">
-    <p>Since \(\|p^N\| \approx 0.653 \lt \Delta_0 = 1\), the Newton step fits inside the trust region. We take it as our trial step: \(p_0 = p^N = (-6/13,\; -6/13)^T\).</p>
+    <p>Since $\|p^N\| \approx 0.653 \lt \Delta_0 = 1$, the Newton step fits inside the trust region. We take it as our trial step: $p_0 = p^N = (-6/13,\; -6/13)^T$.</p>
     <p>No need to compute the Cauchy point or use the dogleg method. The unconstrained optimum of the model is within reach.</p>
   </div>
 </div>
 
 <!-- Step 6 -->
 <div class="step">
-  <div class="step-label">Step 6: Compute the trust-region ratio \(\rho_0\)</div>
+  <div class="step-label">Step 6: Compute the trust-region ratio $\rho_0$</div>
 
-  <p>Now we ask: "How well did the model predict reality?" We compare the <strong>actual reduction</strong> in \(f\) to the <strong>predicted reduction</strong> from the model. This ratio determines whether we accept the step and how we adjust the trust-region radius.</p>
+  <p>Now we ask: "How well did the model predict reality?" We compare the <strong>actual reduction</strong> in $f$ to the <strong>predicted reduction</strong> from the model. This ratio determines whether we accept the step and how we adjust the trust-region radius.</p>
 
   <div class="formula-box">
     <p>$$\rho_0 = \frac{\text{actual reduction}}{\text{predicted reduction}} = \frac{f(x_0) - f(x_0 + p_0)}{m_0(0) - m_0(p_0)}$$</p>
     <dl class="breakdown">
-      <dt>Actual reduction \(f(x_0) - f(x_0 + p_0)\)</dt><dd>how much \(f\) really decreased when we took the step</dd>
-      <dt>Predicted reduction \(m_0(0) - m_0(p_0)\)</dt><dd>how much the model said \(f\) would decrease; note \(m_0(0) = f(x_0)\) by definition</dd>
+      <dt>Actual reduction $f(x_0) - f(x_0 + p_0)$</dt><dd>how much $f$ really decreased when we took the step</dd>
+      <dt>Predicted reduction $m_0(0) - m_0(p_0)$</dt><dd>how much the model said $f$ would decrease; note $m_0(0) = f(x_0)$ by definition</dd>
     </dl>
   </div>
 
   <p><strong>Predicted reduction:</strong></p>
 
   <div class="hand-calc">
-    <p>Since \(p^N\) is the unconstrained minimizer of \(m_0\), we have \(B_0 p^N = -g_0\), which means \(g_0^T p^N = -(p^N)^T B_0 p^N\). Substituting into the model:</p>
+    <p>Since $p^N$ is the unconstrained minimizer of $m_0$, we have $B_0 p^N = -g_0$, which means $g_0^T p^N = -(p^N)^T B_0 p^N$. Substituting into the model:</p>
     <p>$$m_0(p^N) = f_0 + g_0^T p^N + \tfrac{1}{2}(p^N)^T B_0 p^N = f_0 - (p^N)^T B_0 p^N + \tfrac{1}{2}(p^N)^T B_0 p^N = f_0 - \tfrac{1}{2}(p^N)^T B_0 p^N$$</p>
     <p>So the predicted reduction simplifies to:</p>
     <p>$$m_0(0) - m_0(p^N) = \tfrac{1}{2}(p^N)^T B_0\, p^N$$</p>
 
-    <p>Compute \(B_0 p^N\):</p>
+    <p>Compute $B_0 p^N$:</p>
     <p>$$B_0 p^N = \begin{bmatrix}28 & -2 \\ -2 & 2\end{bmatrix}\begin{bmatrix}-6/13 \\ -6/13\end{bmatrix} = \begin{bmatrix}28(-6/13) + (-2)(-6/13) \\ (-2)(-6/13) + 2(-6/13)\end{bmatrix} = \begin{bmatrix}-168/13 + 12/13 \\ 12/13 - 12/13\end{bmatrix} = \begin{bmatrix}-12 \\ 0\end{bmatrix}$$</p>
-    <p>(This equals \(-g_0\), confirming the Newton equation holds.)</p>
+    <p>(This equals $-g_0$, confirming the Newton equation holds.)</p>
 
     <p>$$(p^N)^T B_0 p^N = \begin{bmatrix}-6/13 & -6/13\end{bmatrix}\begin{bmatrix}-12 \\ 0\end{bmatrix} = \frac{-6}{13}(-12) + \frac{-6}{13}(0) = \frac{72}{13}$$</p>
 
@@ -204,10 +204,10 @@
   <p><strong>Actual reduction:</strong></p>
 
   <div class="hand-calc">
-    <p>Evaluate \(f\) at the new point \(x_0 + p^N = (7/13,\; 7/13)\):</p>
-    <p>Since \(x_1 = x_2 = 7/13\), the cross terms simplify. The terms \(2x_1^2 + x_2^2 - 2x_1 x_2\) become \(2x^2 + x^2 - 2x^2 = x^2\) when \(x_1 = x_2 = x\):</p>
+    <p>Evaluate $f$ at the new point $x_0 + p^N = (7/13,\; 7/13)$:</p>
+    <p>Since $x_1 = x_2 = 7/13$, the cross terms simplify. The terms $2x_1^2 + x_2^2 - 2x_1 x_2$ become $2x^2 + x^2 - 2x^2 = x^2$ when $x_1 = x_2 = x$:</p>
     <p>$$f\!\left(\frac{7}{13}, \frac{7}{13}\right) = \left(\frac{7}{13}\right)^2 + 2\!\left(\frac{7}{13}\right)^3 + \left(\frac{7}{13}\right)^4 = \frac{49}{169} + \frac{686}{2197} + \frac{2401}{28561}$$</p>
-    <p>Converting to the common denominator \(28561 = 13^4\):</p>
+    <p>Converting to the common denominator $28561 = 13^4$:</p>
     <p>$$= \frac{8281}{28561} + \frac{8918}{28561} + \frac{2401}{28561} = \frac{19600}{28561} \approx 0.686$$</p>
 
     <p>$$\text{Actual reduction} = 4 - \frac{19600}{28561} = \frac{114244 - 19600}{28561} = \frac{94644}{28561} \approx 3.314$$</p>
@@ -228,38 +228,38 @@
 <div class="step">
   <div class="step-label">Step 7: Decision; accept or reject, adjust radius</div>
 
-  <p>The trust-region algorithm uses \(\rho_0\) and three thresholds to decide what to do next:</p>
+  <p>The trust-region algorithm uses $\rho_0$ and three thresholds to decide what to do next:</p>
 
   <div class="formula-box">
     <table>
       <thead>
-        <tr><th>Condition</th><th>Action on \(x\)</th><th>Action on \(\Delta\)</th></tr>
+        <tr><th>Condition</th><th>Action on $x$</th><th>Action on $\Delta$</th></tr>
       </thead>
       <tbody>
-        <tr><td>\(\rho_0 \lt 0.25\)</td><td>Reject step: \(x_1 = x_0\)</td><td>Shrink: \(\Delta_1 = \frac{1}{4}\Delta_0\)</td></tr>
-        <tr><td>\(\rho_0 \gt 0.75\) and \(\|p\| = \Delta_0\)</td><td>Accept step: \(x_1 = x_0 + p_0\)</td><td>Expand: \(\Delta_1 = \min(2\Delta_0, \hat{\Delta})\)</td></tr>
-        <tr><td>Otherwise (\(0.25 \leq \rho_0\), not expanding)</td><td>Accept step: \(x_1 = x_0 + p_0\)</td><td>Keep: \(\Delta_1 = \Delta_0\)</td></tr>
+        <tr><td>$\rho_0 \lt 0.25$</td><td>Reject step: $x_1 = x_0$</td><td>Shrink: $\Delta_1 = \frac{1}{4}\Delta_0$</td></tr>
+        <tr><td>$\rho_0 \gt 0.75$ and $\|p\| = \Delta_0$</td><td>Accept step: $x_1 = x_0 + p_0$</td><td>Expand: $\Delta_1 = \min(2\Delta_0, \hat{\Delta})$</td></tr>
+        <tr><td>Otherwise ($0.25 \leq \rho_0$, not expanding)</td><td>Accept step: $x_1 = x_0 + p_0$</td><td>Keep: $\Delta_1 = \Delta_0$</td></tr>
       </tbody>
     </table>
   </div>
 
   <div class="result">
-    <p>Here \(\rho_0 \approx 1.197 \gt \eta = 0.25\), so we <strong>accept the step</strong>:</p>
+    <p>Here $\rho_0 \approx 1.197 \gt \eta = 0.25$, so we <strong>accept the step</strong>:</p>
     <p>$$x_1 = x_0 + p_0 = \begin{bmatrix}1 \\ 1\end{bmatrix} + \begin{bmatrix}-6/13 \\ -6/13\end{bmatrix} = \begin{bmatrix}7/13 \\ 7/13\end{bmatrix} \approx \begin{bmatrix}0.538 \\ 0.538\end{bmatrix}$$</p>
-    <p>Although \(\rho_0 \gt 0.75\), the Newton step did <strong>not</strong> hit the trust-region boundary (\(\|p^N\| \approx 0.653 \lt 1 = \Delta_0\)), so we do not expand the radius. We keep \(\Delta_1 = \Delta_0 = 1\).</p>
+    <p>Although $\rho_0 \gt 0.75$, the Newton step did <strong>not</strong> hit the trust-region boundary ($\|p^N\| \approx 0.653 \lt 1 = \Delta_0$), so we do not expand the radius. We keep $\Delta_1 = \Delta_0 = 1$.</p>
     <p>The radius only expands when the step actually hits the boundary, because that signals the trust region might be too small and the model could be trusted over a wider area.</p>
   </div>
 
   <div class="exam-flag">
     <h4>Exam checklist for trust-region problems</h4>
     <ul>
-      <li>Compute \(g_0\) and \(B_0\) (gradient and Hessian at \(x_0\))</li>
-      <li>Compute \(f(x_0)\) for the model constant</li>
-      <li>Solve \(B_0 p^N = -g_0\) for the Newton step</li>
-      <li>Check \(\|p^N\| \leq \Delta_0\): if yes, take Newton; if no, compute Cauchy point</li>
-      <li>Compute predicted reduction \(= \frac{1}{2}(p^N)^T B_0 p^N\) (when taking Newton step)</li>
-      <li>Compute actual reduction \(= f(x_0) - f(x_0 + p)\)</li>
-      <li>Compute \(\rho_0\) and apply the decision rules</li>
+      <li>Compute $g_0$ and $B_0$ (gradient and Hessian at $x_0$)</li>
+      <li>Compute $f(x_0)$ for the model constant</li>
+      <li>Solve $B_0 p^N = -g_0$ for the Newton step</li>
+      <li>Check $\|p^N\| \leq \Delta_0$: if yes, take Newton; if no, compute Cauchy point</li>
+      <li>Compute predicted reduction $= \frac{1}{2}(p^N)^T B_0 p^N$ (when taking Newton step)</li>
+      <li>Compute actual reduction $= f(x_0) - f(x_0 + p)$</li>
+      <li>Compute $\rho_0$ and apply the decision rules</li>
     </ul>
   </div>
 </div>
@@ -274,36 +274,36 @@
 
 <div class="why-box">
   <h4>What CG does and why it matters</h4>
-  <p>The conjugate gradient method solves the linear system \(Ax = b\) where \(A\) is symmetric positive definite (SPD). Equivalently, it minimizes the quadratic function \(f(x) = \frac{1}{2}x^T A x - b^T x\), whose gradient is \(\nabla f = Ax - b\), so the minimum occurs exactly where \(Ax = b\).</p>
-  <p>What makes CG special is how it chooses search directions. Instead of just following the steepest descent direction each time (which can zigzag badly), CG builds directions that are <strong>\(A\)-conjugate</strong>: \(d_i^T A d_j = 0\) for \(i \neq j\). Think of the matrix \(A\) as stretching space (like viewing a circle through a funhouse mirror that turns it into an ellipse). Two directions being \(A\)-conjugate means they are "independent with respect to \(A\)'s stretching." Each CG step makes permanent progress along its direction; it never needs to revisit a direction it already searched.</p>
-  <p>For an \(n \times n\) system, CG converges in <strong>at most \(n\) iterations</strong> (in exact arithmetic). So for our \(2 \times 2\) system, two iterations will give the exact answer.</p>
+  <p>The conjugate gradient method solves the linear system $Ax = b$ where $A$ is symmetric positive definite (SPD). Equivalently, it minimizes the quadratic function $f(x) = \frac{1}{2}x^T A x - b^T x$, whose gradient is $\nabla f = Ax - b$, so the minimum occurs exactly where $Ax = b$.</p>
+  <p>What makes CG special is how it chooses search directions. Instead of just following the steepest descent direction each time (which can zigzag badly), CG builds directions that are <strong>$A$-conjugate</strong>: $d_i^T A d_j = 0$ for $i \neq j$. Think of the matrix $A$ as stretching space (like viewing a circle through a funhouse mirror that turns it into an ellipse). Two directions being $A$-conjugate means they are "independent with respect to $A$'s stretching." Each CG step makes permanent progress along its direction; it never needs to revisit a direction it already searched.</p>
+  <p>For an $n \times n$ system, CG converges in <strong>at most $n$ iterations</strong> (in exact arithmetic). So for our $2 \times 2$ system, two iterations will give the exact answer.</p>
 </div>
 
 <div class="formula-box">
   <h4>Problem setup</h4>
   <p>$$A = \begin{bmatrix}5 & 2 \\ 2 & 2\end{bmatrix}, \quad b = \begin{bmatrix}7 \\ 4\end{bmatrix}, \quad x_0 = \begin{bmatrix}0 \\ 0\end{bmatrix}$$</p>
-  <p>Solve \(Ax = b\) using the Conjugate Gradient method. Run 2 full iterations.</p>
+  <p>Solve $Ax = b$ using the Conjugate Gradient method. Run 2 full iterations.</p>
   <dl class="breakdown">
-    <dt>\(A\)</dt><dd>the coefficient matrix; must be symmetric positive definite for CG to work. Here \(\det(A) = 10 - 4 = 6 \gt 0\) and diagonal entries are positive, so \(A\) is SPD. &#10003;</dd>
-    <dt>\(b\)</dt><dd>the right-hand side vector</dd>
-    <dt>\(x_0\)</dt><dd>the initial guess; starting from zero is the standard choice</dd>
+    <dt>$A$</dt><dd>the coefficient matrix; must be symmetric positive definite for CG to work. Here $\det(A) = 10 - 4 = 6 \gt 0$ and diagonal entries are positive, so $A$ is SPD. &#10003;</dd>
+    <dt>$b$</dt><dd>the right-hand side vector</dd>
+    <dt>$x_0$</dt><dd>the initial guess; starting from zero is the standard choice</dd>
   </dl>
 </div>
 
 <div class="formula-box">
   <h4>The CG algorithm (Page 06)</h4>
-  <p>Initialize: \(r_0 = b - Ax_0\), \(\;p_0 = r_0\)</p>
-  <p>For \(k = 0, 1, 2, \ldots\):</p>
+  <p>Initialize: $r_0 = b - Ax_0$, $\;p_0 = r_0$</p>
+  <p>For $k = 0, 1, 2, \ldots$:</p>
   <p>$$\alpha_k = \frac{r_k^T r_k}{p_k^T A p_k} \qquad \text{(step size: exact line search along } p_k\text{)}$$</p>
   <p>$$x_{k+1} = x_k + \alpha_k\, p_k \qquad \text{(take the step)}$$</p>
   <p>$$r_{k+1} = r_k - \alpha_k\, A p_k \qquad \text{(update residual cheaply, without recomputing } b - Ax_{k+1}\text{)}$$</p>
   <p>$$\beta_k = \frac{r_{k+1}^T r_{k+1}}{r_k^T r_k} \qquad \text{(conjugacy coefficient)}$$</p>
   <p>$$p_{k+1} = r_{k+1} + \beta_k\, p_k \qquad \text{(new search direction: steepest descent + correction for conjugacy)}$$</p>
   <dl class="breakdown">
-    <dt>\(r_k = b - Ax_k\)</dt><dd>the residual; measures how far \(x_k\) is from solving \(Ax = b\). Also equals \(-\nabla f(x_k)\), the negative gradient of the quadratic objective.</dd>
-    <dt>\(p_k\)</dt><dd>the search direction; \(A\)-conjugate to all previous directions</dd>
-    <dt>\(\alpha_k\)</dt><dd>the step size that minimizes \(f\) exactly along \(p_k\); derived by setting \(\frac{d}{d\alpha}f(x_k + \alpha p_k) = 0\)</dd>
-    <dt>\(\beta_k\)</dt><dd>the conjugacy correction; the amount of the old direction \(p_k\) to mix into the new direction to maintain \(A\)-conjugacy</dd>
+    <dt>$r_k = b - Ax_k$</dt><dd>the residual; measures how far $x_k$ is from solving $Ax = b$. Also equals $-\nabla f(x_k)$, the negative gradient of the quadratic objective.</dd>
+    <dt>$p_k$</dt><dd>the search direction; $A$-conjugate to all previous directions</dd>
+    <dt>$\alpha_k$</dt><dd>the step size that minimizes $f$ exactly along $p_k$; derived by setting $\frac{d}{d\alpha}f(x_k + \alpha p_k) = 0$</dd>
+    <dt>$\beta_k$</dt><dd>the conjugacy correction; the amount of the old direction $p_k$ to mix into the new direction to maintain $A$-conjugacy</dd>
   </dl>
 </div>
 
@@ -316,9 +316,9 @@
     <p>$$p_0 = r_0 = \begin{bmatrix}7\\4\end{bmatrix}$$</p>
   </div>
 
-  <p>The first search direction is simply the negative gradient direction (steepest descent). After this first step, CG will modify subsequent directions to maintain \(A\)-conjugacy using \(\beta\).</p>
+  <p>The first search direction is simply the negative gradient direction (steepest descent). After this first step, CG will modify subsequent directions to maintain $A$-conjugacy using $\beta$.</p>
 
-  <p>Precompute \(r_0^T r_0\) since we will need it twice (for \(\alpha_0\) and \(\beta_0\)):</p>
+  <p>Precompute $r_0^T r_0$ since we will need it twice (for $\alpha_0$ and $\beta_0$):</p>
   <div class="hand-calc">
     <p>$$r_0^T r_0 = 7^2 + 4^2 = 49 + 16 = 65$$</p>
   </div>
@@ -328,10 +328,10 @@
 <div class="step">
   <div class="step-label">Iteration 1 (k = 0)</div>
 
-  <p><strong>Compute \(\alpha_0\):</strong> This is the step size that minimizes \(f(x) = \frac{1}{2}x^TAx - b^Tx\) exactly along the direction \(p_0\). The formula \(\alpha_k = r_k^Tr_k / (p_k^TAp_k)\) comes from differentiating \(f(x_0 + \alpha p_0)\) with respect to \(\alpha\) and setting the derivative to zero (Page 06).</p>
+  <p><strong>Compute $\alpha_0$:</strong> This is the step size that minimizes $f(x) = \frac{1}{2}x^TAx - b^Tx$ exactly along the direction $p_0$. The formula $\alpha_k = r_k^Tr_k / (p_k^TAp_k)$ comes from differentiating $f(x_0 + \alpha p_0)$ with respect to $\alpha$ and setting the derivative to zero (Page 06).</p>
 
   <div class="hand-calc">
-    <p>First compute \(Ap_0\) (we will reuse this for the residual update):</p>
+    <p>First compute $Ap_0$ (we will reuse this for the residual update):</p>
     <p>$$Ap_0 = \begin{bmatrix}5&2\\2&2\end{bmatrix}\begin{bmatrix}7\\4\end{bmatrix} = \begin{bmatrix}5(7)+2(4)\\2(7)+2(4)\end{bmatrix} = \begin{bmatrix}35+8\\14+8\end{bmatrix} = \begin{bmatrix}43\\22\end{bmatrix}$$</p>
 
     <div class="why-box">
@@ -349,19 +349,19 @@
   <strong>What $\alpha_0$ means:</strong> This step size minimizes $f$ exactly along direction $p_0$. After taking this step, the gradient of $f$ at the new point will be perpendicular to $p_0$. That is the "exact line search" property; we squeezed every drop of improvement out of this direction before moving on.
   </div>
 
-  <p><strong>Update \(x\):</strong></p>
+  <p><strong>Update $x$:</strong></p>
   <div class="hand-calc">
     <p>$$x_1 = x_0 + \alpha_0 p_0 = \begin{bmatrix}0\\0\end{bmatrix} + \frac{65}{389}\begin{bmatrix}7\\4\end{bmatrix} = \begin{bmatrix}455/389\\260/389\end{bmatrix} \approx \begin{bmatrix}1.170\\0.668\end{bmatrix}$$</p>
   </div>
 
-  <p><strong>Update residual:</strong> Instead of recomputing \(b - Ax_1\) from scratch (which costs a matrix-vector multiply), we use the recurrence \(r_{k+1} = r_k - \alpha_k Ap_k\). This is cheaper and numerically equivalent.</p>
+  <p><strong>Update residual:</strong> Instead of recomputing $b - Ax_1$ from scratch (which costs a matrix-vector multiply), we use the recurrence $r_{k+1} = r_k - \alpha_k Ap_k$. This is cheaper and numerically equivalent.</p>
   <div class="hand-calc">
-    <p>$$r_1 = r_0 - \alpha_0\, Ap_0 = \begin{bmatrix}7\\4\end{bmatrix} - \frac{65}{389}\begin{bmatrix}43\\22\end{bmatrix} = \begin{bmatrix}7 - 2795/389\\4 - 1430/389\end{bmatrix} = \begin{bmatrix}(2723 - 2795)/389\\(1556 - 1430)/389\end{bmatrix} = \begin{bmatrix}-72/389\\126/389\end{bmatrix}$$</p>
+    <p>$$r_1 = r_0 - \alpha_0\, Ap_0 = \begin{bmatrix}7\\4\end{bmatrix} - \frac{65}{389}\begin{bmatrix}43\\22\end{bmatrix} = \begin{bmatrix}7 - 2795/389\\4 - 1430/389\end{bmatrix} = \begin{bmatrix}(2723 - 2795)/389\$1556 - 1430)/389\end{bmatrix} = \begin{bmatrix}-72/389\\126/389\end{bmatrix}$$</p>
     <p>$$\approx \begin{bmatrix}-0.185\\0.324\end{bmatrix}$$</p>
   </div>
 
   <div class="check">
-    <h4>Orthogonality check: \(r_1^T r_0 = 0\)?</h4>
+    <h4>Orthogonality check: $r_1^T r_0 = 0$?</h4>
     <p>$$r_1^T r_0 = \frac{-72}{389}(7) + \frac{126}{389}(4) = \frac{-504 + 504}{389} = 0 \;\checkmark$$</p>
     <p>The new residual is orthogonal to the old one. This is a key property of CG: all residuals are mutually orthogonal. If this check fails on an exam, you made an arithmetic error somewhere above.</p>
   </div>
@@ -370,7 +370,7 @@
   <strong>The orthogonality check:</strong> In exact CG, the residuals are mutually orthogonal: $r_1^T r_0 = 0$. This is not just a nice property; it is the REASON CG works. If $r_1$ were not orthogonal to $r_0$, the new direction $p_1$ would partially re-do work that $p_0$ already did. Orthogonality guarantees each step explores a genuinely new dimension. Compute $r_1^Tr_0$ and verify it equals zero.
   </div>
 
-  <p><strong>Compute \(\beta_0\):</strong> This coefficient ensures the next search direction \(p_1\) will be \(A\)-conjugate to \(p_0\).</p>
+  <p><strong>Compute $\beta_0$:</strong> This coefficient ensures the next search direction $p_1$ will be $A$-conjugate to $p_0$.</p>
   <div class="hand-calc">
     <p>$$r_1^T r_1 = \left(\frac{-72}{389}\right)^2 + \left(\frac{126}{389}\right)^2 = \frac{5184 + 15876}{389^2} = \frac{21060}{151321} \approx 0.1392$$</p>
     <p>$$\beta_0 = \frac{r_1^T r_1}{r_0^T r_0} = \frac{21060/151321}{65} = \frac{21060}{65 \cdot 151321} = \frac{324}{151321} \approx 0.00214$$</p>
@@ -379,19 +379,19 @@
   <p><strong>New search direction:</strong></p>
   <div class="hand-calc">
     <p>$$p_1 = r_1 + \beta_0\, p_0 = \begin{bmatrix}-72/389\\126/389\end{bmatrix} + \frac{324}{151321}\begin{bmatrix}7\\4\end{bmatrix} = \begin{bmatrix}-72/389 + 2268/151321\\126/389 + 1296/151321\end{bmatrix}$$</p>
-    <p>Converting to common denominator \(151321 = 389^2\):</p>
-    <p>$$= \begin{bmatrix}(-72 \cdot 389 + 2268)/151321\\(126 \cdot 389 + 1296)/151321\end{bmatrix} = \begin{bmatrix}(-28008 + 2268)/151321\\(49014 + 1296)/151321\end{bmatrix} = \begin{bmatrix}-25740/151321\\50310/151321\end{bmatrix}$$</p>
+    <p>Converting to common denominator $151321 = 389^2$:</p>
+    <p>$$= \begin{bmatrix}(-72 \cdot 389 + 2268)/151321\$126 \cdot 389 + 1296)/151321\end{bmatrix} = \begin{bmatrix}(-28008 + 2268)/151321\$49014 + 1296)/151321\end{bmatrix} = \begin{bmatrix}-25740/151321\\50310/151321\end{bmatrix}$$</p>
     <p>$$\approx \begin{bmatrix}-0.170\\0.332\end{bmatrix}$$</p>
   </div>
 
-  <p>Notice \(\beta_0\) is very small (\(\approx 0.002\)), so \(p_1\) is almost identical to \(r_1\). The correction is tiny because the first step already made a lot of progress.</p>
+  <p>Notice $\beta_0$ is very small ($\approx 0.002$), so $p_1$ is almost identical to $r_1$. The correction is tiny because the first step already made a lot of progress.</p>
 </div>
 
 <!-- CG Iteration 2 -->
 <div class="step">
   <div class="step-label">Iteration 2 (k = 1)</div>
 
-  <p><strong>Compute \(\alpha_1\):</strong></p>
+  <p><strong>Compute $\alpha_1$:</strong></p>
   <div class="hand-calc">
     <p>$$Ap_1 = \begin{bmatrix}5&2\\2&2\end{bmatrix}\begin{bmatrix}-25740/151321\\50310/151321\end{bmatrix} = \frac{1}{151321}\begin{bmatrix}5(-25740)+2(50310)\\2(-25740)+2(50310)\end{bmatrix}$$</p>
     <p>$$= \frac{1}{151321}\begin{bmatrix}-128700+100620\\-51480+100620\end{bmatrix} = \begin{bmatrix}-28080/151321\\49140/151321\end{bmatrix} \approx \begin{bmatrix}-0.186\\0.325\end{bmatrix}$$</p>
@@ -403,10 +403,10 @@
     <p>$$\alpha_1 = \frac{r_1^T r_1}{p_1^T Ap_1} = \frac{21060/151321}{8213400/58863869} = \frac{21060 \cdot 58863869}{151321 \cdot 8213400} = \frac{389}{390} \approx 0.9974$$</p>
   </div>
 
-  <p><strong>Update \(x\):</strong></p>
+  <p><strong>Update $x$:</strong></p>
   <div class="hand-calc">
     <p>$$x_2 = x_1 + \alpha_1\, p_1 = \begin{bmatrix}455/389\\260/389\end{bmatrix} + \frac{389}{390} \cdot \begin{bmatrix}-25740/151321\\50310/151321\end{bmatrix}$$</p>
-    <p>After simplification (the 389 in the numerator of \(\alpha_1\) cancels with the \(389^2\) in the denominator of \(p_1\)):</p>
+    <p>After simplification (the 389 in the numerator of $\alpha_1$ cancels with the $389^2$ in the denominator of $p_1$):</p>
     <p>$$x_2 = \begin{bmatrix}1\\1\end{bmatrix}$$</p>
   </div>
 
@@ -421,7 +421,7 @@
   </div>
 
   <div class="check">
-    <h4>Verification: \(Ax_2 = b\)?</h4>
+    <h4>Verification: $Ax_2 = b$?</h4>
     <p>$$Ax_2 = \begin{bmatrix}5&2\\2&2\end{bmatrix}\begin{bmatrix}1\\1\end{bmatrix} = \begin{bmatrix}7\\4\end{bmatrix} = b \;\checkmark$$</p>
   </div>
 
@@ -430,19 +430,19 @@
   </div>
 
   <div class="check">
-    <h4>Conjugacy check: \(p_0^T A p_1 = 0\)?</h4>
+    <h4>Conjugacy check: $p_0^T A p_1 = 0$?</h4>
     <p>$$p_0^T Ap_1 = \begin{bmatrix}7&4\end{bmatrix}\begin{bmatrix}-28080/151321\\49140/151321\end{bmatrix} = \frac{7(-28080)+4(49140)}{151321} = \frac{-196560+196560}{151321} = 0 \;\checkmark$$</p>
-    <p>The two search directions are indeed \(A\)-conjugate.</p>
+    <p>The two search directions are indeed $A$-conjugate.</p>
   </div>
 
   <div class="exam-flag">
     <h4>Exam checklist for CG problems</h4>
     <ul>
-      <li>Initialize \(r_0 = b - Ax_0\) and \(p_0 = r_0\). Precompute \(r_0^Tr_0\).</li>
-      <li>Each iteration: compute \(Ap_k\) first (reuse it for both \(\alpha_k\) and the residual update)</li>
-      <li>Check orthogonality \(r_{k+1}^T r_k = 0\) after each iteration; if it fails, backtrack for an arithmetic mistake</li>
-      <li>For an \(n \times n\) system, expect convergence in exactly \(n\) iterations</li>
-      <li>On the exam, you will likely be asked for 2 iterations on a 2\(\times\)2 system; the second iterate should solve the system exactly</li>
+      <li>Initialize $r_0 = b - Ax_0$ and $p_0 = r_0$. Precompute $r_0^Tr_0$.</li>
+      <li>Each iteration: compute $Ap_k$ first (reuse it for both $\alpha_k$ and the residual update)</li>
+      <li>Check orthogonality $r_{k+1}^T r_k = 0$ after each iteration; if it fails, backtrack for an arithmetic mistake</li>
+      <li>For an $n \times n$ system, expect convergence in exactly $n$ iterations</li>
+      <li>On the exam, you will likely be asked for 2 iterations on a 2$\times$2 system; the second iterate should solve the system exactly</li>
     </ul>
   </div>
 </div>
@@ -457,8 +457,8 @@
 
 <div class="why-box">
   <h4>What BFGS does and why it matters</h4>
-  <p>Newton's method uses the search direction \(p_k = -[\nabla^2 f(x_k)]^{-1} \nabla f(x_k)\), which converges very fast but requires computing (and inverting) the Hessian at every step. For large problems this is prohibitively expensive.</p>
-  <p>BFGS is a <strong>quasi-Newton method</strong>: it builds an approximation \(H_k \approx [\nabla^2 f]^{-1}\) from gradient information alone, then uses \(p_k = -H_k g_k\) as the search direction. After each step, it updates \(H_k\) using a rank-2 correction that incorporates how the gradient changed. Over time, \(H_k\) learns the curvature of the function. On a quadratic with exact line search, BFGS recovers the true inverse Hessian in at most \(n\) steps.</p>
+  <p>Newton's method uses the search direction $p_k = -[\nabla^2 f(x_k)]^{-1} \nabla f(x_k)$, which converges very fast but requires computing (and inverting) the Hessian at every step. For large problems this is prohibitively expensive.</p>
+  <p>BFGS is a <strong>quasi-Newton method</strong>: it builds an approximation $H_k \approx [\nabla^2 f]^{-1}$ from gradient information alone, then uses $p_k = -H_k g_k$ as the search direction. After each step, it updates $H_k$ using a rank-2 correction that incorporates how the gradient changed. Over time, $H_k$ learns the curvature of the function. On a quadratic with exact line search, BFGS recovers the true inverse Hessian in at most $n$ steps.</p>
   <p>Think of it this way: Newton's method asks the function for its full curvature map every step (expensive). BFGS instead observes, "when I stepped from here to there, the gradient changed by this much," and uses that observation to update its mental model of the curvature. Each step teaches it more about the landscape's shape.</p>
 </div>
 
@@ -467,17 +467,17 @@
   <p>$$f(x) = \tfrac{1}{2}\,x^T Q\, x, \quad Q = \begin{bmatrix}2&0\\0&3\end{bmatrix}$$</p>
   <p>$$x_0 = \begin{bmatrix}1\\1\end{bmatrix}, \quad H_0 = I = \begin{bmatrix}1&0\\0&1\end{bmatrix}$$</p>
   <dl class="breakdown">
-    <dt>\(Q\)</dt><dd>a diagonal SPD matrix; the true Hessian is \(\nabla^2 f = Q\) (constant), so the true inverse Hessian is \(Q^{-1} = \text{diag}(1/2,\; 1/3)\). We want to see BFGS approach this.</dd>
-    <dt>\(H_0 = I\)</dt><dd>the initial approximation to the inverse Hessian; the identity matrix. This is the standard starting point; it means the first step is plain steepest descent.</dd>
-    <dt>\(f(x) = \frac{1}{2}x^TQx\)</dt><dd>a quadratic with no linear term; the minimum is at \(x^* = 0\). The gradient is \(\nabla f = Qx\) (Page 06).</dd>
+    <dt>$Q$</dt><dd>a diagonal SPD matrix; the true Hessian is $\nabla^2 f = Q$ (constant), so the true inverse Hessian is $Q^{-1} = \text{diag}(1/2,\; 1/3)$. We want to see BFGS approach this.</dd>
+    <dt>$H_0 = I$</dt><dd>the initial approximation to the inverse Hessian; the identity matrix. This is the standard starting point; it means the first step is plain steepest descent.</dd>
+    <dt>$f(x) = \frac{1}{2}x^TQx$</dt><dd>a quadratic with no linear term; the minimum is at $x^* = 0$. The gradient is $\nabla f = Qx$ (Page 06).</dd>
   </dl>
 </div>
 
 <!-- Step 1 -->
 <div class="step">
-  <div class="step-label">Step 1: Compute gradient at \(x_0\)</div>
+  <div class="step-label">Step 1: Compute gradient at $x_0$</div>
 
-  <p>For \(f(x) = \frac{1}{2}x^TQx\), the gradient is \(\nabla f(x) = Qx\). This comes from differentiating the quadratic form (Page 06). Since \(Q\) is symmetric, both the "left" and "right" derivatives give \(Qx\).</p>
+  <p>For $f(x) = \frac{1}{2}x^TQx$, the gradient is $\nabla f(x) = Qx$. This comes from differentiating the quadratic form (Page 06). Since $Q$ is symmetric, both the "left" and "right" derivatives give $Qx$.</p>
 
   <div class="hand-calc">
     <p>$$g_0 = Qx_0 = \begin{bmatrix}2&0\\0&3\end{bmatrix}\begin{bmatrix}1\\1\end{bmatrix} = \begin{bmatrix}2\\3\end{bmatrix}$$</p>
@@ -488,13 +488,13 @@
 <div class="step">
   <div class="step-label">Step 2: Compute search direction</div>
 
-  <p>The BFGS search direction is \(p_k = -H_k g_k\), mimicking Newton's \(p = -[\nabla^2 f]^{-1}g\) but with the approximation \(H_k\) in place of the true inverse Hessian.</p>
+  <p>The BFGS search direction is $p_k = -H_k g_k$, mimicking Newton's $p = -[\nabla^2 f]^{-1}g$ but with the approximation $H_k$ in place of the true inverse Hessian.</p>
 
   <div class="hand-calc">
     <p>$$p_0 = -H_0\, g_0 = -I\begin{bmatrix}2\\3\end{bmatrix} = \begin{bmatrix}-2\\-3\end{bmatrix}$$</p>
   </div>
 
-  <p>Since \(H_0 = I\), this first step is just steepest descent: \(p_0 = -g_0\). BFGS always starts this way when initialized with the identity matrix.</p>
+  <p>Since $H_0 = I$, this first step is just steepest descent: $p_0 = -g_0$. BFGS always starts this way when initialized with the identity matrix.</p>
 
   <div class="why-box">
   <strong>Why $p = -Hg$ and not just $-g$?</strong> The search direction $p_k = -H_k g_k$ mimics Newton's method ($p_k = -[\nabla^2 f]^{-1} g_k$) without computing the Hessian. When $H_0 = I$, we get $p_0 = -g_0$ (steepest descent). As $H_k$ improves over iterations, the directions become more "Newton-like" and convergence accelerates from linear to superlinear.
@@ -505,11 +505,11 @@
 <div class="step">
   <div class="step-label">Step 3: Exact line search</div>
 
-  <p>We minimize \(f(x_0 + \alpha p_0)\) over \(\alpha \gt 0\). For a quadratic \(f(x) = \frac{1}{2}x^TQx\), the exact line search formula is (Page 06):</p>
+  <p>We minimize $f(x_0 + \alpha p_0)$ over $\alpha \gt 0$. For a quadratic $f(x) = \frac{1}{2}x^TQx$, the exact line search formula is (Page 06):</p>
 
   <div class="formula-box">
     <p>$$\alpha_k = \frac{-g_k^T p_k}{p_k^T Q\, p_k}$$</p>
-    <p>This comes from substituting \(x_0 + \alpha p_0\) into \(f\), differentiating with respect to \(\alpha\), and solving \(\frac{d}{d\alpha}f(x_0 + \alpha p_0) = 0\).</p>
+    <p>This comes from substituting $x_0 + \alpha p_0$ into $f$, differentiating with respect to $\alpha$, and solving $\frac{d}{d\alpha}f(x_0 + \alpha p_0) = 0$.</p>
   </div>
 
   <div class="hand-calc">
@@ -549,9 +549,9 @@
 
 <!-- Step 6 -->
 <div class="step">
-  <div class="step-label">Step 6: Compute secant quantities \(s_0\) and \(y_0\)</div>
+  <div class="step-label">Step 6: Compute secant quantities $s_0$ and $y_0$</div>
 
-  <p>The BFGS update learns curvature from two pieces of information: how far we stepped (\(s_k\)) and how the gradient changed over that step (\(y_k\)). These are the "secant quantities" because the update enforces the <strong>secant condition</strong> \(H_{k+1} y_k = s_k\) (the updated inverse Hessian, applied to the gradient change, must reproduce the step).</p>
+  <p>The BFGS update learns curvature from two pieces of information: how far we stepped ($s_k$) and how the gradient changed over that step ($y_k$). These are the "secant quantities" because the update enforces the <strong>secant condition</strong> $H_{k+1} y_k = s_k$ (the updated inverse Hessian, applied to the gradient change, must reproduce the step).</p>
 
   <div class="formula-box">
     <p>$$s_k = x_{k+1} - x_k \qquad \text{(the step we took)}$$</p>
@@ -560,11 +560,11 @@
 
   <div class="hand-calc">
     <p>$$s_0 = x_1 - x_0 = \begin{bmatrix}9/35 - 1\\-4/35 - 1\end{bmatrix} = \begin{bmatrix}-26/35\\-39/35\end{bmatrix}$$</p>
-    <p>$$y_0 = g_1 - g_0 = \begin{bmatrix}18/35 - 2\\-12/35 - 3\end{bmatrix} = \begin{bmatrix}(18-70)/35\\(-12-105)/35\end{bmatrix} = \begin{bmatrix}-52/35\\-117/35\end{bmatrix}$$</p>
+    <p>$$y_0 = g_1 - g_0 = \begin{bmatrix}18/35 - 2\\-12/35 - 3\end{bmatrix} = \begin{bmatrix}(18-70)/35\$-12-105)/35\end{bmatrix} = \begin{bmatrix}-52/35\\-117/35\end{bmatrix}$$</p>
   </div>
 
   <div class="note">
-    <p>Notice that \(s_0 = \alpha_0 p_0\) (the step is just the step size times the direction). And for a quadratic, \(y_0 = Q s_0\) (the gradient change equals the Hessian times the step). This second fact is specific to quadratics and is the reason BFGS can recover the exact inverse Hessian on quadratics.</p>
+    <p>Notice that $s_0 = \alpha_0 p_0$ (the step is just the step size times the direction). And for a quadratic, $y_0 = Q s_0$ (the gradient change equals the Hessian times the step). This second fact is specific to quadratics and is the reason BFGS can recover the exact inverse Hessian on quadratics.</p>
   </div>
 
   <div class="why-box">
@@ -576,14 +576,14 @@
 <div class="step">
   <div class="step-label">Step 7: Curvature check</div>
 
-  <p>Before applying the BFGS update, we must verify \(s_0^T y_0 \gt 0\). This is the <strong>curvature condition</strong>. If it fails, the update would produce a non-positive-definite \(H_1\), destroying the property that BFGS search directions are descent directions.</p>
+  <p>Before applying the BFGS update, we must verify $s_0^T y_0 \gt 0$. This is the <strong>curvature condition</strong>. If it fails, the update would produce a non-positive-definite $H_1$, destroying the property that BFGS search directions are descent directions.</p>
 
   <div class="hand-calc">
     <p>$$s_0^T y_0 = \frac{-26}{35} \cdot \frac{-52}{35} + \frac{-39}{35} \cdot \frac{-117}{35} = \frac{1352}{1225} + \frac{4563}{1225} = \frac{5915}{1225} = \frac{169}{35} \approx 4.829$$</p>
   </div>
 
   <div class="result">
-    <p>\(s_0^T y_0 = 169/35 \gt 0\) &#10003;. The curvature condition holds, so the BFGS update is safe to apply.</p>
+    <p>$s_0^T y_0 = 169/35 \gt 0$ &#10003;. The curvature condition holds, so the BFGS update is safe to apply.</p>
     <p>This is guaranteed when using a line search satisfying the Wolfe conditions (Page 08). For exact line search on a strictly convex quadratic, it always holds.</p>
   </div>
 
@@ -594,7 +594,7 @@
 
 <!-- Step 8 -->
 <div class="step">
-  <div class="step-label">Step 8: Compute \(\rho_0\)</div>
+  <div class="step-label">Step 8: Compute $\rho_0$</div>
 
   <div class="formula-box">
     <p>$$\rho_k = \frac{1}{y_k^T s_k}$$</p>
@@ -614,64 +614,64 @@
 
   <div class="formula-box">
     <p>$$H_{k+1} = \bigl(I - \rho_k\, s_k\, y_k^T\bigr)\; H_k\; \bigl(I - \rho_k\, y_k\, s_k^T\bigr) + \rho_k\, s_k\, s_k^T$$</p>
-    <p>This is a rank-2 update to \(H_k\). It adjusts the inverse Hessian approximation so that the secant condition \(H_{k+1} y_k = s_k\) is satisfied, while preserving symmetry and positive definiteness.</p>
+    <p>This is a rank-2 update to $H_k$. It adjusts the inverse Hessian approximation so that the secant condition $H_{k+1} y_k = s_k$ is satisfied, while preserving symmetry and positive definiteness.</p>
   </div>
 
   <p>We will compute this in stages. Define the left and right factors:</p>
   <p>$$V_L = I - \rho_0\, s_0\, y_0^T, \qquad V_R = I - \rho_0\, y_0\, s_0^T$$</p>
-  <p>Note: \(V_R = V_L^T\) because \((s y^T)^T = y s^T\).</p>
+  <p>Note: $V_R = V_L^T$ because $(s y^T)^T = y s^T$.</p>
 
-  <p><strong>Stage 1: Compute the outer product \(s_0 y_0^T\):</strong></p>
+  <p><strong>Stage 1: Compute the outer product $s_0 y_0^T$:</strong></p>
 
   <div class="hand-calc">
     <p>$$s_0\, y_0^T = \begin{bmatrix}-26/35\\-39/35\end{bmatrix}\begin{bmatrix}-52/35 & -117/35\end{bmatrix} = \begin{bmatrix}1352/1225 & 3042/1225 \\ 2028/1225 & 4563/1225\end{bmatrix}$$</p>
-    <p>Multiplying by \(\rho_0 = 35/169\):</p>
+    <p>Multiplying by $\rho_0 = 35/169$:</p>
     <p>$$\rho_0\, s_0\, y_0^T = \frac{35}{169}\begin{bmatrix}1352/1225 & 3042/1225 \\ 2028/1225 & 4563/1225\end{bmatrix} = \begin{bmatrix}8/35 & 18/35 \\ 12/35 & 27/35\end{bmatrix}$$</p>
   </div>
 
-  <p><strong>Stage 2: Compute \(V_L\):</strong></p>
+  <p><strong>Stage 2: Compute $V_L$:</strong></p>
   <div class="hand-calc">
     <p>$$V_L = I - \rho_0\, s_0\, y_0^T = \begin{bmatrix}1&0\\0&1\end{bmatrix} - \begin{bmatrix}8/35&18/35\\12/35&27/35\end{bmatrix} = \begin{bmatrix}27/35 & -18/35\\-12/35 & 8/35\end{bmatrix}$$</p>
   </div>
 
-  <p><strong>Stage 3: Compute \(V_R = V_L^T\):</strong></p>
+  <p><strong>Stage 3: Compute $V_R = V_L^T$:</strong></p>
   <div class="hand-calc">
     <p>$$V_R = V_L^T = \begin{bmatrix}27/35 & -12/35\\-18/35 & 8/35\end{bmatrix}$$</p>
   </div>
 
-  <p><strong>Stage 4: Compute \(V_L H_0 V_R\):</strong></p>
-  <p>Since \(H_0 = I\), this simplifies to \(V_L \cdot V_R\):</p>
+  <p><strong>Stage 4: Compute $V_L H_0 V_R$:</strong></p>
+  <p>Since $H_0 = I$, this simplifies to $V_L \cdot V_R$:</p>
 
   <div class="hand-calc">
     <p>$$V_L \cdot V_R = \begin{bmatrix}27/35 & -18/35\\-12/35 & 8/35\end{bmatrix}\begin{bmatrix}27/35 & -12/35\\-18/35 & 8/35\end{bmatrix}$$</p>
-    <p>Entry (1,1): \(\frac{27}{35}\cdot\frac{27}{35} + \frac{-18}{35}\cdot\frac{-18}{35} = \frac{729+324}{1225} = \frac{1053}{1225}\)</p>
-    <p>Entry (1,2): \(\frac{27}{35}\cdot\frac{-12}{35} + \frac{-18}{35}\cdot\frac{8}{35} = \frac{-324-144}{1225} = \frac{-468}{1225}\)</p>
-    <p>Entry (2,1): \(\frac{-12}{35}\cdot\frac{27}{35} + \frac{8}{35}\cdot\frac{-18}{35} = \frac{-324-144}{1225} = \frac{-468}{1225}\)</p>
-    <p>Entry (2,2): \(\frac{-12}{35}\cdot\frac{-12}{35} + \frac{8}{35}\cdot\frac{8}{35} = \frac{144+64}{1225} = \frac{208}{1225}\)</p>
+    <p>Entry (1,1): $\frac{27}{35}\cdot\frac{27}{35} + \frac{-18}{35}\cdot\frac{-18}{35} = \frac{729+324}{1225} = \frac{1053}{1225}$</p>
+    <p>Entry (1,2): $\frac{27}{35}\cdot\frac{-12}{35} + \frac{-18}{35}\cdot\frac{8}{35} = \frac{-324-144}{1225} = \frac{-468}{1225}$</p>
+    <p>Entry (2,1): $\frac{-12}{35}\cdot\frac{27}{35} + \frac{8}{35}\cdot\frac{-18}{35} = \frac{-324-144}{1225} = \frac{-468}{1225}$</p>
+    <p>Entry (2,2): $\frac{-12}{35}\cdot\frac{-12}{35} + \frac{8}{35}\cdot\frac{8}{35} = \frac{144+64}{1225} = \frac{208}{1225}$</p>
     <p>$$V_L V_R = \begin{bmatrix}1053/1225 & -468/1225\\-468/1225 & 208/1225\end{bmatrix}$$</p>
   </div>
 
-  <p><strong>Stage 5: Compute \(\rho_0\, s_0\, s_0^T\):</strong></p>
+  <p><strong>Stage 5: Compute $\rho_0\, s_0\, s_0^T$:</strong></p>
   <div class="hand-calc">
     <p>$$s_0\, s_0^T = \begin{bmatrix}-26/35\\-39/35\end{bmatrix}\begin{bmatrix}-26/35 & -39/35\end{bmatrix} = \begin{bmatrix}676/1225 & 1014/1225\\1014/1225 & 1521/1225\end{bmatrix}$$</p>
     <p>$$\rho_0\, s_0\, s_0^T = \frac{35}{169}\begin{bmatrix}676/1225 & 1014/1225\\1014/1225 & 1521/1225\end{bmatrix} = \begin{bmatrix}4/35 & 6/35\\6/35 & 9/35\end{bmatrix}$$</p>
   </div>
 
-  <p><strong>Stage 6: Assemble \(H_1\):</strong></p>
+  <p><strong>Stage 6: Assemble $H_1$:</strong></p>
   <div class="hand-calc">
     <p>$$H_1 = V_L V_R + \rho_0\, s_0\, s_0^T = \begin{bmatrix}1053/1225 + 4/35\\-468/1225 + 6/35\end{bmatrix}\;\cdots$$</p>
-    <p>Converting \(4/35 = 140/1225\) and \(6/35 = 210/1225\) and \(9/35 = 315/1225\):</p>
-    <p>$$H_1 = \begin{bmatrix}(1053+140)/1225 & (-468+210)/1225\\(-468+210)/1225 & (208+315)/1225\end{bmatrix} = \begin{bmatrix}1193/1225 & -258/1225\\-258/1225 & 523/1225\end{bmatrix}$$</p>
+    <p>Converting $4/35 = 140/1225$ and $6/35 = 210/1225$ and $9/35 = 315/1225$:</p>
+    <p>$$H_1 = \begin{bmatrix}(1053+140)/1225 & (-468+210)/1225\$-468+210)/1225 & (208+315)/1225\end{bmatrix} = \begin{bmatrix}1193/1225 & -258/1225\\-258/1225 & 523/1225\end{bmatrix}$$</p>
     <p>In decimal:</p>
     <p>$$H_1 \approx \begin{bmatrix}0.974 & -0.211\\-0.211 & 0.427\end{bmatrix}$$</p>
   </div>
 
   <div class="check">
-    <h4>Secant condition: \(H_1 y_0 = s_0\)?</h4>
+    <h4>Secant condition: $H_1 y_0 = s_0$?</h4>
     <p>$$H_1 y_0 = \begin{bmatrix}1193/1225 & -258/1225\\-258/1225 & 523/1225\end{bmatrix}\begin{bmatrix}-52/35\\-117/35\end{bmatrix}$$</p>
-    <p>Entry 1: \(\frac{1193}{1225}\cdot\frac{-52}{35} + \frac{-258}{1225}\cdot\frac{-117}{35} = \frac{-62036 + 30186}{42875} = \frac{-31850}{42875} = \frac{-26}{35}\) &#10003;</p>
-    <p>Entry 2: \(\frac{-258}{1225}\cdot\frac{-52}{35} + \frac{523}{1225}\cdot\frac{-117}{35} = \frac{13416 - 61191}{42875} = \frac{-47775}{42875} = \frac{-39}{35}\) &#10003;</p>
-    <p>\(H_1 y_0 = (-26/35,\; -39/35)^T = s_0\) &#10003;. The secant condition holds.</p>
+    <p>Entry 1: $\frac{1193}{1225}\cdot\frac{-52}{35} + \frac{-258}{1225}\cdot\frac{-117}{35} = \frac{-62036 + 30186}{42875} = \frac{-31850}{42875} = \frac{-26}{35}$ &#10003;</p>
+    <p>Entry 2: $\frac{-258}{1225}\cdot\frac{-52}{35} + \frac{523}{1225}\cdot\frac{-117}{35} = \frac{13416 - 61191}{42875} = \frac{-47775}{42875} = \frac{-39}{35}$ &#10003;</p>
+    <p>$H_1 y_0 = (-26/35,\; -39/35)^T = s_0$ &#10003;. The secant condition holds.</p>
   </div>
 
   <div class="why-box">
@@ -679,24 +679,24 @@
   </div>
 
   <div class="note">
-    <h4>How close is \(H_1\) to the true inverse Hessian?</h4>
+    <h4>How close is $H_1$ to the true inverse Hessian?</h4>
     <p>The true inverse Hessian is:</p>
     <p>$$Q^{-1} = \begin{bmatrix}1/2 & 0\\0 & 1/3\end{bmatrix} = \begin{bmatrix}0.500 & 0\\0 & 0.333\end{bmatrix}$$</p>
-    <p>Our \(H_1 \approx \begin{bmatrix}0.974 & -0.211\\-0.211 & 0.427\end{bmatrix}\) is not yet equal to \(Q^{-1}\). For an \(n \times n\) quadratic, BFGS with exact line search needs \(n\) iterations to recover the true inverse Hessian exactly. We have done 1 of 2 needed iterations. After one more iteration, \(H_2 = Q^{-1}\) exactly.</p>
+    <p>Our $H_1 \approx \begin{bmatrix}0.974 & -0.211\\-0.211 & 0.427\end{bmatrix}$ is not yet equal to $Q^{-1}$. For an $n \times n$ quadratic, BFGS with exact line search needs $n$ iterations to recover the true inverse Hessian exactly. We have done 1 of 2 needed iterations. After one more iteration, $H_2 = Q^{-1}$ exactly.</p>
   </div>
 
   <div class="exam-flag">
     <h4>Exam checklist for BFGS problems</h4>
     <ul>
-      <li>Compute \(g_0 = \nabla f(x_0)\)</li>
-      <li>Search direction: \(p_0 = -H_0 g_0\) (with \(H_0 = I\), this is just \(-g_0\))</li>
-      <li>Exact line search: \(\alpha_0 = -g_0^Tp_0 / (p_0^TQp_0)\) for quadratics</li>
-      <li>New point: \(x_1 = x_0 + \alpha_0 p_0\); new gradient: \(g_1 = Qx_1\)</li>
-      <li>Secant quantities: \(s_0 = x_1 - x_0\), \(y_0 = g_1 - g_0\)</li>
-      <li>Curvature check: verify \(s_0^Ty_0 \gt 0\)</li>
-      <li>\(\rho_0 = 1/(y_0^Ts_0)\)</li>
-      <li>BFGS update: compute \(V_L\), then \(V_L \cdot H_0 \cdot V_L^T + \rho_0 s_0 s_0^T\)</li>
-      <li>Verify secant condition: \(H_1 y_0 = s_0\)</li>
+      <li>Compute $g_0 = \nabla f(x_0)$</li>
+      <li>Search direction: $p_0 = -H_0 g_0$ (with $H_0 = I$, this is just $-g_0$)</li>
+      <li>Exact line search: $\alpha_0 = -g_0^Tp_0 / (p_0^TQp_0)$ for quadratics</li>
+      <li>New point: $x_1 = x_0 + \alpha_0 p_0$; new gradient: $g_1 = Qx_1$</li>
+      <li>Secant quantities: $s_0 = x_1 - x_0$, $y_0 = g_1 - g_0$</li>
+      <li>Curvature check: verify $s_0^Ty_0 \gt 0$</li>
+      <li>$\rho_0 = 1/(y_0^Ts_0)$</li>
+      <li>BFGS update: compute $V_L$, then $V_L \cdot H_0 \cdot V_L^T + \rho_0 s_0 s_0^T$</li>
+      <li>Verify secant condition: $H_1 y_0 = s_0$</li>
     </ul>
   </div>
 </div>
@@ -711,20 +711,20 @@
 
 <div class="why-box">
   <h4>What this method does and why it matters</h4>
-  <p>In previous sections we minimized functions (found where the gradient is zero). Here, we find where a <strong>system of equations</strong> equals zero directly: given \(r(x) = 0\) where \(r : \mathbb{R}^n \to \mathbb{R}^n\), find the \(x\) that makes all equations simultaneously zero.</p>
-  <p>Newton's method for systems (Page 14) works by <strong>linearizing</strong>: at the current guess \(x^{(k)}\), we replace the nonlinear system with its linear approximation (first-order Taylor expansion) and solve that linear system instead. The <strong>Jacobian</strong> \(J(x)\), the matrix of all partial derivatives of all equations, plays the role that the Hessian played in optimization: it tells us how the equations change locally.</p>
+  <p>In previous sections we minimized functions (found where the gradient is zero). Here, we find where a <strong>system of equations</strong> equals zero directly: given $r(x) = 0$ where $r : \mathbb{R}^n \to \mathbb{R}^n$, find the $x$ that makes all equations simultaneously zero.</p>
+  <p>Newton's method for systems (Page 14) works by <strong>linearizing</strong>: at the current guess $x^{(k)}$, we replace the nonlinear system with its linear approximation (first-order Taylor expansion) and solve that linear system instead. The <strong>Jacobian</strong> $J(x)$, the matrix of all partial derivatives of all equations, plays the role that the Hessian played in optimization: it tells us how the equations change locally.</p>
   <p>Think of it like this: you have two curved surfaces (the two equations), and you need to find where they both cross zero at the same point. At your current guess, you replace each curved surface with its tangent plane, find where the two tangent planes cross zero simultaneously, and jump there. Repeat until convergence.</p>
 </div>
 
 <div class="formula-box">
   <h4>Problem setup</h4>
-  <p>Find \(x = (x_1, x_2)\) such that:</p>
+  <p>Find $x = (x_1, x_2)$ such that:</p>
   <p>$$r(x) = \begin{bmatrix} x_1^2 + x_2^2 - 1 \\ x_1 - x_2 \end{bmatrix} = \begin{bmatrix}0\\0\end{bmatrix}$$</p>
-  <p>Initial guess: \(x^{(0)} = \begin{bmatrix}0.8\\0.5\end{bmatrix}\)</p>
+  <p>Initial guess: $x^{(0)} = \begin{bmatrix}0.8\\0.5\end{bmatrix}$</p>
   <dl class="breakdown">
-    <dt>\(r_1(x) = x_1^2 + x_2^2 - 1\)</dt><dd>the unit circle equation; solutions lie on the circle of radius 1</dd>
-    <dt>\(r_2(x) = x_1 - x_2\)</dt><dd>the line \(x_1 = x_2\); solutions lie on the diagonal</dd>
-    <dt>The true solutions</dt><dd>are the intersections of the unit circle and the line \(x_1 = x_2\): namely \((\frac{1}{\sqrt{2}}, \frac{1}{\sqrt{2}}) \approx (0.707, 0.707)\) and \((-\frac{1}{\sqrt{2}}, -\frac{1}{\sqrt{2}})\). Our initial guess is near the positive root.</dd>
+    <dt>$r_1(x) = x_1^2 + x_2^2 - 1$</dt><dd>the unit circle equation; solutions lie on the circle of radius 1</dd>
+    <dt>$r_2(x) = x_1 - x_2$</dt><dd>the line $x_1 = x_2$; solutions lie on the diagonal</dd>
+    <dt>The true solutions</dt><dd>are the intersections of the unit circle and the line $x_1 = x_2$: namely $(\frac{1}{\sqrt{2}}, \frac{1}{\sqrt{2}}) \approx (0.707, 0.707)$ and $(-\frac{1}{\sqrt{2}}, -\frac{1}{\sqrt{2}})$. Our initial guess is near the positive root.</dd>
   </dl>
 </div>
 
@@ -733,15 +733,15 @@
   <p>$$J(x^{(k)})\; p^{(k)} = -r(x^{(k)}) \qquad \text{(solve this linear system for } p^{(k)}\text{)}$$</p>
   <p>$$x^{(k+1)} = x^{(k)} + p^{(k)} \qquad \text{(update)}$$</p>
   <dl class="breakdown">
-    <dt>\(J(x)\)</dt><dd>the Jacobian matrix; entry \(J_{ij} = \partial r_i / \partial x_j\). It is the "derivative" of the vector-valued function \(r\).</dd>
-    <dt>\(p^{(k)}\)</dt><dd>the Newton step; the direction and magnitude to move</dd>
-    <dt>\(-r(x^{(k)})\)</dt><dd>the negative residual; we want to drive \(r\) to zero, so the right-hand side is \(-r\)</dd>
+    <dt>$J(x)$</dt><dd>the Jacobian matrix; entry $J_{ij} = \partial r_i / \partial x_j$. It is the "derivative" of the vector-valued function $r$.</dd>
+    <dt>$p^{(k)}$</dt><dd>the Newton step; the direction and magnitude to move</dd>
+    <dt>$-r(x^{(k)})$</dt><dd>the negative residual; we want to drive $r$ to zero, so the right-hand side is $-r$</dd>
   </dl>
 </div>
 
 <!-- Step 1 -->
 <div class="step">
-  <div class="step-label">Step 1: Evaluate the residual at \(x^{(0)}\)</div>
+  <div class="step-label">Step 1: Evaluate the residual at $x^{(0)}$</div>
 
   <p>The residual tells us how far our current guess is from satisfying the system. We want both components to be zero.</p>
 
@@ -749,9 +749,9 @@
     <p>$$r(x^{(0)}) = \begin{bmatrix}(0.8)^2 + (0.5)^2 - 1\\0.8 - 0.5\end{bmatrix} = \begin{bmatrix}0.64 + 0.25 - 1\\0.3\end{bmatrix} = \begin{bmatrix}-0.11\\0.3\end{bmatrix}$$</p>
   </div>
 
-  <p>The first equation is slightly negative (our point is just inside the unit circle), and the second equation is positive (\(x_1 \gt x_2\), so we are above the diagonal line). Neither is zero, so \(x^{(0)}\) is not a solution.</p>
+  <p>The first equation is slightly negative (our point is just inside the unit circle), and the second equation is positive ($x_1 \gt x_2$, so we are above the diagonal line). Neither is zero, so $x^{(0)}$ is not a solution.</p>
 
-  <p>In exact fractions: \(r(x^{(0)}) = (-11/100,\; 3/10)^T\).</p>
+  <p>In exact fractions: $r(x^{(0)}) = (-11/100,\; 3/10)^T$.</p>
 
   <div class="why-box">
   <strong>What the residual tells us:</strong> The residual $r(x^{(0)}) = \begin{bmatrix}-0.11\\0.3\end{bmatrix}$ means: (a) the first equation $x_1^2 + x_2^2 - 1 = -0.11$ is nearly satisfied (we are close to the unit circle), and (b) the second equation $x_1 - x_2 = 0.3$ is less well satisfied (we are 0.3 away from the diagonal line $x_1 = x_2$). We want both to be zero simultaneously.
@@ -760,26 +760,26 @@
 
 <!-- Step 2 -->
 <div class="step">
-  <div class="step-label">Step 2: Compute the Jacobian at \(x^{(0)}\)</div>
+  <div class="step-label">Step 2: Compute the Jacobian at $x^{(0)}$</div>
 
   <p>The Jacobian is the matrix of all first partial derivatives of every equation with respect to every variable. It is the "gradient matrix" for systems of equations.</p>
 
   <div class="formula-box">
     <p>$$J(x) = \begin{bmatrix}\dfrac{\partial r_1}{\partial x_1} & \dfrac{\partial r_1}{\partial x_2} \\[10pt] \dfrac{\partial r_2}{\partial x_1} & \dfrac{\partial r_2}{\partial x_2}\end{bmatrix} = \begin{bmatrix}2x_1 & 2x_2 \\ 1 & -1\end{bmatrix}$$</p>
     <dl class="breakdown">
-      <dt>\(\partial r_1/\partial x_1 = 2x_1\)</dt><dd>differentiating \(x_1^2 + x_2^2 - 1\) with respect to \(x_1\)</dd>
-      <dt>\(\partial r_1/\partial x_2 = 2x_2\)</dt><dd>differentiating \(x_1^2 + x_2^2 - 1\) with respect to \(x_2\)</dd>
-      <dt>\(\partial r_2/\partial x_1 = 1\)</dt><dd>differentiating \(x_1 - x_2\) with respect to \(x_1\)</dd>
-      <dt>\(\partial r_2/\partial x_2 = -1\)</dt><dd>differentiating \(x_1 - x_2\) with respect to \(x_2\)</dd>
+      <dt>$\partial r_1/\partial x_1 = 2x_1$</dt><dd>differentiating $x_1^2 + x_2^2 - 1$ with respect to $x_1$</dd>
+      <dt>$\partial r_1/\partial x_2 = 2x_2$</dt><dd>differentiating $x_1^2 + x_2^2 - 1$ with respect to $x_2$</dd>
+      <dt>$\partial r_2/\partial x_1 = 1$</dt><dd>differentiating $x_1 - x_2$ with respect to $x_1$</dd>
+      <dt>$\partial r_2/\partial x_2 = -1$</dt><dd>differentiating $x_1 - x_2$ with respect to $x_2$</dd>
     </dl>
   </div>
 
   <div class="hand-calc">
-    <p>Evaluate at \(x^{(0)} = (0.8, 0.5)\):</p>
+    <p>Evaluate at $x^{(0)} = (0.8, 0.5)$:</p>
     <p>$$J(x^{(0)}) = \begin{bmatrix}2(0.8) & 2(0.5) \\ 1 & -1\end{bmatrix} = \begin{bmatrix}1.6 & 1.0 \\ 1 & -1\end{bmatrix}$$</p>
   </div>
 
-  <p>In exact fractions: \(J = \begin{bmatrix}8/5 & 1 \\ 1 & -1\end{bmatrix}\).</p>
+  <p>In exact fractions: $J = \begin{bmatrix}8/5 & 1 \\ 1 & -1\end{bmatrix}$.</p>
 
   <div class="why-box">
   <strong>Jacobian vs Hessian:</strong> The Jacobian is to systems of equations what the gradient is to a single function. For a single equation $r(x) = 0$, Newton uses $r'(x)$ (the derivative). For a system of $m$ equations in $n$ variables, Newton uses the $m \times n$ Jacobian matrix. Row $i$ is the gradient of equation $i$. When $m = n$, the system is square and (usually) has a unique solution.
@@ -788,9 +788,9 @@
 
 <!-- Step 3 -->
 <div class="step">
-  <div class="step-label">Step 3: Solve the Newton system \(J\, p = -r\)</div>
+  <div class="step-label">Step 3: Solve the Newton system $J\, p = -r$</div>
 
-  <p>This is a linear system: the Jacobian is the coefficient matrix, the negative residual is the right-hand side, and the Newton step \(p^{(0)}\) is the unknown. For a \(2 \times 2\) system, we use the explicit inverse formula.</p>
+  <p>This is a linear system: the Jacobian is the coefficient matrix, the negative residual is the right-hand side, and the Newton step $p^{(0)}$ is the unknown. For a $2 \times 2$ system, we use the explicit inverse formula.</p>
 
   <div class="hand-calc">
     <p><strong>Right-hand side:</strong></p>
@@ -798,20 +798,20 @@
 
     <p><strong>Determinant:</strong></p>
     <p>$$\det(J) = (1.6)(-1) - (1.0)(1) = -1.6 - 1.0 = -2.6$$</p>
-    <p>In exact fractions: \(\det(J) = -13/5\).</p>
+    <p>In exact fractions: $\det(J) = -13/5$.</p>
 
     <p><strong>Inverse:</strong></p>
     <p>$$J^{-1} = \frac{1}{\det(J)}\begin{bmatrix}-1 & -1 \\ -1 & 1.6\end{bmatrix} = \frac{1}{-13/5}\begin{bmatrix}-1 & -1 \\ -1 & 8/5\end{bmatrix} = \frac{-5}{13}\begin{bmatrix}-1 & -1 \\ -1 & 8/5\end{bmatrix} = \begin{bmatrix}5/13 & 5/13 \\ 5/13 & -8/13\end{bmatrix}$$</p>
 
     <p><strong>Newton step:</strong></p>
     <p>$$p^{(0)} = J^{-1}(-r) = \begin{bmatrix}5/13 & 5/13 \\ 5/13 & -8/13\end{bmatrix}\begin{bmatrix}0.11\\-0.3\end{bmatrix}$$</p>
-    <p>Using exact fractions with \(-r = (11/100,\; -3/10)^T\):</p>
+    <p>Using exact fractions with $-r = (11/100,\; -3/10)^T$:</p>
     <p>$$p_1 = \frac{5}{13}\cdot\frac{11}{100} + \frac{5}{13}\cdot\frac{-3}{10} = \frac{55}{1300} + \frac{-15}{130} = \frac{55}{1300} - \frac{150}{1300} = \frac{-95}{1300} = \frac{-19}{260}$$</p>
     <p>$$p_2 = \frac{5}{13}\cdot\frac{11}{100} + \frac{-8}{13}\cdot\frac{-3}{10} = \frac{55}{1300} + \frac{24}{130} = \frac{55}{1300} + \frac{240}{1300} = \frac{295}{1300} = \frac{59}{260}$$</p>
     <p>$$p^{(0)} = \begin{bmatrix}-19/260\\59/260\end{bmatrix} \approx \begin{bmatrix}-0.0731\\0.2269\end{bmatrix}$$</p>
   </div>
 
-  <p>The Newton step says: decrease \(x_1\) slightly and increase \(x_2\) more substantially. This makes geometric sense: we need to move toward the line \(x_1 = x_2\), which means decreasing the gap between them.</p>
+  <p>The Newton step says: decrease $x_1$ slightly and increase $x_2$ more substantially. This makes geometric sense: we need to move toward the line $x_1 = x_2$, which means decreasing the gap between them.</p>
 </div>
 
 <!-- Step 4 -->
@@ -825,7 +825,7 @@
   </div>
 
   <div class="note">
-    <p>Notice that \(x_1^{(1)} = x_2^{(1)} = 189/260\). After just one Newton iteration, the second equation \(x_1 - x_2 = 0\) is satisfied exactly! The iterate landed precisely on the line \(x_1 = x_2\). The remaining error is only in the first equation (we are not quite on the unit circle yet).</p>
+    <p>Notice that $x_1^{(1)} = x_2^{(1)} = 189/260$. After just one Newton iteration, the second equation $x_1 - x_2 = 0$ is satisfied exactly! The iterate landed precisely on the line $x_1 = x_2$. The remaining error is only in the first equation (we are not quite on the unit circle yet).</p>
   </div>
 </div>
 
@@ -849,7 +849,7 @@
   </div>
 
   <div class="result">
-    <p>The residual norm decreased from \(0.3195\) to \(0.0568\): a reduction by a factor of about 5.6. One more Newton iteration would bring us very close to the exact solution \((1/\sqrt{2},\; 1/\sqrt{2}) \approx (0.7071, 0.7071)\).</p>
+    <p>The residual norm decreased from $0.3195$ to $0.0568$: a reduction by a factor of about 5.6. One more Newton iteration would bring us very close to the exact solution $(1/\sqrt{2},\; 1/\sqrt{2}) \approx (0.7071, 0.7071)$.</p>
   </div>
 
   <div class="analogy">
@@ -863,14 +863,14 @@
   <div class="exam-flag">
     <h4>Exam checklist for Newton-on-systems problems</h4>
     <ul>
-      <li>Write out the system as \(r(x) = 0\) explicitly</li>
-      <li>Compute \(r(x^{(0)})\); the residual at the initial guess</li>
-      <li>Build the Jacobian \(J(x)\) symbolically: each row is the gradient of one equation</li>
-      <li>Evaluate \(J\) at \(x^{(0)}\)</li>
-      <li>Solve \(J p = -r\) using the \(2 \times 2\) inverse formula</li>
-      <li>Update: \(x^{(1)} = x^{(0)} + p^{(0)}\)</li>
-      <li>Verify: compute \(\|r(x^{(1)})\|\) and confirm it is smaller than \(\|r(x^{(0)})\|\)</li>
-      <li>Common mistake: forgetting the negative sign in \(-r(x^{(0)})\) on the right-hand side</li>
+      <li>Write out the system as $r(x) = 0$ explicitly</li>
+      <li>Compute $r(x^{(0)})$; the residual at the initial guess</li>
+      <li>Build the Jacobian $J(x)$ symbolically: each row is the gradient of one equation</li>
+      <li>Evaluate $J$ at $x^{(0)}$</li>
+      <li>Solve $J p = -r$ using the $2 \times 2$ inverse formula</li>
+      <li>Update: $x^{(1)} = x^{(0)} + p^{(0)}$</li>
+      <li>Verify: compute $\|r(x^{(1)})\|$ and confirm it is smaller than $\|r(x^{(0)})\|$</li>
+      <li>Common mistake: forgetting the negative sign in $-r(x^{(0)})$ on the right-hand side</li>
     </ul>
   </div>
 </div>
@@ -1399,6 +1399,10 @@ After one iteration: $W^{(1)} = \begin{bmatrix}1\\1\end{bmatrix}$, $H^{(1)} = \b
 </div>
 
 <p class="check">The rank-1 approximation cannot fully recover $V$ (which has rank 2), but it found the best rank-1 non-negative fit. The remaining error of 1 is irreducible for any rank-1 factorization of this particular $V$. To get zero error, you would need rank 2; i.e., $W$ would be $2 \times 2$ and $H$ would be $2 \times 2$.</p>
+
+<div class="why-box">
+<strong>Why did the error only go from 2 to 1?</strong> Our rank-1 factorization $V \approx WH$ can only produce matrices of rank 1 (every column of $WH$ is a scalar multiple of $W$). But $V = \begin{bmatrix}2&1\\1&2\end{bmatrix}$ has rank 2 (its columns are linearly independent). A rank-1 matrix cannot perfectly represent a rank-2 matrix, no matter how many iterations we run. The best rank-1 approximation averages the two patterns in $V$. To get a perfect reconstruction, we would need rank 2 ($W$ would be $2 \times 2$ and $H$ would be $2 \times 2$).
+</div>
 </div>
 </div>
 
@@ -1641,16 +1645,16 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 
 <div class="formula-box">
     <strong>Network Architecture</strong>
-    <p>Input \(\to\) Hidden Layer \(\to\) Output Layer \(\to\) Prediction \(\to\) Loss</p>
+    <p>Input $\to$ Hidden Layer $\to$ Output Layer $\to$ Prediction $\to$ Loss</p>
     <table class="step-table">
         <tr><th>Symbol</th><th>Meaning</th><th>Value</th></tr>
-        <tr><td>\(x\)</td><td>Input vector</td><td>\(\begin{bmatrix}2\\1\end{bmatrix}\)</td></tr>
-        <tr><td>\(y\)</td><td>Target output</td><td>\(0\)</td></tr>
-        <tr><td>\(W_1\)</td><td>Hidden layer weights (2&times;2)</td><td>\(\begin{bmatrix}0.4 &amp; 0.1\\0.2 &amp; 0.3\end{bmatrix}\)</td></tr>
-        <tr><td>\(W_2\)</td><td>Output layer weights (1&times;2)</td><td>\(\begin{bmatrix}0.7 &amp; 0.5\end{bmatrix}\)</td></tr>
-        <tr><td>Biases</td><td>All biases</td><td>\(0\)</td></tr>
-        <tr><td>\(\sigma(z)\)</td><td>Activation function</td><td>\(z\) (linear), so \(\sigma'(z) = 1\)</td></tr>
-        <tr><td>\(\eta\)</td><td>Learning rate</td><td>\(0.1\)</td></tr>
+        <tr><td>$x$</td><td>Input vector</td><td>$\begin{bmatrix}2\\1\end{bmatrix}$</td></tr>
+        <tr><td>$y$</td><td>Target output</td><td>$0$</td></tr>
+        <tr><td>$W_1$</td><td>Hidden layer weights (2&times;2)</td><td>$\begin{bmatrix}0.4 &amp; 0.1\\0.2 &amp; 0.3\end{bmatrix}$</td></tr>
+        <tr><td>$W_2$</td><td>Output layer weights (1&times;2)</td><td>$\begin{bmatrix}0.7 &amp; 0.5\end{bmatrix}$</td></tr>
+        <tr><td>Biases</td><td>All biases</td><td>$0$</td></tr>
+        <tr><td>$\sigma(z)$</td><td>Activation function</td><td>$z$ (linear), so $\sigma'(z) = 1$</td></tr>
+        <tr><td>$\eta$</td><td>Learning rate</td><td>$0.1$</td></tr>
     </table>
 </div>
 
@@ -1659,7 +1663,7 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <div class="hand-calc">
     <div class="step">
         <span class="step-label">Step 1: Hidden Layer Pre-activation and Activation</span>
-        <p>Multiply the weight matrix \(W_1\) by the input \(x\):</p>
+        <p>Multiply the weight matrix $W_1$ by the input $x$:</p>
         $$
         z^{(1)} = W_1 x = \begin{bmatrix}0.4 &amp; 0.1\\0.2 &amp; 0.3\end{bmatrix}\begin{bmatrix}2\\1\end{bmatrix} = \begin{bmatrix}0.4(2)+0.1(1)\\0.2(2)+0.3(1)\end{bmatrix} = \begin{bmatrix}0.9\\0.7\end{bmatrix}
         $$
@@ -1674,7 +1678,7 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 
     <div class="step">
         <span class="step-label">Step 2: Output Layer</span>
-        <p>Multiply \(W_2\) by the hidden activations:</p>
+        <p>Multiply $W_2$ by the hidden activations:</p>
         $$
         \hat{y} = W_2 a^{(1)} = \begin{bmatrix}0.7 &amp; 0.5\end{bmatrix}\begin{bmatrix}0.9\\0.7\end{bmatrix} = 0.7(0.9) + 0.5(0.7) = 0.63 + 0.35 = 0.98
         $$
@@ -1690,7 +1694,7 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
         J = \frac{1}{2}(y - \hat{y})^2 = \frac{1}{2}(0 - 0.98)^2 = \frac{1}{2}(0.9604) = 0.4802
         $$
         <div class="why-box">
-            <strong>Why:</strong> The loss measures how wrong our prediction is. The target is \(0\) but we predicted \(0.98\); that is a large error. We want to adjust the weights to make this smaller.
+            <strong>Why:</strong> The loss measures how wrong our prediction is. The target is $0$ but we predicted $0.98$; that is a large error. We want to adjust the weights to make this smaller.
         </div>
     </div>
 </div>
@@ -1704,56 +1708,56 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <div class="hand-calc">
     <div class="step">
         <span class="step-label">Step 4: Output Error Signal</span>
-        <p>Compute \(\partial J / \partial \hat{y}\):</p>
+        <p>Compute $\partial J / \partial \hat{y}$:</p>
         $$
         \delta^{(2)} = -(y - \hat{y}) = -(0 - 0.98) = 0.98
         $$
         <div class="why-box">
-            <strong>Why:</strong> This tells us how the loss changes with the output. Since \(\hat{y} = 0.98\) but the target is \(0\), the error is positive; we overshot. The negative sign comes from the chain rule on \(\frac{1}{2}(y-\hat{y})^2\): the derivative is \(-(y-\hat{y})\).
+            <strong>Why:</strong> This tells us how the loss changes with the output. Since $\hat{y} = 0.98$ but the target is $0$, the error is positive; we overshot. The negative sign comes from the chain rule on $\frac{1}{2}(y-\hat{y})^2$: the derivative is $-(y-\hat{y})$.
         </div>
     </div>
 
     <div class="step">
-        <span class="step-label">Step 5: Gradient for Output Weights \(W_2\)</span>
+        <span class="step-label">Step 5: Gradient for Output Weights $W_2$</span>
         <p>The gradient is the outer product of the error signal and the hidden activations:</p>
         $$
         \nabla_{W_2} J = \delta^{(2)} \cdot (a^{(1)})^T = 0.98 \cdot \begin{bmatrix}0.9 &amp; 0.7\end{bmatrix} = \begin{bmatrix}0.882 &amp; 0.686\end{bmatrix}
         $$
         <div class="why-box">
-            <strong>Why:</strong> This is the outer product of the error signal and the hidden activations. It tells us: "the more active a hidden unit was, the more its output weight contributed to the error." Hidden unit 1 (activation \(0.9\)) gets more blame than hidden unit 2 (activation \(0.7\)).
+            <strong>Why:</strong> This is the outer product of the error signal and the hidden activations. It tells us: "the more active a hidden unit was, the more its output weight contributed to the error." Hidden unit 1 (activation $0.9$) gets more blame than hidden unit 2 (activation $0.7$).
         </div>
     </div>
 
     <div class="step">
         <span class="step-label">Step 6: Propagate Error Through Output Weights</span>
-        <p>Send the error signal backward through \(W_2\):</p>
+        <p>Send the error signal backward through $W_2$:</p>
         $$
         W_2^T \delta^{(2)} = \begin{bmatrix}0.7\\0.5\end{bmatrix}(0.98) = \begin{bmatrix}0.686\\0.49\end{bmatrix}
         $$
         <div class="why-box">
-            <strong>Why:</strong> We propagate the error backward through \(W_2\) to find out how much each hidden unit contributed to the output error. A hidden unit connected by a larger weight gets more blame.
+            <strong>Why:</strong> We propagate the error backward through $W_2$ to find out how much each hidden unit contributed to the output error. A hidden unit connected by a larger weight gets more blame.
         </div>
     </div>
 
     <div class="step">
         <span class="step-label">Step 7: Hidden Layer Error Signal</span>
-        <p>Element-wise multiply by the activation derivative (Hadamard product \(\odot\)):</p>
+        <p>Element-wise multiply by the activation derivative (Hadamard product $\odot$):</p>
         $$
         \delta^{(1)} = W_2^T\delta^{(2)} \odot \sigma'(z^{(1)}) = \begin{bmatrix}0.686\\0.49\end{bmatrix} \odot \begin{bmatrix}1\\1\end{bmatrix} = \begin{bmatrix}0.686\\0.49\end{bmatrix}
         $$
         <div class="why-box">
-            <strong>Why:</strong> For linear activation, \(\sigma'(z) = 1\) everywhere, so the Hadamard product does nothing. With sigmoid activation, \(\sigma'(z) = \sigma(z)(1-\sigma(z))\), which would scale the error based on how "active" each unit is; saturated units (near 0 or 1) would get very little gradient, causing the vanishing gradient problem.
+            <strong>Why:</strong> For linear activation, $\sigma'(z) = 1$ everywhere, so the Hadamard product does nothing. With sigmoid activation, $\sigma'(z) = \sigma(z)(1-\sigma(z))$, which would scale the error based on how "active" each unit is; saturated units (near 0 or 1) would get very little gradient, causing the vanishing gradient problem.
         </div>
     </div>
 
     <div class="step">
-        <span class="step-label">Step 8: Gradient for Hidden Weights \(W_1\)</span>
+        <span class="step-label">Step 8: Gradient for Hidden Weights $W_1$</span>
         <p>Outer product of the hidden error signal and the input:</p>
         $$
         \nabla_{W_1} J = \delta^{(1)} \cdot x^T = \begin{bmatrix}0.686\\0.49\end{bmatrix}\begin{bmatrix}2 &amp; 1\end{bmatrix} = \begin{bmatrix}1.372 &amp; 0.686\\0.98 &amp; 0.49\end{bmatrix}
         $$
         <div class="why-box">
-            <strong>Why:</strong> Same pattern as Step 5 but one layer deeper. The outer product pairs each hidden error with each input feature: "how much did input feature \(j\) contribute to the error at hidden unit \(i\)?"
+            <strong>Why:</strong> Same pattern as Step 5 but one layer deeper. The outer product pairs each hidden error with each input feature: "how much did input feature $j$ contribute to the error at hidden unit $i$?"
         </div>
     </div>
 </div>
@@ -1762,14 +1766,14 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 
 <div class="hand-calc">
     <div class="step">
-        <span class="step-label">Step 9: Update \(W_2\)</span>
+        <span class="step-label">Step 9: Update $W_2$</span>
         $$
         W_2^{\text{new}} = W_2 - \eta \nabla_{W_2}J = \begin{bmatrix}0.7 &amp; 0.5\end{bmatrix} - 0.1\begin{bmatrix}0.882 &amp; 0.686\end{bmatrix} = \begin{bmatrix}0.6118 &amp; 0.4314\end{bmatrix}
         $$
     </div>
 
     <div class="step">
-        <span class="step-label">Step 10: Update \(W_1\)</span>
+        <span class="step-label">Step 10: Update $W_1$</span>
         $$
         W_1^{\text{new}} = W_1 - \eta \nabla_{W_1}J = \begin{bmatrix}0.4 &amp; 0.1\\0.2 &amp; 0.3\end{bmatrix} - 0.1\begin{bmatrix}1.372 &amp; 0.686\\0.98 &amp; 0.49\end{bmatrix} = \begin{bmatrix}0.2628 &amp; 0.0314\\0.102 &amp; 0.251\end{bmatrix}
         $$
@@ -1777,15 +1781,15 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 </div>
 
 <div class="check">
-    <strong>Verification:</strong> All weights decreased because the prediction (\(0.98\)) was too high relative to the target (\(0\)). The gradient descent step moved every weight in the direction that reduces the output. If the target had been \(1\) instead, the loss would have been tiny (\(\frac{1}{2}(0.02)^2\)) and the weight changes would have been negligible.
+    <strong>Verification:</strong> All weights decreased because the prediction ($0.98$) was too high relative to the target ($0$). The gradient descent step moved every weight in the direction that reduces the output. If the target had been $1$ instead, the loss would have been tiny ($\frac{1}{2}(0.02)^2$) and the weight changes would have been negligible.
 </div>
 
 <div class="exam-flag">
     <strong>Exam Tips:</strong>
     <ul>
-        <li>With linear activation, the entire network collapses to a single linear map \(W_2 W_1 x\). Nonlinear activations are what give MLPs their power.</li>
-        <li>The pattern at every layer is the same: error signal \(\times\) (input to that layer)\(^T\) = weight gradient. Master this pattern and you can handle any depth.</li>
-        <li>If biases are nonzero, the gradient w.r.t. each bias vector is just the error signal \(\delta^{(\ell)}\) itself (the "input" for a bias is always 1).</li>
+        <li>With linear activation, the entire network collapses to a single linear map $W_2 W_1 x$. Nonlinear activations are what give MLPs their power.</li>
+        <li>The pattern at every layer is the same: error signal $\times$ (input to that layer)$^T$ = weight gradient. Master this pattern and you can handle any depth.</li>
+        <li>If biases are nonzero, the gradient w.r.t. each bias vector is just the error signal $\delta^{(\ell)}$ itself (the "input" for a bias is always 1).</li>
     </ul>
 </div>
 
@@ -1797,28 +1801,28 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <p><em>Could appear on the final. One iteration of nonlinear CG with Strong Wolfe line search.</em></p>
 
 <div class="analogy">
-    <strong>Big Picture:</strong> Nonlinear CG (Page 11) extends linear CG to general (non-quadratic) functions. The key idea: instead of restarting with steepest descent every step, we add a fraction \(\beta_k\) of the previous direction. This gives better convergence because the search directions "remember" previous curvature information. Think of it like skiing downhill: pure steepest descent makes you zigzag across the valley, but CG remembers which direction you were carving and adjusts, so you cut a smoother, faster path to the bottom.
+    <strong>Big Picture:</strong> Nonlinear CG (Page 11) extends linear CG to general (non-quadratic) functions. The key idea: instead of restarting with steepest descent every step, we add a fraction $\beta_k$ of the previous direction. This gives better convergence because the search directions "remember" previous curvature information. Think of it like skiing downhill: pure steepest descent makes you zigzag across the valley, but CG remembers which direction you were carving and adjusts, so you cut a smoother, faster path to the bottom.
 </div>
 
 <div class="formula-box">
     <strong>Problem Setup</strong>
     <table class="step-table">
         <tr><th>Symbol</th><th>Meaning</th><th>Value</th></tr>
-        <tr><td>\(f(x_1,x_2)\)</td><td>Rosenbrock function</td><td>\((x_1-1)^2 + 10(x_2-x_1^2)^2\)</td></tr>
-        <tr><td>\(x_0\)</td><td>Starting point</td><td>\(\begin{bmatrix}-1\\1\end{bmatrix}\)</td></tr>
-        <tr><td>\(\alpha_0\)</td><td>Line search step (given)</td><td>\(0.001\)</td></tr>
-        <tr><td>\(\alpha_1\)</td><td>Line search step (given)</td><td>\(0.002\)</td></tr>
+        <tr><td>$f(x_1,x_2)$</td><td>Rosenbrock function</td><td>$(x_1-1)^2 + 10(x_2-x_1^2)^2$</td></tr>
+        <tr><td>$x_0$</td><td>Starting point</td><td>$\begin{bmatrix}-1\\1\end{bmatrix}$</td></tr>
+        <tr><td>$\alpha_0$</td><td>Line search step (given)</td><td>$0.001$</td></tr>
+        <tr><td>$\alpha_1$</td><td>Line search step (given)</td><td>$0.002$</td></tr>
     </table>
 </div>
 
 <div class="formula-box">
     <strong>Nonlinear CG Algorithm (Fletcher-Reeves)</strong>
     <ol>
-        <li>Set \(d_0 = -g_0\) (start with steepest descent)</li>
-        <li>Line search: find \(\alpha_k\) satisfying Strong Wolfe conditions</li>
-        <li>Update: \(x_{k+1} = x_k + \alpha_k d_k\)</li>
-        <li>Compute \(\beta_{k+1}^{FR} = \dfrac{\|g_{k+1}\|^2}{\|g_k\|^2}\)</li>
-        <li>New direction: \(d_{k+1} = -g_{k+1} + \beta_{k+1} d_k\)</li>
+        <li>Set $d_0 = -g_0$ (start with steepest descent)</li>
+        <li>Line search: find $\alpha_k$ satisfying Strong Wolfe conditions</li>
+        <li>Update: $x_{k+1} = x_k + \alpha_k d_k$</li>
+        <li>Compute $\beta_{k+1}^{FR} = \dfrac{\|g_{k+1}\|^2}{\|g_k\|^2}$</li>
+        <li>New direction: $d_{k+1} = -g_{k+1} + \beta_{k+1} d_k$</li>
     </ol>
 </div>
 
@@ -1827,16 +1831,16 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <div class="hand-calc">
     <div class="step">
         <span class="step-label">Step 1: Gradient Formula</span>
-        <p>From the Rosenbrock function \(f = (x_1-1)^2 + 10(x_2 - x_1^2)^2\), the gradient is:</p>
+        <p>From the Rosenbrock function $f = (x_1-1)^2 + 10(x_2 - x_1^2)^2$, the gradient is:</p>
         $$
         \nabla f = \begin{bmatrix}2(x_1-1) - 40x_1(x_2-x_1^2)\\20(x_2-x_1^2)\end{bmatrix}
         $$
-        <p>Evaluate at \(x_0 = (-1, 1)\):</p>
+        <p>Evaluate at $x_0 = (-1, 1)$:</p>
         $$
         g_0 = \begin{bmatrix}2(-1-1) - 40(-1)(1-(-1)^2)\\20(1-(-1)^2)\end{bmatrix} = \begin{bmatrix}2(-2) - 40(-1)(1-1)\\20(1-1)\end{bmatrix} = \begin{bmatrix}-4 - 0\\0\end{bmatrix} = \begin{bmatrix}-4\\0\end{bmatrix}
         $$
         <div class="why-box">
-            <strong>Why:</strong> The gradient tells us the direction of steepest ascent. At \((-1,1)\), the function increases most steeply in the \(-x_1\) direction. The \(x_2\) component is zero because \(x_2 = x_1^2 = 1\) already satisfies the "valley floor" of the Rosenbrock function.
+            <strong>Why:</strong> The gradient tells us the direction of steepest ascent. At $(-1,1)$, the function increases most steeply in the $-x_1$ direction. The $x_2$ component is zero because $x_2 = x_1^2 = 1$ already satisfies the "valley floor" of the Rosenbrock function.
         </div>
     </div>
 
@@ -1850,12 +1854,12 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 
     <div class="step">
         <span class="step-label">Step 3: Line Search and Update</span>
-        <p>Using the given step size \(\alpha_0 = 0.001\):</p>
+        <p>Using the given step size $\alpha_0 = 0.001$:</p>
         $$
         x_1 = x_0 + \alpha_0 d_0 = \begin{bmatrix}-1\\1\end{bmatrix} + 0.001\begin{bmatrix}4\\0\end{bmatrix} = \begin{bmatrix}-0.996\\1\end{bmatrix}
         $$
         <div class="why-box">
-            <strong>Why:</strong> The step is tiny because the Rosenbrock function has a narrow curved valley. The Strong Wolfe conditions prevent us from overshooting the valley walls. In practice, the line search algorithm (e.g., zoom phase from Page 05) would determine this \(\alpha\).
+            <strong>Why:</strong> The step is tiny because the Rosenbrock function has a narrow curved valley. The Strong Wolfe conditions prevent us from overshooting the valley walls. In practice, the line search algorithm (e.g., zoom phase from Page 05) would determine this $\alpha$.
         </div>
     </div>
 </div>
@@ -1865,16 +1869,16 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <div class="hand-calc">
     <div class="step">
         <span class="step-label">Step 4: New Gradient</span>
-        <p>Evaluate \(g_1 = \nabla f(-0.996, 1)\):</p>
+        <p>Evaluate $g_1 = \nabla f(-0.996, 1)$:</p>
         $$
         g_1 = \begin{bmatrix}2(-0.996-1) - 40(-0.996)(1 - 0.992016)\\20(1 - 0.992016)\end{bmatrix}
         $$
         <p>Computing each component:</p>
         <ul>
-            <li>\(x_1^2 = (-0.996)^2 = 0.992016\)</li>
-            <li>\(x_2 - x_1^2 = 1 - 0.992016 = 0.007984\)</li>
-            <li>First component: \(2(-1.996) - 40(-0.996)(0.007984) = -3.992 + 0.318 = -3.674\)</li>
-            <li>Second component: \(20(0.007984) = 0.15968\)</li>
+            <li>$x_1^2 = (-0.996)^2 = 0.992016$</li>
+            <li>$x_2 - x_1^2 = 1 - 0.992016 = 0.007984$</li>
+            <li>First component: $2(-1.996) - 40(-0.996)(0.007984) = -3.992 + 0.318 = -3.674$</li>
+            <li>Second component: $20(0.007984) = 0.15968$</li>
         </ul>
         $$
         g_1 \approx \begin{bmatrix}-3.674\\0.160\end{bmatrix}
@@ -1882,12 +1886,12 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     </div>
 
     <div class="step">
-        <span class="step-label">Step 5: Fletcher-Reeves \(\beta\)</span>
+        <span class="step-label">Step 5: Fletcher-Reeves $\beta$</span>
         $$
         \beta_1^{FR} = \frac{\|g_1\|^2}{\|g_0\|^2} = \frac{(-3.674)^2 + (0.160)^2}{(-4)^2 + 0^2} = \frac{13.498 + 0.026}{16} = \frac{13.524}{16} \approx 0.845
         $$
         <div class="why-box">
-            <strong>Why:</strong> \(\beta\) is the conjugacy coefficient. It controls how much of the old direction \(d_0\) gets blended into the new direction. A value near 1 means the gradient has not changed much, so we keep most of the old momentum. For quadratic functions, this gives exact A-conjugacy; for general functions, it is an approximation that works well in practice.
+            <strong>Why:</strong> $\beta$ is the conjugacy coefficient. It controls how much of the old direction $d_0$ gets blended into the new direction. A value near 1 means the gradient has not changed much, so we keep most of the old momentum. For quadratic functions, this gives exact A-conjugacy; for general functions, it is an approximation that works well in practice.
         </div>
     </div>
 
@@ -1897,13 +1901,13 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
         d_1 = -g_1 + \beta_1 d_0 = \begin{bmatrix}3.674\\-0.160\end{bmatrix} + 0.845\begin{bmatrix}4\\0\end{bmatrix} = \begin{bmatrix}3.674 + 3.380\\-0.160 + 0\end{bmatrix} = \begin{bmatrix}7.054\\-0.160\end{bmatrix}
         $$
         <div class="why-box">
-            <strong>Why:</strong> The new direction combines steepest descent (\(-g_1\)) with momentum from the previous direction. The \(\beta\) term prevents zigzagging: instead of bouncing back and forth across the valley, we carve diagonally along it. Notice the direction now has a small negative \(x_2\) component, guiding us toward the valley floor.
+            <strong>Why:</strong> The new direction combines steepest descent ($-g_1$) with momentum from the previous direction. The $\beta$ term prevents zigzagging: instead of bouncing back and forth across the valley, we carve diagonally along it. Notice the direction now has a small negative $x_2$ component, guiding us toward the valley floor.
         </div>
     </div>
 
     <div class="step">
         <span class="step-label">Step 7: Update</span>
-        <p>Using \(\alpha_1 = 0.002\):</p>
+        <p>Using $\alpha_1 = 0.002$:</p>
         $$
         x_2 = x_1 + \alpha_1 d_1 = \begin{bmatrix}-0.996\\1\end{bmatrix} + 0.002\begin{bmatrix}7.054\\-0.160\end{bmatrix} = \begin{bmatrix}-0.982\\0.9997\end{bmatrix}
         $$
@@ -1915,14 +1919,14 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     $$
     \beta_k^{PR} = \frac{g_{k+1}^T(g_{k+1} - g_k)}{g_k^T g_k}
     $$
-    instead. PR is generally preferred because it automatically restarts (gives \(\beta \approx 0\)) when the gradient direction has not changed much, effectively reverting to steepest descent when the conjugacy approximation breaks down. Both variants <strong>require Strong Wolfe line search</strong> (not just sufficient decrease) to guarantee descent directions.
+    instead. PR is generally preferred because it automatically restarts (gives $\beta \approx 0$) when the gradient direction has not changed much, effectively reverting to steepest descent when the conjugacy approximation breaks down. Both variants <strong>require Strong Wolfe line search</strong> (not just sufficient decrease) to guarantee descent directions.
 </div>
 
 <div class="note">
     <strong>Key Differences from Linear CG:</strong>
     <ul>
-        <li><strong>Linear CG</strong> (Page 10): solves \(Ax=b\) exactly in \(n\) steps; uses \(\alpha_k = r_k^Tr_k / (d_k^TAd_k)\); terminates when residual = 0.</li>
-        <li><strong>Nonlinear CG</strong> (Page 11): minimizes general \(f(x)\); uses a line search for \(\alpha_k\); never terminates exactly (iterative refinement); needs periodic restarts every \(n\) steps.</li>
+        <li><strong>Linear CG</strong> (Page 10): solves $Ax=b$ exactly in $n$ steps; uses $\alpha_k = r_k^Tr_k / (d_k^TAd_k)$; terminates when residual = 0.</li>
+        <li><strong>Nonlinear CG</strong> (Page 11): minimizes general $f(x)$; uses a line search for $\alpha_k$; never terminates exactly (iterative refinement); needs periodic restarts every $n$ steps.</li>
     </ul>
 </div>
 
@@ -1934,17 +1938,17 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <p><em>Format: Assignment 2 Q2 (post-midterm material). One SR1 iteration with exact line search.</em></p>
 
 <div class="analogy">
-    <strong>Big Picture:</strong> SR1 (Page 13) is a rank-1 quasi-Newton update. Unlike BFGS (rank-2), SR1 uses a simpler update formula and can capture <strong>indefinite Hessians</strong>. The trade-off: SR1 does not guarantee positive definiteness, so it is typically used with trust regions instead of line search. Think of it like updating a map one road at a time: each iteration corrects one direction of curvature information, and after \(n\) updates, you have the complete map.
+    <strong>Big Picture:</strong> SR1 (Page 13) is a rank-1 quasi-Newton update. Unlike BFGS (rank-2), SR1 uses a simpler update formula and can capture <strong>indefinite Hessians</strong>. The trade-off: SR1 does not guarantee positive definiteness, so it is typically used with trust regions instead of line search. Think of it like updating a map one road at a time: each iteration corrects one direction of curvature information, and after $n$ updates, you have the complete map.
 </div>
 
 <div class="formula-box">
     <strong>Problem Setup</strong>
     <table class="step-table">
         <tr><th>Symbol</th><th>Meaning</th><th>Value</th></tr>
-        <tr><td>\(f(x)\)</td><td>Quadratic objective</td><td>\(\frac{1}{2}x^TQx\)</td></tr>
-        <tr><td>\(Q\)</td><td>Hessian (constant for quadratics)</td><td>\(\begin{bmatrix}2 &amp; 0\\0 &amp; 1\end{bmatrix}\)</td></tr>
-        <tr><td>\(x_0\)</td><td>Starting point</td><td>\(\begin{bmatrix}1\\1\end{bmatrix}\)</td></tr>
-        <tr><td>\(H_0\)</td><td>Initial inverse Hessian approx</td><td>\(I = \begin{bmatrix}1 &amp; 0\\0 &amp; 1\end{bmatrix}\)</td></tr>
+        <tr><td>$f(x)$</td><td>Quadratic objective</td><td>$\frac{1}{2}x^TQx$</td></tr>
+        <tr><td>$Q$</td><td>Hessian (constant for quadratics)</td><td>$\begin{bmatrix}2 &amp; 0\\0 &amp; 1\end{bmatrix}$</td></tr>
+        <tr><td>$x_0$</td><td>Starting point</td><td>$\begin{bmatrix}1\\1\end{bmatrix}$</td></tr>
+        <tr><td>$H_0$</td><td>Initial inverse Hessian approx</td><td>$I = \begin{bmatrix}1 &amp; 0\\0 &amp; 1\end{bmatrix}$</td></tr>
     </table>
 </div>
 
@@ -1955,9 +1959,9 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     $$
     <table class="step-table">
         <tr><th>Symbol</th><th>Meaning</th></tr>
-        <tr><td>\(s_k = x_{k+1} - x_k\)</td><td>Step taken</td></tr>
-        <tr><td>\(y_k = g_{k+1} - g_k\)</td><td>Gradient change</td></tr>
-        <tr><td>\(s_k - H_k y_k\)</td><td>Secant residual: how far off our current \(H_k\) is from satisfying \(s = Hy\)</td></tr>
+        <tr><td>$s_k = x_{k+1} - x_k$</td><td>Step taken</td></tr>
+        <tr><td>$y_k = g_{k+1} - g_k$</td><td>Gradient change</td></tr>
+        <tr><td>$s_k - H_k y_k$</td><td>Secant residual: how far off our current $H_k$ is from satisfying $s = Hy$</td></tr>
     </table>
 </div>
 
@@ -1965,8 +1969,8 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 
 <div class="hand-calc">
     <div class="step">
-        <span class="step-label">Step 1: Gradient at \(x_0\)</span>
-        <p>For \(f = \frac{1}{2}x^TQx\), the gradient is \(\nabla f = Qx\):</p>
+        <span class="step-label">Step 1: Gradient at $x_0$</span>
+        <p>For $f = \frac{1}{2}x^TQx$, the gradient is $\nabla f = Qx$:</p>
         $$
         g_0 = Qx_0 = \begin{bmatrix}2 &amp; 0\\0 &amp; 1\end{bmatrix}\begin{bmatrix}1\\1\end{bmatrix} = \begin{bmatrix}2\\1\end{bmatrix}
         $$
@@ -1978,13 +1982,13 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
         p_0 = -H_0 g_0 = -I\begin{bmatrix}2\\1\end{bmatrix} = \begin{bmatrix}-2\\-1\end{bmatrix}
         $$
         <div class="why-box">
-            <strong>Why:</strong> With \(H_0 = I\), the quasi-Newton direction is just the steepest descent direction. As \(H\) gets refined, the direction will approach the true Newton direction \(-Q^{-1}g\).
+            <strong>Why:</strong> With $H_0 = I$, the quasi-Newton direction is just the steepest descent direction. As $H$ gets refined, the direction will approach the true Newton direction $-Q^{-1}g$.
         </div>
     </div>
 
     <div class="step">
         <span class="step-label">Step 3: Exact Line Search</span>
-        <p>For a quadratic \(f = \frac{1}{2}x^TQx\), the exact line search formula is:</p>
+        <p>For a quadratic $f = \frac{1}{2}x^TQx$, the exact line search formula is:</p>
         $$
         \alpha_0 = \frac{-g_0^T p_0}{p_0^T Q p_0}
         $$
@@ -2027,23 +2031,23 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
         y_0 = g_1 - g_0 = \begin{bmatrix}-2/9 - 2\\4/9 - 1\end{bmatrix} = \begin{bmatrix}-20/9\\-5/9\end{bmatrix}
         $$
         <div class="why-box">
-            <strong>Why:</strong> The secant equation \(H_{k+1}y_k = s_k\) says: "the updated inverse Hessian approximation should map the gradient change to the step taken." These two vectors are the raw data that drives the update.
+            <strong>Why:</strong> The secant equation $H_{k+1}y_k = s_k$ says: "the updated inverse Hessian approximation should map the gradient change to the step taken." These two vectors are the raw data that drives the update.
         </div>
     </div>
 
     <div class="step">
         <span class="step-label">Step 7: SR1 Update</span>
-        <p><strong>7a.</strong> Compute \(H_0 y_0\):</p>
+        <p><strong>7a.</strong> Compute $H_0 y_0$:</p>
         $$
         H_0 y_0 = I \cdot y_0 = \begin{bmatrix}-20/9\\-5/9\end{bmatrix}
         $$
 
-        <p><strong>7b.</strong> Compute the secant residual \(s_0 - H_0 y_0\):</p>
+        <p><strong>7b.</strong> Compute the secant residual $s_0 - H_0 y_0$:</p>
         $$
         s_0 - H_0 y_0 = \begin{bmatrix}-10/9 - (-20/9)\\-5/9 - (-5/9)\end{bmatrix} = \begin{bmatrix}10/9\\0\end{bmatrix}
         $$
         <div class="why-box">
-            <strong>Why:</strong> This residual measures how far off our current \(H_0\) is from satisfying the secant equation in this direction. The second component is zero, meaning \(H_0\) already captures the curvature perfectly in the \(x_2\) direction (which makes sense; \(Q_{22}=1\) and \(H_{0,22}=1\)).
+            <strong>Why:</strong> This residual measures how far off our current $H_0$ is from satisfying the secant equation in this direction. The second component is zero, meaning $H_0$ already captures the curvature perfectly in the $x_2$ direction (which makes sense; $Q_{22}=1$ and $H_{0,22}=1$).
         </div>
 
         <p><strong>7c.</strong> Denominator:</p>
@@ -2062,10 +2066,10 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
         $$
 
         <div class="result">
-            \(H_1 = \begin{bmatrix}1/2 &amp; 0\\0 &amp; 1\end{bmatrix} = Q^{-1}\) exactly!
+            $H_1 = \begin{bmatrix}1/2 &amp; 0\\0 &amp; 1\end{bmatrix} = Q^{-1}$ exactly!
         </div>
         <div class="why-box">
-            <strong>Why this is remarkable:</strong> For quadratic functions, SR1 recovers the true inverse Hessian in at most \(n\) rank-1 updates (here, \(n=2\) but we got it in 1 step because \(H_0\) already had the correct \((2,2)\) entry). This is a theoretical guarantee that does not hold for general nonlinear functions, but it motivates why SR1 is a good building block for optimization.
+            <strong>Why this is remarkable:</strong> For quadratic functions, SR1 recovers the true inverse Hessian in at most $n$ rank-1 updates (here, $n=2$ but we got it in 1 step because $H_0$ already had the correct $(2,2)$ entry). This is a theoretical guarantee that does not hold for general nonlinear functions, but it motivates why SR1 is a good building block for optimization.
         </div>
     </div>
 </div>
@@ -2075,16 +2079,16 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <div class="hand-calc">
     <div class="step">
         <span class="step-label">Step 8: Verify with Full Newton Step</span>
-        <p>Since \(H_1 = Q^{-1}\), we now have the exact Newton direction:</p>
+        <p>Since $H_1 = Q^{-1}$, we now have the exact Newton direction:</p>
         $$
         p_1 = -H_1 g_1 = -\begin{bmatrix}1/2 &amp; 0\\0 &amp; 1\end{bmatrix}\begin{bmatrix}-2/9\\4/9\end{bmatrix} = \begin{bmatrix}1/9\\-4/9\end{bmatrix}
         $$
-        <p>With \(\alpha_1 = 1\) (full Newton step):</p>
+        <p>With $\alpha_1 = 1$ (full Newton step):</p>
         $$
         x_2 = x_1 + p_1 = \begin{bmatrix}-1/9\\4/9\end{bmatrix} + \begin{bmatrix}1/9\\-4/9\end{bmatrix} = \begin{bmatrix}0\\0\end{bmatrix} = x^*
         $$
         <div class="result">
-            Optimal! The SR1 method found the exact minimizer in 2 iterations (matching the dimension \(n=2\)).
+            Optimal! The SR1 method found the exact minimizer in 2 iterations (matching the dimension $n=2$).
         </div>
     </div>
 </div>
@@ -2092,10 +2096,10 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <div class="exam-flag">
     <strong>SR1 vs. BFGS:</strong>
     <ul>
-        <li><strong>SR1:</strong> Rank-1 update, can handle indefinite Hessians, does NOT guarantee \(H_k \succ 0\), typically paired with trust regions, simpler formula.</li>
-        <li><strong>BFGS:</strong> Rank-2 update, guarantees \(H_k \succ 0\) (if \(s_k^Ty_k \gt 0\)), works with line search, more robust in practice.</li>
-        <li>Both satisfy the secant equation \(H_{k+1}y_k = s_k\).</li>
-        <li>SR1 has a safeguard: skip the update if \(|(s_k - H_ky_k)^Ty_k|\) is too small (avoid division by near-zero).</li>
+        <li><strong>SR1:</strong> Rank-1 update, can handle indefinite Hessians, does NOT guarantee $H_k \succ 0$, typically paired with trust regions, simpler formula.</li>
+        <li><strong>BFGS:</strong> Rank-2 update, guarantees $H_k \succ 0$ (if $s_k^Ty_k \gt 0$), works with line search, more robust in practice.</li>
+        <li>Both satisfy the secant equation $H_{k+1}y_k = s_k$.</li>
+        <li>SR1 has a safeguard: skip the update if $|(s_k - H_ky_k)^Ty_k|$ is too small (avoid division by near-zero).</li>
     </ul>
 </div>
 
@@ -2107,18 +2111,18 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <p><em>New topic. One gradient descent step on logistic loss.</em></p>
 
 <div class="analogy">
-    <strong>Big Picture:</strong> Logistic regression (Page 24) minimizes a convex loss function for binary classification. Imagine you are adjusting a dial (the parameter vector \(\theta\)) that controls the tilt of a decision plane. Points on one side get classified +1, points on the other side get classified -1. The logistic loss is "soft": instead of a hard boundary, it assigns probabilities. The gradient formula has a nice form: misclassified or uncertain points contribute strongly to the gradient, while correctly-classified-with-confidence points contribute weakly; the optimization naturally focuses attention where it is most needed.
+    <strong>Big Picture:</strong> Logistic regression (Page 24) minimizes a convex loss function for binary classification. Imagine you are adjusting a dial (the parameter vector $\theta$) that controls the tilt of a decision plane. Points on one side get classified +1, points on the other side get classified -1. The logistic loss is "soft": instead of a hard boundary, it assigns probabilities. The gradient formula has a nice form: misclassified or uncertain points contribute strongly to the gradient, while correctly-classified-with-confidence points contribute weakly; the optimization naturally focuses attention where it is most needed.
 </div>
 
 <div class="formula-box">
     <strong>Problem Setup</strong>
     <table class="step-table">
-        <tr><th>Data Point</th><th>\(x_i\)</th><th>\(y_i\)</th></tr>
-        <tr><td>1</td><td>\(\begin{bmatrix}1\\0\end{bmatrix}\)</td><td>\(+1\)</td></tr>
-        <tr><td>2</td><td>\(\begin{bmatrix}0\\1\end{bmatrix}\)</td><td>\(-1\)</td></tr>
-        <tr><td>3</td><td>\(\begin{bmatrix}1\\1\end{bmatrix}\)</td><td>\(+1\)</td></tr>
+        <tr><th>Data Point</th><th>$x_i$</th><th>$y_i$</th></tr>
+        <tr><td>1</td><td>$\begin{bmatrix}1\\0\end{bmatrix}$</td><td>$+1$</td></tr>
+        <tr><td>2</td><td>$\begin{bmatrix}0\\1\end{bmatrix}$</td><td>$-1$</td></tr>
+        <tr><td>3</td><td>$\begin{bmatrix}1\\1\end{bmatrix}$</td><td>$+1$</td></tr>
     </table>
-    <p>Initial weights: \(\theta_0 = \begin{bmatrix}0\\0\end{bmatrix}\), learning rate \(\eta = 1\).</p>
+    <p>Initial weights: $\theta_0 = \begin{bmatrix}0\\0\end{bmatrix}$, learning rate $\eta = 1$.</p>
 </div>
 
 <div class="formula-box">
@@ -2128,8 +2132,8 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     $$
     <table class="step-table">
         <tr><th>Symbol</th><th>Meaning</th></tr>
-        <tr><td>\(z_i = y_i \theta^T x_i\)</td><td>Margin: how confidently we classify point \(i\) correctly. Positive = correct side, negative = wrong side.</td></tr>
-        <tr><td>\(\log(1+e^{-z_i})\)</td><td>Loss for point \(i\). Large when \(z_i\) is negative (misclassified), small when \(z_i\) is large positive (confidently correct).</td></tr>
+        <tr><td>$z_i = y_i \theta^T x_i$</td><td>Margin: how confidently we classify point $i$ correctly. Positive = correct side, negative = wrong side.</td></tr>
+        <tr><td>$\log(1+e^{-z_i})$</td><td>Loss for point $i$. Large when $z_i$ is negative (misclassified), small when $z_i$ is large positive (confidently correct).</td></tr>
     </table>
 
     <strong>Gradient</strong>
@@ -2137,7 +2141,7 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     \nabla f = -\frac{1}{n}\sum_{i=1}^{n} \frac{y_i x_i}{1 + e^{z_i}}
     $$
     <div class="why-box">
-        <strong>Why this form:</strong> The weight \(\frac{1}{1+e^{z_i}}\) is the sigmoid function applied to the negative margin. When \(z_i = 0\) (on the boundary), the weight is \(1/2\). When \(z_i \gg 0\) (confidently correct), the weight \(\to 0\). When \(z_i \ll 0\) (confidently wrong), the weight \(\to 1\). So the gradient is dominated by the hard cases.
+        <strong>Why this form:</strong> The weight $\frac{1}{1+e^{z_i}}$ is the sigmoid function applied to the negative margin. When $z_i = 0$ (on the boundary), the weight is $1/2$. When $z_i \gg 0$ (confidently correct), the weight $\to 0$. When $z_i \ll 0$ (confidently wrong), the weight $\to 1$. So the gradient is dominated by the hard cases.
     </div>
 </div>
 
@@ -2145,13 +2149,13 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 
 <div class="hand-calc">
     <div class="step">
-        <span class="step-label">Step 1: Margins at \(\theta = 0\)</span>
-        <p>Since \(\theta = 0\), every dot product \(\theta^T x_i = 0\), so every margin \(z_i = y_i \cdot 0 = 0\).</p>
+        <span class="step-label">Step 1: Margins at $\theta = 0$</span>
+        <p>Since $\theta = 0$, every dot product $\theta^T x_i = 0$, so every margin $z_i = y_i \cdot 0 = 0$.</p>
         $$
         z_1 = 0, \quad z_2 = 0, \quad z_3 = 0
         $$
         <div class="why-box">
-            <strong>Why:</strong> At \(\theta = 0\), the model has no opinion about any point. Every prediction probability is exactly \(0.5\).
+            <strong>Why:</strong> At $\theta = 0$, the model has no opinion about any point. Every prediction probability is exactly $0.5$.
         </div>
     </div>
 
@@ -2161,13 +2165,13 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
         f = \frac{1}{3}\sum_{i=1}^{3} \log(1 + e^{-0}) = \frac{1}{3}\cdot 3 \cdot \log(1+1) = \log 2 \approx 0.693
         $$
         <div class="why-box">
-            <strong>Why:</strong> \(\log 2\) is the maximum entropy loss; it is the loss you get when the model assigns 50/50 probability to every point. This is the worst a well-calibrated model can do.
+            <strong>Why:</strong> $\log 2$ is the maximum entropy loss; it is the loss you get when the model assigns 50/50 probability to every point. This is the worst a well-calibrated model can do.
         </div>
     </div>
 
     <div class="step">
         <span class="step-label">Step 3: Gradient</span>
-        <p>Since all \(z_i = 0\), we have \(\frac{1}{1+e^{z_i}} = \frac{1}{1+1} = \frac{1}{2}\) for every point:</p>
+        <p>Since all $z_i = 0$, we have $\frac{1}{1+e^{z_i}} = \frac{1}{1+1} = \frac{1}{2}$ for every point:</p>
         $$
         \nabla f = -\frac{1}{3}\sum_{i=1}^{3} \frac{y_i x_i}{1+e^{0}} = -\frac{1}{3}\cdot\frac{1}{2}\sum_{i=1}^{3} y_i x_i = -\frac{1}{6}\sum y_i x_i
         $$
@@ -2179,7 +2183,7 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
         \nabla f = -\frac{1}{6}\begin{bmatrix}2\\0\end{bmatrix} = \begin{bmatrix}-1/3\\0\end{bmatrix}
         $$
         <div class="why-box">
-            <strong>Why:</strong> At \(\theta=0\), every point contributes equally (weight \(1/2\)). The gradient points in the \(-x_1\) direction because the positive-class points (\(x_1, x_3\)) have more mass in the \(x_1\) coordinate than the negative-class point (\(x_2\)). The \(x_2\) components cancel out (\(-1+1=0\)).
+            <strong>Why:</strong> At $\theta=0$, every point contributes equally (weight $1/2$). The gradient points in the $-x_1$ direction because the positive-class points ($x_1, x_3$) have more mass in the $x_1$ coordinate than the negative-class point ($x_2$). The $x_2$ components cancel out ($-1+1=0$).
         </div>
     </div>
 
@@ -2192,15 +2196,15 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 
     <div class="step">
         <span class="step-label">Step 5: Interpretation</span>
-        <p>The decision boundary is defined by \(\theta^T x = 0\):</p>
+        <p>The decision boundary is defined by $\theta^T x = 0$:</p>
         $$
         \frac{1}{3}x_1 + 0 \cdot x_2 = 0 \quad\Longrightarrow\quad x_1 = 0
         $$
         <div class="result">
-            Points with \(x_1 \gt 0\) are classified \(+1\), points with \(x_1 \lt 0\) are classified \(-1\).
+            Points with $x_1 \gt 0$ are classified $+1$, points with $x_1 \lt 0$ are classified $-1$.
         </div>
         <div class="why-box">
-            <strong>Check:</strong> \(x_1 = (1,0)\) has \(x_1 = 1 \gt 0 \to +1\) (correct). \(x_2 = (0,1)\) has \(x_1 = 0\) (on the boundary; ambiguous). \(x_3 = (1,1)\) has \(x_1 = 1 \gt 0 \to +1\) (correct). After just one step, the model already classifies two out of three points correctly with confidence, and the third sits on the boundary.
+            <strong>Check:</strong> $x_1 = (1,0)$ has $x_1 = 1 \gt 0 \to +1$ (correct). $x_2 = (0,1)$ has $x_1 = 0$ (on the boundary; ambiguous). $x_3 = (1,1)$ has $x_1 = 1 \gt 0 \to +1$ (correct). After just one step, the model already classifies two out of three points correctly with confidence, and the third sits on the boundary.
         </div>
     </div>
 </div>
@@ -2208,10 +2212,10 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <div class="exam-flag">
     <strong>Exam Tips for Logistic Regression:</strong>
     <ul>
-        <li>The gradient formula involves the sigmoid \(\sigma(-z_i) = \frac{1}{1+e^{z_i}}\). Do not confuse the sign conventions.</li>
-        <li>At \(\theta = 0\), every sigmoid evaluates to \(1/2\), simplifying the first gradient computation considerably.</li>
+        <li>The gradient formula involves the sigmoid $\sigma(-z_i) = \frac{1}{1+e^{z_i}}$. Do not confuse the sign conventions.</li>
+        <li>At $\theta = 0$, every sigmoid evaluates to $1/2$, simplifying the first gradient computation considerably.</li>
         <li>Logistic loss is convex, so gradient descent is guaranteed to converge (unlike neural networks). Newton's method converges in very few steps for logistic regression.</li>
-        <li>If asked for the Hessian: \(\nabla^2 f = \frac{1}{n}\sum \sigma(z_i)(1-\sigma(z_i))x_ix_i^T\), which is always positive semidefinite (confirming convexity).</li>
+        <li>If asked for the Hessian: $\nabla^2 f = \frac{1}{n}\sum \sigma(z_i)(1-\sigma(z_i))x_ix_i^T$, which is always positive semidefinite (confirming convexity).</li>
     </ul>
 </div>
 
@@ -2229,10 +2233,10 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <div class="formula-box">
     <strong>Problem Setup</strong>
     <table class="step-table">
-        <tr><th>Point</th><th>\(x_i\)</th><th>\(y_i\)</th></tr>
-        <tr><td>1</td><td>\((1, 0)\)</td><td>\(+1\)</td></tr>
-        <tr><td>2</td><td>\((0, 1)\)</td><td>\(+1\)</td></tr>
-        <tr><td>3</td><td>\((-1, 0)\)</td><td>\(-1\)</td></tr>
+        <tr><th>Point</th><th>$x_i$</th><th>$y_i$</th></tr>
+        <tr><td>1</td><td>$(1, 0)$</td><td>$+1$</td></tr>
+        <tr><td>2</td><td>$(0, 1)$</td><td>$+1$</td></tr>
+        <tr><td>3</td><td>$(-1, 0)$</td><td>$-1$</td></tr>
     </table>
 </div>
 
@@ -2241,19 +2245,19 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     $$
     \min_{w,b}\;\frac{1}{2}\|w\|^2 \quad\text{subject to}\quad y_i(w^Tx_i + b) \geq 1,\;\; i=1,\dots,n
     $$
-    <p>Minimizing \(\|w\|^2\) maximizes the margin \(2/\|w\|\). The constraints ensure every point is on the correct side of the margin.</p>
+    <p>Minimizing $\|w\|^2$ maximizes the margin $2/\|w\|$. The constraints ensure every point is on the correct side of the margin.</p>
 </div>
 
 <h3>Step 1: Dot Product Matrix</h3>
 
 <div class="hand-calc">
     <div class="step">
-        <p>Compute all pairwise dot products \(x_i^T x_j\):</p>
+        <p>Compute all pairwise dot products $x_i^T x_j$:</p>
         <table class="step-table">
-            <tr><th>\(x_i^T x_j\)</th><th>\(x_1=(1,0)\)</th><th>\(x_2=(0,1)\)</th><th>\(x_3=(-1,0)\)</th></tr>
-            <tr><td>\(x_1=(1,0)\)</td><td>\(1\)</td><td>\(0\)</td><td>\(-1\)</td></tr>
-            <tr><td>\(x_2=(0,1)\)</td><td>\(0\)</td><td>\(1\)</td><td>\(0\)</td></tr>
-            <tr><td>\(x_3=(-1,0)\)</td><td>\(-1\)</td><td>\(0\)</td><td>\(1\)</td></tr>
+            <tr><th>$x_i^T x_j$</th><th>$x_1=(1,0)$</th><th>$x_2=(0,1)$</th><th>$x_3=(-1,0)$</th></tr>
+            <tr><td>$x_1=(1,0)$</td><td>$1$</td><td>$0$</td><td>$-1$</td></tr>
+            <tr><td>$x_2=(0,1)$</td><td>$0$</td><td>$1$</td><td>$0$</td></tr>
+            <tr><td>$x_3=(-1,0)$</td><td>$-1$</td><td>$0$</td><td>$1$</td></tr>
         </table>
     </div>
 </div>
@@ -2262,18 +2266,18 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 
 <div class="hand-calc">
     <div class="step">
-        <p>The dual involves the matrix \(K_{ij} = y_i y_j (x_i^T x_j)\). Multiply each entry above by \(y_i y_j\):</p>
+        <p>The dual involves the matrix $K_{ij} = y_i y_j (x_i^T x_j)$. Multiply each entry above by $y_i y_j$:</p>
         <table class="step-table">
-            <tr><th>\(K_{ij} = y_iy_j(x_i^Tx_j)\)</th><th>\(j=1\; (y=+1)\)</th><th>\(j=2\; (y=+1)\)</th><th>\(j=3\; (y=-1)\)</th></tr>
-            <tr><td>\(i=1\; (y=+1)\)</td><td>\((+1)(+1)(1) = 1\)</td><td>\((+1)(+1)(0) = 0\)</td><td>\((+1)(-1)(-1) = 1\)</td></tr>
-            <tr><td>\(i=2\; (y=+1)\)</td><td>\((+1)(+1)(0) = 0\)</td><td>\((+1)(+1)(1) = 1\)</td><td>\((+1)(-1)(0) = 0\)</td></tr>
-            <tr><td>\(i=3\; (y=-1)\)</td><td>\((-1)(+1)(-1) = 1\)</td><td>\((-1)(+1)(0) = 0\)</td><td>\((-1)(-1)(1) = 1\)</td></tr>
+            <tr><th>$K_{ij} = y_iy_j(x_i^Tx_j)$</th><th>$j=1\; (y=+1)$</th><th>$j=2\; (y=+1)$</th><th>$j=3\; (y=-1)$</th></tr>
+            <tr><td>$i=1\; (y=+1)$</td><td>$(+1)(+1)(1) = 1$</td><td>$(+1)(+1)(0) = 0$</td><td>$(+1)(-1)(-1) = 1$</td></tr>
+            <tr><td>$i=2\; (y=+1)$</td><td>$(+1)(+1)(0) = 0$</td><td>$(+1)(+1)(1) = 1$</td><td>$(+1)(-1)(0) = 0$</td></tr>
+            <tr><td>$i=3\; (y=-1)$</td><td>$(-1)(+1)(-1) = 1$</td><td>$(-1)(+1)(0) = 0$</td><td>$(-1)(-1)(1) = 1$</td></tr>
         </table>
         $$
         K = \begin{bmatrix}1 &amp; 0 &amp; 1\\0 &amp; 1 &amp; 0\\1 &amp; 0 &amp; 1\end{bmatrix}
         $$
         <div class="why-box">
-            <strong>Why:</strong> The kernel matrix encodes both the geometry (dot products) and the labels. Entry \(K_{13} = 1\) is interesting: points 1 and 3 are on opposite sides (\(y\) signs differ) but their dot product is \(-1\), so \(y_1 y_3 \cdot x_1^Tx_3 = (-1)(-1) = 1\). This means they "agree" in the dual formulation; both are candidates to be support vectors.
+            <strong>Why:</strong> The kernel matrix encodes both the geometry (dot products) and the labels. Entry $K_{13} = 1$ is interesting: points 1 and 3 are on opposite sides ($y$ signs differ) but their dot product is $-1$, so $y_1 y_3 \cdot x_1^Tx_3 = (-1)(-1) = 1$. This means they "agree" in the dual formulation; both are candidates to be support vectors.
         </div>
     </div>
 </div>
@@ -2294,7 +2298,7 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
         Q(\alpha) = \alpha_1 + \alpha_2 + \alpha_3 - \frac{1}{2}\bigl(\alpha_1^2 + \alpha_2^2 + \alpha_3^2 + 2\alpha_1\alpha_3\bigr)
         $$
         <div class="why-box">
-            <strong>Why:</strong> The dual reformulates the primal into a problem over the Lagrange multipliers \(\alpha_i\). The linear term \(\sum \alpha_i\) wants to make all multipliers large (widening the margin), while the quadratic term penalizes configurations where points "overlap" in the kernel space.
+            <strong>Why:</strong> The dual reformulates the primal into a problem over the Lagrange multipliers $\alpha_i$. The linear term $\sum \alpha_i$ wants to make all multipliers large (widening the margin), while the quadratic term penalizes configurations where points "overlap" in the kernel space.
         </div>
     </div>
 </div>
@@ -2303,16 +2307,16 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 
 <div class="hand-calc">
     <div class="step">
-        <p>From KKT stationarity with respect to \(b\), we get the constraint:</p>
+        <p>From KKT stationarity with respect to $b$, we get the constraint:</p>
         $$
         \sum_{i=1}^{n}\alpha_i y_i = 0 \quad\Longrightarrow\quad \alpha_1(+1) + \alpha_2(+1) + \alpha_3(-1) = 0
         $$
         $$
         \alpha_1 + \alpha_2 = \alpha_3
         $$
-        <p>Plus the non-negativity constraints: \(\alpha_i \geq 0\) for all \(i\).</p>
+        <p>Plus the non-negativity constraints: $\alpha_i \geq 0$ for all $i$.</p>
         <div class="why-box">
-            <strong>Why:</strong> This constraint comes from the fact that the bias \(b\) is a free variable in the primal. Its Lagrange condition forces the positive-class and negative-class multipliers to balance.
+            <strong>Why:</strong> This constraint comes from the fact that the bias $b$ is a free variable in the primal. Its Lagrange condition forces the positive-class and negative-class multipliers to balance.
         </div>
     </div>
 </div>
@@ -2321,7 +2325,7 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 
 <div class="hand-calc">
     <div class="step">
-        <p>Substitute \(\alpha_3 = \alpha_1 + \alpha_2\) to eliminate one variable:</p>
+        <p>Substitute $\alpha_3 = \alpha_1 + \alpha_2$ to eliminate one variable:</p>
         $$
         Q = \alpha_1 + \alpha_2 + (\alpha_1+\alpha_2) - \frac{1}{2}\bigl[\alpha_1^2 + \alpha_2^2 + (\alpha_1+\alpha_2)^2 + 2\alpha_1(\alpha_1+\alpha_2)\bigr]
         $$
@@ -2335,7 +2339,7 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
         = 2\alpha_1 + 2\alpha_2 - 2\alpha_1^2 - \alpha_2^2 - 2\alpha_1\alpha_2
         $$
         <div class="why-box">
-            <strong>Why:</strong> Now we have an unconstrained (except for \(\alpha_1, \alpha_2 \geq 0\)) quadratic in two variables. This can be solved by setting partial derivatives to zero, or by inspection on an exam.
+            <strong>Why:</strong> Now we have an unconstrained (except for $\alpha_1, \alpha_2 \geq 0$) quadratic in two variables. This can be solved by setting partial derivatives to zero, or by inspection on an exam.
         </div>
     </div>
 </div>
@@ -2345,7 +2349,7 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <div class="hand-calc">
     <div class="step">
         <span class="step-label">Weight Vector</span>
-        <p>Once you have the optimal \(\alpha^*\), recover the weight vector:</p>
+        <p>Once you have the optimal $\alpha^*$, recover the weight vector:</p>
         $$
         w^* = \sum_{i=1}^{n}\alpha_i^* y_i x_i = \alpha_1^*(+1)\begin{bmatrix}1\\0\end{bmatrix} + \alpha_2^*(+1)\begin{bmatrix}0\\1\end{bmatrix} + \alpha_3^*(-1)\begin{bmatrix}-1\\0\end{bmatrix}
         $$
@@ -2353,19 +2357,19 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
         = \begin{bmatrix}\alpha_1^* + \alpha_3^*\\ \alpha_2^*\end{bmatrix}
         $$
         <div class="why-box">
-            <strong>Why:</strong> The optimal hyperplane is a weighted combination of the data points, where only the support vectors (points with \(\alpha_i^* \gt 0\)) contribute. Points far from the margin have \(\alpha_i^* = 0\) and are irrelevant.
+            <strong>Why:</strong> The optimal hyperplane is a weighted combination of the data points, where only the support vectors (points with $\alpha_i^* \gt 0$) contribute. Points far from the margin have $\alpha_i^* = 0$ and are irrelevant.
         </div>
     </div>
 
     <div class="step">
         <span class="step-label">Bias Term</span>
-        <p>For any support vector \(i\) (where \(\alpha_i^* \gt 0\)), complementary slackness gives:</p>
+        <p>For any support vector $i$ (where $\alpha_i^* \gt 0$), complementary slackness gives:</p>
         $$
         y_i(w^{*T}x_i + b^*) = 1 \quad\Longrightarrow\quad b^* = y_i - w^{*T}x_i
         $$
         <p>In practice, average over all support vectors for numerical stability.</p>
         <div class="why-box">
-            <strong>Why:</strong> Complementary slackness says that if a multiplier is active (\(\alpha_i \gt 0\)), the corresponding constraint must be tight (equality). This means support vectors lie exactly on the margin boundary.
+            <strong>Why:</strong> Complementary slackness says that if a multiplier is active ($\alpha_i \gt 0$), the corresponding constraint must be tight (equality). This means support vectors lie exactly on the margin boundary.
         </div>
     </div>
 </div>
@@ -2373,11 +2377,11 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <div class="exam-flag">
     <strong>What to Expect on the Exam:</strong>
     <ul>
-        <li><strong>(a)</strong> Write out the Wolfe dual objective and constraints for given data. This means computing the \(K_{ij}\) matrix and writing \(Q(\alpha)\).</li>
-        <li><strong>(b)</strong> State the constraints: \(\alpha_i \geq 0\) and \(\sum \alpha_i y_i = 0\).</li>
-        <li><strong>(c)</strong> Interpret support vectors via complementary slackness: \(\alpha_i \gt 0 \Leftrightarrow\) point \(i\) lies on the margin.</li>
+        <li><strong>(a)</strong> Write out the Wolfe dual objective and constraints for given data. This means computing the $K_{ij}$ matrix and writing $Q(\alpha)$.</li>
+        <li><strong>(b)</strong> State the constraints: $\alpha_i \geq 0$ and $\sum \alpha_i y_i = 0$.</li>
+        <li><strong>(c)</strong> Interpret support vectors via complementary slackness: $\alpha_i \gt 0 \Leftrightarrow$ point $i$ lies on the margin.</li>
         <li>You may not need to solve the QP; just setting it up correctly is often enough.</li>
-        <li>If a kernel is given (e.g., polynomial or RBF), replace \(x_i^Tx_j\) with \(k(x_i,x_j)\) everywhere; the dual structure is identical.</li>
+        <li>If a kernel is given (e.g., polynomial or RBF), replace $x_i^Tx_j$ with $k(x_i,x_j)$ everywhere; the dual structure is identical.</li>
     </ul>
 </div>
 
@@ -2400,18 +2404,18 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <strong>Quick Reference: Which method for which problem?</strong>
     <table class="step-table" style="font-size: 14px; margin-top: 12px;">
         <tr><th>Problem Type</th><th>Method</th><th>Key Formula</th><th>Page</th></tr>
-        <tr><td>Unconstrained (small)</td><td>Newton</td><td>\(p=-[\nabla^2f]^{-1}\nabla f\)</td><td>07</td></tr>
-        <tr><td>Unconstrained (large)</td><td>GD, CG, BFGS</td><td>\(x_{k+1}=x_k+\alpha_k p_k\)</td><td>06,10,12</td></tr>
-        <tr><td>Trust region</td><td>TR + Newton or Cauchy</td><td>\(\min m_k(p)\) s.t. \(\|p\|\leq\Delta\)</td><td>09</td></tr>
-        <tr><td>\(Ax=b\) (SPD)</td><td>Linear CG</td><td>\(\alpha_k = r_k^Tr_k / (d_k^TAd_k)\)</td><td>10</td></tr>
-        <tr><td>\(r(x)=0\)</td><td>Newton for systems</td><td>\(J(x_k)p_k = -r(x_k)\)</td><td>14</td></tr>
+        <tr><td>Unconstrained (small)</td><td>Newton</td><td>$p=-[\nabla^2f]^{-1}\nabla f$</td><td>07</td></tr>
+        <tr><td>Unconstrained (large)</td><td>GD, CG, BFGS</td><td>$x_{k+1}=x_k+\alpha_k p_k$</td><td>06,10,12</td></tr>
+        <tr><td>Trust region</td><td>TR + Newton or Cauchy</td><td>$\min m_k(p)$ s.t. $\|p\|\leq\Delta$</td><td>09</td></tr>
+        <tr><td>$Ax=b$ (SPD)</td><td>Linear CG</td><td>$\alpha_k = r_k^Tr_k / (d_k^TAd_k)$</td><td>10</td></tr>
+        <tr><td>$r(x)=0$</td><td>Newton for systems</td><td>$J(x_k)p_k = -r(x_k)$</td><td>14</td></tr>
         <tr><td>Constrained</td><td>KKT conditions</td><td>Stationarity + complementary slackness</td><td>15</td></tr>
-        <tr><td>Linear program</td><td>Interior point / KKT</td><td>\(\mu\to 0\) barrier method</td><td>16,21</td></tr>
-        <tr><td>Classification</td><td>Logistic regression</td><td>\(\min \sum\log(1+e^{-y_i\theta^Tx_i})\)</td><td>24</td></tr>
-        <tr><td>Max-margin</td><td>SVM (dual)</td><td>\(\max \sum\alpha_i - \frac{1}{2}\alpha^TK\alpha\)</td><td>25</td></tr>
+        <tr><td>Linear program</td><td>Interior point / KKT</td><td>$\mu\to 0$ barrier method</td><td>16,21</td></tr>
+        <tr><td>Classification</td><td>Logistic regression</td><td>$\min \sum\log(1+e^{-y_i\theta^Tx_i})$</td><td>24</td></tr>
+        <tr><td>Max-margin</td><td>SVM (dual)</td><td>$\max \sum\alpha_i - \frac{1}{2}\alpha^TK\alpha$</td><td>25</td></tr>
         <tr><td>Neural network</td><td>GD + backprop</td><td>Chain rule through layers</td><td>26</td></tr>
-        <tr><td>Non-negative factorization</td><td>NMF (Lee-Seung)</td><td>\(H\leftarrow H\odot(W^TV)/(W^TWH)\)</td><td>22</td></tr>
-        <tr><td>Least-squares</td><td>Normal equations</td><td>\(A^TAx = A^Tb\)</td><td>23</td></tr>
+        <tr><td>Non-negative factorization</td><td>NMF (Lee-Seung)</td><td>$H\leftarrow H\odot(W^TV)/(W^TWH)$</td><td>22</td></tr>
+        <tr><td>Least-squares</td><td>Normal equations</td><td>$A^TAx = A^Tb$</td><td>23</td></tr>
     </table>
 </div>
 
