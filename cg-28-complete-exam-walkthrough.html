@@ -495,6 +495,10 @@
   </div>
 
   <p>Since \(H_0 = I\), this first step is just steepest descent: \(p_0 = -g_0\). BFGS always starts this way when initialized with the identity matrix.</p>
+
+  <div class="why-box">
+  <strong>Why $p = -Hg$ and not just $-g$?</strong> The search direction $p_k = -H_k g_k$ mimics Newton's method ($p_k = -[\nabla^2 f]^{-1} g_k$) without computing the Hessian. When $H_0 = I$, we get $p_0 = -g_0$ (steepest descent). As $H_k$ improves over iterations, the directions become more "Newton-like" and convergence accelerates from linear to superlinear.
+  </div>
 </div>
 
 <!-- Step 3 -->
@@ -518,6 +522,10 @@
 
     <p><strong>Step size:</strong></p>
     <p>$$\alpha_0 = \frac{13}{35} \approx 0.371$$</p>
+  </div>
+
+  <div class="why-box">
+  <strong>Where does the exact line search formula come from?</strong> We want $\alpha$ that minimizes $\phi(\alpha) = f(x_0 + \alpha p_0)$. For quadratic $f(x) = \frac{1}{2}x^TQx$, differentiating $\phi$ and setting $\phi'(\alpha) = 0$ gives $\alpha = -g_0^Tp_0 / (p_0^TQp_0)$. The numerator is the directional derivative (how fast $f$ decreases in direction $p_0$). The denominator is the curvature along $p_0$ (how quickly the slope flattens out). Large curvature means a small step.
   </div>
 </div>
 
@@ -558,6 +566,10 @@
   <div class="note">
     <p>Notice that \(s_0 = \alpha_0 p_0\) (the step is just the step size times the direction). And for a quadratic, \(y_0 = Q s_0\) (the gradient change equals the Hessian times the step). This second fact is specific to quadratics and is the reason BFGS can recover the exact inverse Hessian on quadratics.</p>
   </div>
+
+  <div class="why-box">
+  <strong>What $s$ and $y$ capture:</strong> Think of $s_0$ as "where we walked" and $y_0$ as "how the slope changed while we walked." Together, they encode curvature information: the ratio $y/s$ is an approximation to the Hessian along the direction we traveled. BFGS uses this to update $H_k$ so it better approximates the true inverse Hessian. After enough iterations, $H_k$ converges to $[\nabla^2 f]^{-1}$ and the method behaves like Newton.
+  </div>
 </div>
 
 <!-- Step 7 -->
@@ -573,6 +585,10 @@
   <div class="result">
     <p>\(s_0^T y_0 = 169/35 \gt 0\) &#10003;. The curvature condition holds, so the BFGS update is safe to apply.</p>
     <p>This is guaranteed when using a line search satisfying the Wolfe conditions (Page 08). For exact line search on a strictly convex quadratic, it always holds.</p>
+  </div>
+
+  <div class="why-box">
+  <strong>Why must $s^Ty \gt 0$?</strong> If $s^Ty \leq 0$, the BFGS update would produce an $H_{k+1}$ that is NOT positive definite, which means the search direction $-H_{k+1}g_{k+1}$ might point uphill instead of downhill. The Wolfe line search conditions guarantee $s^Ty \gt 0$ automatically. For exact line search on strictly convex quadratics (like this problem), it always holds. On exams, always verify this before applying the update.
   </div>
 </div>
 
@@ -658,6 +674,10 @@
     <p>\(H_1 y_0 = (-26/35,\; -39/35)^T = s_0\) &#10003;. The secant condition holds.</p>
   </div>
 
+  <div class="why-box">
+  <strong>What did the BFGS update accomplish?</strong> The update adjusted $H_0 = I$ toward the true inverse Hessian $Q^{-1} = \begin{bmatrix}1/2&0\\0&1/3\end{bmatrix}$. The secant condition $H_1 y_0 = s_0$ is now satisfied, meaning $H_1$ correctly captures the curvature along the direction we traveled. For a 2D quadratic, one more BFGS step would give us $H_2 = Q^{-1}$ exactly, and the method would converge in 2 total iterations (same as Newton).
+  </div>
+
   <div class="note">
     <h4>How close is \(H_1\) to the true inverse Hessian?</h4>
     <p>The true inverse Hessian is:</p>
@@ -732,6 +752,10 @@
   <p>The first equation is slightly negative (our point is just inside the unit circle), and the second equation is positive (\(x_1 \gt x_2\), so we are above the diagonal line). Neither is zero, so \(x^{(0)}\) is not a solution.</p>
 
   <p>In exact fractions: \(r(x^{(0)}) = (-11/100,\; 3/10)^T\).</p>
+
+  <div class="why-box">
+  <strong>What the residual tells us:</strong> The residual $r(x^{(0)}) = \begin{bmatrix}-0.11\\0.3\end{bmatrix}$ means: (a) the first equation $x_1^2 + x_2^2 - 1 = -0.11$ is nearly satisfied (we are close to the unit circle), and (b) the second equation $x_1 - x_2 = 0.3$ is less well satisfied (we are 0.3 away from the diagonal line $x_1 = x_2$). We want both to be zero simultaneously.
+  </div>
 </div>
 
 <!-- Step 2 -->
@@ -756,6 +780,10 @@
   </div>
 
   <p>In exact fractions: \(J = \begin{bmatrix}8/5 & 1 \\ 1 & -1\end{bmatrix}\).</p>
+
+  <div class="why-box">
+  <strong>Jacobian vs Hessian:</strong> The Jacobian is to systems of equations what the gradient is to a single function. For a single equation $r(x) = 0$, Newton uses $r'(x)$ (the derivative). For a system of $m$ equations in $n$ variables, Newton uses the $m \times n$ Jacobian matrix. Row $i$ is the gradient of equation $i$. When $m = n$, the system is square and (usually) has a unique solution.
+  </div>
 </div>
 
 <!-- Step 3 -->
@@ -828,6 +856,10 @@
     <p>The quadratic convergence of Newton's method is like a camera auto-focusing: the first adjustment gets you in the right ballpark, the second makes the image sharp, and the third makes it perfect. Each step "squares" the remaining error, so convergence accelerates rapidly once you are close to the solution.</p>
   </div>
 
+  <div class="why-box">
+  <strong>Convergence speed:</strong> Newton's method for systems has quadratic convergence near the solution (just like Newton for optimization). This means the residual norm roughly squares each step: if $\|r(x^{(0)})\| \approx 0.32$, then $\|r(x^{(1)})\| \approx 0.32^2 \approx 0.1$, then $\|r(x^{(2)})\| \approx 0.01$, then $\|r(x^{(3)})\| \approx 0.0001$. The catch: you must start "close enough" to the root. Far from the root, Newton can diverge or oscillate.
+  </div>
+
   <div class="exam-flag">
     <h4>Exam checklist for Newton-on-systems problems</h4>
     <ul>
@@ -845,6 +877,10 @@
 <!-- ===================== SECTION 5: KKT CONDITIONS ===================== -->
 <h2>5. KKT Conditions</h2>
 <p><em>Format: Quiz 8. Given a constrained problem, find the optimal solution using KKT conditions.</em></p>
+
+<div class="analogy">
+<strong>The "fences and gravity" picture for KKT:</strong> Imagine you are a ball rolling downhill (minimizing $f$) inside a fenced yard (the feasible region). Gravity pulls you toward the bottom of the hill, but the fences block your path. At the optimal point, you are pushed up against one or more fences, and the pull of gravity is exactly balanced by the fences pushing you back. The Lagrange multipliers $\mu_j$ measure how hard each fence is pushing. A fence you are not touching ($c_j \gt 0$, slack) exerts no force ($\mu_j = 0$). A fence you ARE touching ($c_j = 0$, active) may push ($\mu_j \gt 0$). This "either the fence is untouched OR the force is zero" rule is <strong>complementary slackness</strong>; the single most important idea in constrained optimization.
+</div>
 
 <div class="formula-box">
 <strong>Problem:</strong>
@@ -1077,6 +1113,10 @@ Interpretation: Constraint $c_1$ (the $x_1 + x_2 \leq 4$ fence) is active with m
 <h2>6. Linear Regression</h2>
 <p><em>Format: Quiz 9. Fit a line to data by minimizing least-squares cost.</em></p>
 
+<div class="analogy">
+<strong>The "ruler on graph paper" picture:</strong> You have 3 dots on graph paper and you want to draw a straight line as close as possible to all of them. "Close" means the sum of squared vertical distances from each dot to the line is as small as possible. The vertical distance from point $(x_i, y_i)$ to the line $y = wx + b$ is $|wx_i + b - y_i|$. Squaring removes the absolute value and penalizes big misses more than small ones. This is the least-squares problem; the most fundamental optimization problem in applied math.
+</div>
+
 <div class="formula-box">
 <strong>Problem:</strong> Given data points $(1, 2)$, $(2, 3)$, $(3, 5)$, fit the model $f(x) = wx + b$ by minimizing:
 $$J(w, b) = \frac{1}{2}\sum_{i=1}^{3}(wx_i + b - y_i)^2$$
@@ -1084,7 +1124,7 @@ $$J(w, b) = \frac{1}{2}\sum_{i=1}^{3}(wx_i + b - y_i)^2$$
 
 <div class="why-box">
 <h3>Why This Is Optimization</h3>
-<p>Linear regression is optimization in disguise. We are minimizing a quadratic function of two variables ($w$ and $b$). The gradient is zero at the optimum, giving us the "normal equations." Every tool from the course applies: gradient descent (<a href="cg-06-gradient-descent.html" style="color:#d4956a;">Page 06</a>), Newton's method (<a href="cg-07-newton-method.html" style="color:#d4956a;">Page 07</a>), or just solving the linear system directly. Since $J$ is a convex quadratic, any stationary point is the global minimum.</p>
+<p>Linear regression is optimization in disguise. We are minimizing a quadratic function of two variables ($w$ and $b$). The gradient is zero at the optimum, giving us the "normal equations." Every tool from the course applies: gradient descent, Newton's method, or just solving the linear system directly. Since $J$ is a convex quadratic (the Hessian $\nabla^2 J$ is constant and positive semidefinite), any stationary point is the global minimum. There are no local minima traps.</p>
 </div>
 
 <div class="hand-calc">
@@ -1226,6 +1266,10 @@ So: $\begin{bmatrix}14&6\\6&3\end{bmatrix}\begin{bmatrix}w\\b\end{bmatrix} = \be
 <h2>7. Non-Negative Matrix Factorization (NMF)</h2>
 <p><em>Format: Assignment 3 Q1. One iteration of Lee-Seung multiplicative updates.</em></p>
 
+<div class="analogy">
+<strong>The "mixing paints" picture:</strong> Imagine $V$ is a painting and we want to recreate it by mixing $k$ base colors. $W$ is the palette (which base colors we use) and $H$ is the recipe (how much of each color in each region). The constraint: paint amounts are non-negative; you cannot "subtract" paint. The Lee-Seung update iteratively adjusts recipes ($H$) then palette ($W$), using a multiplicative rule that naturally keeps everything non-negative. Each update decreases the error $\|V - WH\|_F^2$ (the Frobenius norm squared; just sum all squared element differences).
+</div>
+
 <div class="formula-box">
 <strong>Problem:</strong> Given
 $$V = \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix}$$
@@ -1242,10 +1286,6 @@ Run <strong>one full iteration</strong> of the Lee-Seung multiplicative update r
 
 <div class="hand-calc">
 <h3>Full Worked Solution</h3>
-
-<div class="analogy">
-<strong>The "mixing paints" picture:</strong> Imagine $V$ is a painting and we want to recreate it by mixing $k$ base colors. $W$ is the palette (which base colors we use), and $H$ is the recipe (how much of each color to use in each region). The constraint is that paint amounts are non-negative; you cannot "subtract" paint. The Lee-Seung update is like iteratively adjusting the recipes and the palette: first tweak the recipes ($H$) holding the palette fixed, then tweak the palette ($W$) holding the recipes fixed. Each tweak uses a multiplicative rule that naturally keeps everything non-negative.
-</div>
 
 <div class="step">
 <div class="step-label">Step 1: Current approximation and initial error</div>
@@ -1359,10 +1399,6 @@ After one iteration: $W^{(1)} = \begin{bmatrix}1\\1\end{bmatrix}$, $H^{(1)} = \b
 </div>
 
 <p class="check">The rank-1 approximation cannot fully recover $V$ (which has rank 2), but it found the best rank-1 non-negative fit. The remaining error of 1 is irreducible for any rank-1 factorization of this particular $V$. To get zero error, you would need rank 2; i.e., $W$ would be $2 \times 2$ and $H$ would be $2 \times 2$.</p>
-
-<div class="why-box">
-<strong>Why did the error only go from 2 to 1?</strong> Our rank-1 factorization $V \approx WH$ can only produce matrices of rank 1 (every column of $WH$ is a scalar multiple of $W$). But $V = \begin{bmatrix}2&1\\1&2\end{bmatrix}$ has rank 2 (its columns are linearly independent). A rank-1 matrix cannot perfectly represent a rank-2 matrix, no matter how many iterations we run. The best rank-1 approximation averages the two patterns in $V$. To get a perfect reconstruction, we would need rank 2 ($W$ would be $2 \times 2$ and $H$ would be $2 \times 2$).
-</div>
 </div>
 </div>
 
@@ -1370,6 +1406,10 @@ After one iteration: $W^{(1)} = \begin{bmatrix}1\\1\end{bmatrix}$, $H^{(1)} = \b
 <!-- ===================== SECTION 8: PRIMAL-DUAL IPM ===================== -->
 <h2>8. Primal-Dual Interior Point Method</h2>
 <p><em>Format: Assignment 3 Q2. One iteration of the primal-dual path-following method for LP.</em></p>
+
+<div class="analogy">
+<strong>The "central corridor" picture:</strong> The simplex method walks along edges of the feasible region to find the optimal corner. Interior point methods take a different route: they walk through the INTERIOR along a smooth "central path," guided by a barrier function ($-\mu\sum\ln x_i$) that repels them from the walls ($x_i = 0$ boundaries). As $\mu$ shrinks toward zero, the repulsion weakens and you drift toward the optimal corner. Each iteration solves a Newton system to step along this path. The key variables: $x$ (primal; the decision), $y$ (dual; Lagrange multipliers for equality constraints), $s$ (slack; dual variables for the $x \geq 0$ bounds). We must keep $x \gt 0$ and $s \gt 0$ at all times; that is what "interior" means.
+</div>
 
 <div class="formula-box">
 <strong>Problem:</strong> Solve the LP:
@@ -1422,19 +1462,11 @@ $$r_p = b - Ax^{(0)} = \begin{bmatrix}4\\6\end{bmatrix} - \begin{bmatrix}1&1\\1&
 
 <p class="note">Both constraints are violated: $x_1 + x_2 = 2 \neq 4$ and $x_1 + 3x_2 = 4 \neq 6$. The initial point is infeasible, which is typical for IPMs; they handle infeasibility naturally as part of the iteration.</p>
 
-<div class="why-box">
-<strong>What $r_p = [2, 2]^T$ means:</strong> Our current point $x = [1,1]^T$ does NOT satisfy the equality constraints $Ax = b$. We have $Ax = [2, 4]^T$ but we need $b = [4, 6]^T$. The residual $r_p = b - Ax = [2, 2]^T$ tells us exactly how far we are from feasibility. The Newton step will try to fix this.
-</div>
-
 <strong>Dual residual</strong> (how much the stationarity condition is violated):
 
 $$r_d = c - A^Ty^{(0)} - s^{(0)} = \begin{bmatrix}-1\\-2\end{bmatrix} - \begin{bmatrix}1&1\\1&3\end{bmatrix}^T\begin{bmatrix}0\\0\end{bmatrix} - \begin{bmatrix}1\\1\end{bmatrix}$$
 
 $$= \begin{bmatrix}-1\\-2\end{bmatrix} - \begin{bmatrix}0\\0\end{bmatrix} - \begin{bmatrix}1\\1\end{bmatrix} = \begin{bmatrix}-2\\-3\end{bmatrix}$$
-
-<div class="why-box">
-<strong>What $r_d = [-2, -3]^T$ means:</strong> The dual residual measures how far we are from stationarity (the gradient condition of the Lagrangian). At optimality, $A^Ty + s = c$ (dual feasibility). Currently $A^Ty + s = [0,0] + [1,1] = [1,1]$ but we need $c = [-1,-2]$. The gap is $[-2, -3]$.
-</div>
 
 <strong>Centering parameter $\mu$:</strong>
 
