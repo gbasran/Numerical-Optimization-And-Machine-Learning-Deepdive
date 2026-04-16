@@ -28,7 +28,8 @@
     { num: "17", file: "cg-17-method-map.html", title: "Method Map", synth: true },
     { num: "18", file: "cg-18-exam-computations.html", title: "Exam: Computations", synth: true },
     { num: "19", file: "cg-19-exam-theory.html", title: "Exam: Theory", synth: true },
-    { num: "20", file: "cg-20-formula-sheet.html", title: "Formula Sheet", synth: true }
+    { num: "20", file: "cg-20-formula-sheet.html", title: "Formula Sheet", synth: true },
+    { num: "28", file: "cg-28-complete-exam-walkthrough.html", title: "Exam Walkthrough", synth: true }
   ];
 
   var currentFile = window.location.pathname.split("/").pop();
