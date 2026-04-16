@@ -334,11 +334,19 @@
     <p>First compute \(Ap_0\) (we will reuse this for the residual update):</p>
     <p>$$Ap_0 = \begin{bmatrix}5&2\\2&2\end{bmatrix}\begin{bmatrix}7\\4\end{bmatrix} = \begin{bmatrix}5(7)+2(4)\\2(7)+2(4)\end{bmatrix} = \begin{bmatrix}35+8\\14+8\end{bmatrix} = \begin{bmatrix}43\\22\end{bmatrix}$$</p>
 
+    <div class="why-box">
+    <strong>Why compute $Ap_0$ first?</strong> We need $Ap_0$ for two things: the denominator of $\alpha_0$ (via $p_0^TAp_0$) and the residual update (via $r_1 = r_0 - \alpha_0 Ap_0$). Computing it once and reusing it saves work. This is a key efficiency trick in CG: each iteration requires only ONE matrix-vector product ($Ap_k$).
+    </div>
+
     <p>Now the denominator:</p>
     <p>$$p_0^T A p_0 = \begin{bmatrix}7&4\end{bmatrix}\begin{bmatrix}43\\22\end{bmatrix} = 7(43) + 4(22) = 301 + 88 = 389$$</p>
 
     <p>The step size:</p>
     <p>$$\alpha_0 = \frac{r_0^T r_0}{p_0^T A p_0} = \frac{65}{389} \approx 0.1671$$</p>
+  </div>
+
+  <div class="why-box">
+  <strong>What $\alpha_0$ means:</strong> This step size minimizes $f$ exactly along direction $p_0$. After taking this step, the gradient of $f$ at the new point will be perpendicular to $p_0$. That is the "exact line search" property; we squeezed every drop of improvement out of this direction before moving on.
   </div>
 
   <p><strong>Update \(x\):</strong></p>
@@ -356,6 +364,10 @@
     <h4>Orthogonality check: \(r_1^T r_0 = 0\)?</h4>
     <p>$$r_1^T r_0 = \frac{-72}{389}(7) + \frac{126}{389}(4) = \frac{-504 + 504}{389} = 0 \;\checkmark$$</p>
     <p>The new residual is orthogonal to the old one. This is a key property of CG: all residuals are mutually orthogonal. If this check fails on an exam, you made an arithmetic error somewhere above.</p>
+  </div>
+
+  <div class="why-box">
+  <strong>The orthogonality check:</strong> In exact CG, the residuals are mutually orthogonal: $r_1^T r_0 = 0$. This is not just a nice property; it is the REASON CG works. If $r_1$ were not orthogonal to $r_0$, the new direction $p_1$ would partially re-do work that $p_0$ already did. Orthogonality guarantees each step explores a genuinely new dimension. Compute $r_1^Tr_0$ and verify it equals zero.
   </div>
 
   <p><strong>Compute \(\beta_0\):</strong> This coefficient ensures the next search direction \(p_1\) will be \(A\)-conjugate to \(p_0\).</p>
@@ -411,6 +423,10 @@
   <div class="check">
     <h4>Verification: \(Ax_2 = b\)?</h4>
     <p>$$Ax_2 = \begin{bmatrix}5&2\\2&2\end{bmatrix}\begin{bmatrix}1\\1\end{bmatrix} = \begin{bmatrix}7\\4\end{bmatrix} = b \;\checkmark$$</p>
+  </div>
+
+  <div class="why-box">
+  <strong>Why exactly 2 iterations?</strong> CG solves an $n$-dimensional SPD system in at most $n$ iterations (in exact arithmetic). Our system is $2 \times 2$, so 2 iterations. Each iteration "eliminates" one dimension by finding the exact minimum along an $A$-conjugate direction. After $n$ directions, every dimension is accounted for. This is dramatically better than gradient descent, which might take hundreds of zigzagging steps on an ill-conditioned system.
   </div>
 
   <div class="check">
@@ -845,6 +861,10 @@ $$x_1 + x_2 \leq 4, \quad x_1 + 3x_2 \leq 6, \quad x_1 \geq 0, \quad x_2 \geq 0$
 <div class="hand-calc">
 <h3>Full Worked Solution</h3>
 
+<div class="analogy">
+<strong>The "negotiation" analogy for KKT:</strong> Imagine you are trying to walk downhill (minimize $f$) but there are fences blocking your path (constraints). At the optimal point, you are pushed up against one or more fences, and the "force" pulling you downhill is exactly balanced by the "force" of the fences pushing you back. The Lagrange multipliers $\mu_j$ measure how hard each fence is pushing. A fence you are not touching ($c_j \gt 0$) exerts no force ($\mu_j = 0$). A fence you are touching ($c_j = 0$) may push ($\mu_j \gt 0$). This is complementary slackness.
+</div>
+
 <div class="step">
 <div class="step-label">Step 1: Convert to standard form ($c_j(x) \geq 0$)</div>
 
@@ -949,6 +969,10 @@ $$(\text{S2}): \; -2 + \mu_1 + 0 - \mu_4 = 0 \;\Rightarrow\; -2 + 3 - \mu_4 = 0 
 
 <div class="result">Case 2 is a valid KKT point: $x^* = (4, 0)$, $f = -3(4) - 2(0) = -12$.</div>
 
+<div class="why-box">
+<strong>What the multipliers mean:</strong> $\mu_1 = 3$ means the first constraint ($x_1+x_2 \leq 4$) is "costing" us 3 units of objective per unit of relaxation. If we could relax this constraint slightly (change the 4 to 4.01), the objective would improve by approximately $3 \times 0.01 = 0.03$. $\mu_4 = 1$ means the non-negativity constraint on $x_2$ is costing 1 unit; if $x_2$ could go slightly negative, we would gain about 1 unit of objective. This is called the "shadow price" interpretation.
+</div>
+
 <h4 style="margin-top:20px;">Case 3: $c_1$ and $c_2$ active ($c_1 = 0$ and $c_2 = 0$)</h4>
 
 $$x_1 + x_2 = 4, \quad x_1 + 3x_2 = 6$$
@@ -1041,6 +1065,10 @@ Interpretation: Constraint $c_1$ (the $x_1 + x_2 \leq 4$ fence) is active with m
 </div>
 
 <p class="check">Sanity check: we are minimizing $-3x_1 - 2x_2$, which means we want $x_1$ and $x_2$ as large as possible (with $x_1$ weighted more). The constraint $x_1 + x_2 \leq 4$ limits the total, and since $x_1$ has a bigger coefficient in the objective, we allocate all capacity to $x_1$. That gives $(4, 0)$. Makes intuitive sense.</p>
+
+<div class="why-box">
+<strong>Why compare function values?</strong> KKT gives us candidate optimal points, not THE optimal point. For non-convex problems, there could be multiple KKT points (local minima, saddle points). We compare their function values to find the global optimum. For convex problems (and linear programs like this one), any KKT point IS the global optimum, so comparison is just a safety check.
+</div>
 </div>
 </div>
 
@@ -1061,6 +1089,10 @@ $$J(w, b) = \frac{1}{2}\sum_{i=1}^{3}(wx_i + b - y_i)^2$$
 
 <div class="hand-calc">
 <h3>Full Worked Solution</h3>
+
+<div class="analogy">
+<strong>The "ruler on graph paper" picture:</strong> You have 3 dots on graph paper and you want to draw a straight line as close as possible to all of them. "Close" means the sum of squared vertical distances from each dot to the line is as small as possible. The vertical distance from point $(x_i, y_i)$ to the line $y = wx + b$ is $|wx_i + b - y_i|$. Squaring removes the absolute value and penalizes big misses more than small ones. This is the least-squares problem; the most fundamental optimization problem in applied math.
+</div>
 
 <div class="step">
 <div class="step-label">Step 1: Write out the cost function explicitly</div>
@@ -1103,6 +1135,10 @@ $$= (w + b - 2) + (2w + b - 3) + (3w + b - 5)$$
 $$= 6w + 3b - 10$$
 
 <p class="note">Pattern: $\frac{\partial J}{\partial w} = \sum x_i \cdot \text{residual}_i$ and $\frac{\partial J}{\partial b} = \sum \text{residual}_i$. The $w$-derivative weights each residual by its $x_i$ value; data points further from the origin exert more influence on the slope. The $b$-derivative weights all residuals equally since $b$ shifts the entire line up or down uniformly.</p>
+
+<div class="why-box">
+<strong>Why partial derivatives?</strong> We are minimizing $J(w,b)$, a function of TWO variables. The minimum occurs where the slope is zero in EVERY direction, which means both partial derivatives must be zero simultaneously. $\partial J/\partial w = 0$ adjusts the slope to best fit the data. $\partial J/\partial b = 0$ adjusts the intercept so the line passes through the data's center of mass. Together, they give us the "normal equations."
+</div>
 </div>
 
 <div class="step">
@@ -1178,6 +1214,10 @@ $$A^T \mathbf{y} = \begin{bmatrix} 1&2&3 \\ 1&1&1 \end{bmatrix}\begin{bmatrix} 2
 So: $\begin{bmatrix}14&6\\6&3\end{bmatrix}\begin{bmatrix}w\\b\end{bmatrix} = \begin{bmatrix}23\\10\end{bmatrix}$, exactly equations (E1) and (E2) from Step 3.
 
 <p class="check">The matrix formulation makes it clear that the normal equations are always $A^TA\theta = A^T\mathbf{y}$, regardless of the number of data points or parameters. The elementwise derivation in Steps 2-4 and this matrix approach must always give the same system.</p>
+
+<div class="why-box">
+<strong>Three ways to solve this problem:</strong> (1) Set gradient to zero and solve the $2 \times 2$ system (what we just did; fast for small problems). (2) Gradient descent: start with any $w, b$ and repeatedly step in the direction $-\nabla J$ (good for massive datasets where direct solve is too expensive). (3) Newton's method: use the Hessian to jump directly to the minimum in one step (works because $J$ is quadratic, so the Newton step is exact). All three give the same answer; the choice depends on problem size.
+</div>
 </div>
 </div>
 
@@ -1202,6 +1242,10 @@ Run <strong>one full iteration</strong> of the Lee-Seung multiplicative update r
 
 <div class="hand-calc">
 <h3>Full Worked Solution</h3>
+
+<div class="analogy">
+<strong>The "mixing paints" picture:</strong> Imagine $V$ is a painting and we want to recreate it by mixing $k$ base colors. $W$ is the palette (which base colors we use), and $H$ is the recipe (how much of each color to use in each region). The constraint is that paint amounts are non-negative; you cannot "subtract" paint. The Lee-Seung update is like iteratively adjusting the recipes and the palette: first tweak the recipes ($H$) holding the palette fixed, then tweak the palette ($W$) holding the recipes fixed. Each tweak uses a multiplicative rule that naturally keeps everything non-negative.
+</div>
 
 <div class="step">
 <div class="step-label">Step 1: Current approximation and initial error</div>
@@ -1254,6 +1298,10 @@ $$\frac{W^TV}{W^TWH} = \frac{\begin{bmatrix} 3 & 3 \end{bmatrix}}{\begin{bmatrix
 $$H^{(1)} = H^{(0)} \odot \begin{bmatrix} 3/2 & 3/2 \end{bmatrix} = \begin{bmatrix} 1 & 1 \end{bmatrix} \odot \begin{bmatrix} 3/2 & 3/2 \end{bmatrix} = \begin{bmatrix} 3/2 & 3/2 \end{bmatrix}$$
 
 <p class="note">Both entries of $H$ increased by a factor of $3/2$. This makes sense: the initial approximation was all 1s, but the data $V$ has larger values (averaging $3/2$ per column when weighted by $W$). The update scales $H$ up to match.</p>
+
+<div class="why-box">
+<strong>Why multiplicative updates stay non-negative:</strong> The formula $H \leftarrow H \odot \frac{W^TV}{W^TWH}$ multiplies each entry of $H$ by a ratio of non-negative quantities. Since $V$, $W$, $H$ are all non-negative, both $W^TV$ and $W^TWH$ are non-negative, so the ratio is non-negative. Multiplying a non-negative number by a non-negative ratio gives a non-negative result. This is the beauty of the Lee-Seung approach: non-negativity is guaranteed structurally, without any clamping or projection.
+</div>
 </div>
 
 <div class="step">
@@ -1311,6 +1359,10 @@ After one iteration: $W^{(1)} = \begin{bmatrix}1\\1\end{bmatrix}$, $H^{(1)} = \b
 </div>
 
 <p class="check">The rank-1 approximation cannot fully recover $V$ (which has rank 2), but it found the best rank-1 non-negative fit. The remaining error of 1 is irreducible for any rank-1 factorization of this particular $V$. To get zero error, you would need rank 2; i.e., $W$ would be $2 \times 2$ and $H$ would be $2 \times 2$.</p>
+
+<div class="why-box">
+<strong>Why did the error only go from 2 to 1?</strong> Our rank-1 factorization $V \approx WH$ can only produce matrices of rank 1 (every column of $WH$ is a scalar multiple of $W$). But $V = \begin{bmatrix}2&1\\1&2\end{bmatrix}$ has rank 2 (its columns are linearly independent). A rank-1 matrix cannot perfectly represent a rank-2 matrix, no matter how many iterations we run. The best rank-1 approximation averages the two patterns in $V$. To get a perfect reconstruction, we would need rank 2 ($W$ would be $2 \times 2$ and $H$ would be $2 \times 2$).
+</div>
 </div>
 </div>
 
@@ -1554,8 +1606,8 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
         <tr><th>Symbol</th><th>Meaning</th><th>Value</th></tr>
         <tr><td>\(x\)</td><td>Input vector</td><td>\(\begin{bmatrix}2\\1\end{bmatrix}\)</td></tr>
         <tr><td>\(y\)</td><td>Target output</td><td>\(0\)</td></tr>
-        <tr><td>\(W_1\)</td><td>Hidden layer weights (2&times;2)</td><td>\(\begin{bmatrix}0.4 &amp;&amp; 0.1\\0.2 &amp;&amp; 0.3\end{bmatrix}\)</td></tr>
-        <tr><td>\(W_2\)</td><td>Output layer weights (1&times;2)</td><td>\(\begin{bmatrix}0.7 &amp;&amp; 0.5\end{bmatrix}\)</td></tr>
+        <tr><td>\(W_1\)</td><td>Hidden layer weights (2&times;2)</td><td>\(\begin{bmatrix}0.4 &amp; 0.1\\0.2 &amp; 0.3\end{bmatrix}\)</td></tr>
+        <tr><td>\(W_2\)</td><td>Output layer weights (1&times;2)</td><td>\(\begin{bmatrix}0.7 &amp; 0.5\end{bmatrix}\)</td></tr>
         <tr><td>Biases</td><td>All biases</td><td>\(0\)</td></tr>
         <tr><td>\(\sigma(z)\)</td><td>Activation function</td><td>\(z\) (linear), so \(\sigma'(z) = 1\)</td></tr>
         <tr><td>\(\eta\)</td><td>Learning rate</td><td>\(0.1\)</td></tr>
@@ -1568,13 +1620,13 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Step 1: Hidden Layer Pre-activation and Activation</span>
         <p>Multiply the weight matrix \(W_1\) by the input \(x\):</p>
-        \[
-        z^{(1)} = W_1 x = \begin{bmatrix}0.4 &amp;&amp; 0.1\\0.2 &amp;&amp; 0.3\end{bmatrix}\begin{bmatrix}2\\1\end{bmatrix} = \begin{bmatrix}0.4(2)+0.1(1)\\0.2(2)+0.3(1)\end{bmatrix} = \begin{bmatrix}0.9\\0.7\end{bmatrix}
-        \]
+        $$
+        z^{(1)} = W_1 x = \begin{bmatrix}0.4 &amp; 0.1\\0.2 &amp; 0.3\end{bmatrix}\begin{bmatrix}2\\1\end{bmatrix} = \begin{bmatrix}0.4(2)+0.1(1)\\0.2(2)+0.3(1)\end{bmatrix} = \begin{bmatrix}0.9\\0.7\end{bmatrix}
+        $$
         <p>Apply the activation function (linear, so nothing changes):</p>
-        \[
+        $$
         a^{(1)} = \sigma(z^{(1)}) = \begin{bmatrix}0.9\\0.7\end{bmatrix}
-        \]
+        $$
         <div class="why-box">
             <strong>Why:</strong> The hidden layer transforms the 2D input into a new 2D representation. Think of it as rotating and scaling the coordinate system so the output layer has an easier job.
         </div>
@@ -1583,9 +1635,9 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Step 2: Output Layer</span>
         <p>Multiply \(W_2\) by the hidden activations:</p>
-        \[
-        \hat{y} = W_2 a^{(1)} = \begin{bmatrix}0.7 &amp;&amp; 0.5\end{bmatrix}\begin{bmatrix}0.9\\0.7\end{bmatrix} = 0.7(0.9) + 0.5(0.7) = 0.63 + 0.35 = 0.98
-        \]
+        $$
+        \hat{y} = W_2 a^{(1)} = \begin{bmatrix}0.7 &amp; 0.5\end{bmatrix}\begin{bmatrix}0.9\\0.7\end{bmatrix} = 0.7(0.9) + 0.5(0.7) = 0.63 + 0.35 = 0.98
+        $$
         <div class="why-box">
             <strong>Why:</strong> The output layer combines the hidden features into a single prediction. It is a weighted sum of the hidden activations.
         </div>
@@ -1594,9 +1646,9 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Step 3: Loss</span>
         <p>Mean squared error (halved for cleaner gradients):</p>
-        \[
+        $$
         J = \frac{1}{2}(y - \hat{y})^2 = \frac{1}{2}(0 - 0.98)^2 = \frac{1}{2}(0.9604) = 0.4802
-        \]
+        $$
         <div class="why-box">
             <strong>Why:</strong> The loss measures how wrong our prediction is. The target is \(0\) but we predicted \(0.98\); that is a large error. We want to adjust the weights to make this smaller.
         </div>
@@ -1613,9 +1665,9 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Step 4: Output Error Signal</span>
         <p>Compute \(\partial J / \partial \hat{y}\):</p>
-        \[
+        $$
         \delta^{(2)} = -(y - \hat{y}) = -(0 - 0.98) = 0.98
-        \]
+        $$
         <div class="why-box">
             <strong>Why:</strong> This tells us how the loss changes with the output. Since \(\hat{y} = 0.98\) but the target is \(0\), the error is positive; we overshot. The negative sign comes from the chain rule on \(\frac{1}{2}(y-\hat{y})^2\): the derivative is \(-(y-\hat{y})\).
         </div>
@@ -1624,9 +1676,9 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Step 5: Gradient for Output Weights \(W_2\)</span>
         <p>The gradient is the outer product of the error signal and the hidden activations:</p>
-        \[
-        \nabla_{W_2} J = \delta^{(2)} \cdot (a^{(1)})^T = 0.98 \cdot \begin{bmatrix}0.9 &amp;&amp; 0.7\end{bmatrix} = \begin{bmatrix}0.882 &amp;&amp; 0.686\end{bmatrix}
-        \]
+        $$
+        \nabla_{W_2} J = \delta^{(2)} \cdot (a^{(1)})^T = 0.98 \cdot \begin{bmatrix}0.9 &amp; 0.7\end{bmatrix} = \begin{bmatrix}0.882 &amp; 0.686\end{bmatrix}
+        $$
         <div class="why-box">
             <strong>Why:</strong> This is the outer product of the error signal and the hidden activations. It tells us: "the more active a hidden unit was, the more its output weight contributed to the error." Hidden unit 1 (activation \(0.9\)) gets more blame than hidden unit 2 (activation \(0.7\)).
         </div>
@@ -1635,9 +1687,9 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Step 6: Propagate Error Through Output Weights</span>
         <p>Send the error signal backward through \(W_2\):</p>
-        \[
+        $$
         W_2^T \delta^{(2)} = \begin{bmatrix}0.7\\0.5\end{bmatrix}(0.98) = \begin{bmatrix}0.686\\0.49\end{bmatrix}
-        \]
+        $$
         <div class="why-box">
             <strong>Why:</strong> We propagate the error backward through \(W_2\) to find out how much each hidden unit contributed to the output error. A hidden unit connected by a larger weight gets more blame.
         </div>
@@ -1646,9 +1698,9 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Step 7: Hidden Layer Error Signal</span>
         <p>Element-wise multiply by the activation derivative (Hadamard product \(\odot\)):</p>
-        \[
+        $$
         \delta^{(1)} = W_2^T\delta^{(2)} \odot \sigma'(z^{(1)}) = \begin{bmatrix}0.686\\0.49\end{bmatrix} \odot \begin{bmatrix}1\\1\end{bmatrix} = \begin{bmatrix}0.686\\0.49\end{bmatrix}
-        \]
+        $$
         <div class="why-box">
             <strong>Why:</strong> For linear activation, \(\sigma'(z) = 1\) everywhere, so the Hadamard product does nothing. With sigmoid activation, \(\sigma'(z) = \sigma(z)(1-\sigma(z))\), which would scale the error based on how "active" each unit is; saturated units (near 0 or 1) would get very little gradient, causing the vanishing gradient problem.
         </div>
@@ -1657,9 +1709,9 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Step 8: Gradient for Hidden Weights \(W_1\)</span>
         <p>Outer product of the hidden error signal and the input:</p>
-        \[
-        \nabla_{W_1} J = \delta^{(1)} \cdot x^T = \begin{bmatrix}0.686\\0.49\end{bmatrix}\begin{bmatrix}2 &amp;&amp; 1\end{bmatrix} = \begin{bmatrix}1.372 &amp;&amp; 0.686\\0.98 &amp;&amp; 0.49\end{bmatrix}
-        \]
+        $$
+        \nabla_{W_1} J = \delta^{(1)} \cdot x^T = \begin{bmatrix}0.686\\0.49\end{bmatrix}\begin{bmatrix}2 &amp; 1\end{bmatrix} = \begin{bmatrix}1.372 &amp; 0.686\\0.98 &amp; 0.49\end{bmatrix}
+        $$
         <div class="why-box">
             <strong>Why:</strong> Same pattern as Step 5 but one layer deeper. The outer product pairs each hidden error with each input feature: "how much did input feature \(j\) contribute to the error at hidden unit \(i\)?"
         </div>
@@ -1671,16 +1723,16 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <div class="hand-calc">
     <div class="step">
         <span class="step-label">Step 9: Update \(W_2\)</span>
-        \[
-        W_2^{\text{new}} = W_2 - \eta \nabla_{W_2}J = \begin{bmatrix}0.7 &amp;&amp; 0.5\end{bmatrix} - 0.1\begin{bmatrix}0.882 &amp;&amp; 0.686\end{bmatrix} = \begin{bmatrix}0.6118 &amp;&amp; 0.4314\end{bmatrix}
-        \]
+        $$
+        W_2^{\text{new}} = W_2 - \eta \nabla_{W_2}J = \begin{bmatrix}0.7 &amp; 0.5\end{bmatrix} - 0.1\begin{bmatrix}0.882 &amp; 0.686\end{bmatrix} = \begin{bmatrix}0.6118 &amp; 0.4314\end{bmatrix}
+        $$
     </div>
 
     <div class="step">
         <span class="step-label">Step 10: Update \(W_1\)</span>
-        \[
-        W_1^{\text{new}} = W_1 - \eta \nabla_{W_1}J = \begin{bmatrix}0.4 &amp;&amp; 0.1\\0.2 &amp;&amp; 0.3\end{bmatrix} - 0.1\begin{bmatrix}1.372 &amp;&amp; 0.686\\0.98 &amp;&amp; 0.49\end{bmatrix} = \begin{bmatrix}0.2628 &amp;&amp; 0.0314\\0.102 &amp;&amp; 0.251\end{bmatrix}
-        \]
+        $$
+        W_1^{\text{new}} = W_1 - \eta \nabla_{W_1}J = \begin{bmatrix}0.4 &amp; 0.1\\0.2 &amp; 0.3\end{bmatrix} - 0.1\begin{bmatrix}1.372 &amp; 0.686\\0.98 &amp; 0.49\end{bmatrix} = \begin{bmatrix}0.2628 &amp; 0.0314\\0.102 &amp; 0.251\end{bmatrix}
+        $$
     </div>
 </div>
 
@@ -1736,13 +1788,13 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Step 1: Gradient Formula</span>
         <p>From the Rosenbrock function \(f = (x_1-1)^2 + 10(x_2 - x_1^2)^2\), the gradient is:</p>
-        \[
+        $$
         \nabla f = \begin{bmatrix}2(x_1-1) - 40x_1(x_2-x_1^2)\\20(x_2-x_1^2)\end{bmatrix}
-        \]
+        $$
         <p>Evaluate at \(x_0 = (-1, 1)\):</p>
-        \[
+        $$
         g_0 = \begin{bmatrix}2(-1-1) - 40(-1)(1-(-1)^2)\\20(1-(-1)^2)\end{bmatrix} = \begin{bmatrix}2(-2) - 40(-1)(1-1)\\20(1-1)\end{bmatrix} = \begin{bmatrix}-4 - 0\\0\end{bmatrix} = \begin{bmatrix}-4\\0\end{bmatrix}
-        \]
+        $$
         <div class="why-box">
             <strong>Why:</strong> The gradient tells us the direction of steepest ascent. At \((-1,1)\), the function increases most steeply in the \(-x_1\) direction. The \(x_2\) component is zero because \(x_2 = x_1^2 = 1\) already satisfies the "valley floor" of the Rosenbrock function.
         </div>
@@ -1751,17 +1803,17 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Step 2: Initial Search Direction</span>
         <p>First iteration always uses steepest descent:</p>
-        \[
+        $$
         d_0 = -g_0 = \begin{bmatrix}4\\0\end{bmatrix}
-        \]
+        $$
     </div>
 
     <div class="step">
         <span class="step-label">Step 3: Line Search and Update</span>
         <p>Using the given step size \(\alpha_0 = 0.001\):</p>
-        \[
+        $$
         x_1 = x_0 + \alpha_0 d_0 = \begin{bmatrix}-1\\1\end{bmatrix} + 0.001\begin{bmatrix}4\\0\end{bmatrix} = \begin{bmatrix}-0.996\\1\end{bmatrix}
-        \]
+        $$
         <div class="why-box">
             <strong>Why:</strong> The step is tiny because the Rosenbrock function has a narrow curved valley. The Strong Wolfe conditions prevent us from overshooting the valley walls. In practice, the line search algorithm (e.g., zoom phase from Page 05) would determine this \(\alpha\).
         </div>
@@ -1774,9 +1826,9 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Step 4: New Gradient</span>
         <p>Evaluate \(g_1 = \nabla f(-0.996, 1)\):</p>
-        \[
+        $$
         g_1 = \begin{bmatrix}2(-0.996-1) - 40(-0.996)(1 - 0.992016)\\20(1 - 0.992016)\end{bmatrix}
-        \]
+        $$
         <p>Computing each component:</p>
         <ul>
             <li>\(x_1^2 = (-0.996)^2 = 0.992016\)</li>
@@ -1784,16 +1836,16 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
             <li>First component: \(2(-1.996) - 40(-0.996)(0.007984) = -3.992 + 0.318 = -3.674\)</li>
             <li>Second component: \(20(0.007984) = 0.15968\)</li>
         </ul>
-        \[
+        $$
         g_1 \approx \begin{bmatrix}-3.674\\0.160\end{bmatrix}
-        \]
+        $$
     </div>
 
     <div class="step">
         <span class="step-label">Step 5: Fletcher-Reeves \(\beta\)</span>
-        \[
+        $$
         \beta_1^{FR} = \frac{\|g_1\|^2}{\|g_0\|^2} = \frac{(-3.674)^2 + (0.160)^2}{(-4)^2 + 0^2} = \frac{13.498 + 0.026}{16} = \frac{13.524}{16} \approx 0.845
-        \]
+        $$
         <div class="why-box">
             <strong>Why:</strong> \(\beta\) is the conjugacy coefficient. It controls how much of the old direction \(d_0\) gets blended into the new direction. A value near 1 means the gradient has not changed much, so we keep most of the old momentum. For quadratic functions, this gives exact A-conjugacy; for general functions, it is an approximation that works well in practice.
         </div>
@@ -1801,9 +1853,9 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 
     <div class="step">
         <span class="step-label">Step 6: New Conjugate Direction</span>
-        \[
+        $$
         d_1 = -g_1 + \beta_1 d_0 = \begin{bmatrix}3.674\\-0.160\end{bmatrix} + 0.845\begin{bmatrix}4\\0\end{bmatrix} = \begin{bmatrix}3.674 + 3.380\\-0.160 + 0\end{bmatrix} = \begin{bmatrix}7.054\\-0.160\end{bmatrix}
-        \]
+        $$
         <div class="why-box">
             <strong>Why:</strong> The new direction combines steepest descent (\(-g_1\)) with momentum from the previous direction. The \(\beta\) term prevents zigzagging: instead of bouncing back and forth across the valley, we carve diagonally along it. Notice the direction now has a small negative \(x_2\) component, guiding us toward the valley floor.
         </div>
@@ -1812,17 +1864,17 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Step 7: Update</span>
         <p>Using \(\alpha_1 = 0.002\):</p>
-        \[
+        $$
         x_2 = x_1 + \alpha_1 d_1 = \begin{bmatrix}-0.996\\1\end{bmatrix} + 0.002\begin{bmatrix}7.054\\-0.160\end{bmatrix} = \begin{bmatrix}-0.982\\0.9997\end{bmatrix}
-        \]
+        $$
     </div>
 </div>
 
 <div class="exam-flag">
     <strong>Polak-Ribiere vs. Fletcher-Reeves:</strong> The Polak-Ribiere variant uses
-    \[
+    $$
     \beta_k^{PR} = \frac{g_{k+1}^T(g_{k+1} - g_k)}{g_k^T g_k}
-    \]
+    $$
     instead. PR is generally preferred because it automatically restarts (gives \(\beta \approx 0\)) when the gradient direction has not changed much, effectively reverting to steepest descent when the conjugacy approximation breaks down. Both variants <strong>require Strong Wolfe line search</strong> (not just sufficient decrease) to guarantee descent directions.
 </div>
 
@@ -1850,17 +1902,17 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <table class="step-table">
         <tr><th>Symbol</th><th>Meaning</th><th>Value</th></tr>
         <tr><td>\(f(x)\)</td><td>Quadratic objective</td><td>\(\frac{1}{2}x^TQx\)</td></tr>
-        <tr><td>\(Q\)</td><td>Hessian (constant for quadratics)</td><td>\(\begin{bmatrix}2 &amp;&amp; 0\\0 &amp;&amp; 1\end{bmatrix}\)</td></tr>
+        <tr><td>\(Q\)</td><td>Hessian (constant for quadratics)</td><td>\(\begin{bmatrix}2 &amp; 0\\0 &amp; 1\end{bmatrix}\)</td></tr>
         <tr><td>\(x_0\)</td><td>Starting point</td><td>\(\begin{bmatrix}1\\1\end{bmatrix}\)</td></tr>
-        <tr><td>\(H_0\)</td><td>Initial inverse Hessian approx</td><td>\(I = \begin{bmatrix}1 &amp;&amp; 0\\0 &amp;&amp; 1\end{bmatrix}\)</td></tr>
+        <tr><td>\(H_0\)</td><td>Initial inverse Hessian approx</td><td>\(I = \begin{bmatrix}1 &amp; 0\\0 &amp; 1\end{bmatrix}\)</td></tr>
     </table>
 </div>
 
 <div class="formula-box">
     <strong>SR1 Update Formula (Inverse Hessian Form)</strong>
-    \[
+    $$
     H_{k+1} = H_k + \frac{(s_k - H_k y_k)(s_k - H_k y_k)^T}{(s_k - H_k y_k)^T y_k}
-    \]
+    $$
     <table class="step-table">
         <tr><th>Symbol</th><th>Meaning</th></tr>
         <tr><td>\(s_k = x_{k+1} - x_k\)</td><td>Step taken</td></tr>
@@ -1875,16 +1927,16 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Step 1: Gradient at \(x_0\)</span>
         <p>For \(f = \frac{1}{2}x^TQx\), the gradient is \(\nabla f = Qx\):</p>
-        \[
-        g_0 = Qx_0 = \begin{bmatrix}2 &amp;&amp; 0\\0 &amp;&amp; 1\end{bmatrix}\begin{bmatrix}1\\1\end{bmatrix} = \begin{bmatrix}2\\1\end{bmatrix}
-        \]
+        $$
+        g_0 = Qx_0 = \begin{bmatrix}2 &amp; 0\\0 &amp; 1\end{bmatrix}\begin{bmatrix}1\\1\end{bmatrix} = \begin{bmatrix}2\\1\end{bmatrix}
+        $$
     </div>
 
     <div class="step">
         <span class="step-label">Step 2: Search Direction</span>
-        \[
+        $$
         p_0 = -H_0 g_0 = -I\begin{bmatrix}2\\1\end{bmatrix} = \begin{bmatrix}-2\\-1\end{bmatrix}
-        \]
+        $$
         <div class="why-box">
             <strong>Why:</strong> With \(H_0 = I\), the quasi-Newton direction is just the steepest descent direction. As \(H\) gets refined, the direction will approach the true Newton direction \(-Q^{-1}g\).
         </div>
@@ -1893,47 +1945,47 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Step 3: Exact Line Search</span>
         <p>For a quadratic \(f = \frac{1}{2}x^TQx\), the exact line search formula is:</p>
-        \[
+        $$
         \alpha_0 = \frac{-g_0^T p_0}{p_0^T Q p_0}
-        \]
+        $$
         <p>Numerator:</p>
-        \[
-        -g_0^T p_0 = -\begin{bmatrix}2 &amp;&amp; 1\end{bmatrix}\begin{bmatrix}-2\\-1\end{bmatrix} = -(-4-1) = 5
-        \]
+        $$
+        -g_0^T p_0 = -\begin{bmatrix}2 &amp; 1\end{bmatrix}\begin{bmatrix}-2\\-1\end{bmatrix} = -(-4-1) = 5
+        $$
         <p>Denominator:</p>
-        \[
-        Qp_0 = \begin{bmatrix}2 &amp;&amp; 0\\0 &amp;&amp; 1\end{bmatrix}\begin{bmatrix}-2\\-1\end{bmatrix} = \begin{bmatrix}-4\\-1\end{bmatrix}
-        \]
-        \[
-        p_0^T Q p_0 = \begin{bmatrix}-2 &amp;&amp; -1\end{bmatrix}\begin{bmatrix}-4\\-1\end{bmatrix} = 8 + 1 = 9
-        \]
-        \[
+        $$
+        Qp_0 = \begin{bmatrix}2 &amp; 0\\0 &amp; 1\end{bmatrix}\begin{bmatrix}-2\\-1\end{bmatrix} = \begin{bmatrix}-4\\-1\end{bmatrix}
+        $$
+        $$
+        p_0^T Q p_0 = \begin{bmatrix}-2 &amp; -1\end{bmatrix}\begin{bmatrix}-4\\-1\end{bmatrix} = 8 + 1 = 9
+        $$
+        $$
         \alpha_0 = \frac{5}{9}
-        \]
+        $$
     </div>
 
     <div class="step">
         <span class="step-label">Step 4: Update Position</span>
-        \[
+        $$
         x_1 = x_0 + \alpha_0 p_0 = \begin{bmatrix}1\\1\end{bmatrix} + \frac{5}{9}\begin{bmatrix}-2\\-1\end{bmatrix} = \begin{bmatrix}1 - 10/9\\1 - 5/9\end{bmatrix} = \begin{bmatrix}-1/9\\4/9\end{bmatrix}
-        \]
+        $$
     </div>
 
     <div class="step">
         <span class="step-label">Step 5: New Gradient</span>
-        \[
-        g_1 = Qx_1 = \begin{bmatrix}2 &amp;&amp; 0\\0 &amp;&amp; 1\end{bmatrix}\begin{bmatrix}-1/9\\4/9\end{bmatrix} = \begin{bmatrix}-2/9\\4/9\end{bmatrix}
-        \]
+        $$
+        g_1 = Qx_1 = \begin{bmatrix}2 &amp; 0\\0 &amp; 1\end{bmatrix}\begin{bmatrix}-1/9\\4/9\end{bmatrix} = \begin{bmatrix}-2/9\\4/9\end{bmatrix}
+        $$
     </div>
 
     <div class="step">
         <span class="step-label">Step 6: Secant Quantities</span>
-        \[
+        $$
         s_0 = x_1 - x_0 = \begin{bmatrix}-1/9 - 1\\4/9 - 1\end{bmatrix} = \begin{bmatrix}-10/9\\-5/9\end{bmatrix}
-        \]
-        \[
+        $$
+        $$
         y_0 = g_1 - g_0 = \begin{bmatrix}-2/9 - 2\\4/9 - 1\end{bmatrix} = \begin{bmatrix}-20/9\\-5/9\end{bmatrix}
-        \]
+        $$
         <div class="why-box">
             <strong>Why:</strong> The secant equation \(H_{k+1}y_k = s_k\) says: "the updated inverse Hessian approximation should map the gradient change to the step taken." These two vectors are the raw data that drives the update.
         </div>
@@ -1942,35 +1994,35 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Step 7: SR1 Update</span>
         <p><strong>7a.</strong> Compute \(H_0 y_0\):</p>
-        \[
+        $$
         H_0 y_0 = I \cdot y_0 = \begin{bmatrix}-20/9\\-5/9\end{bmatrix}
-        \]
+        $$
 
         <p><strong>7b.</strong> Compute the secant residual \(s_0 - H_0 y_0\):</p>
-        \[
+        $$
         s_0 - H_0 y_0 = \begin{bmatrix}-10/9 - (-20/9)\\-5/9 - (-5/9)\end{bmatrix} = \begin{bmatrix}10/9\\0\end{bmatrix}
-        \]
+        $$
         <div class="why-box">
             <strong>Why:</strong> This residual measures how far off our current \(H_0\) is from satisfying the secant equation in this direction. The second component is zero, meaning \(H_0\) already captures the curvature perfectly in the \(x_2\) direction (which makes sense; \(Q_{22}=1\) and \(H_{0,22}=1\)).
         </div>
 
         <p><strong>7c.</strong> Denominator:</p>
-        \[
-        (s_0 - H_0 y_0)^T y_0 = \begin{bmatrix}10/9 &amp;&amp; 0\end{bmatrix}\begin{bmatrix}-20/9\\-5/9\end{bmatrix} = \frac{10}{9}\cdot\frac{-20}{9} + 0 = \frac{-200}{81}
-        \]
+        $$
+        (s_0 - H_0 y_0)^T y_0 = \begin{bmatrix}10/9 &amp; 0\end{bmatrix}\begin{bmatrix}-20/9\\-5/9\end{bmatrix} = \frac{10}{9}\cdot\frac{-20}{9} + 0 = \frac{-200}{81}
+        $$
 
         <p><strong>7d.</strong> Numerator (outer product):</p>
-        \[
-        (s_0 - H_0 y_0)(s_0 - H_0 y_0)^T = \begin{bmatrix}10/9\\0\end{bmatrix}\begin{bmatrix}10/9 &amp;&amp; 0\end{bmatrix} = \begin{bmatrix}100/81 &amp;&amp; 0\\0 &amp;&amp; 0\end{bmatrix}
-        \]
+        $$
+        (s_0 - H_0 y_0)(s_0 - H_0 y_0)^T = \begin{bmatrix}10/9\\0\end{bmatrix}\begin{bmatrix}10/9 &amp; 0\end{bmatrix} = \begin{bmatrix}100/81 &amp; 0\\0 &amp; 0\end{bmatrix}
+        $$
 
         <p><strong>7e.</strong> Assemble the update:</p>
-        \[
-        H_1 = I + \frac{\begin{bmatrix}100/81 &amp;&amp; 0\\0 &amp;&amp; 0\end{bmatrix}}{-200/81} = I + \begin{bmatrix}-1/2 &amp;&amp; 0\\0 &amp;&amp; 0\end{bmatrix} = \begin{bmatrix}1/2 &amp;&amp; 0\\0 &amp;&amp; 1\end{bmatrix}
-        \]
+        $$
+        H_1 = I + \frac{\begin{bmatrix}100/81 &amp; 0\\0 &amp; 0\end{bmatrix}}{-200/81} = I + \begin{bmatrix}-1/2 &amp; 0\\0 &amp; 0\end{bmatrix} = \begin{bmatrix}1/2 &amp; 0\\0 &amp; 1\end{bmatrix}
+        $$
 
         <div class="result">
-            \(H_1 = \begin{bmatrix}1/2 &amp;&amp; 0\\0 &amp;&amp; 1\end{bmatrix} = Q^{-1}\) exactly!
+            \(H_1 = \begin{bmatrix}1/2 &amp; 0\\0 &amp; 1\end{bmatrix} = Q^{-1}\) exactly!
         </div>
         <div class="why-box">
             <strong>Why this is remarkable:</strong> For quadratic functions, SR1 recovers the true inverse Hessian in at most \(n\) rank-1 updates (here, \(n=2\) but we got it in 1 step because \(H_0\) already had the correct \((2,2)\) entry). This is a theoretical guarantee that does not hold for general nonlinear functions, but it motivates why SR1 is a good building block for optimization.
@@ -1984,13 +2036,13 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Step 8: Verify with Full Newton Step</span>
         <p>Since \(H_1 = Q^{-1}\), we now have the exact Newton direction:</p>
-        \[
-        p_1 = -H_1 g_1 = -\begin{bmatrix}1/2 &amp;&amp; 0\\0 &amp;&amp; 1\end{bmatrix}\begin{bmatrix}-2/9\\4/9\end{bmatrix} = \begin{bmatrix}1/9\\-4/9\end{bmatrix}
-        \]
+        $$
+        p_1 = -H_1 g_1 = -\begin{bmatrix}1/2 &amp; 0\\0 &amp; 1\end{bmatrix}\begin{bmatrix}-2/9\\4/9\end{bmatrix} = \begin{bmatrix}1/9\\-4/9\end{bmatrix}
+        $$
         <p>With \(\alpha_1 = 1\) (full Newton step):</p>
-        \[
+        $$
         x_2 = x_1 + p_1 = \begin{bmatrix}-1/9\\4/9\end{bmatrix} + \begin{bmatrix}1/9\\-4/9\end{bmatrix} = \begin{bmatrix}0\\0\end{bmatrix} = x^*
-        \]
+        $$
         <div class="result">
             Optimal! The SR1 method found the exact minimizer in 2 iterations (matching the dimension \(n=2\)).
         </div>
@@ -2031,9 +2083,9 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 
 <div class="formula-box">
     <strong>Logistic Regression Loss</strong>
-    \[
+    $$
     f(\theta) = \frac{1}{n}\sum_{i=1}^{n} \log\!\bigl(1 + e^{-y_i \theta^T x_i}\bigr)
-    \]
+    $$
     <table class="step-table">
         <tr><th>Symbol</th><th>Meaning</th></tr>
         <tr><td>\(z_i = y_i \theta^T x_i\)</td><td>Margin: how confidently we classify point \(i\) correctly. Positive = correct side, negative = wrong side.</td></tr>
@@ -2041,9 +2093,9 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     </table>
 
     <strong>Gradient</strong>
-    \[
+    $$
     \nabla f = -\frac{1}{n}\sum_{i=1}^{n} \frac{y_i x_i}{1 + e^{z_i}}
-    \]
+    $$
     <div class="why-box">
         <strong>Why this form:</strong> The weight \(\frac{1}{1+e^{z_i}}\) is the sigmoid function applied to the negative margin. When \(z_i = 0\) (on the boundary), the weight is \(1/2\). When \(z_i \gg 0\) (confidently correct), the weight \(\to 0\). When \(z_i \ll 0\) (confidently wrong), the weight \(\to 1\). So the gradient is dominated by the hard cases.
     </div>
@@ -2055,9 +2107,9 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Step 1: Margins at \(\theta = 0\)</span>
         <p>Since \(\theta = 0\), every dot product \(\theta^T x_i = 0\), so every margin \(z_i = y_i \cdot 0 = 0\).</p>
-        \[
+        $$
         z_1 = 0, \quad z_2 = 0, \quad z_3 = 0
-        \]
+        $$
         <div class="why-box">
             <strong>Why:</strong> At \(\theta = 0\), the model has no opinion about any point. Every prediction probability is exactly \(0.5\).
         </div>
@@ -2065,9 +2117,9 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 
     <div class="step">
         <span class="step-label">Step 2: Loss</span>
-        \[
+        $$
         f = \frac{1}{3}\sum_{i=1}^{3} \log(1 + e^{-0}) = \frac{1}{3}\cdot 3 \cdot \log(1+1) = \log 2 \approx 0.693
-        \]
+        $$
         <div class="why-box">
             <strong>Why:</strong> \(\log 2\) is the maximum entropy loss; it is the loss you get when the model assigns 50/50 probability to every point. This is the worst a well-calibrated model can do.
         </div>
@@ -2076,16 +2128,16 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Step 3: Gradient</span>
         <p>Since all \(z_i = 0\), we have \(\frac{1}{1+e^{z_i}} = \frac{1}{1+1} = \frac{1}{2}\) for every point:</p>
-        \[
+        $$
         \nabla f = -\frac{1}{3}\sum_{i=1}^{3} \frac{y_i x_i}{1+e^{0}} = -\frac{1}{3}\cdot\frac{1}{2}\sum_{i=1}^{3} y_i x_i = -\frac{1}{6}\sum y_i x_i
-        \]
+        $$
         <p>Sum up the weighted data points:</p>
-        \[
+        $$
         \sum y_i x_i = (+1)\begin{bmatrix}1\\0\end{bmatrix} + (-1)\begin{bmatrix}0\\1\end{bmatrix} + (+1)\begin{bmatrix}1\\1\end{bmatrix} = \begin{bmatrix}1+0+1\\0-1+1\end{bmatrix} = \begin{bmatrix}2\\0\end{bmatrix}
-        \]
-        \[
+        $$
+        $$
         \nabla f = -\frac{1}{6}\begin{bmatrix}2\\0\end{bmatrix} = \begin{bmatrix}-1/3\\0\end{bmatrix}
-        \]
+        $$
         <div class="why-box">
             <strong>Why:</strong> At \(\theta=0\), every point contributes equally (weight \(1/2\)). The gradient points in the \(-x_1\) direction because the positive-class points (\(x_1, x_3\)) have more mass in the \(x_1\) coordinate than the negative-class point (\(x_2\)). The \(x_2\) components cancel out (\(-1+1=0\)).
         </div>
@@ -2093,17 +2145,17 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 
     <div class="step">
         <span class="step-label">Step 4: Gradient Descent Update</span>
-        \[
+        $$
         \theta_1 = \theta_0 - \eta \nabla f = \begin{bmatrix}0\\0\end{bmatrix} - 1\cdot\begin{bmatrix}-1/3\\0\end{bmatrix} = \begin{bmatrix}1/3\\0\end{bmatrix}
-        \]
+        $$
     </div>
 
     <div class="step">
         <span class="step-label">Step 5: Interpretation</span>
         <p>The decision boundary is defined by \(\theta^T x = 0\):</p>
-        \[
+        $$
         \frac{1}{3}x_1 + 0 \cdot x_2 = 0 \quad\Longrightarrow\quad x_1 = 0
-        \]
+        $$
         <div class="result">
             Points with \(x_1 \gt 0\) are classified \(+1\), points with \(x_1 \lt 0\) are classified \(-1\).
         </div>
@@ -2146,9 +2198,9 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 
 <div class="formula-box">
     <strong>SVM Primal Problem</strong>
-    \[
+    $$
     \min_{w,b}\;\frac{1}{2}\|w\|^2 \quad\text{subject to}\quad y_i(w^Tx_i + b) \geq 1,\;\; i=1,\dots,n
-    \]
+    $$
     <p>Minimizing \(\|w\|^2\) maximizes the margin \(2/\|w\|\). The constraints ensure every point is on the correct side of the margin.</p>
 </div>
 
@@ -2177,9 +2229,9 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
             <tr><td>\(i=2\; (y=+1)\)</td><td>\((+1)(+1)(0) = 0\)</td><td>\((+1)(+1)(1) = 1\)</td><td>\((+1)(-1)(0) = 0\)</td></tr>
             <tr><td>\(i=3\; (y=-1)\)</td><td>\((-1)(+1)(-1) = 1\)</td><td>\((-1)(+1)(0) = 0\)</td><td>\((-1)(-1)(1) = 1\)</td></tr>
         </table>
-        \[
-        K = \begin{bmatrix}1 &amp;&amp; 0 &amp;&amp; 1\\0 &amp;&amp; 1 &amp;&amp; 0\\1 &amp;&amp; 0 &amp;&amp; 1\end{bmatrix}
-        \]
+        $$
+        K = \begin{bmatrix}1 &amp; 0 &amp; 1\\0 &amp; 1 &amp; 0\\1 &amp; 0 &amp; 1\end{bmatrix}
+        $$
         <div class="why-box">
             <strong>Why:</strong> The kernel matrix encodes both the geometry (dot products) and the labels. Entry \(K_{13} = 1\) is interesting: points 1 and 3 are on opposite sides (\(y\) signs differ) but their dot product is \(-1\), so \(y_1 y_3 \cdot x_1^Tx_3 = (-1)(-1) = 1\). This means they "agree" in the dual formulation; both are candidates to be support vectors.
         </div>
@@ -2191,16 +2243,16 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <div class="hand-calc">
     <div class="step">
         <p>The SVM dual problem is:</p>
-        \[
+        $$
         \max_\alpha \quad Q(\alpha) = \sum_{i=1}^{n}\alpha_i - \frac{1}{2}\sum_{i=1}^{n}\sum_{j=1}^{n}\alpha_i\alpha_j K_{ij}
-        \]
+        $$
         <p>Expanding for our 3 points:</p>
-        \[
+        $$
         Q(\alpha) = \alpha_1 + \alpha_2 + \alpha_3 - \frac{1}{2}\bigl[\alpha_1^2(1) + \alpha_2^2(1) + \alpha_3^2(1) + 2\alpha_1\alpha_3(1) + 0 + 0\bigr]
-        \]
-        \[
+        $$
+        $$
         Q(\alpha) = \alpha_1 + \alpha_2 + \alpha_3 - \frac{1}{2}\bigl(\alpha_1^2 + \alpha_2^2 + \alpha_3^2 + 2\alpha_1\alpha_3\bigr)
-        \]
+        $$
         <div class="why-box">
             <strong>Why:</strong> The dual reformulates the primal into a problem over the Lagrange multipliers \(\alpha_i\). The linear term \(\sum \alpha_i\) wants to make all multipliers large (widening the margin), while the quadratic term penalizes configurations where points "overlap" in the kernel space.
         </div>
@@ -2212,12 +2264,12 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <div class="hand-calc">
     <div class="step">
         <p>From KKT stationarity with respect to \(b\), we get the constraint:</p>
-        \[
+        $$
         \sum_{i=1}^{n}\alpha_i y_i = 0 \quad\Longrightarrow\quad \alpha_1(+1) + \alpha_2(+1) + \alpha_3(-1) = 0
-        \]
-        \[
+        $$
+        $$
         \alpha_1 + \alpha_2 = \alpha_3
-        \]
+        $$
         <p>Plus the non-negativity constraints: \(\alpha_i \geq 0\) for all \(i\).</p>
         <div class="why-box">
             <strong>Why:</strong> This constraint comes from the fact that the bias \(b\) is a free variable in the primal. Its Lagrange condition forces the positive-class and negative-class multipliers to balance.
@@ -2230,18 +2282,18 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
 <div class="hand-calc">
     <div class="step">
         <p>Substitute \(\alpha_3 = \alpha_1 + \alpha_2\) to eliminate one variable:</p>
-        \[
+        $$
         Q = \alpha_1 + \alpha_2 + (\alpha_1+\alpha_2) - \frac{1}{2}\bigl[\alpha_1^2 + \alpha_2^2 + (\alpha_1+\alpha_2)^2 + 2\alpha_1(\alpha_1+\alpha_2)\bigr]
-        \]
-        \[
+        $$
+        $$
         = 2\alpha_1 + 2\alpha_2 - \frac{1}{2}\bigl[\alpha_1^2 + \alpha_2^2 + \alpha_1^2 + 2\alpha_1\alpha_2 + \alpha_2^2 + 2\alpha_1^2 + 2\alpha_1\alpha_2\bigr]
-        \]
-        \[
+        $$
+        $$
         = 2\alpha_1 + 2\alpha_2 - \frac{1}{2}\bigl[4\alpha_1^2 + 2\alpha_2^2 + 4\alpha_1\alpha_2\bigr]
-        \]
-        \[
+        $$
+        $$
         = 2\alpha_1 + 2\alpha_2 - 2\alpha_1^2 - \alpha_2^2 - 2\alpha_1\alpha_2
-        \]
+        $$
         <div class="why-box">
             <strong>Why:</strong> Now we have an unconstrained (except for \(\alpha_1, \alpha_2 \geq 0\)) quadratic in two variables. This can be solved by setting partial derivatives to zero, or by inspection on an exam.
         </div>
@@ -2254,12 +2306,12 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Weight Vector</span>
         <p>Once you have the optimal \(\alpha^*\), recover the weight vector:</p>
-        \[
+        $$
         w^* = \sum_{i=1}^{n}\alpha_i^* y_i x_i = \alpha_1^*(+1)\begin{bmatrix}1\\0\end{bmatrix} + \alpha_2^*(+1)\begin{bmatrix}0\\1\end{bmatrix} + \alpha_3^*(-1)\begin{bmatrix}-1\\0\end{bmatrix}
-        \]
-        \[
+        $$
+        $$
         = \begin{bmatrix}\alpha_1^* + \alpha_3^*\\ \alpha_2^*\end{bmatrix}
-        \]
+        $$
         <div class="why-box">
             <strong>Why:</strong> The optimal hyperplane is a weighted combination of the data points, where only the support vectors (points with \(\alpha_i^* \gt 0\)) contribute. Points far from the margin have \(\alpha_i^* = 0\) and are irrelevant.
         </div>
@@ -2268,9 +2320,9 @@ Each iteration of the primal-dual IPM follows the same five-step recipe:
     <div class="step">
         <span class="step-label">Bias Term</span>
         <p>For any support vector \(i\) (where \(\alpha_i^* \gt 0\)), complementary slackness gives:</p>
-        \[
+        $$
         y_i(w^{*T}x_i + b^*) = 1 \quad\Longrightarrow\quad b^* = y_i - w^{*T}x_i
-        \]
+        $$
         <p>In practice, average over all support vectors for numerical stability.</p>
         <div class="why-box">
             <strong>Why:</strong> Complementary slackness says that if a multiplier is active (\(\alpha_i \gt 0\)), the corresponding constraint must be tight (equality). This means support vectors lie exactly on the margin boundary.
